@@ -3,13 +3,9 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.Info;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.*;
 

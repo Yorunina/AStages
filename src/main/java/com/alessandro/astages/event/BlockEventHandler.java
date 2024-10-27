@@ -2,15 +2,11 @@ package com.alessandro.astages.event;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.BlockStageProvider;
-import mekanism.common.registries.MekanismTileEntityTypes;
-import mekanism.common.tile.base.CapabilityTileEntity;
-import mekanism.common.tile.base.TileEntityUpdateable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -2,7 +2,6 @@ package com.alessandro.astages.networking.packet;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
-import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;

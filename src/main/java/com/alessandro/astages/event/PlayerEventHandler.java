@@ -9,18 +9,14 @@ import com.alessandro.astages.event.item.ServerEventHandler;
 import com.alessandro.astages.util.Info;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.Executors;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class PlayerEventHandler {

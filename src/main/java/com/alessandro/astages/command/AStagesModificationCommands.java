@@ -5,15 +5,12 @@ import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.command.argument.AStagesAddArgument;
 import com.alessandro.astages.command.argument.AStagesRemoveArgument;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class AStagesModificationCommands {
     public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher) {
