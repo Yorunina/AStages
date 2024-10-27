@@ -6,26 +6,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerInventoryChangedEvent extends PlayerEvent {
-    private final int slotIndex;
-    private final ItemStack stack;
-    private final AbstractContainerMenu menu;
+    private final ItemStack item;
+    private final int slot;
 
-    public PlayerInventoryChangedEvent(Player player, int slotIndex, ItemStack stack, AbstractContainerMenu menu) {
+    public PlayerInventoryChangedEvent(Player player, ItemStack item, int slot) {
         super(player);
-        this.slotIndex = slotIndex;
-        this.stack = stack;
-        this.menu = menu;
+        this.item = item;
+        this.slot = slot;
     }
 
-    public int getSlotIndex() {
-        return slotIndex;
+    public ItemStack getItem() {
+        return item;
     }
 
-    public ItemStack getStack() {
-        return stack;
-    }
-
-    public AbstractContainerMenu getMenu() {
-        return menu;
+    public int getSlot() {
+        return slot;
     }
 }

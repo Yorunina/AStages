@@ -1,7 +1,6 @@
 package com.alessandro.astages.integration.kubejs.event;
 
-import com.alessandro.astages.event.custom.StageAddedPlayerEvent;
-import com.alessandro.astages.event.custom.StageRemovedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
 import dev.latvian.mods.kubejs.player.PlayerEventJS;
 import net.minecraft.world.entity.player.Player;
 

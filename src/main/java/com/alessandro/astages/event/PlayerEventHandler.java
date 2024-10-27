@@ -3,15 +3,24 @@ package com.alessandro.astages.event;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
+import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
+import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
+import com.alessandro.astages.event.item.ServerEventHandler;
+import com.alessandro.astages.util.Info;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.Executors;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class PlayerEventHandler {
@@ -20,6 +29,8 @@ public class PlayerEventHandler {
         if (!event.getEntity().level().isClientSide) {
             event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> playerStage.setChangedFor(event.getEntity(), PlayerStage.Operation.GET, null));
         }
+
+        event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
     }
 
     @SubscribeEvent
@@ -39,6 +50,27 @@ public class PlayerEventHandler {
                     newStore.copyFrom(oldStore);
                 });
             });
+
+            event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
         }
+    }
+
+    @Info("For inventory checking!")
+    @SubscribeEvent
+    public static void onContainerOpen(@NotNull PlayerContainerEvent event) {
+        event.getEntity().sendSystemMessage(Component.literal("Added slot listener!"));
+        event.getContainer().addSlotListener(new AInventorySlotListener(event.getEntity()));
+    }
+
+    @Info("For inventory checking!")
+    @SubscribeEvent
+    public static void onInventoryChanged(@NotNull PlayerInventoryChangedEvent event) {
+        ServerEventHandler.isInventoryChanged = true;
+    }
+
+    @Info("For inventory checking!")
+    @SubscribeEvent
+    public static void onStageSynced(StageSyncedPlayerEvent event) {
+        ServerEventHandler.isInventoryChanged = true;
     }
 }

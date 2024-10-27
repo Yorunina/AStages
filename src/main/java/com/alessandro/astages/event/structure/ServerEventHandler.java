@@ -1,20 +1,14 @@
 package com.alessandro.astages.event.structure;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.ARecipeManager;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.AStructureRestriction;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -29,7 +23,6 @@ import java.util.*;
 public class ServerEventHandler {
     public static final Map<UUID, Boolean> playerIsInStructure = new HashMap<>();
 
-    // Check if player is in a structure
     @Info("To be tested!")
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
@@ -37,20 +30,6 @@ public class ServerEventHandler {
         if (event.player.level().isClientSide) { return; }
         if (event.phase == TickEvent.Phase.START) { return; }
         if (event.player.getServer() == null) { return; }
-
-//        if (event.player instanceof ServerPlayer player) {
-//            UUID playerUUID = player.getUUID();
-//            String stage = "structure1";
-//
-//            StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
-//
-//            Structure structure = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).get(new ResourceLocation("minecraft", "pillager_outpost"));
-//            if (structure != null) {
-//                boolean isInStructure = manager.getStructureAt(player.getOnPos(), structure).isValid();
-//
-//                playerIsInStructure.put(playerUUID, isInStructure);
-//            }
-//        }
 
         if (event.player instanceof ServerPlayer player) {
             StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
@@ -76,8 +55,6 @@ public class ServerEventHandler {
             });
         }
     }
-
-    // public static void onPlayerMoved(PlayerEvent.Mo)
 
     @Info("Player can't break block in the structure")
     @SubscribeEvent

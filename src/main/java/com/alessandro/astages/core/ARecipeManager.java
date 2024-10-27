@@ -20,6 +20,10 @@ public class ARecipeManager implements AManager<ARecipeRestriction, ARecipeManag
         return restrictions;
     }
 
+    public boolean isRestrictionListEmpty() {
+        return restrictions.isEmpty();
+    }
+
     @Override
     public void addRestriction(String stage, ARecipeRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());

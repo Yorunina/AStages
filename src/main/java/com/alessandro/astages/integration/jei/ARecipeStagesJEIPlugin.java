@@ -53,38 +53,13 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     @SuppressWarnings("unchecked")
     public <C extends Container, T extends Recipe<C>> void updateRecipeGui() {
         if (runtime == null) { return; }
-        // if (Minecraft.getInstance().level == null) { return; }
-
-//
-//        var categories = runtime.getRecipeManager().createRecipeCategoryLookup().get().toList();
-//
-//        for (var category : categories) {
-//            var type = category.getRecipeType();
-//
-//            if (canCast(type.getRecipeClass(), Recipe.class)) {
-//                var recipes = (Stream<Recipe<?>>) runtime.getRecipeManager().createRecipeLookup(type).get();
-//                var newList = recipes.filter(recipe -> recipe.getId().equals(new ResourceLocation("minecraft", "charcoal"))).toList();
-//                runtime.getRecipeManager().hideRecipes((RecipeType<Recipe<?>>) type, newList);
-//            }
-//        }
 
         var categories = runtime.getRecipeManager().createRecipeCategoryLookup().get().toList();
-        // var manager = Minecraft.getInstance().level.getRecipeManager();
 
-        // Vanilla RecipeType
-//        Map<RecipeType<?>, List<Recipe<?>>> newMap = new HashMap<>();
-
-//        AStages.LOGGER.debug(ARestrictionManager.RECIPE_INSTANCE.restrictionsForType.toString());
-
-        AStages.LOGGER.debug("INSTANTIATE UPDATE!");
-        AStages.LOGGER.debug(ARestrictionManager.RECIPE_INSTANCE.getRestrictions().toString());
         for (Map.Entry<String, List<ARecipeRestriction>> entry : ARestrictionManager.RECIPE_INSTANCE.getRestrictions().entrySet()) {
             for (var restriction : entry.getValue()) {
                 for (var recipeLocation : restriction.recipes) {
                     for (var category : categories) {
-                        AStages.LOGGER.debug("AAAAAA");
-
-                        // var recipes = (Stream<Recipe<?>>) runtime.getRecipeManager().createRecipeLookup(category.getRecipeType()).get();
 
                         var caster = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor((net.minecraft.world.item.crafting.RecipeType<T>) restriction.type).get(0);
                         if (!canCast(category.getRecipeType().getRecipeClass(), caster.getClass())) {
@@ -95,13 +70,8 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
                         var recipe = (Recipe<?>) recipes.filter(r -> r.getId().equals(recipeLocation)).findFirst().orElse(null);
 
                         if (recipe == null) {
-                            AStages.LOGGER.warn("No recipe found for type {} and id {}", restriction.type, recipeLocation);
                             continue;
                         }
-
-//                        AStages.LOGGER.debug(category.getRecipeType().toString());
-//
-//                        AStages.LOGGER.debug("Recipe {} hide!", recipeLocation);
 
                         if (!ClientPlayerStage.getPlayerStages().contains(entry.getKey())) {
                             List<Recipe<?>> newList = new ArrayList<>();
@@ -110,37 +80,10 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
                             runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(newList));
                         }
                     }
-
-//                    var newList = newMap.getOrDefault(recipe.getType(), Collections.emptyList());
-//                    newList.add(recipe);
-//                    newMap.put(recipe.getType(), newList);
                 }
             }
         }
-
-//        for (var vanillaType : newMap.keySet()) {
-//            for (var category : categories) {
-//                var type = category.getRecipeType();
-//
-//                if (canCast(type.getRecipeClass(), vanillaType.getClass())) {
-//                    runtime.getRecipeManager().createRecipeLookup()
-//                    runtime.getRecipeManager().hideRecipes(category.getRecipeType(), newMap.get(vanillaType));
-//                }
-//            }
-//        }
     }
-
-//    public static void forEachRecipe() {
-//
-//    }
-
-//    public RecipeManagerInternal getInternal() {
-//        return ((ARecipeManagerAccessor) runtime.getRecipeManager()).getInternal();
-//    }
-//
-//    public List<IRecipeCategory<?>> getCategories() {
-//        return ((ARecipeManagerInternalAccessor) getInternal()).getRecipeCategories();
-//    }
 
     public static boolean canCast(Class<?> obj, Class<?> caster){
         try {

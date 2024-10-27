@@ -30,6 +30,8 @@ public abstract class ARecipeCacheLookupMonitor<RECIPE extends MekanismRecipe> {
 
     @Inject(method = "updateAndProcess()Z", at = @At("HEAD"), cancellable = true)
     public void astages$updateAndProcess(CallbackInfoReturnable<Boolean> cir) {
+        if (ARestrictionManager.RECIPE_INSTANCE.isRestrictionListEmpty()) { return; }
+
         cachedRecipe = getCachedRecipe(cacheIndex);
 
         if (cachedRecipe != null && handler instanceof BlockEntity blockEntity) {

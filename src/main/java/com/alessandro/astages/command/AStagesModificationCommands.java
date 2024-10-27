@@ -64,6 +64,20 @@ public class AStagesModificationCommands {
                     return 1;
                 })
             ))
+            .then(Commands.literal("info").then(Commands.argument("player", EntityArgument.player())
+                .executes(context -> {
+                    var player = EntityArgument.getPlayer(context, "player");
+
+                    player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
+                        player.sendSystemMessage(Component.literal("Stages unlocked by ").append(player.getName()).append(":").withStyle(ChatFormatting.GREEN));
+                        for (var stage : playerStage.getStages()) {
+                            player.sendSystemMessage(Component.literal(" - ").append(stage));
+                        }
+                    });
+
+                    return 1;
+                })
+            ))
         );
     }
 }

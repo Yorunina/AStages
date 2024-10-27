@@ -1,13 +1,11 @@
 package com.alessandro.astages.integration.kubejs.util;
 
 import com.alessandro.astages.event.custom.InitialStageAdditionEvent;
-import com.alessandro.astages.event.custom.StageAddedPlayerEvent;
-import com.alessandro.astages.event.custom.StageRemovedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
 import com.alessandro.astages.integration.kubejs.event.StageAddedEventJS;
 import com.alessandro.astages.integration.kubejs.event.StageManagerEventJS;
 import com.alessandro.astages.integration.kubejs.event.StageRemovedEventJS;
-import dev.latvian.mods.kubejs.bindings.event.StartupEvents;
-import dev.latvian.mods.kubejs.event.StartupEventJS;
 import dev.latvian.mods.kubejs.script.ScriptTypeHolder;
 import net.minecraftforge.common.MinecraftForge;
 

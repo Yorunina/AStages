@@ -3,36 +3,29 @@ package com.alessandro.astages.event.item;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AItemRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.Info;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.item.ItemEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class ServerEventHandler {
+    public static boolean isInventoryChanged = false;
+
     @SubscribeEvent
     public static void onItemPickup(@NotNull EntityItemPickupEvent event) {
-        if (event.getEntity() != null) {
+        if (canBeRunForPlayer(event.getEntity())) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), event.getItem().getItem());
 
             if (restriction != null && !restriction.canPickedUp) {
@@ -107,36 +100,41 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
-        if (event.player == null) {
-            return;
-        }
+        if (!isInventoryChanged) { return; }
 
-        Player player = event.player;
-        Inventory inventory = player.getInventory();
+        if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
+            Player player = event.player;
+            Inventory inventory = player.getInventory();
 
-        final int armorStart = inventory.items.size();
-        final int armorEnd = armorStart + inventory.armor.size();
+            final int armorStart = inventory.items.size();
+            final int armorEnd = armorStart + inventory.armor.size();
 
-        for (int i = 0; i < inventory.getContainerSize(); i++) {
-            ItemStack slotContent = inventory.getItem(i);
+            for (int i = 0; i < inventory.getContainerSize(); i++) {
+                ItemStack slotContent = inventory.getItem(i);
 
-            if (!slotContent.isEmpty()) {
-                if (i >= armorStart && i <= armorEnd) {
-                    AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.player, slotContent);
+                if (!slotContent.isEmpty()) {
+                    AItemRestriction restriction;
 
-                    if (restriction != null && !restriction.canBeEquipped) {
-                        inventory.setItem(i, ItemStack.EMPTY);
-                        player.drop(slotContent, false);
+                    if (i >= armorStart && i <= armorEnd) {
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
+
+                    } else {
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
+
                     }
-                } else {
-                    AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.player, slotContent);
 
-                    if (restriction != null && !restriction.canBeStoredInInventory) {
+                    if (restriction != null) {
                         inventory.setItem(i, ItemStack.EMPTY);
                         player.drop(slotContent, false);
                     }
                 }
             }
+
+            isInventoryChanged = false;
         }
+    }
+
+    public static boolean canBeRunForPlayer(Player player) {
+        return player != null && !player.level().isClientSide && !(player instanceof FakePlayer);
     }
 }

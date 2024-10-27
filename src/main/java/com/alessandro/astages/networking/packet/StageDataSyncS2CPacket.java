@@ -9,7 +9,9 @@ import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class StageDataSyncS2CPacket {
@@ -44,8 +46,19 @@ public class StageDataSyncS2CPacket {
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
+            List<String> differencesBetweenClientAndServer = new ArrayList<>(ClientPlayerStage.getPlayerStages());
+            differencesBetweenClientAndServer.removeAll(stages);
+
+            List<String> differencesBetweenServerAndClient = new ArrayList<>(stages);
+            differencesBetweenServerAndClient.removeAll(ClientPlayerStage.getPlayerStages());
+
+            Set<String> differences = new HashSet<>();
+            differences.addAll(differencesBetweenClientAndServer);
+            differences.addAll(differencesBetweenServerAndClient);
+
+
             ClientPlayerStage.set(stages);
-            MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent());
+            MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent(new ArrayList<>(differences)));
         });
         ctx.get().setPacketHandled(true);
     }

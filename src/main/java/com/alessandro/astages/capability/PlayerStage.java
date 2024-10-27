@@ -1,8 +1,10 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.event.custom.StageAddedPlayerEvent;
-import com.alessandro.astages.event.custom.StageRemovedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageGetPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
@@ -12,7 +14,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import net.minecraftforge.eventbus.api.Event;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class PlayerStage {
     }
 
     public enum Operation {
-        ADD, REMOVE, REMOVE_ALL, GET
+        ADD, REMOVE, REMOVE_ALL, GET, LOGIN
     }
 
     private List<String> stages = new ArrayList<>();
@@ -46,13 +47,15 @@ public class PlayerStage {
             switch (operation) {
                 case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stage));
                 case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, stage));
-                case REMOVE_ALL, GET -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
+                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStageRemovedPlayerEvent(player, stages));
+                case GET -> MinecraftForge.EVENT_BUS.post(new StageGetPlayerEvent(player, stages));
+                case LOGIN -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
             }
         } else {
             switch (event.getOperation()) {
                 case ADD -> stages.remove(stage);
                 case REMOVE -> stages.add(stage);
-                case REMOVE_ALL, GET -> AStages.LOGGER.debug("CANCELLING NOT YET IMPLEMENTED!");
+                case REMOVE_ALL, GET, LOGIN -> AStages.LOGGER.debug("CANCELLING NOT YET IMPLEMENTED!");
             }
         }
     }

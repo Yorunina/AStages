@@ -36,6 +36,8 @@ public class BlockEventHandler {
             if (event.getLevel().getBlockEntity(pos) != null) {
                 Objects.requireNonNull(event.getLevel().getBlockEntity(pos)).getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> {
                     blockStage.setOwner(player.getUUID());
+
+                    // Objects.requireNonNull(event.getLevel().getBlockEntity(pos)).setChanged();
                 });
             }
         }

@@ -1,12 +1,12 @@
-package com.alessandro.astages.event.custom;
+package com.alessandro.astages.event.custom.actions;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
-public class StageAddedPlayerEvent extends PlayerEvent {
+public class StageRemovedPlayerEvent extends PlayerEvent {
     public final String stage;
 
-    public StageAddedPlayerEvent(Player player, String stage) {
+    public StageRemovedPlayerEvent(Player player, String stage) {
         super(player);
         this.stage = stage;
     }

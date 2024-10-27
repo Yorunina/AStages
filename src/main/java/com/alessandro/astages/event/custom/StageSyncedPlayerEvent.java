@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.custom;
 
 import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.util.Info;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Info("Sync event for server!")
 @Cancelable
 public class StageSyncedPlayerEvent extends PlayerEvent {
     final PlayerStage.Operation operation;

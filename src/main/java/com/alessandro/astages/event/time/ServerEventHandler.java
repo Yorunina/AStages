@@ -16,7 +16,7 @@ import java.util.Map;
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class ServerEventHandler {
 
-    @SubscribeEvent
+//    @SubscribeEvent
     public static void playerTick(TickEvent.@NotNull PlayerTickEvent event) {
 //        if (ARestrictionManager.ITEM_INSTANCE.)
 //        if (!AStagesUtil.isRealPlayer(event.player)) { return; }

@@ -42,6 +42,8 @@ public class AStagesAddArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        // Try remove client stages
+        // context.
         return SharedSuggestionProvider.suggest(ARestrictionManager.ALL_STAGES.stream().sorted(), builder);
     }
 
