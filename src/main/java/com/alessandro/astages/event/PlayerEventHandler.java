@@ -7,7 +7,6 @@ import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.event.item.ServerEventHandler;
 import com.alessandro.astages.util.Info;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
