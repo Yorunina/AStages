@@ -2,8 +2,6 @@ package com.alessandro.astages.integration.jade;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.integration.Mods;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
