@@ -7,7 +7,8 @@ import java.util.Locale;
 
 public enum Mods {
     JEI,
-    KUBEJS;
+    KUBEJS,
+    JADE;
 
     public boolean isLoaded() {
         return ModList.get().isLoaded(asId());
@@ -16,8 +17,4 @@ public enum Mods {
     public @NotNull String asId() {
         return toString().toLowerCase(Locale.ROOT);
     }
-
-//    public void ifInstalled() {
-//
-//    }
 }
