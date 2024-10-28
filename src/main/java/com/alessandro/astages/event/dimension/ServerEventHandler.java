@@ -3,7 +3,6 @@ package com.alessandro.astages.event.dimension;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ADimensionRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
@@ -33,7 +32,9 @@ public class ServerEventHandler {
             if (restriction != null) {
                 event.setCanceled(true);
 
-                player.displayClientMessage(Component.literal("You can't visit this dimension!"), true);
+                if (restriction.dimensionMessage != null) {
+                    player.displayClientMessage(restriction.getDimensionMessage(dimension), true);
+                }
             }
         }
     }

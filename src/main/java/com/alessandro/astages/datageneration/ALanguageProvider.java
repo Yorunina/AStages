@@ -11,6 +11,7 @@ public class ALanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        // ITEM
         add("tooltip.astages.hidden_name", "Unfamiliar Item");
         add("tooltip.astages.item_description", "This item has been staged to [%s]");
         add("message.astages.drop", "You dropped the %s.");
@@ -21,6 +22,8 @@ public class ALanguageProvider extends LanguageProvider {
         add("message.astages.place", "You couldn't place the %s.");
         add("tooltip.astages.jade_integration.item", "Unfamiliar Item");
         add("tooltip.astages.jade_integration.block", "Unfamiliar Block");
-        // add("tooltip.astages.jade_integration.ore", "Unfamiliar Block");
+
+        // DIMENSION
+        add("message.astages.dimension", "You can't visit this dimension!");
     }
 }
