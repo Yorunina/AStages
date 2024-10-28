@@ -54,7 +54,6 @@ public class PlayerEventHandler {
     @Info("For inventory checking!")
     @SubscribeEvent
     public static void onContainerOpen(@NotNull PlayerContainerEvent event) {
-        event.getEntity().sendSystemMessage(Component.literal("Added slot listener!"));
         event.getContainer().addSlotListener(new AInventorySlotListener(event.getEntity()));
     }
 

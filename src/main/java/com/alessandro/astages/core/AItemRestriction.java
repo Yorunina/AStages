@@ -1,18 +1,17 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.util.ARestriction;
-//import com.alessandro.astages.util.RestrictionType;
 import com.alessandro.astages.util.Info;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public class AItemRestriction implements ARestriction {
 
     public final String id;
@@ -34,7 +33,10 @@ public class AItemRestriction implements ARestriction {
     public Function<ItemStack, Component> attackMessage = stack -> Component.translatable("message.astages.attach", stack.getHoverName()).withStyle(ChatFormatting.RED);
     public Function<ItemStack, Component> pickupMessage = stack -> Component.translatable("message.astages.pickup", stack.getHoverName()).withStyle(ChatFormatting.RED);
     public Function<ItemStack, Component> usageMessage = stack -> Component.translatable("message.astages.use", stack.getHoverName()).withStyle(ChatFormatting.RED);
-
+    public Function<ItemStack, Component> mineMessage = stack -> Component.translatable("message.astages.mine", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> placeMessage = stack -> Component.translatable("message.astages.place", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> jadeItemMessage = stack -> Component.translatable("tooltip.astages.jade_integration.item", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> jadeBlockMessage = stack -> Component.translatable("tooltip.astages.jade_integration.block", stack.getHoverName()).withStyle(ChatFormatting.RED);
 
     public int pickUpDelay = 60;
 
@@ -195,6 +197,96 @@ public class AItemRestriction implements ARestriction {
 
     public AItemRestriction setCanBeDig(boolean canBeDig) {
         this.canBeDig = canBeDig;
+
+        return this;
+    }
+
+    public Component getHiddenName(ItemStack stack) {
+        return hiddenName.apply(stack);
+    }
+
+    public AItemRestriction setHiddenName(Function<ItemStack, Component> hiddenName) {
+        this.hiddenName = hiddenName;
+
+        return this;
+    }
+
+    public Component getDropMessage(ItemStack stack) {
+        return dropMessage.apply(stack);
+    }
+
+    public AItemRestriction setDropMessage(Function<ItemStack, Component> dropMessage) {
+        this.dropMessage = dropMessage;
+
+        return this;
+    }
+
+    public Component getAttackMessage(ItemStack stack) {
+        return attackMessage.apply(stack);
+    }
+
+    public AItemRestriction setAttackMessage(Function<ItemStack, Component> attackMessage) {
+        this.attackMessage = attackMessage;
+
+        return this;
+    }
+
+    public Component getPickupMessage(ItemStack stack) {
+        return pickupMessage.apply(stack);
+    }
+
+    public AItemRestriction setPickupMessage(Function<ItemStack, Component> pickupMessage) {
+        this.pickupMessage = pickupMessage;
+
+        return this;
+    }
+
+    public Component getUsageMessage(ItemStack stack) {
+        return usageMessage.apply(stack);
+    }
+
+    public AItemRestriction setUsageMessage(Function<ItemStack, Component> usageMessage) {
+        this.usageMessage = usageMessage;
+
+        return this;
+    }
+
+    public Component getMineMessage(ItemStack stack) {
+        return mineMessage.apply(stack);
+    }
+
+    public AItemRestriction setMineMessage(Function<ItemStack, Component> mineMessage) {
+        this.mineMessage = mineMessage;
+
+        return this;
+    }
+
+    public Component getPlaceMessage(ItemStack stack) {
+        return placeMessage.apply(stack);
+    }
+
+    public AItemRestriction setPlaceMessage(Function<ItemStack, Component> placeMessage) {
+        this.placeMessage = placeMessage;
+
+        return this;
+    }
+
+    public Component getJadeItemMessage(ItemStack stack) {
+        return jadeItemMessage.apply(stack);
+    }
+
+    public AItemRestriction setJadeItemMessage(Function<ItemStack, Component> jadeItemMessage) {
+        this.jadeItemMessage = jadeItemMessage;
+
+        return this;
+    }
+
+    public Component getJadeBlockMessage(ItemStack stack) {
+        return jadeBlockMessage.apply(stack);
+    }
+
+    public AItemRestriction setJadeBlockMessage(Function<ItemStack, Component> jadeBlockMessage) {
+        this.jadeBlockMessage = jadeBlockMessage;
 
         return this;
     }

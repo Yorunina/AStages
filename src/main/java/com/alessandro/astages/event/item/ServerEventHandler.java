@@ -31,6 +31,10 @@ public class ServerEventHandler {
             if (restriction != null && !restriction.canPickedUp) {
                 event.setCanceled(true);
                 event.getItem().setPickUpDelay(restriction.pickUpDelay);
+
+                if (restriction.pickupMessage != null) {
+                    event.getEntity().displayClientMessage(restriction.getPickupMessage(event.getItem().getItem()), true);
+                }
             }
         }
     }
@@ -46,7 +50,13 @@ public class ServerEventHandler {
         }
 
         var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), AStagesUtil.stateToStack(event.getState()));
-        if (restriction != null && !restriction.canBeDig) { event.setNewSpeed(-1f); }
+        if (restriction != null && !restriction.canBeDig) {
+            event.setNewSpeed(-1f);
+
+            if (restriction.mineMessage != null) {
+                event.getEntity().displayClientMessage(restriction.getMineMessage(AStagesUtil.stateToStack(event.getState())), true);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -59,7 +69,13 @@ public class ServerEventHandler {
 
         if (event.isCancelable()) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), event.getItemStack());
-            if (restriction != null && !restriction.canItemBeUsed) { event.setCanceled(true); }
+            if (restriction != null && !restriction.canItemBeUsed) {
+                event.setCanceled(true);
+
+                if (restriction.usageMessage != null) {
+                    event.getEntity().displayClientMessage(restriction.getUsageMessage(event.getItemStack()), true);
+                }
+            }
         }
     }
 
@@ -76,10 +92,15 @@ public class ServerEventHandler {
         }
 
         if (event.getEntity() instanceof ServerPlayer player) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, new ItemStack(event.getPlacedBlock().getBlock()));
+            var stack = new ItemStack(event.getPlacedBlock().getBlock());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
 
             if (restriction != null && !restriction.canBePlaced) {
                 event.setCanceled(true);
+
+                if (restriction.placeMessage != null) {
+                    player.displayClientMessage(restriction.getPlaceMessage(stack), true);
+                }
             }
         }
     }
@@ -94,6 +115,10 @@ public class ServerEventHandler {
 
             if (restriction != null && !restriction.canAttack) {
                 event.setCanceled(true);
+
+                if (restriction.attackMessage != null) {
+                    player.displayClientMessage(restriction.getAttackMessage(stack), true);
+                }
             }
         }
     }
@@ -122,8 +147,11 @@ public class ServerEventHandler {
                         restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
 
                     }
-
                     if (restriction != null) {
+                        if (restriction.dropMessage != null) {
+                            player.displayClientMessage(restriction.getDropMessage(slotContent), true);
+                        }
+
                         inventory.setItem(i, ItemStack.EMPTY);
                         player.drop(slotContent, false);
                     }

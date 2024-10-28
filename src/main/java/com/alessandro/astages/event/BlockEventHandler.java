@@ -19,9 +19,7 @@ import java.util.Objects;
 public class BlockEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onAttachedCapabilities(@NotNull AttachCapabilitiesEvent<BlockEntity> event) {
-        // if (!event.getObject().getCapability(BlockStageProvider.BLOCK_STAGE).isPresent()) {
         event.addCapability(new ResourceLocation(AStages.MODID, "owners"), new BlockStageProvider());
-        // }
     }
 
     @SubscribeEvent
@@ -32,8 +30,6 @@ public class BlockEventHandler {
             if (event.getLevel().getBlockEntity(pos) != null) {
                 Objects.requireNonNull(event.getLevel().getBlockEntity(pos)).getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> {
                     blockStage.setOwner(player.getUUID());
-
-                    // Objects.requireNonNull(event.getLevel().getBlockEntity(pos)).setChanged();
                 });
             }
         }

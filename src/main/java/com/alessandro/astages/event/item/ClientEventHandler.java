@@ -24,43 +24,9 @@ public class ClientEventHandler {
 
             if (restriction.hideTooltip) {
                 event.getToolTip().clear();
-                event.getToolTip().add(Component.literal("Unfamiliar Item").withStyle(ChatFormatting.RED));
+                // event.getToolTip().add(Component.literal("Unfamiliar Item").withStyle(ChatFormatting.RED));
+                event.getToolTip().add(restriction.getHiddenName(event.getItemStack()));
             }
         }
     }
-
-//    @SubscribeEvent
-//    public static void onBlockPlaced(BlockEvent.@NotNull EntityPlaceEvent event) {
-//
-//        if (event.getEntity() instanceof ServerPlayer player) {
-//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, new ItemStack(event.getPlacedBlock().getBlock()));
-//
-//            if (restriction != null && !restriction.canBePlaced) {
-//                event.setCanceled(true);
-//            }
-//        }
-//    }
-
-//    @SubscribeEvent
-//    public static void onInventoryChanged(@NotNull PlayerInventoryChangedEvent event) {
-//        var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getStack());
-//
-//        int armorStart = event.getEntity().getInventory().items.size();
-//        int armorEnd = armorStart + event.getEntity().getInventory().armor.size();
-//
-//        if (restriction != null) {
-//            if (event.getSlotIndex() >= armorStart && event.getSlotIndex() <= armorEnd && !restriction.canBeEquipped) {
-//                event.getEntity().getInventory().clearOrCountMatchingItems(stack -> stack.is(event.getStack().getItem()), event.getStack().getCount(), event.getEntity().inventoryMenu.getCraftSlots());
-//                event.getEntity().containerMenu.broadcastChanges();
-//                event.getEntity().inventoryMenu.slotsChanged(event.getEntity().getInventory());
-//            } else if (!restriction.canBeStoredInInventory) {
-//                event.getEntity().getInventory().clearOrCountMatchingItems(stack -> stack.is(event.getStack().getItem()), event.getStack().getCount(), event.getEntity().inventoryMenu.getCraftSlots());
-//                // event.getEntity().inventoryMenu.broadcastFullState();
-//                event.getEntity().containerMenu.broadcastChanges();
-//                // event.getEntity().containerMenu.sendAllDataToRemote();
-//                event.getEntity().inventoryMenu.slotsChanged(event.getEntity().getInventory());
-//                // event.getEntity().containerMenu.slotsChanged(event.getEntity().getInventory());
-//            }
-//        }
-//    }
 }

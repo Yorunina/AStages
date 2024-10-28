@@ -12,14 +12,11 @@ public record AInventorySlotListener(Player player) implements ContainerListener
 
     @Override
     public void slotChanged(@NotNull AbstractContainerMenu container, int index, @NotNull ItemStack stack) {
-        // if (!stack.isEmpty() && container.getSlot(index).container == player.getInventory() && !(container.getSlot(index) instanceof ResultSlot)) {
         if (!stack.isEmpty() && container.getSlot(index).container == player.getInventory()) {
-        // if (!stack.isEmpty()) {
             MinecraftForge.EVENT_BUS.post(new PlayerInventoryChangedEvent(player, stack, index));
         }
     }
 
     @Override
-    public void dataChanged(@NotNull AbstractContainerMenu container, int index, int item) {
-    }
+    public void dataChanged(@NotNull AbstractContainerMenu container, int index, int item) { }
 }

@@ -18,5 +18,9 @@ public class ALanguageProvider extends LanguageProvider {
         add("message.astages.attach", "You don't know how to attack with the %s.");
         add("message.astages.use", "You don't know how to use the %s.");
         add("message.astages.pickup", "You couldn't pick up the %s.");
+        add("message.astages.place", "You couldn't place the %s.");
+        add("tooltip.astages.jade_integration.item", "Unfamiliar Item");
+        add("tooltip.astages.jade_integration.block", "Unfamiliar Block");
+        // add("tooltip.astages.jade_integration.ore", "Unfamiliar Block");
     }
 }
