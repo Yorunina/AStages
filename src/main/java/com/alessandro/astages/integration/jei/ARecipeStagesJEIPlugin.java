@@ -59,23 +59,26 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
                 for (var recipeLocation : restriction.recipes) {
                     for (var category : categories) {
 
-                        var caster = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor((net.minecraft.world.item.crafting.RecipeType<T>) restriction.type).get(0);
-                        if (!canCast(category.getRecipeType().getRecipeClass(), caster.getClass())) {
-                            continue;
-                        }
+                        var c = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor((net.minecraft.world.item.crafting.RecipeType<T>) restriction.type);
+                        if (!c.isEmpty()) {
+                            var caster = c.get(0);
+                            if (!canCast(category.getRecipeType().getRecipeClass(), caster.getClass())) {
+                                continue;
+                            }
 
-                        var recipes = (Stream<Recipe<?>>) runtime.getRecipeManager().createRecipeLookup(category.getRecipeType()).get();
-                        var recipe = (Recipe<?>) recipes.filter(r -> r.getId().equals(recipeLocation)).findFirst().orElse(null);
+                            var recipes = (Stream<Recipe<?>>) runtime.getRecipeManager().createRecipeLookup(category.getRecipeType()).get();
+                            var recipe = (Recipe<?>) recipes.filter(r -> r.getId().equals(recipeLocation)).findFirst().orElse(null);
 
-                        if (recipe == null) {
-                            continue;
-                        }
+                            if (recipe == null) {
+                                continue;
+                            }
 
-                        if (!ClientPlayerStage.getPlayerStages().contains(entry.getKey())) {
-                            List<Recipe<?>> newList = new ArrayList<>();
-                            newList.add(recipe);
+                            if (!ClientPlayerStage.getPlayerStages().contains(entry.getKey())) {
+                                List<Recipe<?>> newList = new ArrayList<>();
+                                newList.add(recipe);
 
-                            runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(newList));
+                                runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(newList));
+                            }
                         }
                     }
                 }

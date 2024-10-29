@@ -9,8 +9,10 @@
     "APlayerEventJS",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
+    "recipe.botania.ABreweryBlockEntity",
     "recipe.mekanism.ARecipeCacheLookupMonitor",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
+    "recipe.thermal.AMachinePulverizerBlockEntity",
     "screen.AServerPlayer"
   ],
   "client": [

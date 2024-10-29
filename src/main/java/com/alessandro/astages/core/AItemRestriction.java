@@ -1,5 +1,6 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.util.AChangeable;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.Info;
 import net.minecraft.ChatFormatting;
@@ -12,7 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public class AItemRestriction implements ARestriction {
+public class AItemRestriction implements ARestriction, AChangeable {
 
     public final String id;
 
@@ -63,6 +64,11 @@ public class AItemRestriction implements ARestriction {
     }
 
     @Override
+    public void setChanged() {
+        ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions();
+    }
+
+    @Override
     public String toString() {
         return "AItemRestriction{" +
             "id='" + id + '\'' +
@@ -107,6 +113,7 @@ public class AItemRestriction implements ARestriction {
 
     public AItemRestriction setCanBeStoredInInventory(boolean canBeStoredInInventory) {
         this.canBeStoredInInventory = canBeStoredInInventory;
+        setChanged();
 
         return this;
     }
@@ -117,6 +124,7 @@ public class AItemRestriction implements ARestriction {
 
     public AItemRestriction setCanBeEquipped(boolean canBeEquipped) {
         this.canBeEquipped = canBeEquipped;
+        setChanged();
 
         return this;
     }

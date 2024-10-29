@@ -39,6 +39,31 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         ARestrictionManager.ALL_STAGES.add(stage);
     }
 
+    public void reloadInventoryAndEquipmentRestrictions() {
+        equipmentRestrictions.clear();
+        inventoryRestrictions.clear();
+
+        for (var entry : restrictions.entrySet()) {
+            for (var restriction : entry.getValue()) {
+                if (!restriction.canBeStoredInInventory) {
+                    var newInventoryList = inventoryRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
+                    if (!newInventoryList.isEmpty()) { newInventoryList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
+                    newInventoryList.add(restriction);
+
+                    inventoryRestrictions.put(entry.getKey(), newInventoryList);
+                }
+
+                if (!restriction.canBeEquipped) {
+                    var newEquipmentList = equipmentRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
+                    if (!newEquipmentList.isEmpty()) { newEquipmentList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
+                    newEquipmentList.add(restriction);
+
+                    equipmentRestrictions.put(entry.getKey(), newEquipmentList);
+                }
+            }
+        }
+    }
+
     public AItemRestriction getRestriction(String id) {
         for (String stage : restrictions.keySet()) {
             for (AItemRestriction restriction : restrictions.get(stage)) {
@@ -112,8 +137,8 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
     }
 
     public AItemRestriction getEquipmentRestriction(ItemStack stack) {
-        for (String stage : inventoryRestrictions.keySet()) {
-            for (AItemRestriction restriction : inventoryRestrictions.get(stage)) {
+        for (String stage : equipmentRestrictions.keySet()) {
+            for (AItemRestriction restriction : equipmentRestrictions.get(stage)) {
                 if (restriction.isRestricted(stack) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
                     return restriction;
                 }

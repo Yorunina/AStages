@@ -36,6 +36,8 @@ public class ClientEventHandler {
     }
 
     public static void renderAllAgain() {
+        // if (ARestrictionManager.RECIPE_INSTANCE.getRestrictions().isEmpty()) { return; }
+
         for (Map.Entry<String, List<AOreRestriction>> entry : ARestrictionManager.ORE_INSTANCE.getRestrictions().entrySet()) {
             for (AOreRestriction restriction : entry.getValue()) {
                 AStagesUtil.setBakedModelForState(restriction.original, new AOreBakedModel(entry.getKey(), restriction.original, restriction.replacement));

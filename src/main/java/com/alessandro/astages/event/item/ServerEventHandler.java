@@ -107,8 +107,6 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onEntityHurt(@NotNull LivingHurtEvent event) {
-        AStages.LOGGER.debug("Attack");
-
         if (event.getEntity() instanceof Player player) {
             ItemStack stack = player.getMainHandItem();
             AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
@@ -145,7 +143,9 @@ public class ServerEventHandler {
 
                     } else {
                         restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
-
+                        if (restriction != null) {
+                            AStages.LOGGER.debug(restriction.toString());
+                        }
                     }
                     if (restriction != null) {
                         if (restriction.dropMessage != null) {

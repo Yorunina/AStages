@@ -1,15 +1,13 @@
 package com.alessandro.astages.capability;
 
-import com.alessandro.astages.AStages;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @AutoRegisterCapability
 public class BlockStage {
+    public static String OWNER_KEY = "owner";
     private UUID owner;
 
     public UUID getOwner() {
@@ -28,11 +26,7 @@ public class BlockStage {
 
     public void loadNBTData(CompoundTag nbt) {
         if (nbt != null) {
-//            try {
-                owner = nbt.getUUID("owner");
-//            } catch (NullPointerException exception) {
-//                AStages.LOGGER.debug(exception.getMessage());
-//            }
+            owner = nbt.contains(OWNER_KEY) ? nbt.getUUID(OWNER_KEY) : null;
         }
     }
 }
