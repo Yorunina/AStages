@@ -1,6 +1,5 @@
 package com.alessandro.astages;
 
-import com.alessandro.astages.capability.ModData;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.command.argument.ModArguments;
 import com.mojang.logging.LogUtils;
@@ -16,7 +15,6 @@ public class Astages {
 
     public Astages(IEventBus modEventBus, ModContainer modContainer) {
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
-        ModData.ATTACHMENT_TYPES.register(modEventBus);
         PlayerStageProvider.ATTACHMENT_TYPES.register(modEventBus);
     }
 }
