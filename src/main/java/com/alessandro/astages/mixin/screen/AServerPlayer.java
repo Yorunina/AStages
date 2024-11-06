@@ -1,22 +1,19 @@
 package com.alessandro.astages.mixin.screen;
 
 import com.alessandro.astages.core.ARestrictionManager;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import javax.annotation.Nullable;
 import java.util.OptionalInt;
 
 @Mixin(value = ServerPlayer.class)
@@ -30,41 +27,12 @@ public class AServerPlayer {
         return (ServerPlayer) (Object) this;
     }
 
-    /**
-     * @author Alessandro
-     * @reason Add possibility to lock menus under stages
-     */
-    @Overwrite
-    public OptionalInt openMenu(@Nullable MenuProvider pMenu) {
-        if (pMenu == null) {
-            return OptionalInt.empty();
-        } else {
-            if (serverPlayer$self().containerMenu != serverPlayer$self().inventoryMenu) {
-                serverPlayer$self().closeContainer();
-            }
+    @Inject(method = "openMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    public void astages$openMenu(MenuProvider pMenu, CallbackInfoReturnable<OptionalInt> cir, @NotNull AbstractContainerMenu abstractcontainermenu) {
+        var restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(serverPlayer$self(), abstractcontainermenu.getType());
 
-            serverPlayer$self().nextContainerCounter();
-            AbstractContainerMenu abstractcontainermenu = pMenu.createMenu(containerCounter, serverPlayer$self().getInventory(), serverPlayer$self());
-            if (abstractcontainermenu == null) {
-                if (serverPlayer$self().isSpectator()) {
-                    serverPlayer$self().displayClientMessage(Component.translatable("container.spectatorCantOpen").withStyle(ChatFormatting.RED), true);
-                }
-
-                return OptionalInt.empty();
-            } else {
-                // New part
-                var restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(serverPlayer$self(), abstractcontainermenu.getType());
-
-                if (restriction == null) {
-                    connection.send(new ClientboundOpenScreenPacket(abstractcontainermenu.containerId, abstractcontainermenu.getType(), pMenu.getDisplayName()));
-                    serverPlayer$self().initMenu(abstractcontainermenu);
-                    serverPlayer$self().containerMenu = abstractcontainermenu;
-                    MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(serverPlayer$self(), serverPlayer$self().containerMenu));
-                }
-
-                // Old part
-                return OptionalInt.of(this.containerCounter);
-            }
+        if (restriction != null) {
+            cir.setReturnValue(OptionalInt.of(containerCounter));
         }
     }
 }
