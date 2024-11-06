@@ -32,6 +32,10 @@ public class AServerPlayer {
         var restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(serverPlayer$self(), abstractcontainermenu.getType());
 
         if (restriction != null) {
+            if (restriction.openMessage != null) {
+                serverPlayer$self().displayClientMessage(restriction.getOpenMessage(abstractcontainermenu.getType()), true);
+            }
+
             cir.setReturnValue(OptionalInt.of(containerCounter));
         }
     }

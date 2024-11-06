@@ -25,5 +25,8 @@ public class ALanguageProvider extends LanguageProvider {
 
         // DIMENSION
         add("message.astages.dimension", "You can't visit this dimension!");
+
+        // SCREEN
+        add("message.astages.screen", "You can't open this menu!");
     }
 }

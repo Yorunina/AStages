@@ -1,7 +1,6 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.util.ARestriction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class AOreRestriction implements ARestriction {
@@ -9,7 +8,6 @@ public class AOreRestriction implements ARestriction {
 
     public BlockState original;
     public BlockState replacement;
-
 
     public AOreRestriction(String id) {
         this.id = id;

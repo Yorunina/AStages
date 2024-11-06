@@ -1,16 +1,20 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.util.ARestriction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class AScreenRestriction implements ARestriction {
     public final String id;
 
     public List<MenuType<?>> menus = new ArrayList<>();
+
+    public Function<MenuType<?>, Component> openMessage = menu -> Component.translatable("message.astages.screen", menu.toString()).withStyle(ChatFormatting.RED);
 
     public AScreenRestriction(String id) {
         this.id = id;
@@ -30,5 +34,15 @@ public class AScreenRestriction implements ARestriction {
         }
 
         return false;
+    }
+
+    public Component getOpenMessage(MenuType<?> menu) {
+        return openMessage.apply(menu);
+    }
+
+    public AScreenRestriction setOpenMessage(Function<MenuType<?>, Component> hiddenName) {
+        this.openMessage = hiddenName;
+
+        return this;
     }
 }
