@@ -1,11 +1,7 @@
 package com.alessandro.astages.config;
 
-import com.alessandro.astages.AStages;
 import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AStagesCommon {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();

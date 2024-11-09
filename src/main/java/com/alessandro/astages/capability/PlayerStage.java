@@ -1,8 +1,6 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.config.AStagesCommon;
-import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageGetPlayerEvent;
@@ -12,12 +10,7 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
