@@ -65,7 +65,7 @@ public class AItemRestriction implements ARestriction, AChangeable {
 
     @Override
     public void setChanged() {
-        ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions();
+        ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions(this);
     }
 
     @Override

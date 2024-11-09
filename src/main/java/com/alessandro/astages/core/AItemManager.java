@@ -3,6 +3,7 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.Info;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,10 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
     public final Map<String, List<AItemRestriction>> restrictions = new HashMap<>();
     public final Map<String, List<AItemRestriction>> equipmentRestrictions = new HashMap<>();
     public final Map<String, List<AItemRestriction>> inventoryRestrictions = new HashMap<>();
+
+    public Map<String, List<AItemRestriction>> getRestrictions() {
+        return restrictions;
+    }
 
     public void addRestriction(String stage, AItemRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());
@@ -39,7 +44,8 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         ARestrictionManager.ALL_STAGES.add(stage);
     }
 
-    public void reloadInventoryAndEquipmentRestrictions() {
+    @Info("Implement an optimized version of this method")
+    public void reloadInventoryAndEquipmentRestrictions(AItemRestriction unused) {
         equipmentRestrictions.clear();
         inventoryRestrictions.clear();
 

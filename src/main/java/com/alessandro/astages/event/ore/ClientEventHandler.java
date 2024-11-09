@@ -16,20 +16,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID, value = Dist.CLIENT)
+@ParametersAreNonnullByDefault
 public class ClientEventHandler {
     @SubscribeEvent
-    public static void stageSync(@NotNull ClientSynchronizeStagesEvent event) {
+    public static void stageSync(ClientSynchronizeStagesEvent event) {
         if (!ARestrictionManager.areOreStages(event.getStagesSynced())) { return; }
 
         renderAllAgain();
     }
 
     @SubscribeEvent
-    public static void playerLoggedIn(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
+    public static void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             ModNetworking.sendToPlayer(new RenderAtLoginS2CPacket(), player);
         }

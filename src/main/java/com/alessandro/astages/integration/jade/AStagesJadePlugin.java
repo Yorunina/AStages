@@ -34,7 +34,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
 
                 if (restriction != null) {
                     tooltip.clear();
-                    // tooltip.add(Component.literal("Unfamiliar Item").withStyle(ChatFormatting.RED));
+
                     if (restriction.jadeBlockMessage != null) {
                         tooltip.add(restriction.getJadeBlockMessage(stack));
                     }
@@ -49,7 +49,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
 
                     if (restriction != null) {
                         tooltip.clear();
-                        // tooltip.add(Component.literal("Unfamiliar Item").withStyle(ChatFormatting.RED));
+
                         if (restriction.jadeItemMessage != null) {
                             tooltip.add(restriction.getJadeItemMessage(itemEntity.getItem()));
                         }

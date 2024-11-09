@@ -1,6 +1,8 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageGetPlayerEvent;
@@ -8,13 +10,20 @@ import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,8 +41,13 @@ public class PlayerStage {
 
     private List<String> stages = new ArrayList<>();
 
-    @Info("TO BE TESTED!")
+    @Info("Not required, for commands only!")
     public void setChangedFor(Player player, @NotNull Operation operation, String stage) {
+        setChangedFor(player, operation, stage, false);
+    }
+
+    @Info("TO BE TESTED!")
+    public void setChangedFor(Player player, @NotNull Operation operation, @Nullable String stage, boolean silentTitle) {
 //    }
 //
 //    public void setChangedFor(Player player, @NotNull Operation operation, List<String> stage) {
@@ -43,6 +57,10 @@ public class PlayerStage {
 
         if (!event.isCanceled()) {
             ModNetworking.sendToPlayer(new StageDataSyncS2CPacket(stages), (ServerPlayer) player);
+
+            if (!silentTitle && stage != null) {
+                AStagesUtil.showTitles(operation, stage);
+            }
 
             switch (operation) {
                 case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stage));

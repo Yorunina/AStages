@@ -10,10 +10,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @Mod.EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
-    public static void onEntityTravel(@NotNull EntityTravelToDimensionEvent event) {
+    public static void onEntityTravel(EntityTravelToDimensionEvent event) {
         if (event.getEntity() instanceof Player player) {
             ResourceLocation dimension = event.getDimension().location();
 

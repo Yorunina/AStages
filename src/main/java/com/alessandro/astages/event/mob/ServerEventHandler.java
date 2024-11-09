@@ -10,12 +10,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
-    public static void checkMobSpawning(MobSpawnEvent.@NotNull PositionCheck event) {
+    public static void checkMobSpawning(MobSpawnEvent.PositionCheck event) {
 
 //        if (event.getSpawnType() == MobSpawnType.SPAWNER)
 //            return;

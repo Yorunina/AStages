@@ -17,15 +17,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     public static final Map<UUID, Boolean> playerIsInStructure = new HashMap<>();
 
     @Info("To be tested!")
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (ARestrictionManager.STRUCTURE_INSTANCE.getRestrictions().isEmpty()) { return; }
         if (event.player.level().isClientSide) { return; }
         if (event.phase == TickEvent.Phase.START) { return; }

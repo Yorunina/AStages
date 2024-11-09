@@ -18,13 +18,17 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     public static boolean isInventoryChanged = false;
 
     @SubscribeEvent
-    public static void onItemPickup(@NotNull EntityItemPickupEvent event) {
+    public static void onItemPickup(EntityItemPickupEvent event) {
         if (canBeRunForPlayer(event.getEntity())) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), event.getItem().getItem());
 
@@ -40,7 +44,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void breakSpeed(PlayerEvent.@NotNull BreakSpeed event) {
+    public static void breakSpeed(PlayerEvent.BreakSpeed event) {
         boolean isClientSide = event.getEntity().level().isClientSide;
 
         if (isClientSide) {
@@ -60,7 +64,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onItemUsed(@NotNull PlayerInteractEvent event) {
+    public static void onItemUsed(PlayerInteractEvent event) {
         if (event.getLevel().isClientSide && event.isCancelable()) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack());
             if (restriction != null && !restriction.canItemBeUsed) { event.setCanceled(true); }
@@ -80,7 +84,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onBlockPlaced(BlockEvent.@NotNull EntityPlaceEvent event) {
+    public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         if (event.getLevel().isClientSide()) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(new ItemStack(event.getPlacedBlock().getBlock()));
 
@@ -106,7 +110,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityHurt(@NotNull LivingHurtEvent event) {
+    public static void onEntityHurt(LivingHurtEvent event) {
         if (event.getEntity() instanceof Player player) {
             ItemStack stack = player.getMainHandItem();
             AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
@@ -122,7 +126,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!isInventoryChanged) { return; }
 
         if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
@@ -162,7 +166,7 @@ public class ServerEventHandler {
         }
     }
 
-    public static boolean canBeRunForPlayer(Player player) {
+    public static boolean canBeRunForPlayer(@Nullable Player player) {
         return player != null && !player.level().isClientSide && !(player instanceof FakePlayer);
     }
 }

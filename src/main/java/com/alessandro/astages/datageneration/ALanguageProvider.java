@@ -11,6 +11,9 @@ public class ALanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        // GENERAL
+        add("title.astages.add", "%s unlocked!");
+
         // ITEM
         add("tooltip.astages.hidden_name", "Unfamiliar Item");
         add("tooltip.astages.item_description", "This item has been staged to [%s]");

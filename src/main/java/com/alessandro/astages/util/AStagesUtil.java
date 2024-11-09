@@ -1,34 +1,89 @@
 package com.alessandro.astages.util;
 
+import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
+import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.core.stage.AStageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectUtil;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AStagesUtil {
-    // Util class
+    public static void showTitles(PlayerStage.Operation operation, String stage) {
+        var aStage = AStageManager.getStage(stage);
+        if (aStage != null) {
+            setTimes(aStage.fadeIn, aStage.stay, aStage.fadeOut);
 
-//    static {
-//        AStagesUtil.runForSide(
-//            true,
-//            () -> AStages.LOGGER.debug("Client!"),
-//            () -> AStages.LOGGER.debug("Server!")
-//        );
-//    }
+            if (operation == PlayerStage.Operation.ADD) {
+                if (aStage.addTitle != null) {
+                    setTitle(aStage.addTitle);
+                }
+
+                if (aStage.addSubTitle != null) {
+                    setSubTitle(aStage.addSubTitle);
+                }
+            } else if (operation == PlayerStage.Operation.REMOVE) {
+                if (aStage.removeTitle != null) {
+                    setTitle(aStage.removeTitle);
+                }
+
+                if (aStage.removeSubTitle != null) {
+                    AStagesUtil.setSubTitle(aStage.removeSubTitle);
+                }
+            }
+        } else {
+            if (AStagesCommon.ENABLE_TITLE_AFTER_STAGE_ADDING.get()) {
+                setTimes(20, 60, 20);
+
+                if (operation == PlayerStage.Operation.ADD) {
+                    setTitle(Component.translatable("title.astages.add", stageToDescription(stage)).withStyle(AStagesCommon.TITLE_COLOR.get()));
+                }
+            }
+        }
+    }
+
+    @Contract("_ -> !null")
+    public static @NotNull String stageToDescription(@NotNull String input) {
+        return capitalizeWords(input.replace('_', ' '));
+    }
+
+    public static @NotNull String capitalizeWords(@NotNull String input) {
+        // split the input string into an array of words
+        String[] words = input.split("\\s");
+
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            result.append(Character.toTitleCase(word.charAt(0)))
+                .append(word.substring(1))
+                .append(" ");
+        }
+
+        return result.toString().trim();
+    }
+
+    public static void setTitle(Component component) {
+        Minecraft.getInstance().gui.setTitle(component);
+    }
+
+    public static void setSubTitle(Component component) {
+        Minecraft.getInstance().gui.setSubtitle(component);
+    }
+
+    public static void setTimes(int fadeIn, int stay, int fadeOut) {
+        Minecraft.getInstance().gui.setTimes(fadeIn, stay, fadeOut);
+    }
 
     public static void runForSide(boolean discriminantForClient, Runnable client, Runnable server) {
         if (discriminantForClient) {
@@ -42,6 +97,7 @@ public class AStagesUtil {
         return player instanceof ServerPlayer;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasStage(@NotNull Player player, String stage) {
         AtomicBoolean toReturn = new AtomicBoolean(false);
 
@@ -70,33 +126,5 @@ public class AStagesUtil {
     @Contract("_ -> new")
     public static @NotNull ItemStack blockToStack(Block block) {
         return new ItemStack(block);
-    }
-
-    public static float getNewDigSpeed(@NotNull Player player, BlockState state) {
-        float defaultSpeed = player.getInventory().getDestroySpeed(state);
-        if (defaultSpeed > 1.0F) {
-            int i = EnchantmentHelper.getBlockEfficiency(player);
-            ItemStack itemstack = player.getMainHandItem();
-            if (i > 0 && !itemstack.isEmpty()) {
-                defaultSpeed += (float)(i * i + 1);
-            }
-        }
-
-        if (MobEffectUtil.hasDigSpeed(player)) {
-            defaultSpeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(player) + 1) * 0.2F;
-        }
-
-        if (player.hasEffect(MobEffects.DIG_SLOWDOWN)) {
-            float modifier = switch (Objects.requireNonNull(player.getEffect(MobEffects.DIG_SLOWDOWN)).getAmplifier()) {
-                case 0 -> 0.3F;
-                case 1 -> 0.09F;
-                case 2 -> 0.0027F;
-                default -> 8.1E-4F;
-            };
-
-            defaultSpeed *= modifier;
-        }
-
-        return defaultSpeed;
     }
 }

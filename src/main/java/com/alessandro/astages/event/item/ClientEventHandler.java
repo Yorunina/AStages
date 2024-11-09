@@ -18,7 +18,6 @@ public class ClientEventHandler {
 
             if (restriction.hideTooltip) {
                 event.getToolTip().clear();
-                // event.getToolTip().add(Component.literal("Unfamiliar Item").withStyle(ChatFormatting.RED));
                 event.getToolTip().add(restriction.getHiddenName(event.getItemStack()));
             }
         }

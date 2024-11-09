@@ -8,13 +8,15 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @Info("For exp settings! - For other ore changing see mixin/ore package!")
     @SubscribeEvent
-    public static void onBlockBroken(BlockEvent.@NotNull BreakEvent event) {
+    public static void onBlockBroken(BlockEvent.BreakEvent event) {
         var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(event.getState());
 
         if (restriction != null) {
