@@ -1,11 +1,13 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -21,7 +23,11 @@ public class ARecipeManager implements AManager<ARecipeRestriction, ARecipeManag
     }
 
     @Override
-    public void addRestriction(String stage, ARecipeRestriction restriction) {
+    public void addRestriction(String stage, @NotNull ARecipeRestriction restriction) {
+        if (restriction.type == null) {
+            AStages.LOGGER.error("Recipe type for restriction {} is null!", restriction.id);
+        }
+
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());
 
         if (!newList.isEmpty()) { newList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }

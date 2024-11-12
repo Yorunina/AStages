@@ -12,7 +12,6 @@ import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,8 +25,7 @@ import java.util.stream.Stream;
 @JeiPlugin
 public class ARecipeStagesJEIPlugin implements IModPlugin {
     private IJeiRuntime runtime;
-    private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "item_jei");
-    private final List<ItemStack> itemsToHide = new ArrayList<>();
+    private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "recipe_jei");
 
     public ARecipeStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;
@@ -120,7 +118,6 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
     @SuppressWarnings("unchecked")
     public static <T> T cast(Object o) {
-
         return (T) o;
     }
 }

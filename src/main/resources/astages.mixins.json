@@ -10,6 +10,7 @@
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
     "recipe.botania.ABreweryBlockEntity",
+    "recipe.botania.AOrechidBlockEntity",
     "recipe.mekanism.ARecipeCacheLookupMonitor",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
     "recipe.thermal.AMachinePulverizerBlockEntity",

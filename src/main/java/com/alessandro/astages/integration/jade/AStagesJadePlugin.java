@@ -4,14 +4,22 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import snownee.jade.api.*;
 
 @WailaPlugin
 public class AStagesJadePlugin implements IWailaPlugin {
     @Override
+    public void register(@NotNull IWailaCommonRegistration registration) {
+        registration.registerBlockDataProvider(AStagesBlockComponentProvider.INSTANCE, BlockEntity.class);
+    }
+
+    @Override
     public void registerClient(@NotNull IWailaClientRegistration registration) {
         if (!Mods.JADE.isLoaded()) { return; }
+        registration.registerBlockComponent(AStagesBlockComponentProvider.INSTANCE, Block.class);
 
         registration.addRayTraceCallback((hitResult, accessor, originalAccessor) -> {
             if (accessor instanceof BlockAccessor blockAccessor) {

@@ -5,6 +5,8 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.*;
 //import com.alessandro.astages.util.RestrictionType;
+import com.alessandro.astages.core.stage.AStage;
+import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import dev.latvian.mods.kubejs.script.ScriptManager;
@@ -56,6 +58,15 @@ public class AStagesKubeJSUtil {
         return ARestrictionManager.getRestrictionById(type, id);
     }
 
+    // STAGES
+    public static @NotNull AStage customizeStage(String s) {
+        var stage = new AStage(s);
+
+        AStageManager.STAGES.add(stage);
+
+        return stage;
+    }
+
     // ITEM Restrictions
     public static @NotNull AItemRestriction addRestrictionForItem(String id, String stage, Item @NotNull ... items) {
         // var restriction = new AItemRestriction(id, RestrictionType.RUNTIME);
@@ -92,25 +103,15 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-//    public static @NotNull AItemRestriction addRestrictionForTag(String id, String stage, TagKey<Item> tag) {
-////        var tagType = Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(TagKey.create(Registries.ITEM, new ResourceLocation("")));
-//        if (tag == null) {
-//            ConsoleJS.getCurrent(ScriptManager.getCurrentContext()).error("Not found item tag");
-//            return new AItemRestriction("null");
-//        }
-//
-//        var restriction = new AItemRestriction(id);
-//        Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(tag).forEach(item -> restriction.restrict(itemStack -> itemStack.is(item)));
-//
-////        if (tag == null) {
-////            ConsoleJS.getCurrent(ScriptManager.getCurrentContext()).error("Not found item tag");
-////            return new AItemRestriction("null");
-////        }
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
-//
-//        return restriction;
-//    }
+    public static @NotNull AItemRestriction addRestrictionForTag(String id, String stage, ResourceLocation name) {
+        var tag = ItemTags.create(name);
+        var restriction = new AItemRestriction(id);
+        restriction.restrict(itemStack -> itemStack.is(tag));
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
 
     // DIMENSION Restrictions
     public static @NotNull ADimensionRestriction addRestrictionForDimension(String id, String stage, ResourceLocation dimension) {
@@ -167,6 +168,16 @@ public class AStagesKubeJSUtil {
         restriction.restrict(original, replacement);
 
         ARestrictionManager.ORE_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    // PET Restrictions
+    public static @NotNull APetRestriction addRestrictionForPet(String id, String stage, EntityType<?> pet) {
+        var restriction = new APetRestriction(id);
+        restriction.restrict(pet);
+
+        ARestrictionManager.PET_INSTANCE.addRestriction(stage, restriction);
 
         return restriction;
     }

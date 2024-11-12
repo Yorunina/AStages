@@ -12,7 +12,8 @@ public enum ARestrictionType {
     STRUCTURE,
     RECIPE,
     SCREEN,
-    ORE;
+    ORE,
+    PET;
 
     public @NotNull String getId() {
         return toString().toLowerCase(Locale.ROOT);

@@ -1,7 +1,5 @@
 package com.alessandro.astages.core.stage;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +17,5 @@ public class AStageManager {
         }
 
         return null;
-    }
-
-    static {
-        STAGES.add(new AStage("stage_test_class").setAddTitle(Component.literal("Added CUSTOM")).setAddSubTitle(Component.literal("CUSTOM").withStyle(ChatFormatting.GREEN)));
     }
 }

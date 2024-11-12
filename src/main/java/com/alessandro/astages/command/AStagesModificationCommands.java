@@ -53,7 +53,7 @@ public class AStagesModificationCommands {
             playerStage.addStage(stageToAdd);
 
             if (!silentChat) {
-                player.sendSystemMessage(Component.literal("Stage \"" + stageToAdd + "\" added successfully!").withStyle(ChatFormatting.GREEN));
+                player.sendSystemMessage(Component.translatable("chat.astages.add", stageToAdd).withStyle(ChatFormatting.GREEN));
             }
 
             playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stageToAdd, silentTitle);
@@ -66,13 +66,13 @@ public class AStagesModificationCommands {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             if (playerStage.removeStage(stageToRemove) == PlayerStage.Status.SUCCESS) {
                 if (!silentChat) {
-                    player.sendSystemMessage(Component.literal("Stage \"" + stageToRemove + "\" removed successfully!").withStyle(ChatFormatting.GREEN));
+                    player.sendSystemMessage(Component.translatable("chat.astages.remove", stageToRemove).withStyle(ChatFormatting.GREEN));
                 }
 
                 playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stageToRemove, silentTitle);
             } else {
                 if (!silentChat) {
-                    player.sendSystemMessage(Component.literal("Stage \"" + stageToRemove + "\" is not present in your stages!").withStyle(ChatFormatting.RED));
+                    player.sendSystemMessage(Component.translatable("chat.astages.not_present", stageToRemove).withStyle(ChatFormatting.RED));
                 }
             }
         });
@@ -85,7 +85,7 @@ public class AStagesModificationCommands {
             playerStage.removeAllStages();
 
             if (!silentChat) {
-                player.sendSystemMessage(Component.literal("All stages removed successfully!").withStyle(ChatFormatting.GREEN));
+                player.sendSystemMessage(Component.translatable("chat.astages.remove_all").withStyle(ChatFormatting.GREEN));
             }
 
             playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, null, silentTitle);
@@ -97,11 +97,11 @@ public class AStagesModificationCommands {
     private static int infoCommand(Player player) {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             if (playerStage.getStages().isEmpty()) {
-                player.sendSystemMessage(Component.literal("No stages unlocked for player ").append(player.getName()).append("!").withStyle(ChatFormatting.RED));
+                player.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", player.getName()).withStyle(ChatFormatting.RED));
             } else {
-                player.sendSystemMessage(Component.literal("Stages unlocked by ").append(player.getName()).append(":").withStyle(ChatFormatting.GREEN));
+                player.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", player.getName()).withStyle(ChatFormatting.GREEN));
                 for (var stage : playerStage.getStages()) {
-                    player.sendSystemMessage(Component.literal(" - ").append(stage));
+                    player.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
                 }
             }
         });

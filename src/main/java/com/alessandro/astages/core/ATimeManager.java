@@ -37,6 +37,7 @@ public class ATimeManager implements AManager<ATimeRestriction, String> {
         return null;
     }
 
+    @Override
     public ATimeRestriction getRestriction(Player player, String id) {
         for (String stage : restrictions.keySet()) {
             for (ATimeRestriction restriction : restrictions.get(stage)) {

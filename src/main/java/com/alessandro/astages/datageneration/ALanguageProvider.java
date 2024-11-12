@@ -13,6 +13,13 @@ public class ALanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         // GENERAL
         add("title.astages.add", "%s unlocked!");
+        add("chat.astages.add", "Stage %s added successfully!");
+        add("chat.astages.remove", "Stage %s removed successfully!");
+        add("chat.astages.not_present", "Stages %s is not present in your stages");
+        add("chat.astages.remove_all", "All stages removed successfully!");
+        add("chat.astages.info.no_stages", "No stages unlocked for player %s!");
+        add("chat.astages.info.has_stages", "Stages unlocked by %s:");
+        add("chat.astages.info.list_item", " - %s");
 
         // ITEM
         add("tooltip.astages.hidden_name", "Unfamiliar Item");
@@ -31,5 +38,13 @@ public class ALanguageProvider extends LanguageProvider {
 
         // SCREEN
         add("message.astages.screen", "You can't open this menu!");
+
+        // PET
+        add("message.astages.tame", "You can't tame %s!");
+        add("message.astages.breed", "You can't breed %s!");
+        add("message.astages.mount", "You can't mount %s!");
+
+        // JADE INTEGRATION
+        add("config.jade.plugin_astages.block_component_provider", "AStages");
     }
 }

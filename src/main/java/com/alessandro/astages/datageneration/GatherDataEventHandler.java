@@ -1,7 +1,7 @@
 package com.alessandro.astages.datageneration;
 
 import com.alessandro.astages.AStages;
-import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,9 +11,11 @@ import org.jetbrains.annotations.NotNull;
 public class GatherDataEventHandler {
     @SubscribeEvent
     public static void gatherData(@NotNull GatherDataEvent event) {
+        PackOutput packOutput = event.getGenerator().getPackOutput();
+
         event.getGenerator().addProvider(
             event.includeClient(),
-            (DataProvider.Factory<ALanguageProvider>) output -> new ALanguageProvider(output, "en_us")
+            new ALanguageProvider(packOutput, "en_us")
         );
     }
 }
