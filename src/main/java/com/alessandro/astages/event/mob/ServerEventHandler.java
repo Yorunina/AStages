@@ -2,10 +2,8 @@ package com.alessandro.astages.event.mob;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.Info;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraftforge.event.entity.living.AnimalTameEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

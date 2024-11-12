@@ -2,14 +2,7 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
-import mekanism.common.recipe.MekanismRecipeType;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 

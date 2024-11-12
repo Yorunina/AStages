@@ -1,6 +1,5 @@
 package com.alessandro.astages.mixin.recipe.botania;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.core.ARecipeManager;
 import com.alessandro.astages.core.ARestrictionManager;

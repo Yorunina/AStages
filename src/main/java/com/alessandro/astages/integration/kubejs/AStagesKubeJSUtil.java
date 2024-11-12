@@ -1,29 +1,22 @@
 package com.alessandro.astages.integration.kubejs;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.*;
-//import com.alessandro.astages.util.RestrictionType;
 import com.alessandro.astages.core.stage.AStage;
 import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import dev.latvian.mods.kubejs.script.ScriptManager;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
