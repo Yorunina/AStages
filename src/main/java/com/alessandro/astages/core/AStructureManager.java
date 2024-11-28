@@ -9,10 +9,15 @@ import net.minecraft.world.entity.player.Player;
 import java.util.*;
 
 public class AStructureManager implements AManager<AStructureRestriction, ResourceLocation> {
-    private final Map<String, List<AStructureRestriction>> restrictions = new HashMap<>();
+    private Map<String, List<AStructureRestriction>> restrictions = new HashMap<>();
 
     public Map<String, List<AStructureRestriction>> getRestrictions() {
         return restrictions;
+    }
+
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
     }
 
     @Override
@@ -32,19 +37,6 @@ public class AStructureManager implements AManager<AStructureRestriction, Resour
         for (String stage : restrictions.keySet()) {
             for (AStructureRestriction restriction : restrictions.get(stage)) {
                 if (restriction.id.equals(id)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public AStructureRestriction getRestriction(ResourceLocation structure) {
-        for (String stage : restrictions.keySet()) {
-            for (AStructureRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(structure) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
                     return restriction;
                 }
             }

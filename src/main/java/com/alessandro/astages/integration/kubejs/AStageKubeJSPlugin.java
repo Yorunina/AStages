@@ -1,6 +1,7 @@
 package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
@@ -8,9 +9,13 @@ import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 public class AStageKubeJSPlugin extends KubeJSPlugin {
+    private static boolean isStartup = true;
+
     static {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
@@ -36,5 +41,22 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         if (!Mods.KUBEJS.isLoaded()) return;
 
         AStages.LOGGER.debug("KUBEJS: INITIALIZED PLUGIN!");
+    }
+
+    @Override
+    public void onServerReload() {
+        if (!isStartup) {
+            ARestrictionManager.reloadClients();
+
+            ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClients();
+            ARestrictionManager.ORE_INSTANCE.synchronizeWithClients();
+        } else {
+            isStartup = false;
+        }
+    }
+
+    @Override
+    public void clearCaches() {
+        ARestrictionManager.reload();
     }
 }

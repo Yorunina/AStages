@@ -1,18 +1,39 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ud.OreSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ud.RecipeSyncerS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
 public class AOreManager implements AManager<AOreRestriction, BlockState> {
-    private final Map<String, List<AOreRestriction>> restrictions = new HashMap<>();
+    private Map<String, List<AOreRestriction>> restrictions = new HashMap<>();
 
     public Map<String, List<AOreRestriction>> getRestrictions() {
         return restrictions;
+    }
+
+    public void synchronizeWithClient(ServerPlayer player) {
+        restrictions.forEach((s, restrictions) -> {
+            restrictions.forEach(r -> ModNetworking.sendToPlayer(new OreSyncerS2CPacket(r.id, s, r.original, r.replacement), player));
+        });
+    }
+
+    public void synchronizeWithClients() {
+        restrictions.forEach((s, restrictions) -> {
+            restrictions.forEach(r -> ModNetworking.sendToClients(new OreSyncerS2CPacket(r.id, s, r.original, r.replacement)));
+        });
+    }
+
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
     }
 
     @Override
@@ -33,19 +54,6 @@ public class AOreManager implements AManager<AOreRestriction, BlockState> {
         for (String stage : restrictions.keySet()) {
             for (AOreRestriction restriction : restrictions.get(stage)) {
                 if (restriction.id.equals(id)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public AOreRestriction getRestriction(BlockState original) {
-        for (String stage : restrictions.keySet()) {
-            for (AOreRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(original) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
                     return restriction;
                 }
             }

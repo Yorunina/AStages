@@ -17,7 +17,7 @@ public class ServerEventHandler {
     @Info("For exp settings! - For other ore changing see mixin/ore package!")
     @SubscribeEvent
     public static void onBlockBroken(BlockEvent.BreakEvent event) {
-        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(event.getState());
+        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(event.getPlayer(), event.getState());
 
         if (restriction != null) {
             var stack = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);

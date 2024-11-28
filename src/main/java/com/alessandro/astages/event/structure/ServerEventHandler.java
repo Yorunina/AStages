@@ -6,15 +6,20 @@ import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -60,11 +65,13 @@ public class ServerEventHandler {
     @Info("Player can't break block in the structure")
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        for (UUID uuid : playerIsInStructure.keySet()) {
-            if (event.getPlayer().getUUID().equals(uuid) && playerIsInStructure.get(uuid)) {
-                event.setCanceled(true);
-                event.setResult(Event.Result.DENY);
-                AStages.LOGGER.debug("Can't break this structure!");
+        if (canBeRunForPlayer(event.getPlayer())) {
+            for (UUID uuid : playerIsInStructure.keySet()) {
+                if (event.getPlayer().getUUID().equals(uuid) && playerIsInStructure.get(uuid)) {
+                    event.setCanceled(true);
+                    event.setResult(Event.Result.DENY);
+                    AStages.LOGGER.debug("Can't break this structure!");
+                }
             }
         }
     }
@@ -72,12 +79,38 @@ public class ServerEventHandler {
     @Info("To be tested!")
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent event) {
-        for (UUID uuid : playerIsInStructure.keySet()) {
-            if (event.getEntity().getUUID().equals(uuid) && playerIsInStructure.get(uuid)) {
-                event.setCanceled(true);
-                event.setResult(Event.Result.DENY);
-                AStages.LOGGER.debug("Can't interact with this structure!");
+        if (canBeRunForPlayer(event.getEntity())) {
+            for (UUID uuid : playerIsInStructure.keySet()) {
+                if (event.getEntity().getUUID().equals(uuid) && playerIsInStructure.get(uuid)) {
+                    event.setCanceled(true);
+                    event.setResult(Event.Result.DENY);
+                    AStages.LOGGER.debug("Can't interact with this structure!");
+                }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void breakSpeed(PlayerEvent.BreakSpeed event) {
+        for (UUID uuid : playerIsInStructure.keySet()) {
+            if (event.getEntity().getUUID().equals(uuid) && playerIsInStructure.get(uuid)) {
+                event.setNewSpeed(-1);
+                AStages.LOGGER.debug("Can't destroy whi block!");
+            }
+        }
+    }
+
+    public static void explosion(ExplosionEvent event) {
+//        if (!event.getLevel().isClientSide) {
+//            for (UUID uuid : playerIsInStructure.keySet()) {
+//                if (event..getUUID().equals(uuid) &&playerIsInStructure.get(uuid)){
+//
+//                }
+//            }
+//        }
+    }
+
+    public static boolean canBeRunForPlayer(@Nullable Player player) {
+        return player != null && !player.level().isClientSide && !(player instanceof FakePlayer);
     }
 }

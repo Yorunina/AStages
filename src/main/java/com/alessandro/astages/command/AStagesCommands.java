@@ -1,6 +1,7 @@
 package com.alessandro.astages.command;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.simple.AStagesSimpleRestrictionsCommands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,7 +12,9 @@ public class AStagesCommands {
     @SubscribeEvent
     public static void commandRegisterEvent(@NotNull RegisterCommandsEvent event) {
         var dispatcher = event.getDispatcher();
+        var context = event.getBuildContext();
 
         AStagesModificationCommands.register(dispatcher);
+        AStagesSimpleRestrictionsCommands.register(dispatcher, context);
     }
 }

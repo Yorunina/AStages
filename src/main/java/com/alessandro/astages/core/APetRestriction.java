@@ -15,9 +15,8 @@ public class APetRestriction implements ARestriction {
     public final String id;
 
     public boolean isTamable = false;
-    public boolean isBreedable = true;
+    public boolean isBreedable = false;
     public boolean isMountable = false;
-    public List<Item> itemsLockedForBreeding = new ArrayList<>();
 
     public Function<Entity, Component> tameMessage = entity -> Component.translatable("message.astages.tame", entity.getName()).withStyle(ChatFormatting.RED);
     public Function<Entity, Component> breedMessage = entity -> Component.translatable("message.astages.breed", entity.getName()).withStyle(ChatFormatting.RED);
@@ -37,6 +36,20 @@ public class APetRestriction implements ARestriction {
 
     public boolean isRestricted(EntityType<?> pet) {
         return pets.contains(pet);
+    }
+
+    @Override
+    public String toString() {
+        return "APetRestriction{" +
+            "id='" + id + '\'' +
+            ", isTamable=" + isTamable +
+            ", isBreedable=" + isBreedable +
+            ", isMountable=" + isMountable +
+            ", tameMessage=" + tameMessage +
+            ", breedMessage=" + breedMessage +
+            ", mountMessage=" + mountMessage +
+            ", pets=" + pets +
+            '}';
     }
 
     public List<EntityType<?>> getPets() {
@@ -65,13 +78,6 @@ public class APetRestriction implements ARestriction {
 
     public APetRestriction setBreedable(boolean breedable) {
         isBreedable = breedable;
-
-        return this;
-    }
-
-    public APetRestriction lockBreedForItem(Item item) {
-        isBreedable = false;
-        itemsLockedForBreeding.add(item);
 
         return this;
     }

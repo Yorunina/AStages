@@ -1,0 +1,36 @@
+package com.alessandro.astages.simple;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.*;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.synchronization.SuggestionProviders;
+import net.minecraft.core.registries.Registries;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+public class AStagesSimpleRestrictionsCommands {
+    public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+        dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2)).then(Commands.literal("restrict")
+            .then(Commands.argument("id", StringArgumentType.string()).then(Commands.argument("stage", StringArgumentType.string())
+                .then(Commands.literal("item").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandItem)))
+                .then(Commands.literal("mod").then(Commands.argument("mod", StringArgumentType.string()).executes(ASimpleElaborator::commandMod)))
+                .then(Commands.literal("dimension").then(Commands.argument("dimension", DimensionArgument.dimension()).executes(ASimpleElaborator::commandDimension)))
+                .then(Commands.literal("gui").then(Commands.argument("gui", StringArgumentType.string()).executes(ASimpleElaborator::commandGui)))
+                .then(Commands.literal("ore").then(Commands.argument("ore", BlockStateArgument.block(context)).then(Commands.argument("replacement", BlockStateArgument.block(context))).executes(ASimpleElaborator::commandOre)))
+                .then(Commands.literal("structure").then(Commands.argument("structure", ResourceKeyArgument.key(Registries.STRUCTURE)).executes(ASimpleElaborator::commandStructure)))
+                .then(Commands.literal("biome").then(Commands.argument("biome", StringArgumentType.string()).executes(ASimpleElaborator::commandBiome)))
+                .then(Commands.literal("tame").then(Commands.argument("tame", ResourceArgument.resource(context, ForgeRegistries.ENTITY_TYPES.getRegistryKey())).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ASimpleElaborator::commandTame)))
+                .then(Commands.literal("mount").then(Commands.argument("mount", ResourceArgument.resource(context, ForgeRegistries.ENTITY_TYPES.getRegistryKey())).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ASimpleElaborator::commandMount)))
+                .then(Commands.literal("recipe").then(Commands.argument("recipe", ResourceLocationArgument.id()).executes(ASimpleElaborator::commandRecipe)))
+                .then(Commands.literal("armor").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandArmor)))
+            ))
+        ));
+    }
+}

@@ -3,19 +3,31 @@ package com.alessandro.astages.event;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.client.AClientItemManager;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.event.item.ServerEventHandler;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ItemClientDataS2CPacket;
 import com.alessandro.astages.util.Info;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
+
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class PlayerEventHandler {
@@ -26,6 +38,9 @@ public class PlayerEventHandler {
         }
 
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
+
+        ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
+        ARestrictionManager.ORE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
     }
 
     @SubscribeEvent
@@ -60,6 +75,14 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onInventoryChanged(@NotNull PlayerInventoryChangedEvent event) {
         ServerEventHandler.isInventoryChanged = true;
+    }
+
+    @Info("For armor checking!")
+    @SubscribeEvent
+    public static void livingEquipmentChanged(@NotNull LivingEquipmentChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            ServerEventHandler.isInventoryChanged = true;
+        }
     }
 
     @Info("For inventory checking!")

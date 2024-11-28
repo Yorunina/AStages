@@ -12,5 +12,5 @@ public class StageEvents {
 
     public static final EventHandler STAGE_ADDED = GROUP.server("added", () -> StageAddedEventJS.class).extra(Extra.ID);
     public static final EventHandler STAGE_REMOVED = GROUP.server("removed", () -> StageRemovedEventJS.class).extra(Extra.ID);
-    public static final EventHandler STAGE_MANAGER = GROUP.server("manager", () -> StageManagerEventJS.class);
+//    public static final EventHandler STAGE_MANAGER = GROUP.server("manager", () -> StageManagerEventJS.class);
 }

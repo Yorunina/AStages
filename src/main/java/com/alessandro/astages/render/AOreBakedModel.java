@@ -30,7 +30,7 @@ public class AOreBakedModel implements IDynamicBakedModel {
     }
 
     private BakedModel getCorrectModel() {
-        return ClientPlayerStage.getPlayerStages().contains(stage) ? original : replacement;
+        return ClientPlayerStage.hasStage(stage) ? original : replacement;
     }
 
     @Override

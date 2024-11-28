@@ -1,0 +1,54 @@
+package com.alessandro.astages.networking.packet.ud;
+
+import com.alessandro.astages.core.client.AClientRecipeRestriction;
+import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+public class RecipeSyncerS2CPacket {
+    private final String id;
+    private final String stage;
+    private final RecipeType<?> type;
+    private final List<ResourceLocation> recipes;
+
+    public RecipeSyncerS2CPacket(String id, String stage, RecipeType<?> type, List<ResourceLocation> recipes) {
+        this.id = id;
+        this.stage = stage;
+        this.type = type;
+        this.recipes = recipes;
+    }
+
+    public RecipeSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+        id = buf.readUtf();
+        stage = buf.readUtf();
+        type = buf.readRegistryIdUnsafe(ForgeRegistries.RECIPE_TYPES);
+        recipes = buf.readList(FriendlyByteBuf::readResourceLocation);
+    }
+
+    public void toBytes(@NotNull FriendlyByteBuf buf) {
+        buf.writeUtf(id);
+        buf.writeUtf(stage);
+        buf.writeRegistryIdUnsafe(ForgeRegistries.RECIPE_TYPES, type);
+        buf.writeCollection(recipes, FriendlyByteBuf::writeResourceLocation);
+    }
+
+    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            var restriction = new AClientRecipeRestriction(id, stage, type, recipes);
+            AClientRestrictionManager.RECIPE_INSTANCE.addRestriction(stage, restriction);
+
+            MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
+        });
+
+        ctx.get().setPacketHandled(true);
+    }
+}

@@ -9,7 +9,12 @@ import net.minecraft.world.entity.player.Player;
 import java.util.*;
 
 public class APetManager implements AManager<APetRestriction, EntityType<?>> {
-    private final Map<String, List<APetRestriction>> restrictions = new HashMap<>();
+    private Map<String, List<APetRestriction>> restrictions = new HashMap<>();
+
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
+    }
 
     @Override
     public void addRestriction(String stage, APetRestriction restriction) {
@@ -37,19 +42,6 @@ public class APetManager implements AManager<APetRestriction, EntityType<?>> {
     }
 
     @Override
-    public APetRestriction getRestriction(EntityType<?> pet) {
-        for (String stage : restrictions.keySet()) {
-            for (APetRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(pet) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
     public APetRestriction getRestriction(Player player, EntityType<?> pet) {
         for (String stage : restrictions.keySet()) {
             for (APetRestriction restriction : restrictions.get(stage)) {
@@ -60,5 +52,12 @@ public class APetManager implements AManager<APetRestriction, EntityType<?>> {
         }
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "APetManager{" +
+            "restrictions=" + restrictions +
+            '}';
     }
 }

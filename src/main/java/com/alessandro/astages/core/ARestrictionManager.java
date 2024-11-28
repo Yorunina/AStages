@@ -1,14 +1,20 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ud.RequestClientReloadS2CPacket;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import java.util.*;
 
 public class ARestrictionManager {
+    // ADD SLOT RESTRICTION
+
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
@@ -19,8 +25,29 @@ public class ARestrictionManager {
     public static final AOreManager ORE_INSTANCE = new AOreManager();
     public static final APetManager PET_INSTANCE = new APetManager();
 
-    public static final Set<String> ALL_STAGES = new HashSet<>();
-    public static final Set<String> ORE_STAGES = new HashSet<>();
+    public static Set<String> ALL_STAGES = new HashSet<>();
+    public static Set<String> ORE_STAGES = new HashSet<>();
+
+    public static void reload() {
+        ITEM_INSTANCE.reload();
+        DIMENSION_INSTANCE.reload();
+        MOB_INSTANCE.reload();
+//        TIME_INSTANCE.reload();
+        STRUCTURE_INSTANCE.reload();
+        RECIPE_INSTANCE.reload();
+        SCREEN_INSTANCE.reload();
+        ORE_INSTANCE.reload();
+        PET_INSTANCE.reload();
+
+        ALL_STAGES = new HashSet<>();
+        ORE_STAGES = new HashSet<>();
+
+        // ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
+    }
+
+    public static void reloadClients() {
+        ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
+    }
 
     static {
 //        var rest = new ARecipeRestriction("id_auto");
@@ -34,24 +61,24 @@ public class ARestrictionManager {
 //        RECIPE_INSTANCE.addRestriction("test_auto", rest);
 //        RECIPE_INSTANCE.addRestriction("test_auto_mod", rest1);
 
-        ARecipeRestriction restriction = new ARecipeRestriction("astages/botania1");
-        restriction.type = BotaniaRecipeTypes.BREW_TYPE;
-        restriction.restrict(new ResourceLocation("botania", "brew/speed"));
-
-        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction);
-
-        ARecipeRestriction restriction1 = new ARecipeRestriction("astages/botania2");
-        restriction1.type = BotaniaRecipeTypes.ORECHID_TYPE;
-        restriction1.restrict(new ResourceLocation("botania", "orechid/coal_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/iron_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/redstone_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/copper_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/gold_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/emerald_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/lapis_ore"));
-        restriction1.restrict(new ResourceLocation("botania", "orechid/diamond_ore"));
-
-        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction1);
+//        ARecipeRestriction restriction = new ARecipeRestriction("astages/botania1");
+//        restriction.type = BotaniaRecipeTypes.BREW_TYPE;
+//        restriction.restrict(new ResourceLocation("botania", "brew/speed"));
+//
+//        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction);
+//
+//        ARecipeRestriction restriction1 = new ARecipeRestriction("astages/botania2");
+//        restriction1.type = BotaniaRecipeTypes.ORECHID_TYPE;
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/coal_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/iron_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/redstone_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/copper_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/gold_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/emerald_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/lapis_ore"));
+//        restriction1.restrict(new ResourceLocation("botania", "orechid/diamond_ore"));
+//
+//        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction1);
     }
 
     public static boolean isOreStage(String stage) {
@@ -69,12 +96,13 @@ public class ARestrictionManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends ARestriction> T getRestrictionById(@NotNull ARestrictionType type, String id) {
+    public static <T extends ARestriction> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
         return switch (type) {
             case ITEM -> (T) ITEM_INSTANCE.getRestriction(id);
             case MOB -> (T) MOB_INSTANCE.getRestriction(id);
             case DIMENSION -> (T) DIMENSION_INSTANCE.getRestriction(id);
-            case TIME -> (T) TIME_INSTANCE.getRestriction(id);
+//            case TIME -> (T) TIME_INSTANCE.getRestriction(id);
+            case TIME -> null;
             case STRUCTURE -> (T) STRUCTURE_INSTANCE.getRestriction(id);
             case RECIPE -> (T) RECIPE_INSTANCE.getRestriction(id);
             case SCREEN -> (T) SCREEN_INSTANCE.getRestriction(id);

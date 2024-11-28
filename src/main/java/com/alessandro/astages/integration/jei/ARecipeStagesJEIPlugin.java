@@ -4,7 +4,10 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.core.ARecipeRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.client.AClientRecipeRestriction;
+import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
+import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -13,8 +16,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +36,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         if (!Mods.JEI.isLoaded()) return;
 
         if (EffectiveSide.get().isClient()) {
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientRecipeUpdateEvent.class, e -> updateRecipeGui());
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> updateRecipeGui());
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RecipesUpdatedEvent.class, e -> updateRecipeGui());
         }
@@ -52,30 +58,29 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
         var categories = runtime.getRecipeManager().createRecipeCategoryLookup().get().toList();
 
-        for (Map.Entry<String, List<ARecipeRestriction>> entry : ARestrictionManager.RECIPE_INSTANCE.getRestrictions().entrySet()) {
+        for (Map.Entry<String, List<AClientRecipeRestriction>> entry : AClientRestrictionManager.RECIPE_INSTANCE.restrictions.entrySet()) {
             for (var restriction : entry.getValue()) {
-                for (var recipeLocation : restriction.recipes) {
+                for (var recipeLocation : restriction.recipes()) {
                     for (var category : categories) {
 
-                        var c = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor((net.minecraft.world.item.crafting.RecipeType<T>) restriction.type);
+                        var c = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor((net.minecraft.world.item.crafting.RecipeType<T>) restriction.type());
                         if (!c.isEmpty()) {
                             var caster = c.get(0);
                             if (!canCast(category.getRecipeType().getRecipeClass(), caster.getClass())) {
                                 continue;
                             }
 
-                            var recipes = (Stream<Recipe<?>>) runtime.getRecipeManager().createRecipeLookup(category.getRecipeType()).get();
+                            var recipes = (Stream<Recipe<?>>) runtime.getRecipeManager().createRecipeLookup(category.getRecipeType()).includeHidden().get();
                             var recipe = (Recipe<?>) recipes.filter(r -> r.getId().equals(recipeLocation)).findFirst().orElse(null);
 
                             if (recipe == null) {
                                 continue;
                             }
 
-                            if (!ClientPlayerStage.getPlayerStages().contains(entry.getKey())) {
-                                List<Recipe<?>> newList = new ArrayList<>();
-                                newList.add(recipe);
-
-                                runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(newList));
+                            if (!ClientPlayerStage.hasStage(entry.getKey())) {
+                                runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(Collections.singletonList(recipe)));
+                            } else {
+                                runtime.getRecipeManager().unhideRecipes(category.getRecipeType(), cast(Collections.singletonList(recipe)));
                             }
                         }
                     }
@@ -93,7 +98,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
             d1 = getParent(caster);
             if(d1.contains(obj)) return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             AStages.LOGGER.debug(e.getLocalizedMessage());
         }
 

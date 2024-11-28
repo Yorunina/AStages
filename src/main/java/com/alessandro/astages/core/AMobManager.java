@@ -9,8 +9,14 @@ import net.minecraft.world.entity.player.Player;
 import java.util.*;
 
 public class AMobManager implements AManager<AMobRestriction, EntityType<?>> {
-    private final Map<String, List<AMobRestriction>> restrictions = new HashMap<>();
+    private Map<String, List<AMobRestriction>> restrictions = new HashMap<>();
 
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
+    }
+
+    @Override
     public void addRestriction(String stage, AMobRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());
 
@@ -22,6 +28,7 @@ public class AMobManager implements AManager<AMobRestriction, EntityType<?>> {
         restrictions.put(stage, newList);
     }
 
+    @Override
     public AMobRestriction getRestriction(String id) {
         for (String stage : restrictions.keySet()) {
             for (AMobRestriction restriction : restrictions.get(stage)) {
@@ -34,18 +41,7 @@ public class AMobManager implements AManager<AMobRestriction, EntityType<?>> {
         return null;
     }
 
-    public AMobRestriction getRestriction(EntityType<?> mob) {
-        for (String stage : restrictions.keySet()) {
-            for (AMobRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(mob) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
+    @Override
     public AMobRestriction getRestriction(Player player, EntityType<?> mob) {
         for (String stage : restrictions.keySet()) {
             for (AMobRestriction restriction : restrictions.get(stage)) {

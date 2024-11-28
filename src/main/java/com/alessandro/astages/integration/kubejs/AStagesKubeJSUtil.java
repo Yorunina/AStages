@@ -16,10 +16,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -63,7 +65,7 @@ public class AStagesKubeJSUtil {
     // ITEM Restrictions
     public static @NotNull AItemRestriction addRestrictionForItem(String id, String stage, Item @NotNull ... items) {
         // var restriction = new AItemRestriction(id, RestrictionType.RUNTIME);
-        var restriction = new AItemRestriction(id);
+        var restriction = new AItemRestriction(id, stage);
 
         for (var item : items) {
             restriction.restrict(itemStack -> itemStack.is(item));
@@ -76,7 +78,7 @@ public class AStagesKubeJSUtil {
 
     public static @NotNull AItemRestriction addRestrictionForPredicate(String id, String stage, Predicate<ItemStack> predicate) {
         // var restriction = new AItemRestriction(id, RestrictionType.RUNTIME);
-        var restriction = new AItemRestriction(id);
+        var restriction = new AItemRestriction(id, stage);
         restriction.restrict(predicate);
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
@@ -85,11 +87,17 @@ public class AStagesKubeJSUtil {
     }
 
     public static @NotNull AItemRestriction addRestrictionForMod(String id, String stage, String modId) {
-        // var restriction = new AItemRestriction(id, RestrictionType.RUNTIME);
-        var restriction = new AItemRestriction(id);
-        // AStages.LOGGER.debug(modId);
+        var restriction = new AItemRestriction(id, stage);
         restriction.restrict(itemStack -> modId.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).getNamespace()));
-        // AStages.LOGGER.debug(restriction.predicates.toString());
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    public static @NotNull AItemRestriction addRestrictionForMod(String id, String stage, String modId, List<Item> ignored) {
+        var restriction = new AItemRestriction(id, stage);
+        restriction.restrict(itemStack -> modId.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).getNamespace()) && !ignored.contains(itemStack.getItem()));
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
 
@@ -98,8 +106,26 @@ public class AStagesKubeJSUtil {
 
     public static @NotNull AItemRestriction addRestrictionForTag(String id, String stage, ResourceLocation name) {
         var tag = ItemTags.create(name);
-        var restriction = new AItemRestriction(id);
+        var restriction = new AItemRestriction(id, stage);
         restriction.restrict(itemStack -> itemStack.is(tag));
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    public static @NotNull AItemRestriction addRestrictionForArmor(String id, String stage, Item armor) {
+        var restriction = new AItemRestriction(id, stage);
+        restriction.restrict(stack -> stack.is(armor));
+        restriction.setRenderItemName(true)
+            .setHideTooltip(false)
+            .setCanPickedUp(true)
+            .setCanBeStoredInInventory(true)
+            .setCanAttack(true)
+            .setHideInJEI(false)
+            .setCanBePlaced(true)
+            .setCanItemBeUsed(true)
+            .setCanBeDig(true);
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
 
@@ -127,15 +153,9 @@ public class AStagesKubeJSUtil {
     }
 
     // RECIPE Restrictions
-    public static @NotNull ARecipeRestriction addRestrictionForRecipe(String id, String stage, ResourceLocation recipeType, ResourceLocation @NotNull ... recipeIds) {
-        var type = ForgeRegistries.RECIPE_TYPES.getValue(recipeType);
-        if (type == null) {
-            ConsoleJS.getCurrent(ScriptManager.getCurrentContext()).error("Not found a recipe for type \""+ recipeType + "\"");
-            return new ARecipeRestriction("null");
-        }
-
-        var restriction = new ARecipeRestriction(id);
-        restriction.type = type;
+    public static @NotNull ARecipeRestriction addRestrictionForRecipe(String id, String stage, RecipeType<?> recipeType, ResourceLocation @NotNull ... recipeIds) {
+        var restriction = new ARecipeRestriction(id, stage);
+        restriction.type = recipeType;
         for (ResourceLocation r : recipeIds) {
             restriction.restrict(r);
         }
@@ -171,6 +191,16 @@ public class AStagesKubeJSUtil {
         restriction.restrict(pet);
 
         ARestrictionManager.PET_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    // STRUCTURE Restrictions
+    public static @NotNull AStructureRestriction addRestrictionForStructure(String id, String stage, ResourceLocation structure) {
+        var restriction = new AStructureRestriction(id);
+        restriction.restrict(structure);
+
+        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(stage, restriction);
 
         return restriction;
     }

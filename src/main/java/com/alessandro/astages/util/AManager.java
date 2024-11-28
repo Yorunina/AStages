@@ -7,9 +7,11 @@ public interface AManager<T extends ARestriction, U> {
 
     T getRestriction(String id);
 
-    @Info("For client!")
-    T getRestriction(U object);
+//    @Info("For client!")
+//    T getRestriction(U object);
 
     @Info("For server!")
     T getRestriction(Player player, U object);
+
+    void reload();
 }

@@ -9,8 +9,14 @@ import net.minecraft.world.entity.player.Player;
 import java.util.*;
 
 public class ADimensionManager implements AManager<ADimensionRestriction, ResourceLocation> {
-    private final Map<String, List<ADimensionRestriction>> restrictions = new HashMap<>();
+    private Map<String, List<ADimensionRestriction>> restrictions = new HashMap<>();
 
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
+    }
+
+    @Override
     public void addRestriction(String stage, ADimensionRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());
 
@@ -22,6 +28,7 @@ public class ADimensionManager implements AManager<ADimensionRestriction, Resour
         restrictions.put(stage, newList);
     }
 
+    @Override
     public ADimensionRestriction getRestriction(String id) {
         for (String stage : restrictions.keySet()) {
             for (ADimensionRestriction restriction : restrictions.get(stage)) {
@@ -34,18 +41,7 @@ public class ADimensionManager implements AManager<ADimensionRestriction, Resour
         return null;
     }
 
-    public ADimensionRestriction getRestriction(ResourceLocation dimension) {
-        for (String stage : restrictions.keySet()) {
-            for (ADimensionRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(dimension) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
+    @Override
     public ADimensionRestriction getRestriction(Player player, ResourceLocation dimension) {
         for (String stage : restrictions.keySet()) {
             for (ADimensionRestriction restriction : restrictions.get(stage)) {

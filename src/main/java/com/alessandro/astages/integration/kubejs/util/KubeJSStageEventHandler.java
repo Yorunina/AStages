@@ -13,16 +13,16 @@ public class KubeJSStageEventHandler {
     public static void init() {
         MinecraftForge.EVENT_BUS.addListener(KubeJSStageEventHandler::stageAdded);
         MinecraftForge.EVENT_BUS.addListener(KubeJSStageEventHandler::stageRemoved);
-        MinecraftForge.EVENT_BUS.addListener(KubeJSStageEventHandler::stageManager);
+//        MinecraftForge.EVENT_BUS.addListener(KubeJSStageEventHandler::stageManager);
     }
 //
 //    public static void serverLoaded(StartupEvents)
 
-    public static void stageManager(InitialStageAdditionEvent event) {
-        if (StageEvents.STAGE_MANAGER.hasListeners()) {
-            StageEvents.STAGE_MANAGER.post(new StageManagerEventJS(event));
-        }
-    }
+//    public static void stageManager(InitialStageAdditionEvent event) {
+//        if (StageEvents.STAGE_MANAGER.hasListeners()) {
+//            StageEvents.STAGE_MANAGER.post(new StageManagerEventJS(event));
+//        }
+//    }
 
     public static void stageAdded(StageAddedPlayerEvent event) {
         if (StageEvents.STAGE_ADDED.hasListeners()) {

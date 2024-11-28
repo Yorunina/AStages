@@ -11,7 +11,12 @@ import net.minecraft.world.inventory.MenuType;
 import java.util.*;
 
 public class AScreenManager implements AManager<AScreenRestriction, MenuType<?>> {
-    private final Map<String, List<AScreenRestriction>> restrictions = new HashMap<>();
+    private Map<String, List<AScreenRestriction>> restrictions = new HashMap<>();
+
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
+    }
 
     @Override
     public void addRestriction(String stage, AScreenRestriction restriction) {
@@ -30,19 +35,6 @@ public class AScreenManager implements AManager<AScreenRestriction, MenuType<?>>
         for (String stage : restrictions.keySet()) {
             for (AScreenRestriction restriction : restrictions.get(stage)) {
                 if (restriction.id.equals(id)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public AScreenRestriction getRestriction(MenuType<?> menu) {
-        for (String stage : restrictions.keySet()) {
-            for (AScreenRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(menu) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
                     return restriction;
                 }
             }

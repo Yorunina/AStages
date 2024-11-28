@@ -10,7 +10,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -45,12 +47,13 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void breakSpeed(PlayerEvent.BreakSpeed event) {
         boolean isClientSide = event.getEntity().level().isClientSide;
+        if (isClientSide) { return; }
 
-        if (isClientSide) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(AStagesUtil.stateToStack(event.getState()));
-            if (restriction != null && !restriction.canBeDig) { event.setNewSpeed(-1f); }
-            return;
-        }
+//        if (isClientSide) {
+//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), AStagesUtil.stateToStack(event.getState()));
+//            if (restriction != null && !restriction.canBeDig) { event.setNewSpeed(-1f); }
+//            return;
+//        }
 
         var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), AStagesUtil.stateToStack(event.getState()));
         if (restriction != null && !restriction.canBeDig) {
@@ -64,13 +67,13 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent event) {
-        if (event.getLevel().isClientSide && event.isCancelable()) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack());
-            if (restriction != null && !restriction.canItemBeUsed) { event.setCanceled(true); }
-            return;
-        }
+//        if (event.getLevel().isClientSide && event.isCancelable()) {
+//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack());
+//            if (restriction != null && !restriction.canItemBeUsed) { event.setCanceled(true); }
+//            return;
+//        }
 
-        if (event.isCancelable()) {
+        if (event.isCancelable() && !event.getLevel().isClientSide) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), event.getItemStack());
             if (restriction != null && !restriction.canItemBeUsed) {
                 event.setCanceled(true);
@@ -84,17 +87,17 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
-        if (event.getLevel().isClientSide()) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(new ItemStack(event.getPlacedBlock().getBlock()));
+//        if (event.getLevel().isClientSide()) {
+//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(new ItemStack(event.getPlacedBlock().getBlock()));
+//
+//            if (restriction != null && !restriction.canItemBeUsed) {
+//                event.setCanceled(true);
+//            }
+//
+//            return;
+//        }
 
-            if (restriction != null && !restriction.canItemBeUsed) {
-                event.setCanceled(true);
-            }
-
-            return;
-        }
-
-        if (event.getEntity() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player && !event.getLevel().isClientSide()) {
             var stack = new ItemStack(event.getPlacedBlock().getBlock());
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
 
@@ -109,19 +112,20 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityHurt(LivingHurtEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            ItemStack stack = player.getMainHandItem();
-            AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
+    public static void onEntityHurt(AttackEntityEvent event) {
+        // if (event.getEntity() instanceof Player player) {
+        var player = event.getEntity();
+        ItemStack stack = player.getMainHandItem();
+        AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
 
-            if (restriction != null && !restriction.canAttack) {
-                event.setCanceled(true);
+        if (restriction != null && !restriction.canAttack) {
+            event.setCanceled(true);
 
-                if (restriction.attackMessage != null) {
-                    player.displayClientMessage(restriction.getAttackMessage(stack), true);
-                }
+            if (restriction.attackMessage != null) {
+                player.displayClientMessage(restriction.getAttackMessage(stack), true);
             }
         }
+        // }
     }
 
     @SubscribeEvent

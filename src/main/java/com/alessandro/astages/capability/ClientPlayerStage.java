@@ -17,4 +17,8 @@ public class ClientPlayerStage {
     public static List<String> getPlayerStages() {
         return playerStages;
     }
+
+    public static boolean hasStage(String stage) {
+        return playerStages.contains(stage);
+    }
 }

@@ -1,6 +1,7 @@
 package com.alessandro.astages.integration.jade;
 
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -24,10 +25,11 @@ public class AStagesJadePlugin implements IWailaPlugin {
         registration.addRayTraceCallback((hitResult, accessor, originalAccessor) -> {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlockState();
-                var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(original);
+                // var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(original);
+                var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(original);
 
                 if (restriction != null) {
-                    return registration.blockAccessor().from(blockAccessor).blockState(restriction.replacement).build();
+                    return registration.blockAccessor().from(blockAccessor).blockState(restriction.replacement()).build();
                 }
             }
 
@@ -38,7 +40,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
                 var stack = new ItemStack(original);
-                var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(stack);
+                var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), stack);
 
                 if (restriction != null) {
                     tooltip.clear();
@@ -53,7 +55,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(itemEntity.getItem());
+                    var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), itemEntity.getItem());
 
                     if (restriction != null) {
                         tooltip.clear();

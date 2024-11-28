@@ -15,8 +15,8 @@ public class AStructureRestriction implements ARestriction {
         this.id = id;
     }
 
-    public AStructureRestriction restrict(ResourceLocation dimension) {
-        structures.add(dimension);
+    public AStructureRestriction restrict(ResourceLocation structure) {
+        structures.add(structure);
 
         return this;
     }

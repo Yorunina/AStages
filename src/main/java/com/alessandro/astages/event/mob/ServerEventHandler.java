@@ -2,8 +2,11 @@ package com.alessandro.astages.event.mob;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,8 +23,10 @@ public class ServerEventHandler {
 
 //        if (event.getSpawnType() == MobSpawnType.SPAWNER)
 //            return;
-
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(event.getEntity().getType());
+//        event.ge
+        Player nearestPlayer = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
+//        Player nearestPlayer = event.getLevel().getNearestPlayer(a -> (), event.getEntity());
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(nearestPlayer, event.getEntity().getType());
 
         if (restriction != null) {
             if (event.getSpawnType() == MobSpawnType.SPAWNER && !restriction.disableSpawner) {

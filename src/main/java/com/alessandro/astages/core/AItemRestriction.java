@@ -14,8 +14,8 @@ import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 public class AItemRestriction implements ARestriction, AChangeable {
-
     public final String id;
+    public final String stage;
 
     public boolean renderItemName = false;
     public boolean hideTooltip = true;
@@ -25,7 +25,7 @@ public class AItemRestriction implements ARestriction, AChangeable {
     public boolean canAttack = false;
     public boolean hideInJEI = true;
     public boolean canBePlaced = false;
-    @Info("To be reviewed!") public boolean canBlockBeUsed = false;
+//    @Info("To be reviewed!") public boolean canBlockBeUsed = false;
     @Info("To be reviewed!") public boolean canItemBeUsed = false;
     public boolean canBeDig = false;
 
@@ -43,8 +43,9 @@ public class AItemRestriction implements ARestriction, AChangeable {
 
     public List<Predicate<ItemStack>> predicates = new ArrayList<>();
 
-    public AItemRestriction(String id) {
+    public AItemRestriction(String id, String stage) {
         this.id = id;
+        this.stage = stage;
     }
 
     public AItemRestriction restrict(Predicate<ItemStack> predicate) {
@@ -80,7 +81,7 @@ public class AItemRestriction implements ARestriction, AChangeable {
             ", hideTooltip=" + hideTooltip +
             ", renderItemName=" + renderItemName +
             ", canBePlaced=" + canBePlaced +
-            ", canBlockBeUsed=" + canBlockBeUsed +
+//            ", canBlockBeUsed=" + canBlockBeUsed +
             ", canItemBeUsed=" + canItemBeUsed +
             ", pickUpDelay=" + pickUpDelay +
             '}';
@@ -179,15 +180,15 @@ public class AItemRestriction implements ARestriction, AChangeable {
         return this;
     }
 
-    public boolean isCanBlockBeUsed() {
-        return canBlockBeUsed;
-    }
-
-    public AItemRestriction setCanBlockBeUsed(boolean canBlockBeUsed) {
-        this.canBlockBeUsed = canBlockBeUsed;
-
-        return this;
-    }
+//    public boolean isCanBlockBeUsed() {
+//        return canBlockBeUsed;
+//    }
+//
+//    public AItemRestriction setCanBlockBeUsed(boolean canBlockBeUsed) {
+//        this.canBlockBeUsed = canBlockBeUsed;
+//
+//        return this;
+//    }
 
     public boolean isCanItemBeUsed() {
         return canItemBeUsed;

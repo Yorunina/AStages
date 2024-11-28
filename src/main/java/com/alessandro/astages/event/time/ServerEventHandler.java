@@ -9,35 +9,35 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
-@Mod.EventBusSubscriber(modid = AStages.MODID)
+//@Mod.EventBusSubscriber(modid = AStages.MODID)
 public class ServerEventHandler {
 
 //    @SubscribeEvent
-    public static void playerTick(TickEvent.@NotNull PlayerTickEvent event) {
+//    public static void playerTick(TickEvent.@NotNull PlayerTickEvent event) {
 //        if (ARestrictionManager.ITEM_INSTANCE.)
 //        if (!AStagesUtil.isRealPlayer(event.player)) { return; }
-        if (event.player.level().isClientSide) { return; }
-        if (event.phase == TickEvent.Phase.END) { return; }
+//        if (event.player.level().isClientSide) { return; }
+//        if (event.phase == TickEvent.Phase.END) { return; }
+//
+//        Player player = event.player;
+//        if (player.isAlive()) {
+//            if (player instanceof ServerPlayer serverPlayer) {
+//                for (String stage : ARestrictionManager.TIME_INSTANCE.getRestrictions().keySet()) {
+//                    for (ATimeRestriction restriction : ARestrictionManager.TIME_INSTANCE.getRestrictions().get(stage)) {
+//                        int associatedTimer = getEntityData(serverPlayer, restriction.id);
+//
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-        Player player = event.player;
-        if (player.isAlive()) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                for (String stage : ARestrictionManager.TIME_INSTANCE.getRestrictions().keySet()) {
-                    for (ATimeRestriction restriction : ARestrictionManager.TIME_INSTANCE.getRestrictions().get(stage)) {
-                        int associatedTimer = getEntityData(serverPlayer, restriction.id);
-
-
-                    }
-                }
-            }
-        }
-    }
-
-    public static void setEntityData(Player player, String tag, int timer) {
-        player.getPersistentData().putInt(tag, timer);
-    }
-
-    public static int getEntityData(Player player, String tag) {
-        return player.getPersistentData().getInt(tag);
-    }
+//    public static void setEntityData(Player player, String tag, int timer) {
+//        player.getPersistentData().putInt(tag, timer);
+//    }
+//
+//    public static int getEntityData(Player player, String tag) {
+//        return player.getPersistentData().getInt(tag);
+//    }
 }

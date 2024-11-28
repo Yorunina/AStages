@@ -14,43 +14,49 @@ import org.jetbrains.annotations.NotNull;
 public class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerTame(@NotNull AnimalTameEvent event) {
-        var player = event.getTamer();
-        var pet = event.getEntity();
+        if (!event.getTamer().level().isClientSide) {
+            var player = event.getTamer();
+            var pet = event.getEntity();
 
-        var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
+            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
 
-        if (restriction != null && !restriction.isTamable) {
-            event.setCanceled(true);
-            player.displayClientMessage(restriction.getTameMessage(pet), true);
+            if (restriction != null && !restriction.isTamable) {
+                event.setCanceled(true);
+                player.displayClientMessage(restriction.getTameMessage(pet), true);
+            }
         }
     }
 
     @SubscribeEvent
     public static void onMount(@NotNull EntityMountEvent event) {
-        var entity = event.getEntityMounting();
-        var pet = event.getEntityBeingMounted();
+        if (!event.getEntityMounting().level().isClientSide) {
+            var entity = event.getEntityMounting();
+            var pet = event.getEntityBeingMounted();
 
-        if (entity instanceof Player player) {
-            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
+            if (entity instanceof Player player) {
+                var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
 
-            if (restriction != null && !restriction.isMountable) {
-                event.setCanceled(true);
-                player.displayClientMessage(restriction.getMountMessage(pet), true);
+                if (restriction != null && !restriction.isMountable) {
+                    event.setCanceled(true);
+                    player.displayClientMessage(restriction.getMountMessage(pet), true);
+                }
             }
         }
     }
 
     @SubscribeEvent
     public static void onPlayerBreedEntity(PlayerInteractEvent.@NotNull EntityInteract event) {
-        var player = event.getEntity();
-        var pet = event.getTarget();
-        var item = event.getEntity().getItemInHand(event.getHand());
+        if (!event.getEntity().level().isClientSide) {
+            var player = event.getEntity();
+            var pet = event.getTarget();
+            var item = event.getEntity().getItemInHand(event.getHand());
 
-        var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
+            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
 
-        if (restriction != null && !restriction.isBreedable && !item.isEmpty()) {
-            event.setCanceled(true);
-            player.displayClientMessage(restriction.getBreedMessage(pet), true);
+            if (restriction != null && !restriction.isBreedable && !item.isEmpty()) {
+                event.setCanceled(true);
+                player.displayClientMessage(restriction.getBreedMessage(pet), true);
+            }
         }
     }
 }

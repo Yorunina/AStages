@@ -11,6 +11,10 @@ import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
@@ -52,7 +56,12 @@ public class PlayerStage {
             ModNetworking.sendToPlayer(new StageDataSyncS2CPacket(stages), (ServerPlayer) player);
 
             if (!silentTitle && stage != null) {
-                AStagesUtil.showTitles(operation, stage);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    AStages.LOGGER.debug("TEXT!");
+                    // serverPlayer.connection.send(new ClientboundSetTitleTextPacket(Component.literal("TEXT!")));
+                    // AStagesUtil.showTitles(operation, stage);
+                    AStagesUtil.showTitles(serverPlayer, operation, stage);
+                }
             }
 
             switch (operation) {

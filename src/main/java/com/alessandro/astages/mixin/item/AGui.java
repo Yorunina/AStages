@@ -2,6 +2,9 @@ package com.alessandro.astages.mixin.item;
 
 import com.alessandro.astages.core.AItemRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.client.AClientItemManager;
+import com.alessandro.astages.core.client.AClientItemRestriction;
+import com.alessandro.astages.core.client.AClientRestrictionManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -12,6 +15,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public class AGui {
@@ -37,10 +43,12 @@ public class AGui {
 
             // New part
             MutableComponent mutablecomponent = Component.empty();
-            AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
+//            AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
+//            var restriction = AClientRestrictionManager.ITEM_INSTANCE.isRenderItemNameRestricted(this.lastToolHighlight);
+            var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
 
-            if (restriction != null && !restriction.renderItemName) {
-                mutablecomponent.append("Unfamiliar Item").withStyle(ChatFormatting.RED);
+            if (restriction != null && !restriction.renderItemName()) {
+                mutablecomponent.append(Component.translatable("tooltip.astages.hidden_name")).withStyle(ChatFormatting.RED);
             } else {
                 mutablecomponent.append(this.lastToolHighlight.getHoverName()).withStyle(this.lastToolHighlight.getRarity().getStyleModifier());
 
@@ -77,4 +85,9 @@ public class AGui {
 
         this.minecraft.getProfiler().pop();
     }
+
+//    @Inject(method = "renderSelectedItemName(Lnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE", target = "r"))
+//    public void astages$renderSelectedItemName(GuiGraphics pGuiGraphics, CallbackInfo ci) {
+//
+//    }
 }

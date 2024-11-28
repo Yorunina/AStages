@@ -1,17 +1,21 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ItemClientDataS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class AItemManager implements AManager<AItemRestriction, ItemStack> {
-    public final Map<String, List<AItemRestriction>> restrictions = new HashMap<>();
+    public Map<String, List<AItemRestriction>> restrictions = new HashMap<>();
     public final Map<String, List<AItemRestriction>> equipmentRestrictions = new HashMap<>();
     public final Map<String, List<AItemRestriction>> inventoryRestrictions = new HashMap<>();
 
@@ -19,6 +23,12 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         return restrictions;
     }
 
+    @Override
+    public void reload() {
+        restrictions = new HashMap<>();
+    }
+
+    @Override
     public void addRestriction(String stage, AItemRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());
         if (!newList.isEmpty()) { newList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
@@ -70,10 +80,26 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         }
     }
 
+    @Override
     public AItemRestriction getRestriction(String id) {
         for (String stage : restrictions.keySet()) {
             for (AItemRestriction restriction : restrictions.get(stage)) {
                 if (restriction.id.equals(id)) {
+                    return restriction;
+                }
+            }
+        }
+
+        return null;
+    }
+
+//    @Override
+    public AItemRestriction getRestriction(@NotNull ItemStack stack) {
+        if (stack.isEmpty()) { return null; }
+
+        for (String stage : restrictions.keySet()) {
+            for (AItemRestriction restriction : restrictions.get(stage)) {
+                if (restriction.isRestricted(stack)) {
                     return restriction;
                 }
             }
@@ -89,18 +115,7 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
      * @param stack item to check
      * @return restriction or null
      */
-    public AItemRestriction getRestriction(ItemStack stack) {
-        for (String stage : restrictions.keySet()) {
-            for (AItemRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(stack) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
+    @Override
     public AItemRestriction getRestriction(Player player, @NotNull ItemStack stack) {
         if (stack.isEmpty()) { return null; }
 
@@ -115,37 +130,12 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         return null;
     }
 
-
-    public AItemRestriction getInventoryRestriction(ItemStack stack) {
-        for (String stage : inventoryRestrictions.keySet()) {
-            for (AItemRestriction restriction : inventoryRestrictions.get(stage)) {
-                if (restriction.isRestricted(stack) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
     public AItemRestriction getInventoryRestriction(Player player, @NotNull ItemStack stack) {
         if (stack.isEmpty()) { return null; }
 
         for (String stage : inventoryRestrictions.keySet()) {
             for (AItemRestriction restriction : inventoryRestrictions.get(stage)) {
                 if (restriction.isRestricted(stack) && !AStagesUtil.hasStage(player, stage)) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public AItemRestriction getEquipmentRestriction(ItemStack stack) {
-        for (String stage : equipmentRestrictions.keySet()) {
-            for (AItemRestriction restriction : equipmentRestrictions.get(stage)) {
-                if (restriction.isRestricted(stack) && !ClientPlayerStage.getPlayerStages().contains(stage)) {
                     return restriction;
                 }
             }
