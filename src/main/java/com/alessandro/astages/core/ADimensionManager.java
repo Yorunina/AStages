@@ -1,6 +1,5 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.resources.ResourceLocation;

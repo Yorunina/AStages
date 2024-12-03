@@ -1,7 +1,6 @@
 package com.alessandro.astages.event.enchant;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.profiling.jfr.event.ChunkGenerationEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraftforge.event.AnvilUpdateEvent;
@@ -9,7 +8,6 @@ import net.minecraftforge.event.RegisterStructureConversionsEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 

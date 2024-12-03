@@ -2,7 +2,6 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestriction;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class AEnchantRestriction implements ARestriction {

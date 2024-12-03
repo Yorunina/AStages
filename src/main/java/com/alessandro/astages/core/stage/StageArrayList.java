@@ -1,6 +1,5 @@
 package com.alessandro.astages.core.stage;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import org.jetbrains.annotations.NotNull;
 

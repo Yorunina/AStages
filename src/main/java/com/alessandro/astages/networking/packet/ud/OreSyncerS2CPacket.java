@@ -1,6 +1,5 @@
 package com.alessandro.astages.networking.packet.ud;
 
-import com.alessandro.astages.capability.BlockStage;
 import com.alessandro.astages.core.client.AClientOreRestriction;
 import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;

@@ -2,7 +2,6 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.Info;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
