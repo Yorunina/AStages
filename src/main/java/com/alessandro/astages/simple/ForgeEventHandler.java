@@ -1,7 +1,6 @@
 package com.alessandro.astages.simple;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.util.Info;
 import net.minecraftforge.api.distmarker.Dist;
