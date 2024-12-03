@@ -9,7 +9,6 @@ import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
 public record AInventorySlotListener(Player player) implements ContainerListener {
-
     @Override
     public void slotChanged(@NotNull AbstractContainerMenu container, int index, @NotNull ItemStack stack) {
         if (!stack.isEmpty() && container.getSlot(index).container == player.getInventory()) {

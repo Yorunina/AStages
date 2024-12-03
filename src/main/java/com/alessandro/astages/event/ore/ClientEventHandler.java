@@ -38,22 +38,12 @@ public class ClientEventHandler {
     @Info("TODO: SYNCHRONIZE ORE STAGES!")
     @SubscribeEvent
     public static void stageSync(ClientSynchronizeStagesEvent event) {
-        if (!ARestrictionManager.areOreStages(event.getStagesSynced())) { return; }
+        if (!AClientRestrictionManager.areOreStages(event.getStagesSynced())) { return; }
 
         renderAllAgain();
     }
 
-    // CLIENT TO CLIENT, WHY?
-//    @SubscribeEvent
-//    public static void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-//        if (event.getEntity() instanceof ServerPlayer player) {
-//            ModNetworking.sendToPlayer(new RenderAtLoginS2CPacket(), player);
-//        }
-//    }
-
     public static void renderAllAgain() {
-        // if (ARestrictionManager.RECIPE_INSTANCE.getRestrictions().isEmpty()) { return; }
-
         for (Map.Entry<String, List<AClientOreRestriction>> entry : AClientRestrictionManager.ORE_INSTANCE.restrictions.entrySet()) {
             for (AClientOreRestriction restriction : entry.getValue()) {
                 AStagesUtil.setBakedModelForState(restriction.original(), new AOreBakedModel(entry.getKey(), restriction.original(), restriction.replacement()));

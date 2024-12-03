@@ -57,10 +57,9 @@ public class StageDataSyncS2CPacket {
 
 
             ClientPlayerStage.set(stages);
-//            if (!differences.isEmpty()) {
             MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent(new ArrayList<>(differences)));
-//            }
         });
+
         ctx.get().setPacketHandled(true);
     }
 }

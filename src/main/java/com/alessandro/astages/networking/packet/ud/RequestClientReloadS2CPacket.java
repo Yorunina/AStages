@@ -19,6 +19,8 @@ public class RequestClientReloadS2CPacket {
             AClientRestrictionManager.ITEM_INSTANCE.reloadBeforeScripts();
             AClientRestrictionManager.RECIPE_INSTANCE.reloadBeforeScripts();
             AClientRestrictionManager.ORE_INSTANCE.reloadBeforeScripts();
+
+            AClientRestrictionManager.ORE_STAGES.clear();
         });
 
         ctx.get().setPacketHandled(true);

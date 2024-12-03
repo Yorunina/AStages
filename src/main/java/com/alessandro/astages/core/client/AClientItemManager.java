@@ -16,10 +16,11 @@ import java.util.*;
 @OnlyIn(Dist.CLIENT)
 public class AClientItemManager implements AClientManager {
     public final Map<String, List<AClientItemRestriction>> restrictions = new HashMap<>();
-    // public Map<ItemStack, AClientItemRestriction> CACHE = new HashMap<>();
+    private final Map<ItemStack, AClientItemRestriction> CACHE = new HashMap<>();
 
     public void reloadBeforeScripts() {
         restrictions.clear();
+        CACHE.clear();
     }
 
     public void addRestriction(String stage, AClientItemRestriction restriction) {
@@ -27,10 +28,16 @@ public class AClientItemManager implements AClientManager {
         if (!newList.isEmpty()) { newList.removeIf(rest -> Objects.equals(rest.id(), restriction.id())); }
         newList.add(restriction);
         restrictions.put(stage, newList);
+
+        CACHE.put(restriction.stack(), restriction);
     }
 
     public AClientItemRestriction getRestriction(@NotNull ItemStack stack) {
         if (stack.isEmpty()) { return null; }
+
+        if (CACHE.containsKey(stack)) {
+            return CACHE.get(stack);
+        }
 
         for (String stage : restrictions.keySet()) {
             for (AClientItemRestriction restriction : restrictions.get(stage)) {

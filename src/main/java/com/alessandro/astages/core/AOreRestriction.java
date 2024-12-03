@@ -32,5 +32,6 @@ public class AOreRestriction implements ARestriction, AMarkable {
     @Override
     public void markAsDirty() {
         ModNetworking.sendToClients(new OreSyncerS2CPacket(id, stage, original, replacement, true));
+        ARestrictionManager.synchronizeOreStages(null);
     }
 }

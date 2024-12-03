@@ -7,6 +7,8 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.event.item.ServerEventHandler;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ud.OreStagesSyncerS2CPacket;
 import com.alessandro.astages.util.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,6 +34,7 @@ public class PlayerEventHandler {
 
         ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
         ARestrictionManager.ORE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
+        ARestrictionManager.synchronizeOreStages((ServerPlayer) event.getEntity());
     }
 
     @SubscribeEvent
@@ -45,7 +48,7 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.@NotNull Clone event) {
-        if(event.isWasDeath()) {
+        if (event.isWasDeath()) {
             event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
                 event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);

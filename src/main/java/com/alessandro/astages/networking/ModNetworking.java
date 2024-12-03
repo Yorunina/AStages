@@ -97,6 +97,12 @@ public class ModNetworking {
             .consumerMainThread(OreSyncerS2CPacket::handle)
             .add();
 
+        net.messageBuilder(OreStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(OreStagesSyncerS2CPacket::new)
+            .encoder(OreStagesSyncerS2CPacket::toBytes)
+            .consumerMainThread(OreStagesSyncerS2CPacket::handle)
+            .add();
+
         // RELOADING
         net.messageBuilder(RequestClientReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(RequestClientReloadS2CPacket::new)

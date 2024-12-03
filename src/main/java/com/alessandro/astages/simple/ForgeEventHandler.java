@@ -24,17 +24,13 @@ public class ForgeEventHandler {
         ASimpleRestrictionManager.writeToFile();
     }
 
-//    @SubscribeEvent
-//    public static void onClientTick(TickEvent.ClientTickEvent event) {
-//        AStages.LOGGER.debug(AClientRestrictionManager.RECIPE_INSTANCE.restrictions.toString());
-//    }
-
     public static int tick = 0;
     @SubscribeEvent
     @Info("For Debug Only!")
     public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
         if (event.side.isClient()) {
             if (tick == 20) {
+                AStages.LOGGER.debug(AClientRestrictionManager.ORE_STAGES.toString());
 //                AStages.LOGGER.debug(ASimpleRestrictionManager.RESTRICTIONS.toString());
 //                AStages.LOGGER.debug(ARestrictionManager.PET_INSTANCE.toString());
 

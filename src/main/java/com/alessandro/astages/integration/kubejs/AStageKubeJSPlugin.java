@@ -7,12 +7,9 @@ import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 public class AStageKubeJSPlugin extends KubeJSPlugin {
-//    public static boolean isStartup = true;
-
     static {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
@@ -43,29 +40,12 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
     @Override
     public void onServerReload() {
         // AFTER SERVER SCRIPT RELOADING!
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            AStages.LOGGER.debug("NULL!");
-            return;
-        }
-
-//        if (!isStartup) {
-            ARestrictionManager.reloadAfterScripts();
-//        } else {
-//            isStartup = false;
-//        }
+        ARestrictionManager.reloadAfterScripts();
     }
 
     @Override
     public void clearCaches() {
         // BEFORE SERVER SCRIPT RELOADING!
-
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            AStages.LOGGER.debug("NULL!");
-            return;
-        }
-
-//        if (!isStartup) {
-            ARestrictionManager.reloadBeforeScripts();
-//        }
+        ARestrictionManager.reloadBeforeScripts();
     }
 }

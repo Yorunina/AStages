@@ -1,22 +1,15 @@
 package com.alessandro.astages.simple;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.ADimensionRestriction;
-import com.alessandro.astages.core.AItemRestriction;
-import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.AScreenRestriction;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.*;
 
 public class ASimpleRestrictionManager {
@@ -65,13 +58,14 @@ public class ASimpleRestrictionManager {
         AStages.LOGGER.debug("READING IN PROGRESS...");
 
         try (var fileReader = new FileReader(getConfigFileWithRestrictions())) {
-            RESTRICTIONS = GSON.fromJson(fileReader, TYPE);
+//            if (RESTRICTIONS == null) {
+//                RESTRICTIONS = new HashMap<>();
+//            } else {
+//                synchronizeWithServer();
+//                return;
+//            }
 
-            if (RESTRICTIONS == null) {
-                RESTRICTIONS = new HashMap<>();
-            } else {
-                synchronizeWithServer();
-            }
+            RESTRICTIONS = GSON.fromJson(fileReader, TYPE);
         } catch (IOException exception) {
             AStages.LOGGER.error(exception.getLocalizedMessage());
         }

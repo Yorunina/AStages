@@ -1,12 +1,12 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.JeiRecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.ud.OreSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.ud.RequestClientReloadS2CPacket;
-import com.alessandro.astages.networking.packet.ud.RequestJeiClientReloadS2CPacket;
+import com.alessandro.astages.networking.packet.ud.*;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +31,10 @@ public class ARestrictionManager {
     public static Set<String> ORE_STAGES = new HashSet<>();
 
     public static void reloadBeforeScripts() {
+        if (ServerLifecycleHooks.getCurrentServer() == null) {
+            return;
+        }
+
         ITEM_INSTANCE.reloadBeforeScripts();
         DIMENSION_INSTANCE.reloadBeforeScripts();
         MOB_INSTANCE.reloadBeforeScripts();
@@ -48,6 +52,11 @@ public class ARestrictionManager {
     }
 
     public static void reloadAfterScripts() {
+        if (ServerLifecycleHooks.getCurrentServer() == null) {
+            AStages.LOGGER.debug("SERVER is NULL!");
+            return;
+        }
+
         // ITEMS AUTOMATICALLY -> question/answer system
         // JEI
         ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
@@ -59,6 +68,17 @@ public class ARestrictionManager {
         ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
             ModNetworking.sendToClients(new OreSyncerS2CPacket(restriction.id, s, restriction.original, restriction.replacement, false));
         }));
+
+        // ORE STAGES
+        synchronizeOreStages(null);
+    }
+
+    public static void synchronizeOreStages(ServerPlayer player) {
+        if (player == null) {
+            ModNetworking.sendToClients(new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()));
+        } else {
+            ModNetworking.sendToPlayer(new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()), player);
+        }
     }
 
     static {
@@ -113,8 +133,6 @@ public class ARestrictionManager {
             case ITEM -> (T) ITEM_INSTANCE.getRestriction(id);
             case MOB -> (T) MOB_INSTANCE.getRestriction(id);
             case DIMENSION -> (T) DIMENSION_INSTANCE.getRestriction(id);
-//            case TIME -> (T) TIME_INSTANCE.getRestriction(id);
-            case TIME -> null;
             case STRUCTURE -> (T) STRUCTURE_INSTANCE.getRestriction(id);
             case RECIPE -> (T) RECIPE_INSTANCE.getRestriction(id);
             case SCREEN -> (T) SCREEN_INSTANCE.getRestriction(id);

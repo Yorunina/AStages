@@ -8,7 +8,6 @@ public enum ARestrictionType {
     ITEM,
     MOB,
     DIMENSION,
-    TIME,
     STRUCTURE,
     RECIPE,
     SCREEN,

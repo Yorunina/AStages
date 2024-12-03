@@ -1,6 +1,5 @@
 package com.alessandro.astages.integration.jade;
 
-import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -40,13 +39,15 @@ public class AStagesJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
                 var stack = new ItemStack(original);
-                var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), stack);
+                // var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), stack);
+                var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
 
                 if (restriction != null) {
                     tooltip.clear();
 
-                    if (restriction.jadeBlockMessage != null) {
-                        tooltip.add(restriction.getJadeBlockMessage(stack));
+                    if (restriction.jadeBlockMessage() != null) {
+                        // tooltip.add(restriction.jadeBlockMessage(stack));
+                        tooltip.add(restriction.jadeBlockMessage());
                     }
                 }
             }
@@ -55,13 +56,15 @@ public class AStagesJadePlugin implements IWailaPlugin {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), itemEntity.getItem());
+                    // var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), itemEntity.getItem());
+                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(itemEntity.getItem());
 
                     if (restriction != null) {
                         tooltip.clear();
 
-                        if (restriction.jadeItemMessage != null) {
-                            tooltip.add(restriction.getJadeItemMessage(itemEntity.getItem()));
+                        if (restriction.jadeItemMessage() != null) {
+                            // tooltip.add(restriction.getJadeItemMessage(itemEntity.getItem()));
+                            tooltip.add(restriction.jadeItemMessage());
                         }
                     }
                 }
