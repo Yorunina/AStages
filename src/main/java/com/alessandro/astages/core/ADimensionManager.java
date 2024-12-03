@@ -9,11 +9,11 @@ import net.minecraft.world.entity.player.Player;
 import java.util.*;
 
 public class ADimensionManager implements AManager<ADimensionRestriction, ResourceLocation> {
-    private Map<String, List<ADimensionRestriction>> restrictions = new HashMap<>();
+    private final Map<String, List<ADimensionRestriction>> restrictions = new HashMap<>();
 
     @Override
-    public void reload() {
-        restrictions = new HashMap<>();
+    public void reloadBeforeScripts() {
+        restrictions.clear();
     }
 
     @Override

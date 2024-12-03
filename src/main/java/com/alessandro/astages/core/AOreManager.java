@@ -1,9 +1,7 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.ud.OreSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.ud.RecipeSyncerS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.*;
 
 public class AOreManager implements AManager<AOreRestriction, BlockState> {
-    private Map<String, List<AOreRestriction>> restrictions = new HashMap<>();
+    private final Map<String, List<AOreRestriction>> restrictions = new HashMap<>();
 
     public Map<String, List<AOreRestriction>> getRestrictions() {
         return restrictions;
@@ -21,19 +19,13 @@ public class AOreManager implements AManager<AOreRestriction, BlockState> {
 
     public void synchronizeWithClient(ServerPlayer player) {
         restrictions.forEach((s, restrictions) -> {
-            restrictions.forEach(r -> ModNetworking.sendToPlayer(new OreSyncerS2CPacket(r.id, s, r.original, r.replacement), player));
-        });
-    }
-
-    public void synchronizeWithClients() {
-        restrictions.forEach((s, restrictions) -> {
-            restrictions.forEach(r -> ModNetworking.sendToClients(new OreSyncerS2CPacket(r.id, s, r.original, r.replacement)));
+            restrictions.forEach(r -> ModNetworking.sendToPlayer(new OreSyncerS2CPacket(r.id, s, r.original, r.replacement, true), player));
         });
     }
 
     @Override
-    public void reload() {
-        restrictions = new HashMap<>();
+    public void reloadBeforeScripts() {
+        restrictions.clear();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class AStage {
     public final String stage;
     public final String description;

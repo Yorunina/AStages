@@ -7,6 +7,7 @@ import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.core.AItemRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.event.custom.actions.ClientJeiReloadEvent;
 import com.alessandro.astages.event.custom.actions.ClientJeiUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.networking.ModNetworking;
@@ -33,7 +34,6 @@ import java.util.List;
 
 @JeiPlugin
 public class AItemStagesJEIPlugin implements IModPlugin {
-//    private boolean requiresUpdate = false;
     private IJeiRuntime runtime;
     private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "item_jei");
     public static final List<ItemStack> itemsToHide = Collections.synchronizedList(new ArrayList<>());
@@ -42,11 +42,9 @@ public class AItemStagesJEIPlugin implements IModPlugin {
         if (!Mods.JEI.isLoaded()) return;
 
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
-//            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> updateGui());
-//            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RecipesUpdatedEvent.class, e -> updateGui());
-
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> requestItemsToServer());
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RecipesUpdatedEvent.class, e -> requestItemsToServer());
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientJeiReloadEvent.class, e -> requestItemsToServer());
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientJeiUpdateEvent.class, e -> updateGui());
         }
@@ -76,7 +74,6 @@ public class AItemStagesJEIPlugin implements IModPlugin {
             // Get Restrictions
             for (ItemStack stack : ingredientManager.getAllItemStacks()) {
                 ModNetworking.sendToServer(new IsJeiRestrictedC2SPacket(stack, stack.equals(lastItem, false)));
-//                ModNetworking.sendToServer(new );
             }
         }
     }
@@ -91,31 +88,4 @@ public class AItemStagesJEIPlugin implements IModPlugin {
             }
         }
     }
-
-//    public void updateGui() {
-//        if (runtime != null) {
-//            IIngredientManager ingredientManager = runtime.getIngredientManager();
-//
-//            // Reset JEI
-//            if (!itemsToHide.isEmpty()) {
-//                ingredientManager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemsToHide);
-//                itemsToHide.clear();
-//            }
-//
-//            // Get Restrictions
-//            for (ItemStack stack : ingredientManager.getAllItemStacks()) {
-//                AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(stack);
-//
-//                if (restriction != null && restriction.hideInJEI) {
-//                    itemsToHide.add(stack);
-//                }
-//            }
-//
-//            // Hide in JEI
-//            if (!itemsToHide.isEmpty()) {
-//                // Minecraft.getInstance().re
-//                ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemsToHide);
-//            }
-//        }
-//    }
 }

@@ -1,52 +1,64 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ud.JeiRecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ud.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ud.RequestClientReloadS2CPacket;
+import com.alessandro.astages.networking.packet.ud.RequestJeiClientReloadS2CPacket;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import java.util.*;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
+    // ADD ENCHANTMENT RESTRICTION
 
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
-    public static final ATimeManager TIME_INSTANCE = new ATimeManager();
+//    public static final ATimeManager TIME_INSTANCE = new ATimeManager();
     public static final AStructureManager STRUCTURE_INSTANCE = new AStructureManager();
     public static final ARecipeManager RECIPE_INSTANCE = new ARecipeManager();
     public static final AScreenManager SCREEN_INSTANCE = new AScreenManager();
     public static final AOreManager ORE_INSTANCE = new AOreManager();
     public static final APetManager PET_INSTANCE = new APetManager();
+    public static final AEnchantManager ENCHANT_INSTANCE = new AEnchantManager();
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
 
-    public static void reload() {
-        ITEM_INSTANCE.reload();
-        DIMENSION_INSTANCE.reload();
-        MOB_INSTANCE.reload();
-//        TIME_INSTANCE.reload();
-        STRUCTURE_INSTANCE.reload();
-        RECIPE_INSTANCE.reload();
-        SCREEN_INSTANCE.reload();
-        ORE_INSTANCE.reload();
-        PET_INSTANCE.reload();
+    public static void reloadBeforeScripts() {
+        ITEM_INSTANCE.reloadBeforeScripts();
+        DIMENSION_INSTANCE.reloadBeforeScripts();
+        MOB_INSTANCE.reloadBeforeScripts();
+        STRUCTURE_INSTANCE.reloadBeforeScripts();
+        RECIPE_INSTANCE.reloadBeforeScripts();
+        SCREEN_INSTANCE.reloadBeforeScripts();
+        ORE_INSTANCE.reloadBeforeScripts();
+        PET_INSTANCE.reloadBeforeScripts();
+        ENCHANT_INSTANCE.reloadBeforeScripts();
 
-        ALL_STAGES = new HashSet<>();
-        ORE_STAGES = new HashSet<>();
+        ALL_STAGES.clear();
+        ORE_STAGES.clear();
 
-        // ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
+        ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
     }
 
-    public static void reloadClients() {
-        ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
+    public static void reloadAfterScripts() {
+        // ITEMS AUTOMATICALLY -> question/answer system
+        // JEI
+        ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
+
+        // RECIPE
+        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(restriction.id, s, restriction.type, restriction.recipes))));
+
+        // ORE
+        ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
+            ModNetworking.sendToClients(new OreSyncerS2CPacket(restriction.id, s, restriction.original, restriction.replacement, false));
+        }));
     }
 
     static {
@@ -108,6 +120,7 @@ public class ARestrictionManager {
             case SCREEN -> (T) SCREEN_INSTANCE.getRestriction(id);
             case ORE -> (T) ORE_INSTANCE.getRestriction(id);
             case PET -> (T) PET_INSTANCE.getRestriction(id);
+            case ENCHANT -> (T) ENCHANT_INSTANCE.getRestriction(id);
         };
     }
 }

@@ -13,7 +13,8 @@ public enum ARestrictionType {
     RECIPE,
     SCREEN,
     ORE,
-    PET;
+    PET,
+    ENCHANT;
 
     public @NotNull String getId() {
         return toString().toLowerCase(Locale.ROOT);

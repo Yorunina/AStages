@@ -1,21 +1,18 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ItemClientDataS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class AItemManager implements AManager<AItemRestriction, ItemStack> {
-    public Map<String, List<AItemRestriction>> restrictions = new HashMap<>();
+//    public static boolean isInventoryChanged = false;
+
+    public final Map<String, List<AItemRestriction>> restrictions = new HashMap<>();
     public final Map<String, List<AItemRestriction>> equipmentRestrictions = new HashMap<>();
     public final Map<String, List<AItemRestriction>> inventoryRestrictions = new HashMap<>();
 
@@ -24,8 +21,8 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
     }
 
     @Override
-    public void reload() {
-        restrictions = new HashMap<>();
+    public void reloadBeforeScripts() {
+        restrictions.clear();
     }
 
     @Override
@@ -54,30 +51,49 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         ARestrictionManager.ALL_STAGES.add(stage);
     }
 
-    @Info("Implement an optimized version of this method")
-    public void reloadInventoryAndEquipmentRestrictions(AItemRestriction unused) {
-        equipmentRestrictions.clear();
-        inventoryRestrictions.clear();
+//    @Info("Implement an optimized version of this method")
+    public void reloadInventoryAndEquipmentRestrictions(@NotNull AItemRestriction restriction) {
+        inventoryRestrictions.get(restriction.stage).removeIf(r -> Objects.equals(r.id, restriction.id));
+        equipmentRestrictions.get(restriction.stage).removeIf(r -> Objects.equals(r.id, restriction.id));
 
-        for (var entry : restrictions.entrySet()) {
-            for (var restriction : entry.getValue()) {
-                if (!restriction.canBeStoredInInventory) {
-                    var newInventoryList = inventoryRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
-                    if (!newInventoryList.isEmpty()) { newInventoryList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
-                    newInventoryList.add(restriction);
+        if (!restriction.canBeStoredInInventory) {
+            var newInventoryList = inventoryRestrictions.getOrDefault(restriction.stage, new ArrayList<>());
+            if (!newInventoryList.isEmpty()) { newInventoryList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
+            newInventoryList.add(restriction);
 
-                    inventoryRestrictions.put(entry.getKey(), newInventoryList);
-                }
-
-                if (!restriction.canBeEquipped) {
-                    var newEquipmentList = equipmentRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
-                    if (!newEquipmentList.isEmpty()) { newEquipmentList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
-                    newEquipmentList.add(restriction);
-
-                    equipmentRestrictions.put(entry.getKey(), newEquipmentList);
-                }
-            }
+            inventoryRestrictions.put(restriction.stage, newInventoryList);
         }
+
+        if (!restriction.canBeEquipped) {
+            var newEquipmentList = equipmentRestrictions.getOrDefault(restriction.stage, new ArrayList<>());
+            if (!newEquipmentList.isEmpty()) { newEquipmentList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
+            newEquipmentList.add(restriction);
+
+            equipmentRestrictions.put(restriction.stage, newEquipmentList);
+        }
+
+//        equipmentRestrictions.clear();
+//        inventoryRestrictions.clear();
+//
+//        for (var entry : restrictions.entrySet()) {
+//            for (var restriction : entry.getValue()) {
+//                if (!restriction.canBeStoredInInventory) {
+//                    var newInventoryList = inventoryRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
+//                    if (!newInventoryList.isEmpty()) { newInventoryList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
+//                    newInventoryList.add(restriction);
+//
+//                    inventoryRestrictions.put(entry.getKey(), newInventoryList);
+//                }
+//
+//                if (!restriction.canBeEquipped) {
+//                    var newEquipmentList = equipmentRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
+//                    if (!newEquipmentList.isEmpty()) { newEquipmentList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
+//                    newEquipmentList.add(restriction);
+//
+//                    equipmentRestrictions.put(entry.getKey(), newEquipmentList);
+//                }
+//            }
+//        }
     }
 
     @Override

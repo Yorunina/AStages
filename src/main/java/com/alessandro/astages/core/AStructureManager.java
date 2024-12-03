@@ -9,15 +9,15 @@ import net.minecraft.world.entity.player.Player;
 import java.util.*;
 
 public class AStructureManager implements AManager<AStructureRestriction, ResourceLocation> {
-    private Map<String, List<AStructureRestriction>> restrictions = new HashMap<>();
+    private final Map<String, List<AStructureRestriction>> restrictions = new HashMap<>();
 
     public Map<String, List<AStructureRestriction>> getRestrictions() {
         return restrictions;
     }
 
     @Override
-    public void reload() {
-        restrictions = new HashMap<>();
+    public void reloadBeforeScripts() {
+        restrictions.clear();
     }
 
     @Override

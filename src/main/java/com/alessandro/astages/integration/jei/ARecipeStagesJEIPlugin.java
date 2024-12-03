@@ -2,8 +2,6 @@ package com.alessandro.astages.integration.jei;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.core.ARecipeRestriction;
-import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.client.AClientRecipeRestriction;
 import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
@@ -16,10 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +56,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
         for (Map.Entry<String, List<AClientRecipeRestriction>> entry : AClientRestrictionManager.RECIPE_INSTANCE.restrictions.entrySet()) {
             for (var restriction : entry.getValue()) {
+                recipeLoop:
                 for (var recipeLocation : restriction.recipes()) {
                     for (var category : categories) {
 
@@ -79,8 +76,10 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
                             if (!ClientPlayerStage.hasStage(entry.getKey())) {
                                 runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(Collections.singletonList(recipe)));
+                                break recipeLoop;
                             } else {
                                 runtime.getRecipeManager().unhideRecipes(category.getRecipeType(), cast(Collections.singletonList(recipe)));
+                                break recipeLoop;
                             }
                         }
                     }

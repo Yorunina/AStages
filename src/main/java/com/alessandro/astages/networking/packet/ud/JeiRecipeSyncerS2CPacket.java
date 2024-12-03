@@ -14,20 +14,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class RecipeSyncerS2CPacket {
+public class JeiRecipeSyncerS2CPacket {
     private final String id;
     private final String stage;
     private final RecipeType<?> type;
     private final List<ResourceLocation> recipes;
 
-    public RecipeSyncerS2CPacket(String id, String stage, RecipeType<?> type, List<ResourceLocation> recipes) {
+    public JeiRecipeSyncerS2CPacket(String id, String stage, RecipeType<?> type, List<ResourceLocation> recipes) {
         this.id = id;
         this.stage = stage;
         this.type = type;
         this.recipes = recipes;
     }
 
-    public RecipeSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public JeiRecipeSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
         id = buf.readUtf();
         stage = buf.readUtf();
         type = buf.readRegistryIdUnsafe(ForgeRegistries.RECIPE_TYPES);

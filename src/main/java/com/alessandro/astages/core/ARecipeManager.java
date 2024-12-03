@@ -1,10 +1,8 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.OreSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.ud.RecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ud.JeiRecipeSyncerS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.ASendable;
 import com.alessandro.astages.util.AStagesUtil;
@@ -12,30 +10,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.network.PacketDistributor;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class ARecipeManager implements AManager<ARecipeRestriction, ARecipeManager.RecipeWrapper>, ASendable<ARecipeRestriction> {
-    private Map<String, List<ARecipeRestriction>> restrictions = new HashMap<>();
+public class ARecipeManager implements AManager<ARecipeRestriction, ARecipeManager.RecipeWrapper> {
+    private final Map<String, List<ARecipeRestriction>> restrictions = new HashMap<>();
 
     public Map<String, List<ARecipeRestriction>> getRestrictions() {
         return restrictions;
     }
 
-    @Override
-    public void sendToClientIfRestrictionChanged(@NotNull ARecipeRestriction restriction) {
-//        ModNetworking.sendToClients(new RecipeSyncerS2CPacket(restriction.id, restriction.stage, restriction.type, restriction.recipes));
-    }
-
     public void synchronizeWithClient(ServerPlayer player) {
-        restrictions.forEach((s, restrictions) -> restrictions.forEach(r -> ModNetworking.sendToPlayer(new RecipeSyncerS2CPacket(r.id, s, r.type, r.recipes), player)));
-    }
-
-    public void synchronizeWithClients() {
-        restrictions.forEach((s, restrictions) -> restrictions.forEach(r -> ModNetworking.sendToClients(new RecipeSyncerS2CPacket(r.id, s, r.type, r.recipes))));
+        restrictions.forEach((s, restrictions) -> restrictions.forEach(r -> ModNetworking.sendToPlayer(new JeiRecipeSyncerS2CPacket(r.id, s, r.type, r.recipes), player)));
     }
 
     public boolean isRestrictionListEmpty() {
@@ -43,8 +30,8 @@ public class ARecipeManager implements AManager<ARecipeRestriction, ARecipeManag
     }
 
     @Override
-    public void reload() {
-        restrictions = new HashMap<>();
+    public void reloadBeforeScripts() {
+        restrictions.clear();
     }
 
     @Override

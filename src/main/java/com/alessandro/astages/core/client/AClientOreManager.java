@@ -1,6 +1,5 @@
 package com.alessandro.astages.core.client;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AClientManager;
 import net.minecraft.world.level.block.state.BlockState;
@@ -9,7 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class AClientOreManager implements AClientManager {
-    public Map<String, List<AClientOreRestriction>> restrictions = new HashMap<>();
+    public final Map<String, List<AClientOreRestriction>> restrictions = new HashMap<>();
+
+    public void reloadBeforeScripts() {
+        restrictions.clear();
+    }
 
     public void addRestriction(String stage, @NotNull AClientOreRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());

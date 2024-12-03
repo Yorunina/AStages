@@ -17,12 +17,14 @@ public class OreSyncerS2CPacket {
     private final String stage;
     private final BlockState original;
     private final BlockState replacement;
+    private final boolean requestReload;
 
-    public OreSyncerS2CPacket(String id, String stage, BlockState original, BlockState replacement) {
+    public OreSyncerS2CPacket(String id, String stage, BlockState original, BlockState replacement, boolean requestReload) {
         this.id = id;
         this.stage = stage;
         this.original = original;
         this.replacement = replacement;
+        this.requestReload = requestReload;
     }
 
     public OreSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
@@ -30,6 +32,7 @@ public class OreSyncerS2CPacket {
         stage = buf.readUtf();
         original = buf.readJsonWithCodec(BlockState.CODEC);
         replacement = buf.readJsonWithCodec(BlockState.CODEC);
+        requestReload = buf.readBoolean();
     }
 
     public void toBytes(@NotNull FriendlyByteBuf buf) {
@@ -37,6 +40,7 @@ public class OreSyncerS2CPacket {
         buf.writeUtf(stage);
         buf.writeJsonWithCodec(BlockState.CODEC, original);
         buf.writeJsonWithCodec(BlockState.CODEC, replacement);
+        buf.writeBoolean(requestReload);
     }
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
@@ -44,7 +48,9 @@ public class OreSyncerS2CPacket {
             var restriction = new AClientOreRestriction(id, stage, original, replacement);
             AClientRestrictionManager.ORE_INSTANCE.addRestriction(stage, restriction);
 
-            MinecraftForge.EVENT_BUS.post(new ClientOreUpdateEvent());
+            if (requestReload) {
+                MinecraftForge.EVENT_BUS.post(new ClientOreUpdateEvent());
+            }
         });
 
         ctx.get().setPacketHandled(true);

@@ -5,6 +5,7 @@ import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.*;
 import com.alessandro.astages.core.stage.AStage;
 import com.alessandro.astages.core.stage.AStageManager;
+import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import dev.latvian.mods.kubejs.script.ScriptManager;
@@ -17,6 +18,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -177,7 +179,7 @@ public class AStagesKubeJSUtil {
 
     // ORE Restrictions
     public static @NotNull AOreRestriction addRestrictionForOre(String id, String stage, BlockState original, BlockState replacement) {
-        var restriction = new AOreRestriction(id);
+        var restriction = new AOreRestriction(id, stage);
         restriction.restrict(original, replacement);
 
         ARestrictionManager.ORE_INSTANCE.addRestriction(stage, restriction);
@@ -201,6 +203,16 @@ public class AStagesKubeJSUtil {
         restriction.restrict(structure);
 
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    // ENCHANT Restrictions
+    public static @NotNull AEnchantRestriction addRestrictionForEnchant(String id, String stage, Enchantment enchantment, ACompareCondition compareCondition, int level) {
+        var restriction = new AEnchantRestriction(id);
+        restriction.restrict(enchantment, compareCondition, level);
+
+        ARestrictionManager.ENCHANT_INSTANCE.addRestriction(stage, restriction);
 
         return restriction;
     }

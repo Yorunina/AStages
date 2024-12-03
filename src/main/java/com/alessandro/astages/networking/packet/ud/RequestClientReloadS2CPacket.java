@@ -11,16 +11,15 @@ import java.util.function.Supplier;
 public class RequestClientReloadS2CPacket {
     public RequestClientReloadS2CPacket() { }
 
-    @SuppressWarnings("unused")
-    public RequestClientReloadS2CPacket(FriendlyByteBuf unused) { }
+    public RequestClientReloadS2CPacket(FriendlyByteBuf ignoredUnused) { }
 
-    @SuppressWarnings("unused")
-    public void toBytes(FriendlyByteBuf unused) { }
+    public void toBytes(FriendlyByteBuf ignoredUnused) { }
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            AClientRestrictionManager.RECIPE_INSTANCE.restrictions = new HashMap<>();
-            AClientRestrictionManager.ORE_INSTANCE.restrictions = new HashMap<>();
+            AClientRestrictionManager.ITEM_INSTANCE.reloadBeforeScripts();
+            AClientRestrictionManager.RECIPE_INSTANCE.reloadBeforeScripts();
+            AClientRestrictionManager.ORE_INSTANCE.reloadBeforeScripts();
         });
 
         ctx.get().setPacketHandled(true);

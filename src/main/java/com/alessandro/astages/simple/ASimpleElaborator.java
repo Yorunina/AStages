@@ -41,7 +41,7 @@ public class ASimpleElaborator {
         String[] splice = simple.object.split("//");
         BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[0]))).defaultBlockState();
         var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[1]))).defaultBlockState();
-        ARestrictionManager.ORE_INSTANCE.addRestriction(simple.stage, new AOreRestriction(simple.id).restrict(original, replacement));
+        ARestrictionManager.ORE_INSTANCE.addRestriction(simple.stage, new AOreRestriction(simple.id, simple.stage).restrict(original, replacement));
     }
 
     public static void elaborateStructure(@NotNull ASimpleRestriction simple) {

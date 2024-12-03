@@ -1,6 +1,8 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.util.AChangeable;
+import com.alessandro.astages.util.AMarkable;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.Info;
 import net.minecraft.ChatFormatting;
@@ -13,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public class AItemRestriction implements ARestriction, AChangeable {
+public class AItemRestriction implements ARestriction, AChangeable, AMarkable {
     public final String id;
     public final String stage;
 
@@ -68,6 +70,9 @@ public class AItemRestriction implements ARestriction, AChangeable {
     public void setChanged() {
         ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions(this);
     }
+
+    @Override
+    public void markAsDirty() { }
 
     @Override
     public String toString() {

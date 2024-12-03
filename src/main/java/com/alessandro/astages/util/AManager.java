@@ -13,5 +13,5 @@ public interface AManager<T extends ARestriction, U> {
     @Info("For server!")
     T getRestriction(Player player, U object);
 
-    void reload();
+    void reloadBeforeScripts();
 }

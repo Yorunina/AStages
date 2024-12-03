@@ -35,7 +35,7 @@ public class IsJeiRestrictedC2SPacket {
 
             if (restriction != null && restriction.isHideInJEI()) {
                 // ModNetworking.sendToPlayer(new ItemIsRestrictedS2CPacket(stack, requestReload), ctx.get().getSender());
-                ModNetworking.sendToPlayer(new ItemIsRestrictedS2CPacket(stack), ctx.get().getSender());
+                ModNetworking.sendToPlayer(new JeiIsRestrictedS2CPacket(stack), ctx.get().getSender());
             }
 
             if (requestReload) {

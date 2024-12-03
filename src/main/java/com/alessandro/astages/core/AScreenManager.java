@@ -11,11 +11,11 @@ import net.minecraft.world.inventory.MenuType;
 import java.util.*;
 
 public class AScreenManager implements AManager<AScreenRestriction, MenuType<?>> {
-    private Map<String, List<AScreenRestriction>> restrictions = new HashMap<>();
+    private final Map<String, List<AScreenRestriction>> restrictions = new HashMap<>();
 
     @Override
-    public void reload() {
-        restrictions = new HashMap<>();
+    public void reloadBeforeScripts() {
+        restrictions.clear();
     }
 
     @Override

@@ -1,31 +1,21 @@
 package com.alessandro.astages.networking.packet.ud;
 
-import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.client.AClientItemManager;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
-import com.alessandro.astages.event.custom.actions.ClientJeiUpdateEvent;
 import com.alessandro.astages.integration.jei.AItemStagesJEIPlugin;
-import com.alessandro.astages.util.AClientQuestionType;
-import com.alessandro.astages.util.Triple;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
-import oshi.util.tuples.Pair;
 
 import java.util.function.Supplier;
 
-public class ItemIsRestrictedS2CPacket {
+public class JeiIsRestrictedS2CPacket {
 //    private final String stage;
     private final ItemStack stack;
 //    private final AClientQuestionType type;
 //    private final Component message;
 //    private final boolean requestReload;
 
-    public ItemIsRestrictedS2CPacket(ItemStack stack) {
+    public JeiIsRestrictedS2CPacket(ItemStack stack) {
     // public ItemIsRestrictedS2CPacket(ItemStack stack, boolean requestReload) {
     // public ItemIsRestrictedS2CPacket(ItemStack stack, Component message) {
         this.stack = stack;
@@ -33,7 +23,7 @@ public class ItemIsRestrictedS2CPacket {
 //        this.requestReload = requestReload;
     }
 
-    public ItemIsRestrictedS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public JeiIsRestrictedS2CPacket(@NotNull FriendlyByteBuf buf) {
         stack = buf.readItem();
 //        requestReload = buf.readBoolean();
 //        message = buf.readComponent();
