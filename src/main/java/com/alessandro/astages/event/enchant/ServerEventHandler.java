@@ -38,7 +38,7 @@ public class ServerEventHandler {
     }
 
     public static void onEnter(PlayerBrewedPotionEvent event) {
-
+        // event.getEntity().getActiveEffects().
     }
 
     public static void onAnvilUpdate(@NotNull AnvilUpdateEvent event) {

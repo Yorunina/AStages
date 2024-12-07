@@ -10,6 +10,7 @@ import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
@@ -233,6 +234,16 @@ public class AStagesKubeJSUtil {
             .setAge(age);
 
         ARestrictionManager.CROP_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    // EFFECT Restrictions
+    public static @NotNull AEffectRestriction addRestrictionForEffect(String id, String stage, MobEffect effect) {
+        var restriction = new AEffectRestriction(id);
+        restriction.restrict(effect);
+
+        ARestrictionManager.EFFECT_INSTANCE.addRestriction(stage, restriction);
 
         return restriction;
     }

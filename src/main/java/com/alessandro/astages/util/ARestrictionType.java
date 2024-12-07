@@ -14,7 +14,8 @@ public enum ARestrictionType {
     ORE,
     PET,
     ENCHANT,
-    CROP;
+    CROP,
+    EFFECT;
 
     public @NotNull String getId() {
         return toString().toLowerCase(Locale.ROOT);

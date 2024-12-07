@@ -27,6 +27,7 @@ public class ARestrictionManager {
     public static final APetManager PET_INSTANCE = new APetManager();
     public static final AEnchantManager ENCHANT_INSTANCE = new AEnchantManager();
     public static final ACropManager CROP_INSTANCE = new ACropManager();
+    public static final AEffectManager EFFECT_INSTANCE = new AEffectManager();
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
@@ -46,6 +47,7 @@ public class ARestrictionManager {
         PET_INSTANCE.reloadBeforeScripts();
         ENCHANT_INSTANCE.reloadBeforeScripts();
         CROP_INSTANCE.reloadBeforeScripts();
+        EFFECT_INSTANCE.reloadBeforeScripts();
 
         ALL_STAGES.clear();
         ORE_STAGES.clear();
@@ -128,6 +130,7 @@ public class ARestrictionManager {
             case PET -> (T) PET_INSTANCE.getRestriction(id);
             case ENCHANT -> (T) ENCHANT_INSTANCE.getRestriction(id);
             case CROP -> (T) CROP_INSTANCE.getRestriction(id);
+            case EFFECT -> (T) EFFECT_INSTANCE.getRestriction(id);
         };
     }
 }
