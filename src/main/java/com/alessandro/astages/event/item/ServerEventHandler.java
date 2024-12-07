@@ -4,11 +4,8 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AItemRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.util.AStagesUtil;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import com.alessandro.astages.util.Info;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +16,6 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +64,7 @@ public class ServerEventHandler {
         }
     }
 
+    @Info("Error for server!")
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent event) {
 //        if (event.getLevel().isClientSide && event.isCancelable()) {

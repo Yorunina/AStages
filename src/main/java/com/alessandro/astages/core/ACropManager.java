@@ -1,12 +1,9 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
