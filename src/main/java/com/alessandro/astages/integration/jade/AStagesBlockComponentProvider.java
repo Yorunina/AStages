@@ -41,7 +41,10 @@ public enum AStagesBlockComponentProvider implements IBlockComponentProvider, IS
         blockEntity.getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> {
             if (blockAccessor.getPlayer().getServer() != null) {
                 var player = AStagesUtil.getPlayerFromUUID(blockAccessor.getPlayer().getServer(), blockStage.getOwner());
-                compoundTag.putString(OWNER_KEY, player.getName().getString());
+
+                if (player != null) {
+                    compoundTag.putString(OWNER_KEY, player.getName().getString());
+                }
             }
         });
     }

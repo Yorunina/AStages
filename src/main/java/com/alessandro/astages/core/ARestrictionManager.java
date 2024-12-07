@@ -26,6 +26,7 @@ public class ARestrictionManager {
     public static final AOreManager ORE_INSTANCE = new AOreManager();
     public static final APetManager PET_INSTANCE = new APetManager();
     public static final AEnchantManager ENCHANT_INSTANCE = new AEnchantManager();
+    public static final ACropManager CROP_INSTANCE = new ACropManager();
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
@@ -44,6 +45,7 @@ public class ARestrictionManager {
         ORE_INSTANCE.reloadBeforeScripts();
         PET_INSTANCE.reloadBeforeScripts();
         ENCHANT_INSTANCE.reloadBeforeScripts();
+        CROP_INSTANCE.reloadBeforeScripts();
 
         ALL_STAGES.clear();
         ORE_STAGES.clear();
@@ -113,20 +115,6 @@ public class ARestrictionManager {
 //        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction1);
     }
 
-    public static boolean isOreStage(String stage) {
-        return ORE_STAGES.contains(stage);
-    }
-
-    public static boolean areOreStages(List<String> stages) {
-        for (String stage : ORE_STAGES) {
-            if (stages.contains(stage)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @SuppressWarnings("unchecked")
     public static <T extends ARestriction> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
         return switch (type) {
@@ -139,6 +127,7 @@ public class ARestrictionManager {
             case ORE -> (T) ORE_INSTANCE.getRestriction(id);
             case PET -> (T) PET_INSTANCE.getRestriction(id);
             case ENCHANT -> (T) ENCHANT_INSTANCE.getRestriction(id);
+            case CROP -> (T) CROP_INSTANCE.getRestriction(id);
         };
     }
 }

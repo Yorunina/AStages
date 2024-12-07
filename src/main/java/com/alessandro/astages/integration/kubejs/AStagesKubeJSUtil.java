@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -211,6 +212,27 @@ public class AStagesKubeJSUtil {
         restriction.restrict(enchantment, compareCondition, level);
 
         ARestrictionManager.ENCHANT_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    // CROP Restrictions
+    public static @NotNull ACropRestriction addRestrictionForCrop(String id, String stage, Block crop) {
+        var restriction = new ACropRestriction(id);
+        restriction.restrict(crop);
+
+        ARestrictionManager.CROP_INSTANCE.addRestriction(stage, restriction);
+
+        return restriction;
+    }
+
+    public static @NotNull ACropRestriction addRestrictionForCrop(String id, String stage, Block crop, ACompareCondition compareCondition, int age) {
+        var restriction = new ACropRestriction(id);
+        restriction.restrict(crop)
+            .setCompareCondition(compareCondition)
+            .setAge(age);
+
+        ARestrictionManager.CROP_INSTANCE.addRestriction(stage, restriction);
 
         return restriction;
     }

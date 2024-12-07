@@ -4,7 +4,11 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AItemRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.util.AStagesUtil;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +19,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
@@ -71,10 +76,43 @@ public class ServerEventHandler {
 //            return;
 //        }
 
-        if (event.isCancelable() && !event.getLevel().isClientSide) {
+
+//        event.setCancellationResult(InteractionResult.sidedSuccess(event.getSide().isClient()));
+
+        if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), event.getItemStack());
             if (restriction != null && !restriction.canItemBeUsed) {
+//                event.getEntity().setItemInHand(InteractionHand.MAIN_HAND, event.getItemStack().copy());
+//                event.getEntity().containerMenu.broadcastChanges();
+//                event.getEntity().inventoryMenu.slotsChanged(event.getEntity().getInventory());
+                // ClientboundContainerSetSlotPacket;
+                // ((ServerPlayer) event.getEntity()).connection.send(new ClientboundContainerSetSlotPacket(event.getEntity().containerMenu.containerId, event.getEntity().containerMenu.getStateId(), event.getEntity().getSlot(1), ));
+                // event.setCancellationResult();
+//                event.setCancellationResult(InteractionResult.FAIL);
+//                event.setResult(Event.Result.DENY);
+                // event.setCancellationResult(InteractionResult.PASS);
                 event.setCanceled(true);
+
+//                var menu = serverPlayer.containerMenu;
+//                var s = event.getItemStack().copy();
+//                s.setCount(4);
+//
+//                var slot = serverPlayer.getInventory().findSlotMatchingItem(s);
+//                AStages.LOGGER.debug(String.valueOf(slot));
+//                serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.getStateId(), slot, s));
+
+//                if (event.getEntity().getMainHandItem().equals(event.getItemStack(), false)) {
+//                    event.getEntity().getMainHandItem().setCount(event.getEntity().getMainHandItem().getCount() + 1);
+//                } else if (event.getEntity().getOffhandItem().equals(event.getItemStack(), false)) {
+//                    event.getEntity().getOffhandItem().setCount(event.getEntity().getMainHandItem().getCount() + 1);
+//                }
+
+                // event.getEntity().containerMenu.setCarried(event.getItemStack().copy());
+                // AStages.LOGGER.debug("PERFORMED!");
+                // event.getItemStack().setCount(event.getItemStack().getCount());
+                // event.getEntity().getInventory().setChanged();
+                // event.getEntity().inventoryMenu.broadcastChanges();
+                // event.getEntity().containerMenu.broadcastChanges();
 
                 if (restriction.usageMessage != null) {
                     event.getEntity().displayClientMessage(restriction.getUsageMessage(event.getItemStack()), true);
@@ -85,16 +123,6 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
-//        if (event.getLevel().isClientSide()) {
-//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(new ItemStack(event.getPlacedBlock().getBlock()));
-//
-//            if (restriction != null && !restriction.canItemBeUsed) {
-//                event.setCanceled(true);
-//            }
-//
-//            return;
-//        }
-
         if (event.getEntity() instanceof ServerPlayer player && !event.getLevel().isClientSide()) {
             var stack = new ItemStack(event.getPlacedBlock().getBlock());
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
@@ -111,19 +139,19 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onEntityHurt(AttackEntityEvent event) {
-        // if (event.getEntity() instanceof Player player) {
-        var player = event.getEntity();
-        ItemStack stack = player.getMainHandItem();
-        AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
+        if (canBeRunForPlayer(event.getEntity())) {
+            var player = event.getEntity();
+            ItemStack stack = player.getMainHandItem();
+            AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
 
-        if (restriction != null && !restriction.canAttack) {
-            event.setCanceled(true);
+            if (restriction != null && !restriction.canAttack) {
+                event.setCanceled(true);
 
-            if (restriction.attackMessage != null) {
-                player.displayClientMessage(restriction.getAttackMessage(stack), true);
+                if (restriction.attackMessage != null) {
+                    player.displayClientMessage(restriction.getAttackMessage(stack), true);
+                }
             }
         }
-        // }
     }
 
     @SubscribeEvent
