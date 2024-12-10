@@ -8,7 +8,7 @@ import com.alessandro.astages.event.custom.actions.ClientJeiReloadEvent;
 import com.alessandro.astages.event.custom.actions.ClientJeiUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.IsJeiRestrictedC2SPacket;
+import com.alessandro.astages.networking.packet.syncer.IsJeiRestrictedC2SPacket;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;

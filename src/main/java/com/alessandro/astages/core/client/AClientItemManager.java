@@ -2,7 +2,7 @@ package com.alessandro.astages.core.client;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.IsItemRestrictedC2SPacket;
+import com.alessandro.astages.networking.packet.syncer.IsItemRestrictedC2SPacket;
 import com.alessandro.astages.util.AClientManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;

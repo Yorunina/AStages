@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet.ud;
+package com.alessandro.astages.networking.packet.syncer;
 
 import com.alessandro.astages.event.custom.actions.ClientJeiUpdateEvent;
 import net.minecraft.network.FriendlyByteBuf;

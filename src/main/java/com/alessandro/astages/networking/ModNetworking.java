@@ -3,7 +3,7 @@ package com.alessandro.astages.networking;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.packet.RenderAtLoginS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
-import com.alessandro.astages.networking.packet.ud.*;
+import com.alessandro.astages.networking.packet.syncer.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;

@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet.ud;
+package com.alessandro.astages.networking.packet.syncer;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ModNetworking;

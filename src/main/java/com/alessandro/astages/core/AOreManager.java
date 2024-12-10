@@ -1,7 +1,7 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.OreSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.syncer.OreSyncerS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;

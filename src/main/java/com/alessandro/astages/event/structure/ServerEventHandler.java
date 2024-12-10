@@ -6,7 +6,10 @@ import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.Info;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.util.FakePlayer;
@@ -19,6 +22,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -49,9 +53,10 @@ public class ServerEventHandler {
 
                             if (structure != null) {
                                 boolean isInStructure = manager.getStructureAt(player.getOnPos(), structure).isValid();
-                                if (isInStructure && !playerIsInStructure.get(playerUUID)) {
+
+                                if (isInStructure && !playerIsInStructure.getOrDefault(playerUUID, false)) {
                                     playerIsInStructure.put(playerUUID, true);
-                                } else if (!isInStructure && playerIsInStructure.get(playerUUID)) {
+                                } else if (!isInStructure && playerIsInStructure.getOrDefault(playerUUID, false)) {
                                     playerIsInStructure.put(playerUUID, false);
                                 }
                             }

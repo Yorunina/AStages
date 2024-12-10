@@ -2,7 +2,7 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.*;
+import com.alessandro.astages.networking.packet.syncer.*;
 import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;

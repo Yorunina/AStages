@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet.ud;
+package com.alessandro.astages.networking.packet.syncer;
 
 import com.alessandro.astages.integration.jei.AItemStagesJEIPlugin;
 import net.minecraft.network.FriendlyByteBuf;

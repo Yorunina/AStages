@@ -2,7 +2,7 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.ud.JeiRecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.syncer.JeiRecipeSyncerS2CPacket;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.resources.ResourceLocation;
