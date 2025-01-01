@@ -18,9 +18,9 @@ public class APetRestriction implements ARestriction {
     public boolean isBreedable = false;
     public boolean isMountable = false;
 
-    public Function<Entity, Component> tameMessage = entity -> Component.translatable("message.astages.tame", entity.getName()).withStyle(ChatFormatting.RED);
-    public Function<Entity, Component> breedMessage = entity -> Component.translatable("message.astages.breed", entity.getName()).withStyle(ChatFormatting.RED);
-    public Function<Entity, Component> mountMessage = entity -> Component.translatable("message.astages.mount", entity.getName()).withStyle(ChatFormatting.RED);
+    public Function<Entity, Component> tameMessage = entity -> Component.translatable("message.astages.pet.tame", entity.getName()).withStyle(ChatFormatting.RED);
+    public Function<Entity, Component> breedMessage = entity -> Component.translatable("message.astages.pet.breed", entity.getName()).withStyle(ChatFormatting.RED);
+    public Function<Entity, Component> mountMessage = entity -> Component.translatable("message.astages.pet.mount", entity.getName()).withStyle(ChatFormatting.RED);
 
     public List<EntityType<?>> pets = new ArrayList<>();
 

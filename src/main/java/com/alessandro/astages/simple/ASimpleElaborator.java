@@ -42,7 +42,7 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateStructure(@NotNull ASimpleRestriction simple) {
-
+        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(simple.stage, new AStructureRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
     }
 
     public static void elaborateBiome(@NotNull ASimpleRestriction simple) {
@@ -66,7 +66,8 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeUsed(true).setCanBeDig(true));
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeUsed(true).setCanBeDig(true));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeLeftClicked(true).setCanItemBeRightClicked(true).setCanBeDig(true));
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {

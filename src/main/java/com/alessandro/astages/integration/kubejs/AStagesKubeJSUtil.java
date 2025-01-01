@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -97,9 +96,16 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-    public static @NotNull AItemRestriction addRestrictionForMod(String id, String stage, String modId, List<Item> ignored) {
+    public static @NotNull AItemRestriction addRestrictionForMod(String id, String stage, String modId, @NotNull Item... ignored) {
         var restriction = new AItemRestriction(id, stage);
-        restriction.restrict(itemStack -> modId.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).getNamespace()) && !ignored.contains(itemStack.getItem()));
+
+        restriction.restrict(itemStack ->  {
+            for (var i : ignored) {
+                if (itemStack.is(i)) { return false; }
+            }
+
+            return modId.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).getNamespace());
+        });
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
 
@@ -126,7 +132,9 @@ public class AStagesKubeJSUtil {
             .setCanAttack(true)
             .setHideInJEI(false)
             .setCanBePlaced(true)
-            .setCanItemBeUsed(true)
+//            .setCanItemBeUsed(true)
+            .setCanItemBeLeftClicked(true)
+            .setCanItemBeRightClicked(true)
             .setCanBeDig(true);
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
@@ -153,6 +161,16 @@ public class AStagesKubeJSUtil {
 
         return restriction;
     }
+
+//    public static @NotNull AMobRestriction addRestrictionForMob(String id, String stage, EntityType<?> mob) {
+//        var tag
+//        var restriction = new AMobRestriction(id);
+//        restriction.restrict(mob);
+//
+//        ARestrictionManager.MOB_INSTANCE.addRestriction(stage, restriction);
+//
+//        return restriction;
+//    }
 
     // RECIPE Restrictions
     public static @NotNull ARecipeRestriction addRestrictionForRecipe(String id, String stage, RecipeType<?> recipeType, ResourceLocation @NotNull ... recipeIds) {
@@ -199,7 +217,7 @@ public class AStagesKubeJSUtil {
 
     // STRUCTURE Restrictions
     public static @NotNull AStructureRestriction addRestrictionForStructure(String id, String stage, ResourceLocation structure) {
-        var restriction = new AStructureRestriction(id);
+        var restriction = new AStructureRestriction(id, stage);
         restriction.restrict(structure);
 
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(stage, restriction);

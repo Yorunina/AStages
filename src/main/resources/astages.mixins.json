@@ -7,19 +7,19 @@
   "mixins": [
     "AModRuleCompatibilityLayer",
     "APlayerEventJS",
-    "enchant.AEnchantment",
     "enchant.AEnchantmentMenu",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
-    "recipe.botania.ABreweryBlockEntity",
-    "recipe.botania.AOrechidBlockEntity",
-    "recipe.mekanism.ARecipeCacheLookupMonitor",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
-    "recipe.thermal.AMachinePulverizerBlockEntity",
+    "recipe.minecraft.ACampfireBlock",
+    "recipe.minecraft.ACraftingMenu",
+    "recipe.minecraft.ASmithingMenu",
+    "recipe.minecraft.AStonecutterMenu",
     "screen.AServerPlayer"
   ],
   "client": [
-    "item.AGui"
+    "item.AGui",
+    "recipe.minecraft.AStonecutterScreen"
   ],
   "injectors": {
     "defaultRequire": 1

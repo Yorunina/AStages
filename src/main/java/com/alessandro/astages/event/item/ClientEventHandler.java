@@ -13,7 +13,6 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void onItemTooltip(@NotNull ItemTooltipEvent event) {
         if (event.getEntity() != null) {
-
             var stack = event.getItemStack();
             var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
 

@@ -50,7 +50,6 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
         ARestrictionManager.ALL_STAGES.add(stage);
     }
 
-//    @Info("Implement an optimized version of this method")
     public void reloadInventoryAndEquipmentRestrictions(@NotNull AItemRestriction restriction) {
         inventoryRestrictions.get(restriction.stage).removeIf(r -> Objects.equals(r.id, restriction.id));
         equipmentRestrictions.get(restriction.stage).removeIf(r -> Objects.equals(r.id, restriction.id));
@@ -70,29 +69,6 @@ public class AItemManager implements AManager<AItemRestriction, ItemStack> {
 
             equipmentRestrictions.put(restriction.stage, newEquipmentList);
         }
-
-//        equipmentRestrictions.clear();
-//        inventoryRestrictions.clear();
-//
-//        for (var entry : restrictions.entrySet()) {
-//            for (var restriction : entry.getValue()) {
-//                if (!restriction.canBeStoredInInventory) {
-//                    var newInventoryList = inventoryRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
-//                    if (!newInventoryList.isEmpty()) { newInventoryList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
-//                    newInventoryList.add(restriction);
-//
-//                    inventoryRestrictions.put(entry.getKey(), newInventoryList);
-//                }
-//
-//                if (!restriction.canBeEquipped) {
-//                    var newEquipmentList = equipmentRestrictions.getOrDefault(entry.getKey(), new ArrayList<>());
-//                    if (!newEquipmentList.isEmpty()) { newEquipmentList.removeIf(rest -> Objects.equals(rest.id, restriction.id)); }
-//                    newEquipmentList.add(restriction);
-//
-//                    equipmentRestrictions.put(entry.getKey(), newEquipmentList);
-//                }
-//            }
-//        }
     }
 
     @Override

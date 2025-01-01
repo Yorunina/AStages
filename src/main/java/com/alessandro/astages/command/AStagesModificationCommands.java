@@ -11,6 +11,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,10 +41,10 @@ public class AStagesModificationCommands {
                 .executes(context -> removeAllStagesCommand(EntityArgument.getPlayer(context, "player"), BoolArgumentType.getBool(context, "silentChat"), BoolArgumentType.getBool(context, "silentTitle")))
             ))))
             .then(Commands.literal("info")
-                .executes(context -> infoCommand(Objects.requireNonNull(context.getSource().getPlayer())))
+                .executes(context -> infoCommand(Objects.requireNonNull(context.getSource().getPlayer()), context.getSource().getPlayer()))
             )
             .then(Commands.literal("info").then(Commands.argument("player", EntityArgument.player())
-                .executes(context -> infoCommand(EntityArgument.getPlayer(context, "player")))
+                .executes(context -> infoCommand(Objects.requireNonNull(context.getSource().getPlayer()), EntityArgument.getPlayer(context, "player")))
             ))
         );
     }
@@ -94,14 +95,14 @@ public class AStagesModificationCommands {
         return 1;
     }
 
-    private static int infoCommand(Player player) {
+    private static int infoCommand(ServerPlayer executor, Player player) {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             if (playerStage.getStages().isEmpty()) {
-                player.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", player.getName()).withStyle(ChatFormatting.RED));
+                executor.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", player.getName()).withStyle(ChatFormatting.RED));
             } else {
-                player.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", player.getName()).withStyle(ChatFormatting.GREEN));
+                executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", player.getName()).withStyle(ChatFormatting.GREEN));
                 for (var stage : playerStage.getStages()) {
-                    player.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
+                    executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
                 }
             }
         });

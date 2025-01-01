@@ -34,13 +34,7 @@ public class ServerEventHandler {
 
             if (restriction != null) {
                 level.setBlock(pos, event.getOriginalState(), Block.UPDATE_ALL);
-                AStages.LOGGER.debug(event.getOriginalState().toString());
             }
         }
-
-//        if (event.getState().getBlock() instanceof CropBlock cropBlock) {
-//            cropBlock.get
-//        }
-//        event.getLevel().setBlock(event.getPos(), event.getOriginalState(), Block.UPDATE_ALL);
     }
 }

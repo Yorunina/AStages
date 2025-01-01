@@ -24,7 +24,6 @@ public class AStagesJadePlugin implements IWailaPlugin {
         registration.addRayTraceCallback((hitResult, accessor, originalAccessor) -> {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlockState();
-                // var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(original);
                 var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(original);
 
                 if (restriction != null) {
@@ -39,14 +38,12 @@ public class AStagesJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
                 var stack = new ItemStack(original);
-                // var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), stack);
                 var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
 
                 if (restriction != null) {
                     tooltip.clear();
 
                     if (restriction.jadeBlockMessage() != null) {
-                        // tooltip.add(restriction.jadeBlockMessage(stack));
                         tooltip.add(restriction.jadeBlockMessage());
                     }
                 }
@@ -56,14 +53,12 @@ public class AStagesJadePlugin implements IWailaPlugin {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    // var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(accessor.getPlayer(), itemEntity.getItem());
                     var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(itemEntity.getItem());
 
                     if (restriction != null) {
                         tooltip.clear();
 
                         if (restriction.jadeItemMessage() != null) {
-                            // tooltip.add(restriction.getJadeItemMessage(itemEntity.getItem()));
                             tooltip.add(restriction.jadeItemMessage());
                         }
                     }

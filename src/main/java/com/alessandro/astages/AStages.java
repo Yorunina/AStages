@@ -1,7 +1,9 @@
 package com.alessandro.astages;
 
+import com.alessandro.astages.block.ModBlocks;
 import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.item.ModItems;
 import com.alessandro.astages.networking.ModNetworking;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,6 +21,9 @@ public class AStages {
 
     public AStages() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModItems.ITEMS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
 
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");

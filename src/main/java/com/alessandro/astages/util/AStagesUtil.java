@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -94,6 +95,11 @@ public class AStagesUtil {
         return capitalizeWords(input.replace('_', ' '));
     }
 
+    @Contract("_ -> !null")
+    public static @NotNull String structureToDescription(@NotNull ResourceLocation input) {
+        return capitalizeWords(input.getPath().replace('_', ' '));
+    }
+
     public static @NotNull String capitalizeWords(@NotNull String input) {
         // split the input string into an array of words
         String[] words = input.split("\\s");
@@ -108,18 +114,6 @@ public class AStagesUtil {
 
         return result.toString().trim();
     }
-
-//    public static void setTitle(Component component) {
-//        Minecraft.getInstance().gui.setTitle(component);
-//    }
-//
-//    public static void setSubTitle(Component component) {
-//        Minecraft.getInstance().gui.setSubtitle(component);
-//    }
-//
-//    public static void setTimes(int fadeIn, int stay, int fadeOut) {
-//        Minecraft.getInstance().gui.setTimes(fadeIn, stay, fadeOut);
-//    }
 
     public static void runForSide(boolean discriminantForClient, Runnable client, Runnable server) {
         if (discriminantForClient) {

@@ -8,12 +8,14 @@ import net.minecraftforge.event.entity.living.AnimalTameEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
-    public static void onPlayerTame(@NotNull AnimalTameEvent event) {
+    public static void onPlayerTame(AnimalTameEvent event) {
         if (!event.getTamer().level().isClientSide) {
             var player = event.getTamer();
             var pet = event.getEntity();
@@ -28,7 +30,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onMount(@NotNull EntityMountEvent event) {
+    public static void onMount(EntityMountEvent event) {
         if (!event.getEntityMounting().level().isClientSide) {
             var entity = event.getEntityMounting();
             var pet = event.getEntityBeingMounted();
@@ -45,7 +47,7 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerBreedEntity(PlayerInteractEvent.@NotNull EntityInteract event) {
+    public static void onPlayerBreedEntity(PlayerInteractEvent.EntityInteract event) {
         if (!event.getEntity().level().isClientSide) {
             var player = event.getEntity();
             var pet = event.getTarget();

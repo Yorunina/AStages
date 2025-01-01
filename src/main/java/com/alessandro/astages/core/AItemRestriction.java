@@ -3,7 +3,6 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.util.AChangeable;
 import com.alessandro.astages.util.AMarkable;
 import com.alessandro.astages.util.ARestriction;
-import com.alessandro.astages.util.Info;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -26,19 +25,20 @@ public class AItemRestriction implements ARestriction, AChangeable, AMarkable {
     public boolean canAttack = false;
     public boolean hideInJEI = true;
     public boolean canBePlaced = false;
-//    @Info("To be reviewed!") public boolean canBlockBeUsed = false;
-    @Info("To be reviewed!") public boolean canItemBeUsed = false;
+    public boolean canItemBeLeftClicked = false;
+    public boolean canItemBeRightClicked = false;
+    // public boolean canItemBeUsed = false;
     public boolean canBeDig = false;
 
-    public Function<ItemStack, Component> hiddenName = stack -> Component.translatable("tooltip.astages.hidden_name", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> dropMessage = stack -> Component.translatable("message.astages.drop", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> attackMessage = stack -> Component.translatable("message.astages.attach", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> pickupMessage = stack -> Component.translatable("message.astages.pickup", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> usageMessage = stack -> Component.translatable("message.astages.use", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> mineMessage = stack -> Component.translatable("message.astages.mine", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> placeMessage = stack -> Component.translatable("message.astages.place", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> jadeItemMessage = stack -> Component.translatable("tooltip.astages.jade_integration.item", stack.getHoverName()).withStyle(ChatFormatting.RED);
-    public Function<ItemStack, Component> jadeBlockMessage = stack -> Component.translatable("tooltip.astages.jade_integration.block", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> hiddenName = stack -> Component.translatable("tooltip.astages.item.hidden_name", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> dropMessage = stack -> Component.translatable("message.astages.item.drop", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> attackMessage = stack -> Component.translatable("message.astages.item.attach", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> pickupMessage = stack -> Component.translatable("message.astages.item.pickup", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> usageMessage = stack -> Component.translatable("message.astages.item.use", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> mineMessage = stack -> Component.translatable("message.astages.item.mine", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> placeMessage = stack -> Component.translatable("message.astages.item.place", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> jadeItemMessage = stack -> Component.translatable("tooltip.astages.item.jade_integration.item", stack.getHoverName()).withStyle(ChatFormatting.RED);
+    public Function<ItemStack, Component> jadeBlockMessage = stack -> Component.translatable("tooltip.astages.item.jade_integration.block", stack.getHoverName()).withStyle(ChatFormatting.RED);
 
     public int pickUpDelay = 60;
 
@@ -85,8 +85,7 @@ public class AItemRestriction implements ARestriction, AChangeable, AMarkable {
             ", hideTooltip=" + hideTooltip +
             ", renderItemName=" + renderItemName +
             ", canBePlaced=" + canBePlaced +
-//            ", canBlockBeUsed=" + canBlockBeUsed +
-            ", canItemBeUsed=" + canItemBeUsed +
+            // ", canItemBeUsed=" + canItemBeUsed +
             ", pickUpDelay=" + pickUpDelay +
             '}';
     }
@@ -184,22 +183,32 @@ public class AItemRestriction implements ARestriction, AChangeable, AMarkable {
         return this;
     }
 
-//    public boolean isCanBlockBeUsed() {
-//        return canBlockBeUsed;
+//    public boolean isCanItemBeUsed() {
+//        return canItemBeUsed;
 //    }
 //
-//    public AItemRestriction setCanBlockBeUsed(boolean canBlockBeUsed) {
-//        this.canBlockBeUsed = canBlockBeUsed;
+//    public AItemRestriction setCanItemBeUsed(boolean canItemBeUsed) {
+//        this.canItemBeUsed = canItemBeUsed;
 //
 //        return this;
 //    }
 
-    public boolean isCanItemBeUsed() {
-        return canItemBeUsed;
+    public boolean isCanItemBeLeftClicked() {
+        return canItemBeLeftClicked;
     }
 
-    public AItemRestriction setCanItemBeUsed(boolean canItemBeUsed) {
-        this.canItemBeUsed = canItemBeUsed;
+    public AItemRestriction setCanItemBeLeftClicked(boolean canItemBeLeftClicked) {
+        this.canItemBeLeftClicked = canItemBeLeftClicked;
+
+        return this;
+    }
+
+    public boolean isCanItemBeRightClicked() {
+        return canItemBeRightClicked;
+    }
+
+    public AItemRestriction setCanItemBeRightClicked(boolean canItemBeRightClicked) {
+        this.canItemBeRightClicked = canItemBeRightClicked;
 
         return this;
     }

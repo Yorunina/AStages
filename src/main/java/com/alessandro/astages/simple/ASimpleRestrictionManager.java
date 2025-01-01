@@ -42,7 +42,8 @@ public class ASimpleRestrictionManager {
                 case DIMENSION -> entry.getValue().forEach(ASimpleElaborator::elaborateDimension);
                 case GUI -> entry.getValue().forEach(ASimpleElaborator::elaborateGui);
                 case ORE -> entry.getValue().forEach(ASimpleElaborator::elaborateOre);
-                case STRUCTURE, BIOME -> entry.getValue().forEach(simple -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!"));
+                case STRUCTURE -> entry.getValue().forEach(ASimpleElaborator::elaborateStructure);
+                case BIOME -> entry.getValue().forEach(simple -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!"));
                 case TAME -> entry.getValue().forEach(ASimpleElaborator::elaborateTame);
                 case MOUNT -> entry.getValue().forEach(ASimpleElaborator::elaborateMount);
                 case RECIPE -> entry.getValue().forEach(ASimpleElaborator::elaborateRecipe);

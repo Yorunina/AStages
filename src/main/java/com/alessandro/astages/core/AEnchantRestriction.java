@@ -13,6 +13,7 @@ public class AEnchantRestriction implements ARestriction {
 
     public boolean isAnvilRestricted = true;
     public boolean isEnchantingTableRestricted = true;
+    public boolean isInventoryRestricted = true;
 
     public AEnchantRestriction(String id) {
         this.id = id;

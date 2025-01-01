@@ -31,6 +31,8 @@ public class IsItemRestrictedC2SPacket {
 
             if (restriction != null) {
                 ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(restriction.id, restriction.stage, stack, restriction.renderItemName, restriction.hideTooltip, restriction.getHiddenName(stack), restriction.getJadeItemMessage(stack), restriction.getJadeBlockMessage(stack)), ctx.get().getSender());
+            } else {
+                ModNetworking.sendToPlayer(new NullItemSyncerS2CPacket(stack), ctx.get().getSender());
             }
         });
 

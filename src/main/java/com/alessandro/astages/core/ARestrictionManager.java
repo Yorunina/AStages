@@ -85,38 +85,6 @@ public class ARestrictionManager {
         }
     }
 
-    static {
-//        var rest = new ARecipeRestriction("id_auto");
-//        rest.type = RecipeType.SMELTING;
-//        rest.restrict(new ResourceLocation("minecraft", "charcoal"));
-//
-//        var rest1 = new ARecipeRestriction("id_auto_1");
-//        rest1.type = MekanismRecipeType.CRUSHING.getRecipeType();
-//        rest1.restrict(new ResourceLocation("mekanism", "crushing/gravel_to_sand"));
-//
-//        RECIPE_INSTANCE.addRestriction("test_auto", rest);
-//        RECIPE_INSTANCE.addRestriction("test_auto_mod", rest1);
-
-//        ARecipeRestriction restriction = new ARecipeRestriction("astages/botania1");
-//        restriction.type = BotaniaRecipeTypes.BREW_TYPE;
-//        restriction.restrict(new ResourceLocation("botania", "brew/speed"));
-//
-//        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction);
-//
-//        ARecipeRestriction restriction1 = new ARecipeRestriction("astages/botania2");
-//        restriction1.type = BotaniaRecipeTypes.ORECHID_TYPE;
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/coal_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/iron_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/redstone_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/copper_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/gold_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/emerald_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/lapis_ore"));
-//        restriction1.restrict(new ResourceLocation("botania", "orechid/diamond_ore"));
-//
-//        ARestrictionManager.RECIPE_INSTANCE.addRestriction("stage_rec", restriction1);
-    }
-
     @SuppressWarnings("unchecked")
     public static <T extends ARestriction> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
         return switch (type) {

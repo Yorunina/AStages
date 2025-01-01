@@ -22,16 +22,16 @@ public class ALanguageProvider extends LanguageProvider {
         add("chat.astages.info.list_item", " - %s");
 
         // ITEM
-        add("tooltip.astages.hidden_name", "Unfamiliar Item");
-        add("tooltip.astages.item_description", "This item has been staged to [%s]");
-        add("message.astages.drop", "You dropped the %s.");
-        add("message.astages.mine", "You do not know how to mine with the %s.");
-        add("message.astages.attach", "You don't know how to attack with the %s.");
-        add("message.astages.use", "You don't know how to use the %s.");
-        add("message.astages.pickup", "You couldn't pick up the %s.");
-        add("message.astages.place", "You couldn't place the %s.");
-        add("tooltip.astages.jade_integration.item", "Unfamiliar Item");
-        add("tooltip.astages.jade_integration.block", "Unfamiliar Block");
+        add("tooltip.astages.item.hidden_name", "Unfamiliar Item");
+        add("tooltip.astages.item.item_description", "This item has been staged to [%s]");
+        add("message.astages.item.drop", "You dropped the %s.");
+        add("message.astages.item.mine", "You do not know how to mine with the %s.");
+        add("message.astages.item.attach", "You don't know how to attack with the %s.");
+        add("message.astages.item.use", "You don't know how to use the %s.");
+        add("message.astages.item.pickup", "You couldn't pick up the %s.");
+        add("message.astages.item.place", "You couldn't place the %s.");
+        add("tooltip.astages.item.jade_integration.item", "Unfamiliar Item");
+        add("tooltip.astages.item.jade_integration.block", "Unfamiliar Block");
 
         // DIMENSION
         add("message.astages.dimension", "You can't visit this dimension!");
@@ -40,9 +40,16 @@ public class ALanguageProvider extends LanguageProvider {
         add("message.astages.screen", "You can't open this menu!");
 
         // PET
-        add("message.astages.tame", "You can't tame %s!");
-        add("message.astages.breed", "You can't breed %s!");
-        add("message.astages.mount", "You can't mount %s!");
+        add("message.astages.pet.tame", "You can't tame %s!");
+        add("message.astages.pet.breed", "You can't breed %s!");
+        add("message.astages.pet.mount", "You can't mount %s!");
+
+        // STRUCTURE
+        add("message.astages.structure.attack", "You can't attack in %s!");
+        add("message.astages.structure.interact", "You can't interact with %s!");
+        add("message.astages.structure.enter", "You can't enter in %s!");
+        add("message.astages.structure.place", "You can't place in %s!");
+        add("message.astages.structure.break", "You can't break in %s!");
 
         // JADE INTEGRATION
         add("config.jade.plugin_astages.block_component_provider", "AStages");

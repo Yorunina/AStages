@@ -1,5 +1,6 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.event.structure.ServerEventHandler;
 import com.alessandro.astages.util.AManager;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +18,7 @@ public class AStructureManager implements AManager<AStructureRestriction, Resour
     @Override
     public void reloadBeforeScripts() {
         restrictions.clear();
+        ServerEventHandler.playerIsInStructure.clear();
     }
 
     @Override

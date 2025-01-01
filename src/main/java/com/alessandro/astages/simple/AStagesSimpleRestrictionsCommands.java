@@ -13,8 +13,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class AStagesSimpleRestrictionsCommands {
     public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2)).then(Commands.literal("restrict")

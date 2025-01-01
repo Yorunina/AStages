@@ -48,7 +48,7 @@ public class AGui {
             var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
 
             if (restriction != null && !restriction.renderItemName()) {
-                mutablecomponent.append(Component.translatable("tooltip.astages.hidden_name")).withStyle(ChatFormatting.RED);
+                mutablecomponent.append(Component.translatable("tooltip.astages.item.hidden_name")).withStyle(ChatFormatting.RED);
             } else {
                 mutablecomponent.append(this.lastToolHighlight.getHoverName()).withStyle(this.lastToolHighlight.getRarity().getStyleModifier());
 

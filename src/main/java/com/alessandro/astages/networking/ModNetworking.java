@@ -57,6 +57,12 @@ public class ModNetworking {
             .consumerMainThread(ItemSyncerS2CPacket::handle)
             .add();
 
+        net.messageBuilder(NullItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(NullItemSyncerS2CPacket::new)
+            .encoder(NullItemSyncerS2CPacket::toBytes)
+            .consumerMainThread(NullItemSyncerS2CPacket::handle)
+            .add();
+
         // JEI
         net.messageBuilder(IsJeiRestrictedC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
             .decoder(IsJeiRestrictedC2SPacket::new)

@@ -6,12 +6,12 @@ import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
-import com.alessandro.astages.event.item.ServerEventHandler;
 import com.alessandro.astages.util.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
@@ -48,7 +48,7 @@ public class PlayerEventHandler {
     public static void onPlayerCloned(PlayerEvent.@NotNull Clone event) {
         if (event.isWasDeath()) {
             event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
+                event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -66,20 +66,26 @@ public class PlayerEventHandler {
     @Info("For inventory checking!")
     @SubscribeEvent
     public static void onInventoryChanged(@NotNull PlayerInventoryChangedEvent event) {
-        ServerEventHandler.isInventoryChanged = true;
+        CommonEventSettings.isInventoryChanged = true;
+        CommonEventSettings.slotChanged = event.getSlot();
+
+        AStages.LOGGER.debug(String.valueOf(CommonEventSettings.slotChanged));
     }
 
-    @Info("For armor checking!")
-    @SubscribeEvent
-    public static void livingEquipmentChanged(@NotNull LivingEquipmentChangeEvent event) {
-        if (event.getEntity() instanceof Player) {
-            ServerEventHandler.isInventoryChanged = true;
-        }
-    }
+//    @Info("For armor checking!")
+//    @SubscribeEvent
+//    public static void livingEquipmentChanged(@NotNull LivingEquipmentChangeEvent event) {
+//        if (event.getEntity() instanceof Player) {
+//            ServerEventHandler.isInventoryChanged = true;
+//            CommonEventSettings.isInventoryChanged = true;
+//            CommonEventSettings.slotChanged = event.getSlot().getIndex();
+//        }
+//    }
 
-    @Info("For inventory checking!")
+    @Info("For whole inventory checking!")
     @SubscribeEvent
     public static void onStageSynced(StageSyncedPlayerEvent event) {
-        ServerEventHandler.isInventoryChanged = true;
+        CommonEventSettings.isInventoryChanged = true;
+        CommonEventSettings.slotChanged = null;
     }
 }

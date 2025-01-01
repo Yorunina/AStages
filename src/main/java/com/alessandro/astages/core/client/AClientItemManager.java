@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.client;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.syncer.IsItemRestrictedC2SPacket;
@@ -16,27 +17,35 @@ import java.util.*;
 @OnlyIn(Dist.CLIENT)
 public class AClientItemManager implements AClientManager {
     public final Map<String, List<AClientItemRestriction>> restrictions = new HashMap<>();
-    private final Map<ItemStack, AClientItemRestriction> CACHE = new HashMap<>();
+    public final List<ItemStack> notRestricted = new ArrayList<>();
+//    private final Map<ItemStack, AClientItemRestriction> CACHE = new HashMap<>();
 
     public void reloadBeforeScripts() {
         restrictions.clear();
-        CACHE.clear();
+        notRestricted.clear();
+//        CACHE.clear();
     }
 
     public void addRestriction(String stage, AClientItemRestriction restriction) {
         var newList = restrictions.getOrDefault(stage, new ArrayList<>());
-        if (!newList.isEmpty()) { newList.removeIf(rest -> Objects.equals(rest.id(), restriction.id())); }
+        // if (!newList.isEmpty()) { newList.removeIf(rest -> Objects.equals(rest.id(), restriction.id())); }
         newList.add(restriction);
         restrictions.put(stage, newList);
 
-        CACHE.put(restriction.stack(), restriction);
+//        CACHE.put(restriction.stack(), restriction);
+    }
+
+    public void notRestricted(ItemStack stack) {
+        notRestricted.add(stack);
     }
 
     public AClientItemRestriction getRestriction(@NotNull ItemStack stack) {
         if (stack.isEmpty()) { return null; }
 
-        if (CACHE.containsKey(stack)) {
-            return CACHE.get(stack);
+        for (var s : notRestricted) {
+            if (s.equals(stack, false)) {
+                return null;
+            }
         }
 
         for (String stage : restrictions.keySet()) {
@@ -51,6 +60,7 @@ public class AClientItemManager implements AClientManager {
             }
         }
 
+        AStages.LOGGER.debug("REQUESTED FOR {}", stack);
         ModNetworking.sendToServer(new IsItemRestrictedC2SPacket(stack));
         return null;
     }
