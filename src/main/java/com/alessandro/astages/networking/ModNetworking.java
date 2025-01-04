@@ -42,8 +42,6 @@ public class ModNetworking {
             .consumerMainThread(RenderAtLoginS2CPacket::handle)
             .add();
 
-        // UNDER DEVELOPMENT
-
         // ITEMS
         net.messageBuilder(IsItemRestrictedC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
             .decoder(IsItemRestrictedC2SPacket::new)

@@ -2,7 +2,7 @@ package com.alessandro.astages.event.ore;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.Info;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.event.level.BlockEvent;
@@ -24,7 +24,7 @@ public class ServerEventHandler {
 
             int fortuneLevel = stack.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
             int silkTouchLevel = stack.getEnchantmentLevel(Enchantments.SILK_TOUCH);
-            event.setExpToDrop(restriction.replacement.getExpDrop(event.getLevel(), event.getLevel().getRandom(), event.getPos(), fortuneLevel, silkTouchLevel));
+            event.setExpToDrop(restriction.getReplacement().getExpDrop(event.getLevel(), event.getLevel().getRandom(), event.getPos(), fortuneLevel, silkTouchLevel));
         }
     }
 }

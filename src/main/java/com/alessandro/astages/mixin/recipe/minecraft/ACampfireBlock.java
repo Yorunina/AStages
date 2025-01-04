@@ -1,7 +1,7 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
-import com.alessandro.astages.core.ARecipeManager;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,11 +25,12 @@ import java.util.Optional;
 
 @Mixin(CampfireBlock.class)
 public class ACampfireBlock {
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Ljava/util/Optional;isPresent()Z"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     public void astages$use(BlockState pState, Level pLevel, BlockPos pPos, Player player, InteractionHand pHand, BlockHitResult pHit, CallbackInfoReturnable<InteractionResult> cir, BlockEntity blockentity, CampfireBlockEntity campfireblockentity, ItemStack itemstack, @NotNull Optional<CampfireCookingRecipe> optional) {
         if (optional.isPresent()) {
             var recipe = optional.get();
-            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(player, new ARecipeManager.RecipeWrapper(recipe.getType(), recipe.getId()));
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(player, new RecipeWrapper(recipe.getType(), recipe.getId()));
 
             if (restriction != null) {
                 cir.setReturnValue(InteractionResult.CONSUME);

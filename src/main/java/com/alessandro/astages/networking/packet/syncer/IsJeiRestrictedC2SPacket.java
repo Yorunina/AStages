@@ -2,11 +2,13 @@ package com.alessandro.astages.networking.packet.syncer;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class IsJeiRestrictedC2SPacket {
@@ -31,9 +33,9 @@ public class IsJeiRestrictedC2SPacket {
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON SERVER!
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(ctx.get().getSender(), stack);
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(Objects.requireNonNull(ctx.get().getSender()), stack);
 
-            if (restriction != null && restriction.isHideInJEI()) {
+            if (restriction != null && restriction.isDisabled(Attributes.HIDING_JEI)) {
                 // ModNetworking.sendToPlayer(new ItemIsRestrictedS2CPacket(stack, requestReload), ctx.get().getSender());
                 ModNetworking.sendToPlayer(new JeiIsRestrictedS2CPacket(stack), ctx.get().getSender());
             }

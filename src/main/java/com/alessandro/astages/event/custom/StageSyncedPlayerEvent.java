@@ -1,7 +1,7 @@
 package com.alessandro.astages.event.custom;
 
 import com.alessandro.astages.capability.PlayerStage;
-import com.alessandro.astages.util.Info;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;

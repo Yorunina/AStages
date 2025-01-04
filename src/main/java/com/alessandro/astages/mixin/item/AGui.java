@@ -1,9 +1,5 @@
 package com.alessandro.astages.mixin.item;
 
-import com.alessandro.astages.core.AItemRestriction;
-import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.client.AClientItemManager;
-import com.alessandro.astages.core.client.AClientItemRestriction;
 import com.alessandro.astages.core.client.AClientRestrictionManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -15,9 +11,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public class AGui {

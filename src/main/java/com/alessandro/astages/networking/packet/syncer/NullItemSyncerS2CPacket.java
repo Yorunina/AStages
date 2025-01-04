@@ -26,10 +26,6 @@ public class NullItemSyncerS2CPacket {
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            // var restriction = new AClientItemRestriction(null, null, stack, false, false, null, null, null);
-
-            // AClientRestrictionManager.ITEM_INSTANCE.addRestriction(null, restriction);
-            // AClientRestrictionManager.ITEM_INSTANCE.notRestricted(restriction);
             AClientRestrictionManager.ITEM_INSTANCE.notRestricted(stack);
         });
 

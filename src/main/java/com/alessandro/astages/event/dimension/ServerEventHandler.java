@@ -1,8 +1,9 @@
 package com.alessandro.astages.event.dimension;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.ADimensionRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.restriction.ADimensionRestriction;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
@@ -34,9 +35,7 @@ public class ServerEventHandler {
             if (restriction != null) {
                 event.setCanceled(true);
 
-                if (restriction.dimensionMessage != null) {
-                    player.displayClientMessage(restriction.getDimensionMessage(dimension), true);
-                }
+                restriction.displayMessage(Attributes.Dimension.ENTER_MESSAGE, dimension, player);
             }
         }
     }

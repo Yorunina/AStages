@@ -2,6 +2,7 @@ package com.alessandro.astages.event.pet;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;
@@ -22,9 +23,10 @@ public class ServerEventHandler {
 
             var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
 
-            if (restriction != null && !restriction.isTamable) {
+            if (restriction != null && restriction.isDisabled(Attributes.TAMABLE)) {
                 event.setCanceled(true);
-                player.displayClientMessage(restriction.getTameMessage(pet), true);
+
+                restriction.displayMessage(Attributes.Pet.TAME_MESSAGE, pet, player);
             }
         }
     }
@@ -38,9 +40,10 @@ public class ServerEventHandler {
             if (entity instanceof Player player) {
                 var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
 
-                if (restriction != null && !restriction.isMountable) {
+                if (restriction != null && restriction.isDisabled(Attributes.MOUNTABLE)) {
                     event.setCanceled(true);
-                    player.displayClientMessage(restriction.getMountMessage(pet), true);
+
+                    restriction.displayMessage(Attributes.Pet.MOUNT_MESSAGE, pet, player);
                 }
             }
         }
@@ -55,9 +58,10 @@ public class ServerEventHandler {
 
             var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(player, pet.getType());
 
-            if (restriction != null && !restriction.isBreedable && !item.isEmpty()) {
+            if (restriction != null && restriction.isDisabled(Attributes.BREEDABLE) && !item.isEmpty()) {
                 event.setCanceled(true);
-                player.displayClientMessage(restriction.getBreedMessage(pet), true);
+
+                restriction.displayMessage(Attributes.Pet.BREED_MESSAGE, pet, player);
             }
         }
     }

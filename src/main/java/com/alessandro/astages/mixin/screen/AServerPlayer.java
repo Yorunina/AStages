@@ -1,6 +1,7 @@
 package com.alessandro.astages.mixin.screen;
 
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.MenuProvider;
@@ -32,9 +33,7 @@ public class AServerPlayer {
         var restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(serverPlayer$self(), abstractcontainermenu.getType());
 
         if (restriction != null) {
-            if (restriction.openMessage != null) {
-                serverPlayer$self().displayClientMessage(restriction.getOpenMessage(abstractcontainermenu.getType()), true);
-            }
+            restriction.displayMessage(Attributes.Screen.OPEN_MESSAGE, abstractcontainermenu.getType(), serverPlayer$self());
 
             cir.setReturnValue(OptionalInt.of(containerCounter));
         }

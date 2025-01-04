@@ -1,6 +1,10 @@
 package com.alessandro.astages.simple;
 
-import com.alessandro.astages.core.*;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.restriction.*;
+import com.alessandro.astages.core.wrapper.OreWrapper;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import com.alessandro.astages.store.Attributes;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -19,30 +23,30 @@ import java.util.Objects;
 
 public class ASimpleElaborator {
     public static void elaborateItem(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))));
     }
 
     public static void elaborateMod(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace())));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace())));
     }
 
     public static void elaborateDimension(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.DIMENSION_INSTANCE.addRestriction(simple.stage, new ADimensionRestriction(simple.id).restrict(new ResourceLocation(simple.object)));
+        ARestrictionManager.DIMENSION_INSTANCE.addRestriction(new ADimensionRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
     }
 
     public static void elaborateGui(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.SCREEN_INSTANCE.addRestriction(simple.stage, new AScreenRestriction(simple.id).restrict(ForgeRegistries.MENU_TYPES.getValue(new ResourceLocation(simple.object))));
+        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(ForgeRegistries.MENU_TYPES.getValue(new ResourceLocation(simple.object))));
     }
 
     public static void elaborateOre(@NotNull ASimpleRestriction simple) {
         String[] splice = simple.object.split("//");
         BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[0]))).defaultBlockState();
         var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[1]))).defaultBlockState();
-        ARestrictionManager.ORE_INSTANCE.addRestriction(simple.stage, new AOreRestriction(simple.id, simple.stage).restrict(original, replacement));
+        ARestrictionManager.ORE_INSTANCE.addRestriction(new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement)));
     }
 
     public static void elaborateStructure(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(simple.stage, new AStructureRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
+        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
     }
 
     public static void elaborateBiome(@NotNull ASimpleRestriction simple) {
@@ -51,23 +55,37 @@ public class ASimpleElaborator {
 
     public static void elaborateTame(@NotNull ASimpleRestriction simple) {
         // Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).removeIf();
-        ARestrictionManager.PET_INSTANCE.addRestriction(simple.stage, new APetRestriction(simple.id).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).setBreedable(true).setMountable(true).setTamable(false));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, true).setAttribute(Attributes.TAMABLE, false));
     }
 
     public static void elaborateMount(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(simple.stage, new APetRestriction(simple.id).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).setBreedable(true).setMountable(false).setTamable(true));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, false).setAttribute(Attributes.TAMABLE, true));
     }
 
     public static void elaborateRecipe(@NotNull ASimpleRestriction simple) {
         String[] splice = simple.object.split("//");
         var type = ForgeRegistries.RECIPE_TYPES.getValue(new ResourceLocation(splice[0]));
         var id = new ResourceLocation(splice[1]);
-        ARestrictionManager.RECIPE_INSTANCE.addRestriction(simple.stage, new ARecipeRestriction(simple.id, simple.stage).setType(type).restrict(id));
+        ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
     }
 
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
         // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeUsed(true).setCanBeDig(true));
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeLeftClicked(true).setCanItemBeRightClicked(true).setCanBeDig(true));
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeLeftClicked(true).setCanItemBeRightClicked(true).setCanBeDig(true));
+
+        var restriction = new AItemRestriction(simple.id, simple.stage);
+        restriction.restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
+        restriction.setAttribute(Attributes.HIDING_TOOLTIP, false)
+            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
+            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
+            .setAttribute(Attributes.ATTACKING, true)
+            .setAttribute(Attributes.HIDING_JEI, false)
+            .setAttribute(Attributes.BLOCK_PLACING, true)
+            .setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, true)
+            .setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
+            .setAttribute(Attributes.BLOCK_BREAKING, true);
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {

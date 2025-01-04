@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +30,7 @@ public class AServerPlayerGameMode {
         var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player, state);
         // AStages.LOGGER.debug(restriction.replacement.toString());
         if (restriction != null) {
-            return restriction.replacement;
+            return restriction.getReplacement();
         } else {
             return null;
         }

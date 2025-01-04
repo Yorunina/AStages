@@ -1,9 +1,10 @@
 package com.alessandro.astages.event.enchant;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.AEnchantManager;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.event.CommonEventSettings;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -82,9 +83,9 @@ public class ServerEventHandler {
                 var level = EnchantmentHelper.getEnchantmentLevel(compound);
 
                 if (enchantment != null) {
-                    var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new AEnchantManager.EnchantWrapper(enchantment, level));
+                    var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(enchantment, level));
 
-                    if (restriction != null && restriction.isAnvilRestricted) {
+                    if (restriction != null && restriction.isDisabled(Attributes.ANVIL)) {
                         return true;
                     }
                 }
@@ -96,9 +97,9 @@ public class ServerEventHandler {
 
             for (var enchantment : allEnchantments.keySet()) {
                 var level = allEnchantments.get(enchantment);
-                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new AEnchantManager.EnchantWrapper(enchantment, level));
+                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(enchantment, level));
 
-                if (restriction != null && restriction.isAnvilRestricted) {
+                if (restriction != null && restriction.isDisabled(Attributes.ANVIL)) {
                     return true;
                 }
             }
@@ -113,9 +114,9 @@ public class ServerEventHandler {
         newStack.removeTagKey("StoredEnchantments"); // Books
 
         EnchantmentHelper.getEnchantments(itemStack).forEach(((enchantment, level) -> {
-            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new AEnchantManager.EnchantWrapper(enchantment, level));
+            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(enchantment, level));
 
-            if (restriction == null || !restriction.isInventoryRestricted) {
+            if (restriction == null || restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
                 newStack.enchant(enchantment, level);
             }
         }));

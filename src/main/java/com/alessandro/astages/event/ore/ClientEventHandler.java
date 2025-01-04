@@ -7,7 +7,7 @@ import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.render.AOreBakedModel;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.Info;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;

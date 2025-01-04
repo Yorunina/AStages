@@ -35,7 +35,6 @@ public class StageDataSyncS2CPacket {
         var stagesAsByte = new ArrayList<byte[]>();
 
         stages.forEach(stage -> {
-//            ACollectionLibrary.LOGGER.debug(stage);
             stagesAsByte.add(stage.getBytes());
         });
 

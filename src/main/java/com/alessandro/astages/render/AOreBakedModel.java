@@ -2,7 +2,6 @@ package com.alessandro.astages.render;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AStagesUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;

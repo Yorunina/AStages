@@ -1,9 +1,9 @@
 package com.alessandro.astages.event.crop;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.ACropManager;
-import com.alessandro.astages.core.ACropRestriction;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.restriction.ACropRestriction;
+import com.alessandro.astages.core.wrapper.CropWrapper;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,9 +27,9 @@ public class ServerEventHandler {
 
             ACropRestriction restriction;
             if (event.getOriginalState().getBlock() instanceof CropBlock crop) {
-                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(nearestPlayer, new ACropManager.CropWrapper(event.getOriginalState(), crop.getAge(event.getOriginalState())));
+                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(nearestPlayer, new CropWrapper(event.getOriginalState(), crop.getAge(event.getOriginalState())));
             } else {
-                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(nearestPlayer, new ACropManager.CropWrapper(event.getOriginalState(), null));
+                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(nearestPlayer, new CropWrapper(event.getOriginalState(), null));
             }
 
             if (restriction != null) {

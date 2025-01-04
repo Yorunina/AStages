@@ -1,6 +1,7 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.syncer.*;
 import com.alessandro.astages.util.ARestriction;
@@ -66,11 +67,11 @@ public class ARestrictionManager {
         ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
 
         // RECIPE
-        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(restriction.id, s, restriction.type, restriction.recipes))));
+        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(restriction.getId(), s, restriction.getType(), restriction.getRecipes()))));
 
         // ORE
         ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
-            ModNetworking.sendToClients(new OreSyncerS2CPacket(restriction.id, s, restriction.original, restriction.replacement, false));
+            ModNetworking.sendToClients(new OreSyncerS2CPacket(restriction.getId(), s, restriction.getOriginal(), restriction.getReplacement(), false));
         }));
 
         // ORE STAGES

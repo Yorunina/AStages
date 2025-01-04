@@ -24,7 +24,7 @@ public abstract class APlayer {
         var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player$self(), state);
 
         if (restriction != null) {
-            cir.setReturnValue(hasCorrectToolForDrops(restriction.replacement));
+            cir.setReturnValue(hasCorrectToolForDrops(restriction.getReplacement()));
         }
     }
 }

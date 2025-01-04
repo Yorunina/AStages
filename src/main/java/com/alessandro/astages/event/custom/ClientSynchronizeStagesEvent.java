@@ -1,6 +1,6 @@
 package com.alessandro.astages.event.custom;
 
-import com.alessandro.astages.util.Info;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;

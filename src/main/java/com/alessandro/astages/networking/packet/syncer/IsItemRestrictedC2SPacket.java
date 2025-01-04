@@ -2,6 +2,7 @@ package com.alessandro.astages.networking.packet.syncer;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -30,7 +31,7 @@ public class IsItemRestrictedC2SPacket {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(stack); // Regardless to player...
 
             if (restriction != null) {
-                ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(restriction.id, restriction.stage, stack, restriction.renderItemName, restriction.hideTooltip, restriction.getHiddenName(stack), restriction.getJadeItemMessage(stack), restriction.getJadeBlockMessage(stack)), ctx.get().getSender());
+                ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(restriction.getId(), restriction.getStage(), stack, restriction.getAttribute(Attributes.RENDERING_NAME), restriction.getAttribute(Attributes.HIDING_TOOLTIP), restriction.getMessage(Attributes.Item.HIDDEN_NAME, stack), restriction.getMessage(Attributes.Item.JADE_ITEM_MESSAGE, stack), restriction.getMessage(Attributes.Item.JADE_BLOCK_MESSAGE, stack)), ctx.get().getSender());
             } else {
                 ModNetworking.sendToPlayer(new NullItemSyncerS2CPacket(stack), ctx.get().getSender());
             }

@@ -2,6 +2,7 @@ package com.alessandro.astages.event.mob;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -29,20 +30,20 @@ public class ServerEventHandler {
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(nearestPlayer, event.getEntity().getType());
 
         if (restriction != null) {
-            if (event.getSpawnType() == MobSpawnType.SPAWNER && !restriction.disableSpawner) {
+            if (event.getSpawnType() == MobSpawnType.SPAWNER && restriction.isDisabled(Attributes.SPAWNER)) {
                 event.setResult(Event.Result.DENY);
                 return;
             }
 
-            if (restriction.isDimensionSet && restriction.dimension != null) {
+            if (restriction.getAttribute(Attributes.DIMENSION) != null) {
                 event.setResult(Event.Result.DENY);
                 return;
             }
 
-            if (restriction.shouldReplace && restriction.replacing != null) {
+            if (restriction.getAttribute(Attributes.REPLACE) != null) {
                 var level = event.getLevel().getLevel();
 
-                Entity newEntity = Objects.requireNonNull(restriction.replacing.create(level));
+                Entity newEntity = Objects.requireNonNull(restriction.getAttribute(Attributes.REPLACE).create(level));
                 newEntity.setPos(event.getX(), event.getY(), event.getZ());
                 level.addFreshEntity(newEntity);
 
