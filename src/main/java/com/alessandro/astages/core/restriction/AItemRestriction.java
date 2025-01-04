@@ -5,6 +5,7 @@ import com.alessandro.astages.store.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AChangeable;
+import com.alessandro.astages.util.AMarkable;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<ItemStack>, ItemStack> implements AChangeable {
+public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<ItemStack>, ItemStack> implements AChangeable, AMarkable {
     private final List<Predicate<ItemStack>> predicates = new ArrayList<>();
 
     public AItemRestriction(String id, String stage) {
@@ -69,4 +70,7 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
     public void setChanged() {
         ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions(this);
     }
+
+    @Override
+    public void markAsDirty() { }
 }
