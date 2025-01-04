@@ -10,7 +10,6 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
-import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
@@ -59,7 +58,7 @@ public class AStagesKubeJSUtil {
         });
     }
 
-    public static <T extends ARestriction> @Nullable T getRestrictionById(ARestrictionType type, String id) {
+    public static <T> @Nullable T getRestrictionById(ARestrictionType type, String id) {
         return ARestrictionManager.getRestrictionById(type, id);
     }
 

@@ -4,7 +4,6 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.syncer.*;
-import com.alessandro.astages.util.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -87,7 +86,7 @@ public class ARestrictionManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends ARestriction> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
+    public static <T> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
         return switch (type) {
             case ITEM -> (T) ITEM_INSTANCE.getRestriction(id);
             case MOB -> (T) MOB_INSTANCE.getRestriction(id);

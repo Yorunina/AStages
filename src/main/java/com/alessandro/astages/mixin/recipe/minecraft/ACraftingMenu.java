@@ -22,6 +22,7 @@ import java.util.Optional;
 
 @Mixin(CraftingMenu.class)
 public class ACraftingMenu {
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "slotChangedCraftingGrid", at = @At(value = "INVOKE", target = "Ljava/util/Optional;get()Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private static void astages$slotChanged(AbstractContainerMenu pMenu, Level pLevel, Player pPlayer, CraftingContainer pContainer, ResultContainer pResult, CallbackInfo ci, ServerPlayer serverPlayer, ItemStack $$6, @NotNull Optional<CraftingRecipe> optional) {
         if (optional.isPresent()) {
