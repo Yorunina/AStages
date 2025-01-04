@@ -24,8 +24,8 @@ public class AStages {
 
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
-
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
 
         ModNetworking.register();
