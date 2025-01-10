@@ -217,9 +217,12 @@ public class AStagesKubeJSUtil {
     }
 
     // STRUCTURE Restrictions
-    public static AStructureRestriction addRestrictionForStructure(String id, String stage, ResourceLocation structure) {
+    public static AStructureRestriction addRestrictionForStructure(String id, String stage, ResourceLocation... structures) {
         var restriction = new AStructureRestriction(id, stage);
-        restriction.restrict(structure);
+
+        for (var structure : structures) {
+            restriction.restrict(structure);
+        }
 
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(restriction);
 
