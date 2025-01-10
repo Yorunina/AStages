@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -28,8 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 @ParametersAreNonnullByDefault
 public class ServerEventHandler {
-//    public static boolean isInventoryChanged = false;
-
     @SubscribeEvent
     public static void onItemPickup(EntityItemPickupEvent event) {
         if (canBeRunForPlayer(event.getEntity())) {
@@ -171,6 +170,16 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
+    public static void onPlayerOpenContainer(PlayerContainerEvent.Open event) {
+        CommonEventSettings.playersHaveOtherInventoriesOpened.put(event.getEntity().getUUID(), true);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerCloseContainer(PlayerContainerEvent.Close event) {
+        CommonEventSettings.playersHaveOtherInventoriesOpened.put(event.getEntity().getUUID(), false);
+    }
+
+    @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!CommonEventSettings.isInventoryChanged) { return; }
 
@@ -181,7 +190,7 @@ public class ServerEventHandler {
             final int armorStart = inventory.items.size();
             final int armorEnd = armorStart + inventory.armor.size();
 
-            if (CommonEventSettings.slotChanged == null) {
+            if (CommonEventSettings.slotChanged == null || CommonEventSettings.playersHaveOtherInventoriesOpened.getOrDefault(event.player.getUUID(), false)) {
                 for (int i = 0; i < inventory.getContainerSize(); i++) {
                     ItemStack slotContent = inventory.getItem(i);
 
@@ -219,51 +228,14 @@ public class ServerEventHandler {
 
                         inventory.setItem(CommonEventSettings.slotChanged, ItemStack.EMPTY);
                         player.drop(slotContent, false);
+
+                        AStages.LOGGER.debug(inventory.getItem(CommonEventSettings.slotChanged).toString());
                     }
                 }
             }
 
             CommonEventSettings.isInventoryChanged = false;
         }
-
-
-//        if (!isInventoryChanged) { return; }
-//
-//        if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
-//            Player player = event.player;
-//            Inventory inventory = player.getInventory();
-//
-//            final int armorStart = inventory.items.size();
-//            final int armorEnd = armorStart + inventory.armor.size();
-//
-//            for (int i = 0; i < inventory.getContainerSize(); i++) {
-//                ItemStack slotContent = inventory.getItem(i);
-//
-//                if (!slotContent.isEmpty()) {
-//                    AItemRestriction restriction;
-//
-//                    if (i >= armorStart && i <= armorEnd) {
-//                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
-//                    } else {
-//                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
-//                        if (restriction != null) {
-//                            AStages.LOGGER.debug(restriction.toString());
-//                        }
-//                    }
-//
-//                    if (restriction != null) {
-//                        if (restriction.dropMessage != null) {
-//                            player.displayClientMessage(restriction.getDropMessage(slotContent), true);
-//                        }
-//
-//                        inventory.setItem(i, ItemStack.EMPTY);
-//                        player.drop(slotContent, false);
-//                    }
-//                }
-//            }
-//
-//            isInventoryChanged = false;
-//        }
     }
 
     public static boolean canBeRunForPlayer(@Nullable Player player) {

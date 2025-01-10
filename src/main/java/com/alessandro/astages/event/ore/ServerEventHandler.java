@@ -27,4 +27,21 @@ public class ServerEventHandler {
             event.setExpToDrop(restriction.getReplacement().getExpDrop(event.getLevel(), event.getLevel().getRandom(), event.getPos(), fortuneLevel, silkTouchLevel));
         }
     }
+
+//    @SubscribeEvent
+//    public static void setBreakSpeed(PlayerEvent.BreakSpeed event) {
+//        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(event.getEntity(), event.getState());
+//
+//        if (restriction != null) {
+//            event.setNewSpeed(restriction.getReplacement().getDestroySpeed(event.getEntity().level(), event.getPosition().orElse(new BlockPos(0, 0, 0))));
+//        }
+//
+//        if (restriction != null) {
+//            AStages.LOGGER.debug(restriction.getReplacement().toString());
+//            // event.setNewSpeed(5000.0f);
+//            event.setNewSpeed(event.getEntity().getDigSpeed(restriction.getReplacement(), event.getPosition().orElse(null)));
+//            AStages.LOGGER.debug(String.valueOf(event.getOriginalSpeed()));
+//            AStages.LOGGER.debug(String.valueOf(event.getEntity().getDigSpeed(restriction.getReplacement(), event.getPosition().orElse(null))));
+//        }
+//    }
 }

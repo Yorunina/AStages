@@ -3,6 +3,7 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,7 +11,8 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
@@ -75,6 +77,8 @@ public class ARestrictionManager {
 
         // ORE STAGES
         synchronizeOreStages(null);
+
+        ModNetworking.sendToClients(new RequestReRenderingS2CPacket());
     }
 
     public static void synchronizeOreStages(ServerPlayer player) {

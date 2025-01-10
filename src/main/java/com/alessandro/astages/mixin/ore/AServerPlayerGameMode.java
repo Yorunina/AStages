@@ -18,17 +18,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(value = ServerPlayerGameMode.class)
 public class AServerPlayerGameMode {
-//    @Unique
-//    private ServerPlayerGameMode serverPlayerGameMode$self() {
-//        return (ServerPlayerGameMode) (Object) this;
-//    }
-
     @Shadow @Final protected ServerPlayer player;
 
     @Unique
     private @Nullable BlockState astages$getReplacer(BlockState state) {
         var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player, state);
-        // AStages.LOGGER.debug(restriction.replacement.toString());
+
         if (restriction != null) {
             return restriction.getReplacement();
         } else {

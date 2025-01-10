@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.networking.packet.RenderAtLoginS2CPacket;
+import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
 import net.minecraft.resources.ResourceLocation;
@@ -36,10 +36,10 @@ public class ModNetworking {
                 .consumerMainThread(StageDataSyncS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(RenderAtLoginS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RenderAtLoginS2CPacket::new)
-            .encoder(RenderAtLoginS2CPacket::toBytes)
-            .consumerMainThread(RenderAtLoginS2CPacket::handle)
+        net.messageBuilder(RequestReRenderingS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(RequestReRenderingS2CPacket::new)
+            .encoder(RequestReRenderingS2CPacket::toBytes)
+            .consumerMainThread(RequestReRenderingS2CPacket::handle)
             .add();
 
         // ITEMS

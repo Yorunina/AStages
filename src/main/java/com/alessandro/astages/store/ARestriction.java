@@ -29,6 +29,10 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> {
         return attributes.getAttribute(attribute);
     }
 
+    public <T> T get(Attribute<T> attribute) {
+        return getAttribute(attribute);
+    }
+
     public <T> Component getMessage(Attribute<Function<T, Component>> attribute, T value) {
         checkAttribute(attribute);
 
@@ -49,6 +53,10 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> {
         attributes.setAttribute(attribute, value);
 
         return (R) this;
+    }
+
+    public <T> R set(Attribute<T> attribute, T value) {
+        return setAttribute(attribute, value);
     }
 
     public boolean isDisabled(Attribute<Boolean> attribute) throws SetAttributeNotSupported {

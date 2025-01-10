@@ -45,11 +45,15 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.@NotNull Clone event) {
         if (event.isWasDeath()) {
+            event.getOriginal().reviveCaps();
+
             event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
+
+            event.getOriginal().invalidateCaps();
 
             event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
         }

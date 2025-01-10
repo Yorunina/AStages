@@ -38,7 +38,7 @@ public class Attributes {
     public static final Attribute<Boolean> ENCHANTING_TABLE = Attribute.create("enchanting_table", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
-    public static final Attribute<Integer> AGE = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, null);
+    public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
     public static final Attribute<Integer> LEVEL = Attribute.create("level", AttributeTypes.INTEGER, null);
 
     public static final Attribute<ResourceLocation> DIMENSION = Attribute.create("dimension", AttributeTypes.RESOURCE_LOCATION, null);

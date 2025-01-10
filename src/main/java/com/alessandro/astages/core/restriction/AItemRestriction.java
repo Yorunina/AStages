@@ -2,6 +2,7 @@ package com.alessandro.astages.core.restriction;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.ARestriction;
+import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AChangeable;
@@ -67,10 +68,98 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
     }
 
     @Override
+    public <T> AItemRestriction setAttribute(Attribute<T> attribute, T value) {
+        var toReturn = super.setAttribute(attribute, value);
+
+        if (attribute == Attributes.STORING_IN_INVENTORY || attribute == Attributes.EQUIPPING) {
+            setChanged();
+        }
+
+        return toReturn;
+    }
+
+    @Override
     public void setChanged() {
         ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions(this);
     }
 
     @Override
     public void markAsDirty() { }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setPickUpDelay(int value) {
+        setAttribute(Attributes.PICK_UP_DELAY, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanAttack(boolean value) {
+        setAttribute(Attributes.ATTACKING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanBeStoredInInventory(boolean value) {
+        setAttribute(Attributes.STORING_IN_INVENTORY, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanBeEquipped(boolean value) {
+        setAttribute(Attributes.EQUIPPING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanPickedUp(boolean value) {
+        setAttribute(Attributes.PICKING_UP, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setHideTooltip(boolean value) {
+        setAttribute(Attributes.HIDING_TOOLTIP, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setRenderItemName(boolean value) {
+        setAttribute(Attributes.RENDERING_NAME, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setHideInJEI(boolean value) {
+        setAttribute(Attributes.HIDING_JEI, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanBePlaced(boolean value) {
+        setAttribute(Attributes.BLOCK_PLACING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanBeDig(boolean value) {
+        setAttribute(Attributes.BLOCK_BREAKING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanItemBeLeftClicked(boolean value) {
+        setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanItemBeRightClicked(boolean value) {
+        setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, value);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return this.getId() + " " + this.getAttribute(Attributes.STORING_IN_INVENTORY);
+    }
 }

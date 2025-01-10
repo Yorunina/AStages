@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.manager;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.restriction.AItemRestriction;
 import com.alessandro.astages.store.AManager;
 import com.alessandro.astages.store.Attributes;
@@ -45,13 +46,15 @@ public class AItemManager extends AManager<AItemRestriction, Predicate<ItemStack
     }
 
     public void reloadInventoryAndEquipmentRestrictions(AItemRestriction restriction) {
-        inventoryRestrictions.get(restriction.getStage()).removeIf(r -> Objects.equals(r.getId(), restriction.getId()));
-        equipmentRestrictions.get(restriction.getStage()).removeIf(r -> Objects.equals(r.getId(), restriction.getId()));
+        inventoryRestrictions.getOrDefault(restriction.getStage(), new ArrayList<>()).removeIf(r -> Objects.equals(r.getId(), restriction.getId()));
+        equipmentRestrictions.getOrDefault(restriction.getStage(), new ArrayList<>()).removeIf(r -> Objects.equals(r.getId(), restriction.getId()));
 
         if (restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
             var newInventoryList = inventoryRestrictions.getOrDefault(restriction.getStage(), new ArrayList<>());
             if (!newInventoryList.isEmpty()) { newInventoryList.removeIf(rest -> Objects.equals(rest.getId(), restriction.getId())); }
             newInventoryList.add(restriction);
+
+            AStages.LOGGER.debug(restriction.getId());
 
             inventoryRestrictions.put(restriction.getStage(), newInventoryList);
         }
@@ -63,6 +66,8 @@ public class AItemManager extends AManager<AItemRestriction, Predicate<ItemStack
 
             equipmentRestrictions.put(restriction.getStage(), newEquipmentList);
         }
+
+        AStages.LOGGER.debug("Restrictions: {}", inventoryRestrictions);
     }
 
     public AItemRestriction getRestriction(ItemStack stack) {

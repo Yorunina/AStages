@@ -142,26 +142,26 @@ dependencies {
 
     // Botania
     // compileOnly fg.deobf("curse.maven:botania-225643:5594997")
-    implementation fg.deobf("curse.maven:botania-225643:5002307")
-    implementation fg.deobf("curse.maven:curios-309927:5680164")
-    implementation fg.deobf("curse.maven:patchouli-306770:4966125")
+    // implementation fg.deobf("curse.maven:botania-225643:5002307")
+    // implementation fg.deobf("curse.maven:curios-309927:5680164")
+    // implementation fg.deobf("curse.maven:patchouli-306770:4966125")
 
     // Mekanism
     // compileOnly fg.deobf("curse.maven:mekanism-268560:5662583")
-    implementation fg.deobf("curse.maven:mekanism-268560:5662583")
+    // implementation fg.deobf("curse.maven:mekanism-268560:5662583")
 
     // Thermal
     // implementation fg.deobf("curse.maven:thermal-expansion-69163:5372749")
     // implementation fg.deobf("curse.maven:thermal-foundation-222880:5443583")
     // implementation fg.deobf("curse.maven:cofh-core-69162:5374122")
     // implementation fg.deobf("com.teamcofh:thermal_core:${mc_version}-11.1.0")
-    compileOnly fg.deobf("com.teamcofh:cofh_core:${minecraft_version}-${cofh_core_version}")
-    compileOnly fg.deobf("com.teamcofh:thermal_core:${minecraft_version}-${thermal_core_version}")
+    // compileOnly fg.deobf("com.teamcofh:cofh_core:${minecraft_version}-${cofh_core_version}")
+    // compileOnly fg.deobf("com.teamcofh:thermal_core:${minecraft_version}-${thermal_core_version}")
     // implementation fg.deobf("com.teamcofh:thermal_foundation:${minecraft_version}-${thermal_foundation_version}")
-    compileOnly fg.deobf("com.teamcofh:thermal_expansion:${minecraft_version}-${thermal_expansion_version}")
+    // compileOnly fg.deobf("com.teamcofh:thermal_expansion:${minecraft_version}-${thermal_expansion_version}")
 
     // Create
-    implementation fg.deobf("curse.maven:create-328085:5838779")
+    // implementation fg.deobf("curse.maven:create-328085:5838779")
     // implementation fg.deobf("curse.maven:create-328085:5838779")
 
     // In Control!
@@ -203,7 +203,7 @@ dependencies {
 
     implementation fg.deobf("curse.maven:jade-324717:5339264")
 
-    implementation fg.deobf("curse.maven:probejs-585406:5227399")
+    // implementation fg.deobf("curse.maven:probejs-585406:5227399")
 
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")

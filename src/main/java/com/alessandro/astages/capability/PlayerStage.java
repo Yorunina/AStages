@@ -1,11 +1,11 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageGetPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
-import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
@@ -41,10 +41,6 @@ public class PlayerStage {
 
     @Info("TO BE TESTED!")
     public void setChangedFor(Player player, @NotNull Operation operation, @Nullable String stage, boolean silentTitle) {
-//    }
-//
-//    public void setChangedFor(Player player, @NotNull Operation operation, List<String> stage) {
-
         StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stage);
         MinecraftForge.EVENT_BUS.post(event);
 
@@ -53,9 +49,6 @@ public class PlayerStage {
 
             if (!silentTitle && stage != null) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    AStages.LOGGER.debug("TEXT!");
-                    // serverPlayer.connection.send(new ClientboundSetTitleTextPacket(Component.literal("TEXT!")));
-                    // AStagesUtil.showTitles(operation, stage);
                     AStagesUtil.showTitles(serverPlayer, operation, stage);
                 }
             }

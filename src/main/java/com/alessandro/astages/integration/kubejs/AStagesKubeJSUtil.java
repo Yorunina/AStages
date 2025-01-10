@@ -130,13 +130,16 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-    public static AItemRestriction addRestrictionForArmor(String id, String stage, Item armor) {
+    public static AItemRestriction addRestrictionForArmor(String id, String stage, Item... armors) {
         var restriction = new AItemRestriction(id, stage);
-        restriction.restrict(stack -> stack.is(armor));
+
+        for (var armor : armors) {
+            restriction.restrict(itemStack -> itemStack.is(armor));
+        }
 
         restriction.setAttribute(Attributes.RENDERING_NAME, true)
             .setAttribute(Attributes.HIDING_TOOLTIP, false)
-            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
+            .setAttribute(Attributes.PICKING_UP, true)
             .setAttribute(Attributes.STORING_IN_INVENTORY, true)
             .setAttribute(Attributes.ATTACKING, true)
             .setAttribute(Attributes.HIDING_JEI, false)
@@ -144,18 +147,6 @@ public class AStagesKubeJSUtil {
             .setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, true)
             .setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
             .setAttribute(Attributes.BLOCK_BREAKING, true);
-
-//        restriction.setRenderItemName(true)
-//            .setHideTooltip(false)
-//            .setCanPickedUp(true)
-//            .setCanBeStoredInInventory(true)
-//            .setCanAttack(true)
-//            .setHideInJEI(false)
-//            .setCanBePlaced(true)
-////            .setCanItemBeUsed(true)
-//            .setCanItemBeLeftClicked(true)
-//            .setCanItemBeRightClicked(true)
-//            .setCanBeDig(true);
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
@@ -182,16 +173,6 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-//    public static @NotNull AMobRestriction addRestrictionForMob(String id, String stage, EntityType<?> mob) {
-//        var tag
-//        var restriction = new AMobRestriction(id);
-//        restriction.restrict(mob);
-//
-//        ARestrictionManager.MOB_INSTANCE.addRestriction(stage, restriction);
-//
-//        return restriction;
-//    }
-
     // RECIPE Restrictions
     public static ARecipeRestriction addRestrictionForRecipe(String id, String stage, RecipeType<?> recipeType, ResourceLocation @NotNull ... recipeIds) {
         var restriction = new ARecipeRestriction(id, stage);
@@ -199,10 +180,6 @@ public class AStagesKubeJSUtil {
         for (ResourceLocation r : recipeIds) {
             restriction.restrict(new RecipeWrapper(recipeType, r));
         }
-//        restriction.type = recipeType;
-//        for (ResourceLocation r : recipeIds) {
-//            restriction.restrict(r);
-//        }
 
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(restriction);
 
@@ -250,9 +227,17 @@ public class AStagesKubeJSUtil {
     }
 
     // ENCHANT Restrictions
+    public static AEnchantRestriction addRestrictionForEnchant(String id, String stage, Enchantment enchantment) {
+        var restriction = new AEnchantRestriction(id, stage);
+        restriction.restrict(enchantment);
+
+        ARestrictionManager.ENCHANT_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
     public static AEnchantRestriction addRestrictionForEnchant(String id, String stage, Enchantment enchantment, ACompareCondition compareCondition, int level) {
         var restriction = new AEnchantRestriction(id, stage);
-        // restriction.restrict(enchantment, compareCondition, level);
         restriction.restrict(enchantment)
             .setAttribute(Attributes.COMPARE_CONDITION, compareCondition)
             .setAttribute(Attributes.LEVEL, level);
@@ -277,8 +262,6 @@ public class AStagesKubeJSUtil {
         restriction.restrict(crop)
             .setAttribute(Attributes.COMPARE_CONDITION, compareCondition)
             .setAttribute(Attributes.AGE, age);
-//            .setCompareCondition(compareCondition)
-//            .setAge(age);
 
         ARestrictionManager.CROP_INSTANCE.addRestriction(restriction);
 

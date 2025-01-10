@@ -55,4 +55,46 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
     public List<ResourceLocation> getStructures() {
         return structures;
     }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setCanAttackEntities(boolean value) {
+        setAttribute(Attributes.ATTACKING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setCanEnter(boolean value) {
+        setAttribute(Attributes.ENTERING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setCanInteract(boolean value) {
+        setAttribute(Attributes.GENERIC_INTERACTIONS, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setCanBlockBePlaced(boolean value) {
+        setAttribute(Attributes.BLOCK_PLACING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setCanBlockBeBroken(boolean value) {
+        setAttribute(Attributes.BLOCK_BREAKING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setMakeExplosionsAffectBlocks(boolean value) {
+        setAttribute(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setMakeExplosionsAffectEntities(boolean value) {
+        setAttribute(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
+        return this;
+    }
 }

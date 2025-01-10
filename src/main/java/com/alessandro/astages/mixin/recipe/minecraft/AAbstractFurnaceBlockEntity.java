@@ -10,6 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mixin(value = AbstractFurnaceBlockEntity.class)
 public class AAbstractFurnaceBlockEntity {
     @Inject(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;getMaxStackSize()I"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    private static void astages$serverTick(@NotNull Level level, BlockPos pos, BlockState pState, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci, boolean flag, boolean flag1, ItemStack itemstack, boolean flag2, boolean flag3, Recipe recipe) {
+    private static void astages$serverTick(@NotNull Level level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci, boolean flag, boolean flag1, ItemStack itemstack, boolean flag2, boolean flag3, Recipe<?> recipe) {
         if (level.getServer() == null) { return; }
 
         AtomicReference<UUID> atomicOwner = new AtomicReference<>();
@@ -39,6 +41,10 @@ public class AAbstractFurnaceBlockEntity {
 
         if (restriction != null) {
             ci.cancel();
+
+            level.setBlock(pos, state.setValue(AbstractFurnaceBlock.LIT, false), Block.UPDATE_ALL);
+        } else {
+            level.setBlock(pos, state.setValue(AbstractFurnaceBlock.LIT, true), Block.UPDATE_ALL);
         }
     }
 }

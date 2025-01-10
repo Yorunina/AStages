@@ -41,4 +41,10 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
 
         return false;
     }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setBidirectional(boolean value) {
+        setAttribute(Attributes.BIDIRECTIONAL, value);
+        return this;
+    }
 }
