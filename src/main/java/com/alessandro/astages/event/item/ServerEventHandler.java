@@ -1,0 +1,272 @@
+package com.alessandro.astages.event.item;
+
+import com.alessandro.astages.AStages;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.restriction.AItemRestriction;
+import com.alessandro.astages.event.CommonEventSettings;
+import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.develop.Info;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@EventBusSubscriber(modid = AStages.MODID)
+@ParametersAreNonnullByDefault
+public class ServerEventHandler {
+//    public static boolean isInventoryChanged = false;
+
+    @SubscribeEvent
+    public static void onItemPickup(ItemEntityPickupEvent.Pre event) {
+        if (canBeRunForPlayer(event.getPlayer())) {
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getPlayer(), event.getItemEntity().getItem());
+
+            if (restriction != null && restriction.isDisabled(Attributes.PICKING_UP)) {
+                event.setCanPickup(TriState.FALSE);
+
+                event.getItemEntity().setPickUpDelay(restriction.getAttribute(Attributes.PICK_UP_DELAY));
+                restriction.displayMessage(Attributes.Item.PICKING_UP_MESSAGE, event.getItemEntity().getItem(), event.getPlayer());
+            }
+        }
+    }
+
+    @Info("Try to use PlayerEvent.BreakSpeed event!")
+    @SubscribeEvent
+    public static void breakSpeed(BlockEvent.BreakEvent event) {
+        boolean isClientSide = event.getPlayer().level().isClientSide;
+        if (isClientSide) { return; }
+
+        var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getPlayer(), AStagesUtil.stateToStack(event.getState()));
+        if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
+            event.setCanceled(true);
+            event.setCanceled(true);
+
+            restriction.displayMessage(Attributes.Item.MINING_MESSAGE, AStagesUtil.stateToStack(event.getState()), event.getPlayer());
+        }
+    }
+
+//    @Info("Error for server!")
+//    @SubscribeEvent
+//    public static void onItemUsed(PlayerInteractEvent.RightClickEmpty event) {
+//        if (!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
+//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+//
+//            if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
+//                event.setCanceled(true);
+//
+//                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+//            }
+//        }
+//    }
+
+    @SubscribeEvent
+    public static void onItemUsed(PlayerInteractEvent.RightClickItem event) {
+        if (!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+
+            if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
+                event.setCanceled(true);
+
+                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onItemUsed(PlayerInteractEvent.LeftClickBlock event) {
+        if (!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+
+            if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
+                event.setCanceled(true);
+
+                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+            }
+        }
+    }
+
+//    @SubscribeEvent
+//    public static void onItemUsed(PlayerInteractEvent.LeftClickEmpty event) {
+//        if (!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
+//            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+//
+//            if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
+//                event.setCanceled(true);
+//
+//                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+//            }
+//        }
+//    }
+
+    @SubscribeEvent
+    public static void onItemUsed(PlayerInteractEvent.EntityInteract event) {
+        if (!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+
+            if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
+                event.setCanceled(true);
+
+                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onItemUsed(PlayerInteractEvent.EntityInteractSpecific event) {
+        if (event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+
+            if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
+                event.setCanceled(true);
+
+                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player && !event.getLevel().isClientSide()) {
+            var stack = new ItemStack(event.getPlacedBlock().getBlock());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
+
+            if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
+                event.setCanceled(true);
+                // Synchronize changes with client!
+                var slot = player.getInventory().selected;
+                player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+
+                restriction.displayMessage(Attributes.Item.PLACING_MESSAGE, stack, player);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityHurt(AttackEntityEvent event) {
+        if (canBeRunForPlayer(event.getEntity())) {
+            var player = event.getEntity();
+            ItemStack stack = player.getMainHandItem();
+            AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
+
+            if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
+                event.setCanceled(true);
+
+                restriction.displayMessage(Attributes.Item.ATTACK_MESSAGE, stack, player);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Pre event) {
+        if (!CommonEventSettings.isInventoryChanged) { return; }
+
+        if (!event.getEntity().level().isClientSide && !(event.getEntity() instanceof FakePlayer)) {
+            Player player = event.getEntity();
+            Inventory inventory = player.getInventory();
+
+            final int armorStart = inventory.items.size();
+            final int armorEnd = armorStart + inventory.armor.size();
+
+            if (CommonEventSettings.slotChanged == null) {
+                for (int i = 0; i < inventory.getContainerSize(); i++) {
+                    ItemStack slotContent = inventory.getItem(i);
+
+                    if (!slotContent.isEmpty()) {
+                        AItemRestriction restriction;
+
+                        if (i >= armorStart && i <= armorEnd) {
+                            restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.getEntity(), slotContent);
+                        } else {
+                            restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.getEntity(), slotContent);
+                        }
+
+                        if (restriction != null) {
+                            restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
+
+                            inventory.setItem(i, ItemStack.EMPTY);
+                            player.drop(slotContent, false);
+                        }
+                    }
+                }
+            } else {
+                ItemStack slotContent = inventory.getItem(CommonEventSettings.slotChanged);
+
+                if (!slotContent.isEmpty()) {
+                    AItemRestriction restriction;
+
+                    if (CommonEventSettings.slotChanged >= armorStart && CommonEventSettings.slotChanged <= armorEnd) {
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.getEntity(), slotContent);
+                    } else {
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.getEntity(), slotContent);
+                    }
+
+                    if (restriction != null) {
+                        restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
+
+                        inventory.setItem(CommonEventSettings.slotChanged, ItemStack.EMPTY);
+                        player.drop(slotContent, false);
+                    }
+                }
+            }
+
+            CommonEventSettings.isInventoryChanged = false;
+        }
+
+
+//        if (!isInventoryChanged) { return; }
+//
+//        if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
+//            Player player = event.player;
+//            Inventory inventory = player.getInventory();
+//
+//            final int armorStart = inventory.items.size();
+//            final int armorEnd = armorStart + inventory.armor.size();
+//
+//            for (int i = 0; i < inventory.getContainerSize(); i++) {
+//                ItemStack slotContent = inventory.getItem(i);
+//
+//                if (!slotContent.isEmpty()) {
+//                    AItemRestriction restriction;
+//
+//                    if (i >= armorStart && i <= armorEnd) {
+//                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
+//                    } else {
+//                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
+//                        if (restriction != null) {
+//                            AStages.LOGGER.debug(restriction.toString());
+//                        }
+//                    }
+//
+//                    if (restriction != null) {
+//                        if (restriction.dropMessage != null) {
+//                            player.displayClientMessage(restriction.getDropMessage(slotContent), true);
+//                        }
+//
+//                        inventory.setItem(i, ItemStack.EMPTY);
+//                        player.drop(slotContent, false);
+//                    }
+//                }
+//            }
+//
+//            isInventoryChanged = false;
+//        }
+    }
+
+    public static boolean canBeRunForPlayer(@Nullable Player player) {
+        return player != null && !player.level().isClientSide && !(player instanceof FakePlayer);
+    }
+}

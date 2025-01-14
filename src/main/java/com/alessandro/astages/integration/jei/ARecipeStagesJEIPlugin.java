@@ -1,0 +1,133 @@
+package com.alessandro.astages.integration.jei;
+
+import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.core.client.AClientRecipeRestriction;
+import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
+import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
+import com.alessandro.astages.integration.Mods;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.util.thread.EffectiveSide;
+import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+import java.util.stream.Stream;
+
+@JeiPlugin
+public class ARecipeStagesJEIPlugin implements IModPlugin {
+    private IJeiRuntime runtime;
+    private static final ResourceLocation PLUGIN_ID = ResourceLocation.fromNamespaceAndPath(AStages.MODID, "recipe_jei");
+
+    public ARecipeStagesJEIPlugin() {
+        if (!Mods.JEI.isLoaded()) return;
+
+        if (EffectiveSide.get().isClient()) {
+            NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientRecipeUpdateEvent.class, e -> updateRecipeGui());
+            NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> updateRecipeGui());
+            NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RecipesUpdatedEvent.class, e -> updateRecipeGui());
+        }
+    }
+
+    @Override
+    public @NotNull ResourceLocation getPluginUid() {
+        return PLUGIN_ID;
+    }
+
+    @Override
+    public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
+        runtime = jeiRuntime;
+    }
+
+    @SuppressWarnings("unchecked")
+    // <C extends Container, T extends Recipe<C>>
+    public <I extends RecipeInput, T extends Recipe<I>> void updateRecipeGui() {
+        if (runtime == null) { return; }
+
+        var categories = runtime.getRecipeManager().createRecipeCategoryLookup().get().toList();
+//
+//        var a = categories.get(0);
+//        Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor()
+
+
+        for (Map.Entry<String, List<AClientRecipeRestriction>> entry : AClientRestrictionManager.RECIPE_INSTANCE.restrictions.entrySet()) {
+            for (var restriction : entry.getValue()) {
+                recipeLoop:
+                for (var recipeLocation : restriction.recipes()) {
+                    for (var category : categories) {
+
+                        var c = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager().getAllRecipesFor((net.minecraft.world.item.crafting.RecipeType<T>) restriction.type());
+                        if (!c.isEmpty()) {
+                            var caster = c.get(0);
+                            if (!canCast(category.getRecipeType().getRecipeClass(), caster.getClass())) {
+                                continue;
+                            }
+
+                            var recipes = (Stream<RecipeHolder<?>>) runtime.getRecipeManager().createRecipeLookup(category.getRecipeType()).includeHidden().get();
+                            var recipe = (RecipeHolder<?>) recipes.filter(r -> r.id().equals(recipeLocation)).findFirst().orElse(null);
+
+                            if (recipe == null) {
+                                continue;
+                            }
+
+                            if (!ClientPlayerStage.hasStage(entry.getKey())) {
+                                runtime.getRecipeManager().hideRecipes(category.getRecipeType(), cast(Collections.singletonList(recipe)));
+                                break recipeLoop;
+                            } else {
+                                runtime.getRecipeManager().unhideRecipes(category.getRecipeType(), cast(Collections.singletonList(recipe)));
+                                break recipeLoop;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean canCast(Class<?> obj, Class<?> caster){
+        try {
+            if(obj == caster) return true;
+
+            List<Class<?>> d1 = getParent(obj);
+            if(d1.contains(caster)) return true;
+
+            d1 = getParent(caster);
+            if(d1.contains(obj)) return true;
+        } catch (Exception e) {
+            AStages.LOGGER.debug(e.getLocalizedMessage());
+        }
+
+        return false;
+    }
+
+    public static @NotNull List<Class<?>> getParent(@NotNull Class<?> obj){
+        List<Class<?>> classes = Collections.synchronizedList(new ArrayList<>());
+
+        for (Class<?> anInterface : obj.getInterfaces()) {
+            classes.add(anInterface);
+            classes.addAll(getParent(anInterface));
+        }
+
+        if (obj.getSuperclass() != null) {
+            classes.add(obj.getSuperclass());
+            classes.addAll(getParent(obj.getSuperclass()));
+        }
+
+        return classes;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object o) {
+        return (T) o;
+    }
+}

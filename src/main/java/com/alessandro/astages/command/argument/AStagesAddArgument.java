@@ -1,5 +1,6 @@
 package com.alessandro.astages.command.argument;
 
+import com.alessandro.astages.core.ARestrictionManager;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 public class AStagesAddArgument implements ArgumentType<String> {
@@ -41,12 +41,16 @@ public class AStagesAddArgument implements ArgumentType<String> {
     }
 
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, SuggestionsBuilder builder) {
         // Try remove client stages
         // context.
-        // TODO: implement stage manager
-        // return SharedSuggestionProvider.suggest(ARestrictionManager.ALL_STAGES.stream().sorted(), builder);
-        return SharedSuggestionProvider.suggest(Collections.emptyList(), builder);
+//        var player = context.getArgument("player", EntitySelector.class);
+//        AtomicReference<List<String>> stagesAlreadyAdded = new AtomicReference<>(new ArrayList<>());
+//
+//        player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> stagesAlreadyAdded.set(playerStage.getStages()));
+//
+//        var toReturn = ARestrictionManager.ALL_STAGES.stream().dropWhile(string -> stagesAlreadyAdded.get().contains(string)).sorted();
+        return SharedSuggestionProvider.suggest(ARestrictionManager.ALL_STAGES.stream().sorted(), builder);
     }
 
     @Override

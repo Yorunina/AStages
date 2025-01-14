@@ -1,14 +1,24 @@
 package com.alessandro.astages.capability;
 
-import com.alessandro.astages.Astages;
+import com.alessandro.astages.AStages;
+import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageGetPlayerEvent;
+import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.ArrayList;
@@ -26,43 +36,53 @@ public class PlayerStage implements INBTSerializable<CompoundTag> {
 
     private List<String> stages = new ArrayList<>();
 
-    public void setChangedFor(ServerPlayer player, @NotNull Operation operation, String stage) {
-        PacketDistributor.sendToPlayer(player, new StageDataSyncS2CPacket(stages));
-        Astages.LOGGER.debug("SERVER UPDATED!");
+    public PlayerStage(IAttachmentHolder iAttachmentHolder) { }
 
-//        switch (operation) {
-//            case ADD -> stages.add(stage);
-//            case REMOVE -> stages.remove(stage);
-//            case REMOVE_ALL, GET, LOGIN -> Astages.LOGGER.debug("CANCELLING NOT YET IMPLEMENTED!");
-//        }
-
-//        StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stage);
-//        MinecraftForge.EVENT_BUS.post(event);
-//
-//        if (!event.isCanceled()) {
-//            ModNetworking.sendToPlayer(new StageDataSyncS2CPacket(stages), (ServerPlayer) player);
-//
-//            switch (operation) {
-//                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stage));
-//                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, stage));
-//                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStageRemovedPlayerEvent(player, stages));
-//                case GET -> MinecraftForge.EVENT_BUS.post(new StageGetPlayerEvent(player, stages));
-//                case LOGIN -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
-//            }
-//        } else {
-//            switch (event.getOperation()) {
-//                case ADD -> stages.remove(stage);
-//                case REMOVE -> stages.add(stage);
-//                case REMOVE_ALL, GET, LOGIN -> AStages.LOGGER.debug("CANCELLING NOT YET IMPLEMENTED!");
-//            }
-//        }
+    public PlayerStage(List<String> stages) {
+        this.stages = stages;
     }
-//
-//    public List<String> setStages(List<String> stages) {
-//        this.stages = stages;
-//
-//        return stages;
+
+    @Info("Not required, for commands only!")
+    public void setChangedFor(Player player, @NotNull Operation operation, String stage) {
+        setChangedFor(player, operation, stage, false);
+    }
+
+    @Info("TO BE TESTED!")
+    public void setChangedFor(Player player, @NotNull Operation operation, @Nullable String stage, boolean silentTitle) {
 //    }
+//
+//    public void setChangedFor(Player player, @NotNull Operation operation, List<String> stage) {
+
+        StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stage);
+        NeoForge.EVENT_BUS.post(event);
+
+        if (!event.isCanceled()) {
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new StageDataSyncS2CPacket(stages));
+
+            if (!silentTitle && stage != null) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    AStages.LOGGER.debug("TEXT!");
+                    // serverPlayer.connection.send(new ClientboundSetTitleTextPacket(Component.literal("TEXT!")));
+                    // AStagesUtil.showTitles(operation, stage);
+                    AStagesUtil.showTitles(serverPlayer, operation, stage);
+                }
+            }
+
+            switch (operation) {
+                case ADD -> NeoForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stage));
+                case REMOVE -> NeoForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, stage));
+                case REMOVE_ALL -> NeoForge.EVENT_BUS.post(new AllStageRemovedPlayerEvent(player, stages));
+                case GET -> NeoForge.EVENT_BUS.post(new StageGetPlayerEvent(player, stages));
+                case LOGIN -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
+            }
+        } else {
+            switch (event.getOperation()) {
+                case ADD -> stages.remove(stage);
+                case REMOVE -> stages.add(stage);
+                case REMOVE_ALL, GET, LOGIN -> AStages.LOGGER.debug("CANCELLING NOT YET IMPLEMENTED!");
+            }
+        }
+    }
 
     public List<String> getStages() {
         if (stages == null) {

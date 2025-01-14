@@ -5,8 +5,23 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "astages.refmap.json",
   "mixins": [
+    "AModRuleCompatibilityLayer",
+    "APlayerEventJS",
+    "enchant.AEnchantmentMenu",
+    "ore.ABlockStateExtension",
+    "ore.APlayer",
+    "ore.AServerPlayerGameMode",
+    "recipe.minecraft.AAbstractFurnaceBlockEntity",
+    "recipe.minecraft.ACampfireBlock",
+    "recipe.minecraft.ACrafterMenu",
+    "recipe.minecraft.ACraftingMenu",
+    "recipe.minecraft.ASmithingMenu",
+    "recipe.minecraft.AStonecutterMenu",
+    "screen.AServerPlayer"
   ],
   "client": [
+    "item.AGui",
+    "recipe.minecraft.AStonecutterScreen"
   ],
   "injectors": {
     "defaultRequire": 1

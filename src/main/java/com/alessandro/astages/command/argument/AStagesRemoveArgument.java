@@ -1,6 +1,7 @@
 package com.alessandro.astages.command.argument;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.core.ARestrictionManager;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;

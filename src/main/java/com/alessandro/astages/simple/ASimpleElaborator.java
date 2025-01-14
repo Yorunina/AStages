@@ -1,0 +1,148 @@
+package com.alessandro.astages.simple;
+
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.restriction.*;
+import com.alessandro.astages.core.wrapper.OreWrapper;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import com.alessandro.astages.store.Attributes;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.DimensionArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+public class ASimpleElaborator {
+    public static void elaborateItem(@NotNull ASimpleRestriction simple) {
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)))));
+    }
+
+    public static void elaborateMod(@NotNull ASimpleRestriction simple) {
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(stack.getItem())).getNamespace())));
+    }
+
+    public static void elaborateDimension(@NotNull ASimpleRestriction simple) {
+        ARestrictionManager.DIMENSION_INSTANCE.addRestriction(new ADimensionRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
+    }
+
+    public static void elaborateGui(@NotNull ASimpleRestriction simple) {
+        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.MENU.get(ResourceLocation.parse(simple.object))));
+    }
+
+    public static void elaborateOre(@NotNull ASimpleRestriction simple) {
+        String[] splice = simple.object.split("//");
+        BlockState original = Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(splice[0]))).defaultBlockState();
+        var replacement = Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(splice[1]))).defaultBlockState();
+        ARestrictionManager.ORE_INSTANCE.addRestriction(new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement)));
+    }
+
+    public static void elaborateStructure(@NotNull ASimpleRestriction simple) {
+        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
+    }
+
+    public static void elaborateBiome(@NotNull ASimpleRestriction simple) {
+
+    }
+
+    public static void elaborateTame(@NotNull ASimpleRestriction simple) {
+        // Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).removeIf();
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, true).setAttribute(Attributes.TAMABLE, false));
+    }
+
+    public static void elaborateMount(@NotNull ASimpleRestriction simple) {
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, false).setAttribute(Attributes.TAMABLE, true));
+    }
+
+    public static void elaborateRecipe(@NotNull ASimpleRestriction simple) {
+        String[] splice = simple.object.split("//");
+        var type = BuiltInRegistries.RECIPE_TYPE.get(ResourceLocation.parse(splice[0]));
+        var id = ResourceLocation.parse(splice[1]);
+        ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
+    }
+
+    public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeUsed(true).setCanBeDig(true));
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeLeftClicked(true).setCanItemBeRightClicked(true).setCanBeDig(true));
+
+        var restriction = new AItemRestriction(simple.id, simple.stage);
+        restriction.restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object))));
+        restriction.setAttribute(Attributes.HIDING_TOOLTIP, false)
+            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
+            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
+            .setAttribute(Attributes.ATTACKING, true)
+            .setAttribute(Attributes.HIDING_JEI, false)
+            .setAttribute(Attributes.BLOCK_PLACING, true)
+            .setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, true)
+            .setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
+            .setAttribute(Attributes.BLOCK_BREAKING, true);
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+    }
+
+    public static int commandItem(CommandContext<CommandSourceStack> c) {
+        return addRestrictionForType(ASimpleRestrictionType.ITEM, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
+    }
+
+    public static int commandMod(CommandContext<CommandSourceStack> c) {
+        return addRestrictionForType(ASimpleRestrictionType.MOD, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "mod"));
+    }
+
+    public static int commandDimension(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
+        return addRestrictionForType(ASimpleRestrictionType.DIMENSION, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), DimensionArgument.getDimension(c, "dimension").dimension().location().toString());
+    }
+
+    public static int commandGui(CommandContext<CommandSourceStack> c) {
+        return addRestrictionForType(ASimpleRestrictionType.GUI, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "gui"));
+    }
+
+    public static int commandOre(CommandContext<CommandSourceStack> c) {
+        return addRestrictionForType(ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
+            Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "ore").getState().getBlock())) +
+                "//" +
+                Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock()))
+        );
+    }
+
+    public static int commandStructure(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
+        return addRestrictionForType(ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), ResourceArgument.getStructure(c, "structure").key().toString());
+    }
+
+    public static int commandBiome(CommandContext<CommandSourceStack> c) {
+        return 0;
+    }
+
+    public static int commandTame(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
+        return addRestrictionForType(ASimpleRestrictionType.TAME, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(ResourceArgument.getSummonableEntityType(c, "tame").value())).toString());
+    }
+
+    public static int commandMount(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
+        return addRestrictionForType(ASimpleRestrictionType.MOUNT, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(ResourceArgument.getSummonableEntityType(c, "mount").value())).toString());
+    }
+
+    public static int commandRecipe(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
+        return addRestrictionForType(ASimpleRestrictionType.RECIPE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
+            Objects.requireNonNull(Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(ResourceLocationArgument.getRecipe(c, "recipe").value().getType()))) +
+                "//" +
+                Objects.requireNonNull(ResourceLocationArgument.getRecipe(c, "recipe").id().toString())
+        );
+    }
+
+    public static int commandArmor(CommandContext<CommandSourceStack> c) {
+        return addRestrictionForType(ASimpleRestrictionType.ARMOR, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
+    }
+
+    private static int addRestrictionForType(@NotNull ASimpleRestrictionType type, String id, String stage, String object) {
+        ASimpleRestrictionManager.addRestriction(type, "simple/" + id, stage, object);
+
+        return 1;
+    }
+}

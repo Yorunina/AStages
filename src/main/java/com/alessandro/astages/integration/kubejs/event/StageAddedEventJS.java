@@ -1,0 +1,22 @@
+package com.alessandro.astages.integration.kubejs.event;
+
+import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
+import dev.latvian.mods.kubejs.player.KubePlayerEvent;
+import net.minecraft.world.entity.player.Player;
+
+public class StageAddedEventJS implements KubePlayerEvent {
+    StageAddedPlayerEvent event;
+
+    public StageAddedEventJS(StageAddedPlayerEvent event) {
+        this.event = event;
+    }
+
+    @Override
+    public Player getEntity() {
+        return event.getEntity();
+    }
+
+    public String getStage() {
+        return event.stage;
+    }
+}
