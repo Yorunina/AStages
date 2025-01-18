@@ -20,24 +20,18 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isValueNull(Attribute<?> attribute) {
-        return getAttribute(attribute) == null;
+        return get(attribute) == null;
     }
 
-    public <T> T getAttribute(Attribute<T> attribute) {
+    public <T> T get(Attribute<T> attribute) {
         checkAttribute(attribute);
 
         return attributes.getAttribute(attribute);
     }
 
-    public <T> T get(Attribute<T> attribute) {
-        return getAttribute(attribute);
-    }
-
     public <T> Component getMessage(Attribute<Function<T, Component>> attribute, T value) {
-        checkAttribute(attribute);
-
         var message = attributes.getAttribute(attribute);
-//        if (message == null) { return Component.empty(); }
+
         return message.apply(value);
     }
 
@@ -48,27 +42,22 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> R setAttribute(Attribute<T> attribute, T value) {
+    public <T> R set(Attribute<T> attribute, T value) {
         checkAttribute(attribute);
         attributes.setAttribute(attribute, value);
 
         return (R) this;
     }
 
-    public <T> R set(Attribute<T> attribute, T value) {
-        return setAttribute(attribute, value);
-    }
-
     public boolean isDisabled(Attribute<Boolean> attribute) throws SetAttributeNotSupported {
-        return !getAttribute(attribute);
+        return !get(attribute);
     }
 
     public boolean isEnabled(Attribute<Boolean> attribute) throws SetAttributeNotSupported {
-        return getAttribute(attribute);
+        return get(attribute);
     }
 
     public void checkAttribute(Attribute<?> attribute) throws SetAttributeNotSupported {
-//        AStages.LOGGER.debug(allowedAttributes().toString());
         if (!allowedAttributes().containsKey(attribute)) {
             throw new SetAttributeNotSupported(attribute);
         }

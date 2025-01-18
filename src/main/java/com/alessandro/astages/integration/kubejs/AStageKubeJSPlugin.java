@@ -2,6 +2,7 @@ package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
@@ -65,11 +66,13 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
     public void onServerReload() {
         // AFTER SERVER SCRIPT RELOADING!
         ARestrictionManager.reloadAfterScripts();
+        AStageManager.reloadAfterScripts();
     }
 
     @Override
     public void clearCaches() {
         // BEFORE SERVER SCRIPT RELOADING!
         ARestrictionManager.reloadBeforeScripts();
+        AStageManager.reloadBeforeScripts();
     }
 }

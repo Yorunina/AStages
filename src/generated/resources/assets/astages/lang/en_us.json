@@ -14,6 +14,7 @@
   "message.astages.item.pickup": "You couldn't pick up the %s.",
   "message.astages.item.place": "You couldn't place the %s.",
   "message.astages.item.use": "You don't know how to use the %s.",
+  "message.astages.mob": "Unknown Entity!",
   "message.astages.pet.breed": "You can't breed %s!",
   "message.astages.pet.mount": "You can't mount %s!",
   "message.astages.pet.tame": "You can't tame %s!",

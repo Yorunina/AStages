@@ -2,8 +2,8 @@ package com.alessandro.astages.integration.jade;
 
 import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +35,24 @@ public class AStagesJadePlugin implements IWailaPlugin {
         });
 
         registration.addTooltipCollectedCallback((tooltip, accessor) -> {
+            if (accessor instanceof EntityAccessor entityAccessor) {
+                var entity = entityAccessor.getEntity();
+                var type = entity.getType();
+
+                var restriction = AClientRestrictionManager.MOB_INSTANCE.getRestriction(type);
+
+                if (restriction != null) {
+                    tooltip.clear();
+
+                    if (restriction.jadeMobMessage() != null) {
+                        tooltip.add(restriction.jadeMobMessage());
+                    }
+                }
+            }
+
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
-                var stack = new ItemStack(original);
+                var stack = AStagesUtil.blockToStack(original);
                 var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
 
                 if (restriction != null) {

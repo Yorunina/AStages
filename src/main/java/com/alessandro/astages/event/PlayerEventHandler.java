@@ -28,9 +28,12 @@ public class PlayerEventHandler {
 
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
 
-        ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
-        ARestrictionManager.ORE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
-        ARestrictionManager.synchronizeOreStages((ServerPlayer) event.getEntity());
+        if (!event.getEntity().level().isClientSide) {
+            ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
+            ARestrictionManager.ORE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
+            ARestrictionManager.MOB_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
+            ARestrictionManager.synchronizeOreStages((ServerPlayer) event.getEntity());
+        }
     }
 
     @SubscribeEvent
@@ -44,19 +47,17 @@ public class PlayerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.@NotNull Clone event) {
-        if (event.isWasDeath()) {
-            event.getOriginal().reviveCaps();
+        event.getOriginal().reviveCaps();
 
-            event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
-                event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
-                    newStore.copyFrom(oldStore);
-                });
+        event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
+            event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
+                newStore.copyFrom(oldStore);
             });
+        });
 
-            event.getOriginal().invalidateCaps();
+        event.getOriginal().invalidateCaps();
 
-            event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
-        }
+        event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
     }
 
     @Info("For inventory checking!")
@@ -70,8 +71,6 @@ public class PlayerEventHandler {
     public static void onInventoryChanged(@NotNull PlayerInventoryChangedEvent event) {
         CommonEventSettings.isInventoryChanged = true;
         CommonEventSettings.slotChanged = event.getSlot();
-
-        AStages.LOGGER.debug(String.valueOf(CommonEventSettings.slotChanged));
     }
 
 //    @Info("For armor checking!")

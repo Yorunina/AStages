@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 // Read attributes as: can be used in/can be showed...
 public class Attributes {
@@ -32,10 +33,12 @@ public class Attributes {
     public static final Attribute<Boolean> GENERIC_INTERACTIONS = Attribute.create("generic_interactions", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> EXPLOSIONS_AFFECT_BLOCKS = Attribute.create("explosion_affect_blocks", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> EXPLOSIONS_AFFECT_ENTITIES = Attribute.create("explosion_affect_entities", AttributeTypes.BOOLEAN, false);
-    public static final Attribute<Boolean> SPAWNER = Attribute.create("explosion_affect_entities", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> SPAWNER = Attribute.create("spawner", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> BIDIRECTIONAL = Attribute.create("bidirectional", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> ANVIL = Attribute.create("anvil", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> ENCHANTING_TABLE = Attribute.create("enchanting_table", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> BLOCK_INTERACTIONS = Attribute.create("block_restrictions", AttributeTypes.BOOLEAN, true);
+    public static final Attribute<Boolean> MOB_SPAWNING = Attribute.create("mob_spawning", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
@@ -85,5 +88,10 @@ public class Attributes {
     // DIMENSION
     public static class Dimension {
         public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension", resourceLocation).withStyle(ChatFormatting.RED));
+    }
+
+    // MOB
+    public static class Mob {
+        public static final Attribute<Supplier<Component>> JADE_MOB_MESSAGE = Attribute.create("jade_mob_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob").withStyle(ChatFormatting.RED));
     }
 }

@@ -3,11 +3,13 @@ package com.alessandro.astages.core.restriction;
 import com.alessandro.astages.store.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class ADimensionRestriction extends ARestriction<ADimensionRestriction, ResourceLocation, ResourceLocation> {
     private final List<ResourceLocation> dimensions = new ArrayList<>();
@@ -44,7 +46,13 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
 
     @SuppressWarnings("unused")
     public ADimensionRestriction setBidirectional(boolean value) {
-        setAttribute(Attributes.BIDIRECTIONAL, value);
+        set(Attributes.BIDIRECTIONAL, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setDimensionMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Dimension.ENTER_MESSAGE, message);
         return this;
     }
 }

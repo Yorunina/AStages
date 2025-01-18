@@ -189,7 +189,7 @@ dependencies {
     implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.2-build.18")
     implementation fg.deobf("dev.architectury:architectury-forge:9.1.13")
 
-    implementation fg.deobf("curse.maven:the-twilight-forest-227639:5468648")
+    // implementation fg.deobf("curse.maven:the-twilight-forest-227639:5468648")
 
     // compileOnly(fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.14"))
     // compileOnly(fg.deobf("dev.latvian.mods:rhino-forge:2001.2.2-build.18"))
@@ -203,7 +203,16 @@ dependencies {
 
     implementation fg.deobf("curse.maven:jade-324717:5339264")
 
-    // implementation fg.deobf("curse.maven:probejs-585406:5227399")
+    implementation fg.deobf("curse.maven:probejs-585406:5227399")
+
+    // implementation fg.deobf("curse.maven:ftb-quests-forge-289412:5363570")
+    // implementation fg.deobf("curse.maven:ftb-quests-forge-289412:5378300")
+    // implementation fg.deobf("curse.maven:ftb-quests-forge-289412:5418359")
+    // implementation fg.deobf("curse.maven:ftb-quests-forge-289412:5513826")
+    // implementation fg.deobf("curse.maven:ftb-quests-forge-289412:5816794")
+    // implementation fg.deobf("curse.maven:ftb-quests-forge-289412:5543955")
+    // implementation fg.deobf("curse.maven:ftb-library-forge-404465:6016763")
+    // implementation fg.deobf("curse.maven:ftb-teams-forge-404468:5267190")
 
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")

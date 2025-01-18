@@ -3,6 +3,7 @@ package com.alessandro.astages;
 import com.alessandro.astages.block.ModBlocks;
 import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.core.RestrictionPluginFinder;
 import com.alessandro.astages.item.ModItems;
 import com.alessandro.astages.networking.ModNetworking;
 import com.mojang.logging.LogUtils;
@@ -21,6 +22,8 @@ public class AStages {
 
     public AStages() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        AStages.LOGGER.debug("RESTRICTION CLIENTS: {}", RestrictionPluginFinder.getAClientRestrictionSynchronizer());
 
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);

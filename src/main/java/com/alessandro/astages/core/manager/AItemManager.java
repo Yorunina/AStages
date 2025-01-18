@@ -66,8 +66,6 @@ public class AItemManager extends AManager<AItemRestriction, Predicate<ItemStack
 
             equipmentRestrictions.put(restriction.getStage(), newEquipmentList);
         }
-
-        AStages.LOGGER.debug("Restrictions: {}", inventoryRestrictions);
     }
 
     public AItemRestriction getRestriction(ItemStack stack) {

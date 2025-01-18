@@ -40,9 +40,9 @@ public class ACropRestriction extends ARestriction<ACropRestriction, Block, Crop
     }
 
     private boolean elaborateRestriction(int age) {
-        var thisAge = getAttribute(Attributes.AGE);
+        var thisAge = get(Attributes.AGE);
 
-        return switch (getAttribute(Attributes.COMPARE_CONDITION)) {
+        return switch (get(Attributes.COMPARE_CONDITION)) {
             case EQUAL -> thisAge == age;
             case LESS -> age < thisAge;
             case LESS_EQUAL -> age <= thisAge;

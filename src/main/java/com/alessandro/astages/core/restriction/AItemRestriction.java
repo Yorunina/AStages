@@ -7,11 +7,13 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AChangeable;
 import com.alessandro.astages.util.AMarkable;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<ItemStack>, ItemStack> implements AChangeable, AMarkable {
@@ -35,6 +37,7 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
             .addAttribute(Attributes.LEFT_CLICK_INTERACTIONS)
             .addAttribute(Attributes.RIGHT_CLICK_INTERACTIONS)
             .addAttribute(Attributes.BLOCK_BREAKING)
+            .addAttribute(Attributes.BLOCK_INTERACTIONS)
 
             .addAttribute(Attributes.PICK_UP_DELAY)
 
@@ -47,6 +50,7 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
             .addAttribute(Attributes.Item.PLACING_MESSAGE)
             .addAttribute(Attributes.Item.JADE_ITEM_MESSAGE)
             .addAttribute(Attributes.Item.JADE_BLOCK_MESSAGE);
+//            .addAttribute(Attributes.Item.A_USING_MESSAGE);
     }
 
     @Override
@@ -68,8 +72,8 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
     }
 
     @Override
-    public <T> AItemRestriction setAttribute(Attribute<T> attribute, T value) {
-        var toReturn = super.setAttribute(attribute, value);
+    public <T> AItemRestriction set(Attribute<T> attribute, T value) {
+        var toReturn = super.set(attribute, value);
 
         if (attribute == Attributes.STORING_IN_INVENTORY || attribute == Attributes.EQUIPPING) {
             setChanged();
@@ -88,78 +92,131 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
 
     @SuppressWarnings("unused")
     public AItemRestriction setPickUpDelay(int value) {
-        setAttribute(Attributes.PICK_UP_DELAY, value);
+        set(Attributes.PICK_UP_DELAY, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanAttack(boolean value) {
-        setAttribute(Attributes.ATTACKING, value);
+        set(Attributes.ATTACKING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanBeStoredInInventory(boolean value) {
-        setAttribute(Attributes.STORING_IN_INVENTORY, value);
+        set(Attributes.STORING_IN_INVENTORY, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanBeEquipped(boolean value) {
-        setAttribute(Attributes.EQUIPPING, value);
+        set(Attributes.EQUIPPING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanPickedUp(boolean value) {
-        setAttribute(Attributes.PICKING_UP, value);
+        set(Attributes.PICKING_UP, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setHideTooltip(boolean value) {
-        setAttribute(Attributes.HIDING_TOOLTIP, value);
+        set(Attributes.HIDING_TOOLTIP, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setRenderItemName(boolean value) {
-        setAttribute(Attributes.RENDERING_NAME, value);
+        set(Attributes.RENDERING_NAME, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setHideInJEI(boolean value) {
-        setAttribute(Attributes.HIDING_JEI, value);
+        set(Attributes.HIDING_JEI, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanBePlaced(boolean value) {
-        setAttribute(Attributes.BLOCK_PLACING, value);
+        set(Attributes.BLOCK_PLACING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanBeDig(boolean value) {
-        setAttribute(Attributes.BLOCK_BREAKING, value);
+        set(Attributes.BLOCK_BREAKING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanItemBeLeftClicked(boolean value) {
-        setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, value);
+        set(Attributes.LEFT_CLICK_INTERACTIONS, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AItemRestriction setCanItemBeRightClicked(boolean value) {
-        setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, value);
+        set(Attributes.LEFT_CLICK_INTERACTIONS, value);
         return this;
     }
 
+    @SuppressWarnings("unused")
+    public AItemRestriction setCanInteractWithBlock(boolean value) {
+        set(Attributes.BLOCK_INTERACTIONS, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setDropMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.DROP_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setAttackMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.ATTACK_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setPickupMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.PICKING_UP_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setUsageMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.USING_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setMineMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.MINING_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setPlaceMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.PLACING_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setJadeItemMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.JADE_ITEM_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AItemRestriction setJadeBlockMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.JADE_BLOCK_MESSAGE, message);
+        return this;
+    }
     @Override
     public String toString() {
-        return this.getId() + " " + this.getAttribute(Attributes.STORING_IN_INVENTORY);
+        return this.getId() + " " + this.get(Attributes.STORING_IN_INVENTORY);
     }
 }

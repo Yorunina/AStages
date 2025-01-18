@@ -58,43 +58,43 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
 
     @SuppressWarnings("unused")
     public AStructureRestriction setCanAttackEntities(boolean value) {
-        setAttribute(Attributes.ATTACKING, value);
+        set(Attributes.ATTACKING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AStructureRestriction setCanEnter(boolean value) {
-        setAttribute(Attributes.ENTERING, value);
+        set(Attributes.ENTERING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AStructureRestriction setCanInteract(boolean value) {
-        setAttribute(Attributes.GENERIC_INTERACTIONS, value);
+        set(Attributes.GENERIC_INTERACTIONS, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AStructureRestriction setCanBlockBePlaced(boolean value) {
-        setAttribute(Attributes.BLOCK_PLACING, value);
+        set(Attributes.BLOCK_PLACING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AStructureRestriction setCanBlockBeBroken(boolean value) {
-        setAttribute(Attributes.BLOCK_BREAKING, value);
+        set(Attributes.BLOCK_BREAKING, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AStructureRestriction setMakeExplosionsAffectBlocks(boolean value) {
-        setAttribute(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
+        set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
         return this;
     }
 
     @SuppressWarnings("unused")
     public AStructureRestriction setMakeExplosionsAffectEntities(boolean value) {
-        setAttribute(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
+        set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
         return this;
     }
 }

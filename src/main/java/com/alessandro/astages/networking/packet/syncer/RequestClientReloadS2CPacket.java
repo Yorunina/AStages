@@ -15,13 +15,7 @@ public class RequestClientReloadS2CPacket {
     public void toBytes(FriendlyByteBuf ignoredUnused) { }
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            AClientRestrictionManager.ITEM_INSTANCE.reloadBeforeScripts();
-            AClientRestrictionManager.RECIPE_INSTANCE.reloadBeforeScripts();
-            AClientRestrictionManager.ORE_INSTANCE.reloadBeforeScripts();
-
-            AClientRestrictionManager.ORE_STAGES.clear();
-        });
+        ctx.get().enqueueWork(AClientRestrictionManager::reloadBeforeScripts);
 
         ctx.get().setPacketHandled(true);
     }

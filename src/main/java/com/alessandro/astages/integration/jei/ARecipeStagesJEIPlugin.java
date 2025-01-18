@@ -51,7 +51,14 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     @SuppressWarnings("unchecked")
     public <C extends Container, T extends Recipe<C>> void updateRecipeGui() {
         if (runtime == null) { return; }
-
+//        var recipeManager = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getRecipeManager() : null;
+//        if (recipeManager == null) { return; }
+//
+//        AClientRestrictionManager.RECIPE_INSTANCE.generateCache();
+//        // CRAFTING SHAPED AND SHAPELESS
+//        runtime.getRecipeManager().hideRecipes(RecipeTypes.CRAFTING, AClientRestrictionManager.RECIPE_INSTANCE.getAllRecipesForType(RecipeType.CRAFTING));
+//
+//
         var categories = runtime.getRecipeManager().createRecipeCategoryLookup().get().toList();
 
         for (Map.Entry<String, List<AClientRecipeRestriction>> entry : AClientRestrictionManager.RECIPE_INSTANCE.restrictions.entrySet()) {

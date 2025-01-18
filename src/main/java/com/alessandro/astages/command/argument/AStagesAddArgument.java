@@ -1,5 +1,6 @@
 package com.alessandro.astages.command.argument;
 
+import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -42,15 +43,10 @@ public class AStagesAddArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, SuggestionsBuilder builder) {
-        // Try remove client stages
-        // context.
-//        var player = context.getArgument("player", EntitySelector.class);
-//        AtomicReference<List<String>> stagesAlreadyAdded = new AtomicReference<>(new ArrayList<>());
-//
-//        player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> stagesAlreadyAdded.set(playerStage.getStages()));
-//
-//        var toReturn = ARestrictionManager.ALL_STAGES.stream().dropWhile(string -> stagesAlreadyAdded.get().contains(string)).sorted();
-        return SharedSuggestionProvider.suggest(ARestrictionManager.ALL_STAGES.stream().sorted(), builder);
+        var toReturn = ARestrictionManager.ALL_STAGES;
+        ClientPlayerStage.getPlayerStages().forEach(toReturn::remove);
+
+        return SharedSuggestionProvider.suggest(toReturn.stream().sorted(), builder);
     }
 
     @Override

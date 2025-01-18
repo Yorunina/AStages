@@ -11,6 +11,7 @@ import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -25,10 +26,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -37,25 +38,49 @@ import java.util.function.Predicate;
 @MethodsReturnNonnullByDefault
 public class AStagesKubeJSUtil {
     // Player Stages
-    public static void addStageForPlayer(String stage, Player player) {
+    public static void addStageToPlayer(String stage, Player player) {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             playerStage.addStage(stage);
             playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stage);
         });
     }
 
-    public static void removeStageForPlayer(String stage, Player player) {
+    public static void removeStageFromPlayer(String stage, Player player) {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             playerStage.removeStage(stage);
             playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stage);
         });
     }
 
-    public static void removeAllStagesForPlayer(Player player) {
+    public static void removeAllStagesFromPlayer(Player player) {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             playerStage.removeAllStages();
             playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, null);
         });
+    }
+
+    public static boolean playerHasStage(String stage, Player player) {
+        return AStagesUtil.hasStage(player, stage);
+    }
+
+    public static boolean playerHasAtLeastOneStage(List<String> stages, Player player) {
+        for (var stage : stages) {
+            if (playerHasStage(stage, player)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean playerHasAllStages(List<String> stages, Player player) {
+        for (var stage : stages) {
+            if (!playerHasStage(stage, player)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static <T> @Nullable T getRestrictionById(ARestrictionType type, String id) {
@@ -130,6 +155,23 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
+    public static AItemRestriction addRestrictionForTag(String id, String stage, ResourceLocation name, Item... ignored) {
+        var tag = ItemTags.create(name);
+        var restriction = new AItemRestriction(id, stage);
+
+        restriction.restrict(itemStack -> {
+            for (var i : ignored) {
+                if (itemStack.is(i)) { return false; }
+            }
+
+            return itemStack.is(tag);
+        });
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
     public static AItemRestriction addRestrictionForArmor(String id, String stage, Item... armors) {
         var restriction = new AItemRestriction(id, stage);
 
@@ -137,16 +179,16 @@ public class AStagesKubeJSUtil {
             restriction.restrict(itemStack -> itemStack.is(armor));
         }
 
-        restriction.setAttribute(Attributes.RENDERING_NAME, true)
-            .setAttribute(Attributes.HIDING_TOOLTIP, false)
-            .setAttribute(Attributes.PICKING_UP, true)
-            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
-            .setAttribute(Attributes.ATTACKING, true)
-            .setAttribute(Attributes.HIDING_JEI, false)
-            .setAttribute(Attributes.BLOCK_PLACING, true)
-            .setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, true)
-            .setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
-            .setAttribute(Attributes.BLOCK_BREAKING, true);
+        restriction.set(Attributes.RENDERING_NAME, true)
+            .set(Attributes.HIDING_TOOLTIP, false)
+            .set(Attributes.PICKING_UP, true)
+            .set(Attributes.STORING_IN_INVENTORY, true)
+            .set(Attributes.ATTACKING, true)
+            .set(Attributes.HIDING_JEI, false)
+            .set(Attributes.BLOCK_PLACING, true)
+            .set(Attributes.LEFT_CLICK_INTERACTIONS, true)
+            .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
+            .set(Attributes.BLOCK_BREAKING, true);
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
@@ -174,7 +216,7 @@ public class AStagesKubeJSUtil {
     }
 
     // RECIPE Restrictions
-    public static ARecipeRestriction addRestrictionForRecipe(String id, String stage, RecipeType<?> recipeType, ResourceLocation @NotNull ... recipeIds) {
+    public static ARecipeRestriction addRestrictionForRecipe(String id, String stage, RecipeType<?> recipeType, ResourceLocation... recipeIds) {
         var restriction = new ARecipeRestriction(id, stage);
 
         for (ResourceLocation r : recipeIds) {
@@ -242,8 +284,8 @@ public class AStagesKubeJSUtil {
     public static AEnchantRestriction addRestrictionForEnchant(String id, String stage, Enchantment enchantment, ACompareCondition compareCondition, int level) {
         var restriction = new AEnchantRestriction(id, stage);
         restriction.restrict(enchantment)
-            .setAttribute(Attributes.COMPARE_CONDITION, compareCondition)
-            .setAttribute(Attributes.LEVEL, level);
+            .set(Attributes.COMPARE_CONDITION, compareCondition)
+            .set(Attributes.LEVEL, level);
 
         ARestrictionManager.ENCHANT_INSTANCE.addRestriction(restriction);
 
@@ -263,8 +305,8 @@ public class AStagesKubeJSUtil {
     public static ACropRestriction addRestrictionForCrop(String id, String stage, Block crop, ACompareCondition compareCondition, int age) {
         var restriction = new ACropRestriction(id, stage);
         restriction.restrict(crop)
-            .setAttribute(Attributes.COMPARE_CONDITION, compareCondition)
-            .setAttribute(Attributes.AGE, age);
+            .set(Attributes.COMPARE_CONDITION, compareCondition)
+            .set(Attributes.AGE, age);
 
         ARestrictionManager.CROP_INSTANCE.addRestriction(restriction);
 

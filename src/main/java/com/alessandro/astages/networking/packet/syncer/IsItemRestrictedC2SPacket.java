@@ -31,7 +31,7 @@ public class IsItemRestrictedC2SPacket {
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(stack); // Regardless to player...
 
             if (restriction != null) {
-                ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(restriction.getId(), restriction.getStage(), stack, restriction.getAttribute(Attributes.RENDERING_NAME), restriction.getAttribute(Attributes.HIDING_TOOLTIP), restriction.getMessage(Attributes.Item.HIDDEN_NAME, stack), restriction.getMessage(Attributes.Item.JADE_ITEM_MESSAGE, stack), restriction.getMessage(Attributes.Item.JADE_BLOCK_MESSAGE, stack)), ctx.get().getSender());
+                ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(restriction.getId(), restriction.getStage(), stack, restriction.get(Attributes.RENDERING_NAME), restriction.get(Attributes.HIDING_TOOLTIP), restriction.getMessage(Attributes.Item.HIDDEN_NAME, stack), restriction.getMessage(Attributes.Item.JADE_ITEM_MESSAGE, stack), restriction.getMessage(Attributes.Item.JADE_BLOCK_MESSAGE, stack)), ctx.get().getSender());
             } else {
                 ModNetworking.sendToPlayer(new NullItemSyncerS2CPacket(stack), ctx.get().getSender());
             }

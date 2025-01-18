@@ -55,11 +55,11 @@ public class ASimpleElaborator {
 
     public static void elaborateTame(@NotNull ASimpleRestriction simple) {
         // Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).removeIf();
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, true).setAttribute(Attributes.TAMABLE, false));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
     }
 
     public static void elaborateMount(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, false).setAttribute(Attributes.TAMABLE, true));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
     }
 
     public static void elaborateRecipe(@NotNull ASimpleRestriction simple) {
@@ -70,20 +70,17 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeUsed(true).setCanBeDig(true));
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeLeftClicked(true).setCanItemBeRightClicked(true).setCanBeDig(true));
-
         var restriction = new AItemRestriction(simple.id, simple.stage);
         restriction.restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
-        restriction.setAttribute(Attributes.HIDING_TOOLTIP, false)
-            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
-            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
-            .setAttribute(Attributes.ATTACKING, true)
-            .setAttribute(Attributes.HIDING_JEI, false)
-            .setAttribute(Attributes.BLOCK_PLACING, true)
-            .setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, true)
-            .setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
-            .setAttribute(Attributes.BLOCK_BREAKING, true);
+        restriction.set(Attributes.HIDING_TOOLTIP, false)
+            .set(Attributes.STORING_IN_INVENTORY, true)
+            .set(Attributes.STORING_IN_INVENTORY, true)
+            .set(Attributes.ATTACKING, true)
+            .set(Attributes.HIDING_JEI, false)
+            .set(Attributes.BLOCK_PLACING, true)
+            .set(Attributes.LEFT_CLICK_INTERACTIONS, true)
+            .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
+            .set(Attributes.BLOCK_BREAKING, true);
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }

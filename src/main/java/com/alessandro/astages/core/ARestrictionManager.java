@@ -1,10 +1,10 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -16,12 +16,10 @@ import java.util.Set;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
-    // ADD ENCHANTMENT RESTRICTION
 
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
-//    public static final ATimeManager TIME_INSTANCE = new ATimeManager();
     public static final AStructureManager STRUCTURE_INSTANCE = new AStructureManager();
     public static final ARecipeManager RECIPE_INSTANCE = new ARecipeManager();
     public static final AScreenManager SCREEN_INSTANCE = new AScreenManager();
@@ -59,7 +57,6 @@ public class ARestrictionManager {
 
     public static void reloadAfterScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) {
-            AStages.LOGGER.debug("SERVER is NULL!");
             return;
         }
 
@@ -73,6 +70,11 @@ public class ARestrictionManager {
         // ORE
         ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
             ModNetworking.sendToClients(new OreSyncerS2CPacket(restriction.getId(), s, restriction.getOriginal(), restriction.getReplacement(), false));
+        }));
+
+        // MOB
+        ARestrictionManager.MOB_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
+            ModNetworking.sendToClients(new MobSyncerS2CPacket(restriction.getId(), restriction.getStage(), restriction.getMobs(), restriction.get(Attributes.Mob.JADE_MOB_MESSAGE).get()));
         }));
 
         // ORE STAGES
