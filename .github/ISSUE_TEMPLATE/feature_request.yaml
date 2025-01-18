@@ -1,0 +1,7 @@
+name: Feature Request
+description: Request a new feature AStages
+labels: [ feature request / addon ]
+body:
+  - type: markdown
+    attributes:
+      value: "## Feature Description"
