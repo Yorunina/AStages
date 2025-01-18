@@ -2,27 +2,44 @@ name: Bug Report
 description: Report a bug with AStages
 labels: [ bug ]
 body:
-  - type: input
-    id: mc-version
+  - type: dropdown
+    id: loader-type
+    attributes:
+      label: Loader Type
+      options:
+        - Forge
+        - NeoForge
+    validations:
+      required: true
+
+  - type: dropdown
+    id: minecraft-version
     attributes:
       label: Minecraft Version
-      placeholder: "Ex: 1.18.1"
+      options:
+        - 1.20.1
+        - 1.21.1
     validations:
       required: true
 
-  - type: input
-    id: kjs-version
+  - type: dropdown
+    id: astages-version
     attributes:
       label: AStages Version
-      placeholder: "Ex: 1605.3.19-build.258"
-    validations:
-      required: true
-
-  - type: input
-    id: loader-version
-    attributes:
-      label: Forge/Fabric Version
-      placeholder: "Ex: Forge 26.2.22/Fabric 0.12.12"
+      options:
+        - 0.1.0
+        - 0.1.1
+        - 0.2.0
+        - 0.2.1
+        - 0.2.2
+        - 0.3.0
+        - 0.4.0
+        - 0.4.1
+        - 0.5.0
+        - 0.6.0
+        - 0.6.1
+        - 0.7.0
+        - 0.8.0
     validations:
       required: true
 
