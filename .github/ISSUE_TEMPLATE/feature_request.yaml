@@ -1,7 +1,16 @@
 name: Feature Request
-description: Request a new feature AStages
+description: Request a new feature/enhancement for AStages
 labels: [ feature request / addon ]
 body:
-  - type: markdown
+  - type: textarea
+    id: description
     attributes:
-      value: "## Feature Description"
+      label: Describe the feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional info
+      description: Why should this be considered? Are there any alternatives?
