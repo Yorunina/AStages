@@ -155,13 +155,31 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-    public static AItemRestriction addRestrictionForTag(String id, String stage, ResourceLocation name, Item... ignored) {
+    public static AItemRestriction addRestrictionForTagAndBlacklistItems(String id, String stage, ResourceLocation name, Item... ignored) {
         var tag = ItemTags.create(name);
         var restriction = new AItemRestriction(id, stage);
 
         restriction.restrict(itemStack -> {
             for (var i : ignored) {
                 if (itemStack.is(i)) { return false; }
+            }
+
+            return itemStack.is(tag);
+        });
+
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
+    public static AItemRestriction addRestrictionForTag(String id, String stage, ResourceLocation name, ResourceLocation... ignored) {
+        var tag = ItemTags.create(name);
+        var restriction = new AItemRestriction(id, stage);
+
+        restriction.restrict(itemStack -> {
+            for (var i : ignored) {
+                var t = ItemTags.create(i);
+                if (itemStack.is(t)) { return false; }
             }
 
             return itemStack.is(tag);
