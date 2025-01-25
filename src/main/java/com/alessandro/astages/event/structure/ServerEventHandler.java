@@ -1,18 +1,16 @@
 package com.alessandro.astages.event.structure;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.base.Twin;
 import com.alessandro.astages.util.develop.ToBeTested;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.StructureManager;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -25,16 +23,13 @@ import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 @ParametersAreNonnullByDefault
 public class ServerEventHandler {
-    // public static final Map<UUID, Triple<Boolean, AStructureRestriction, ResourceLocation>> playerIsInStructure = new HashMap<>();
-    public static final Map<UUID, Twin<Boolean, ResourceLocation>> playerIsInStructure = new HashMap<>();
+    public static final Map<UUID, List<ResourceLocation>> playerIsInStructure = new HashMap<>();
+    public static int tick = 0;
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -43,96 +38,63 @@ public class ServerEventHandler {
         if (event.phase == TickEvent.Phase.START) { return; }
         if (event.player.getServer() == null) { return; }
 
-        if (event.player instanceof ServerPlayer player) {
-            StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
-            UUID playerUUID = player.getUUID();
+        if (tick % AStagesCommon.TICK_STRUCTURE_UPDATING.get() == 0) {
+            if (event.player instanceof ServerPlayer player) {
+                StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
+                UUID playerUUID = player.getUUID();
 
-            ARestrictionManager.STRUCTURE_INSTANCE.getRestrictions().forEach((stage, restrictions) -> {
-                if (!AStagesUtil.hasStage(player, stage)) {
-                    for (var restriction : restrictions) {
-                        for (var structureResource : restriction.getStructures()) {
-                            Structure structure = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).get(structureResource);
+                var newList = new ArrayList<ResourceLocation>();
+                manager.getAllStructuresAt(player.getOnPos()).keySet().forEach(structure -> {
+                    var structureId = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(structure);
+                    newList.add(structureId);
+                });
 
-                            if (structure != null) {
-                                boolean isInStructure = manager.getStructureAt(player.getOnPos(), structure).isValid();
-
-                                if (isInStructure && !playerIsInStructure.getOrDefault(playerUUID, new Twin<>(false, null)).a()) {
-                                    // playerIsInStructure.put(playerUUID, true);
-                                    // playerIsInStructure.put(playerUUID, new Triple<>(true, restriction, structureResource));
-                                    playerIsInStructure.put(playerUUID, new Twin<>(true, structureResource));
-                                } else if (!isInStructure && playerIsInStructure.getOrDefault(playerUUID, new Twin<>(false, null)).a()) {
-                                    // playerIsInStructure.put(playerUUID, false);
-                                     //playerIsInStructure.put(playerUUID, new Triple<>(false, null, null));
-                                    playerIsInStructure.put(playerUUID, new Twin<>(false, null));
-                                }
-                            }
-                        }
-                    }
+                if (playerIsInStructure.containsKey(playerUUID)) {
+                    playerIsInStructure.get(playerUUID).clear();
                 }
-            });
+
+                playerIsInStructure.put(playerUUID, newList);
+            }
+
+            AStages.LOGGER.debug(playerIsInStructure.toString());
         }
+
+        tick++;
+        if (tick >= AStagesCommon.TICK_STRUCTURE_UPDATING.get()) { tick = 0; }
     }
 
     @SubscribeEvent
     public static void onBlockBroken(BlockEvent.BreakEvent event) {
         if (canBeRunForPlayer(event.getPlayer())) {
-            for (UUID uuid : playerIsInStructure.keySet()) {
-                var isInStructure = playerIsInStructure.get(uuid).a();
-                // var restriction = playerIsInStructure.get(uuid).b();
-                var structure = playerIsInStructure.get(uuid).b();
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(event.getPlayer(), structure);
+            Player player = event.getPlayer();
+            UUID playerUUID = player.getUUID();
 
-                if (event.getPlayer().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getPlayer(), restriction.getStage())) {
-                    if (restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
-                        event.setCanceled(true);
-//                        event.setResult(Event.Result.DENY);
+            for (var structure : playerIsInStructure.get(playerUUID)) {
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                        restriction.displayMessage(Attributes.Structure.MINING_MESSAGE, structure, event.getPlayer());
-                    }
+                if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
+                    event.setCanceled(true);
+                    restriction.displayMessage(Attributes.Structure.MINING_MESSAGE, structure, player);
+                    break;
                 }
             }
         }
     }
 
-//    @ToBeTested
-//    @SubscribeEvent
-//    public static void onItemUsed(PlayerInteractEvent.RightClickItem event) {
-//        if (canBeRunForPlayer(event.getEntity())) {
-//            for (UUID uuid : playerIsInStructure.keySet()) {
-//                var isInStructure = playerIsInStructure.get(uuid).a();
-//                var restriction = playerIsInStructure.get(uuid).b();
-//                var structure = playerIsInStructure.get(uuid).c();
-//
-//                if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getEntity(), restriction.stage)) {
-//                    if (!restriction.canInteract) {
-//                        event.setCanceled(true);
-////                        event.setResult(Event.Result.DENY);
-//
-//                        if (restriction.interactMessage != null) {
-//                            event.getEntity().displayClientMessage(restriction.getInteractMessage(structure), true);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     @ToBeTested
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.RightClickBlock event) {
         if (canBeRunForPlayer(event.getEntity())) {
-            for (UUID uuid : playerIsInStructure.keySet()) {
-                var isInStructure = playerIsInStructure.get(uuid).a();
-                // var restriction = playerIsInStructure.get(uuid).b();
-                var structure = playerIsInStructure.get(uuid).b();
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(event.getEntity(), structure);
+            Player player = event.getEntity();
+            UUID playerUUID = player.getUUID();
 
-                if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getEntity(), restriction.getStage())) {
-                    if (restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
-                        event.setCanceled(true);
+            for (var structure : playerIsInStructure.get(playerUUID)) {
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                        restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, event.getEntity());
-                    }
+                if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
+                    event.setCanceled(true);
+                    restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
+                    break;
                 }
             }
         }
@@ -141,18 +103,16 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onEntityHurt(AttackEntityEvent event) {
         if (canBeRunForPlayer(event.getEntity())) {
-            for (UUID uuid : playerIsInStructure.keySet()) {
-                var isInStructure = playerIsInStructure.get(uuid).a();
-                // var restriction = playerIsInStructure.get(uuid).b();
-                var structure = playerIsInStructure.get(uuid).b();
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(event.getEntity(), structure);
+            Player player = event.getEntity();
+            UUID playerUUID = player.getUUID();
 
-                if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getEntity(), restriction.getStage())) {
-                    if (restriction.isDisabled(Attributes.ATTACKING)) {
-                        event.setCanceled(true);
+            for (var structure : playerIsInStructure.get(playerUUID)) {
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                        restriction.displayMessage(Attributes.Structure.ATTACK_MESSAGE, structure, event.getEntity());
-                    }
+                if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
+                    event.setCanceled(true);
+                    restriction.displayMessage(Attributes.Structure.ATTACK_MESSAGE, structure, player);
+                    break;
                 }
             }
         }
@@ -161,23 +121,15 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            if (canBeRunForPlayer(player)) {
-                for (UUID uuid : playerIsInStructure.keySet()) {
-                    var isInStructure = playerIsInStructure.get(uuid).a();
-                    // var restriction = playerIsInStructure.get(uuid).b();
-                    var structure = playerIsInStructure.get(uuid).b();
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+            UUID playerUUID = player.getUUID();
 
-                    if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(player, restriction.getStage())) {
-                        if (restriction.isDisabled(Attributes.BLOCK_PLACING)) {
-                            event.setCanceled(true);
-                            // Synchronize changes with client!
-                            var slot = player.getInventory().selected;
-                            player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+            for (var structure : playerIsInStructure.get(playerUUID)) {
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                            restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
-                        }
-                    }
+                if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
+                    event.setCanceled(true);
+                    restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
+                    break;
                 }
             }
         }
@@ -187,13 +139,12 @@ public class ServerEventHandler {
     public static void onExplosionDetonation(ExplosionEvent.Detonate event) {
         var player = AStagesUtil.getNearestPlayer(event.getLevel(), event.getExplosion().getPosition());
         if (canBeRunForPlayer(player)) {
-            for (UUID uuid : playerIsInStructure.keySet()) {
-                var isInStructure = playerIsInStructure.get(uuid).a();
-                var structure = playerIsInStructure.get(uuid).b();
+            UUID playerUUID = player.getUUID();
+
+            for (var structure : playerIsInStructure.get(playerUUID)) {
                 var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-
-                if (player.getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(player, restriction.getStage())) {
+                if (restriction != null) {
                     if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_BLOCKS)) {
                         event.getAffectedBlocks().clear();
                     }
@@ -201,6 +152,8 @@ public class ServerEventHandler {
                     if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_ENTITIES)) {
                         event.getAffectedEntities().clear();
                     }
+
+                    break;
                 }
             }
         }
