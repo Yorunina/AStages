@@ -15,6 +15,10 @@ import java.util.function.Function;
 public class APetRestriction extends ARestriction<APetRestriction, EntityType<?>, EntityType<?>> {
     private final List<EntityType<?>> pets = new ArrayList<>();
 
+    public List<EntityType<?>> getPets() {
+        return pets;
+    }
+
     public APetRestriction(String id, String stage) {
         super(id, stage);
     }

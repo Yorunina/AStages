@@ -2,10 +2,9 @@ package com.alessandro.astages.event.structure;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.AStructureRestriction;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.base.Triple;
+import com.alessandro.astages.util.base.Twin;
 import com.alessandro.astages.util.develop.ToBeTested;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -34,7 +33,8 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 @ParametersAreNonnullByDefault
 public class ServerEventHandler {
-    public static final Map<UUID, Triple<Boolean, AStructureRestriction, ResourceLocation>> playerIsInStructure = new HashMap<>();
+    // public static final Map<UUID, Triple<Boolean, AStructureRestriction, ResourceLocation>> playerIsInStructure = new HashMap<>();
+    public static final Map<UUID, Twin<Boolean, ResourceLocation>> playerIsInStructure = new HashMap<>();
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -56,12 +56,14 @@ public class ServerEventHandler {
                             if (structure != null) {
                                 boolean isInStructure = manager.getStructureAt(player.getOnPos(), structure).isValid();
 
-                                if (isInStructure && !playerIsInStructure.getOrDefault(playerUUID, new Triple<>(false, null, null)).a()) {
+                                if (isInStructure && !playerIsInStructure.getOrDefault(playerUUID, new Twin<>(false, null)).a()) {
                                     // playerIsInStructure.put(playerUUID, true);
-                                    playerIsInStructure.put(playerUUID, new Triple<>(true, restriction, structureResource));
-                                } else if (!isInStructure && playerIsInStructure.getOrDefault(playerUUID, new Triple<>(false, null, null)).a()) {
+                                    // playerIsInStructure.put(playerUUID, new Triple<>(true, restriction, structureResource));
+                                    playerIsInStructure.put(playerUUID, new Twin<>(true, structureResource));
+                                } else if (!isInStructure && playerIsInStructure.getOrDefault(playerUUID, new Twin<>(false, null)).a()) {
                                     // playerIsInStructure.put(playerUUID, false);
-                                    playerIsInStructure.put(playerUUID, new Triple<>(false, null, null));
+                                     //playerIsInStructure.put(playerUUID, new Triple<>(false, null, null));
+                                    playerIsInStructure.put(playerUUID, new Twin<>(false, null));
                                 }
                             }
                         }
@@ -76,8 +78,9 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(event.getPlayer())) {
             for (UUID uuid : playerIsInStructure.keySet()) {
                 var isInStructure = playerIsInStructure.get(uuid).a();
-                var restriction = playerIsInStructure.get(uuid).b();
-                var structure = playerIsInStructure.get(uuid).c();
+                // var restriction = playerIsInStructure.get(uuid).b();
+                var structure = playerIsInStructure.get(uuid).b();
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(event.getPlayer(), structure);
 
                 if (event.getPlayer().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getPlayer(), restriction.getStage())) {
                     if (restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
@@ -120,8 +123,9 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(event.getEntity())) {
             for (UUID uuid : playerIsInStructure.keySet()) {
                 var isInStructure = playerIsInStructure.get(uuid).a();
-                var restriction = playerIsInStructure.get(uuid).b();
-                var structure = playerIsInStructure.get(uuid).c();
+                // var restriction = playerIsInStructure.get(uuid).b();
+                var structure = playerIsInStructure.get(uuid).b();
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(event.getEntity(), structure);
 
                 if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getEntity(), restriction.getStage())) {
                     if (restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
@@ -139,8 +143,9 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(event.getEntity())) {
             for (UUID uuid : playerIsInStructure.keySet()) {
                 var isInStructure = playerIsInStructure.get(uuid).a();
-                var restriction = playerIsInStructure.get(uuid).b();
-                var structure = playerIsInStructure.get(uuid).c();
+                // var restriction = playerIsInStructure.get(uuid).b();
+                var structure = playerIsInStructure.get(uuid).b();
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(event.getEntity(), structure);
 
                 if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(event.getEntity(), restriction.getStage())) {
                     if (restriction.isDisabled(Attributes.ATTACKING)) {
@@ -159,8 +164,9 @@ public class ServerEventHandler {
             if (canBeRunForPlayer(player)) {
                 for (UUID uuid : playerIsInStructure.keySet()) {
                     var isInStructure = playerIsInStructure.get(uuid).a();
-                    var restriction = playerIsInStructure.get(uuid).b();
-                    var structure = playerIsInStructure.get(uuid).c();
+                    // var restriction = playerIsInStructure.get(uuid).b();
+                    var structure = playerIsInStructure.get(uuid).b();
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
                     if (event.getEntity().getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(player, restriction.getStage())) {
                         if (restriction.isDisabled(Attributes.BLOCK_PLACING)) {
@@ -183,7 +189,9 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(player)) {
             for (UUID uuid : playerIsInStructure.keySet()) {
                 var isInStructure = playerIsInStructure.get(uuid).a();
-                var restriction = playerIsInStructure.get(uuid).b();
+                var structure = playerIsInStructure.get(uuid).b();
+                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+
 
                 if (player.getUUID().equals(uuid) && isInStructure && !AStagesUtil.hasStage(player, restriction.getStage())) {
                     if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_BLOCKS)) {

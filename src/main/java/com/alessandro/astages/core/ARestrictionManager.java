@@ -16,7 +16,6 @@ import java.util.Set;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
-
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
@@ -65,7 +64,7 @@ public class ARestrictionManager {
         ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
 
         // RECIPE
-        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(restriction.getId(), s, restriction.getType(), restriction.getRecipes()))));
+        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(restriction.getId(), s, restriction.getPriority(), restriction.getType(), restriction.getRecipes()))));
 
         // ORE
         ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {

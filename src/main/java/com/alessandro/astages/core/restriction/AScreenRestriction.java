@@ -14,6 +14,10 @@ import java.util.function.Function;
 public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuType<?>, MenuType<?>> {
     private final List<MenuType<?>> menus = new ArrayList<>();
 
+    public List<MenuType<?>> getMenus() {
+        return menus;
+    }
+
     public AScreenRestriction(String id, String stage) {
         super(id, stage);
     }

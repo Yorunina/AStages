@@ -86,6 +86,6 @@ public class ARecipeRestriction extends ARestriction<ARecipeRestriction, RecipeW
 
     @Override
     public void markAsDirty() {
-        ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(getId(), getStage(), type, recipes));
+        ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
     }
 }
