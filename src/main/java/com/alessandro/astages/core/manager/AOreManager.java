@@ -37,8 +37,6 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     }
 
     public void synchronizeWithClient(ServerPlayer player) {
-        restrictions.forEach((s, restrictions) -> {
-            restrictions.forEach(r -> ModNetworking.sendToPlayer(new OreSyncerS2CPacket(r.getId(), s, r.getOriginal(), r.getReplacement(), true), player));
-        });
+        getRestrictions().forEach(r -> ModNetworking.sendToPlayer(new OreSyncerS2CPacket(r.getId(), r.getStage(), r.getOriginal(), r.getReplacement(), true), player));
     }
 }

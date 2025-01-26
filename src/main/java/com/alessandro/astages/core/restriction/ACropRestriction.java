@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class ACropRestriction extends ARestriction<ACropRestriction, Block, CropWrapper> {
-    // private final List<Block> crops = new ArrayList<>();
     private Block crop;
 
     public ACropRestriction(String id, String stage) {
@@ -24,7 +23,6 @@ public class ACropRestriction extends ARestriction<ACropRestriction, Block, Crop
 
     @Override
     public ACropRestriction restrict(Block crop) {
-        // crops.add(crop);
         this.crop = crop;
 
         return this;

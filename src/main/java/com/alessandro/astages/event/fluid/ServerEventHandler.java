@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class ServerEventHandler {
     public static void onEvent(BlockEvent.FluidPlaceBlockEvent event) {
-
     }
 
     public static void onEvent(FillBucketEvent event) {

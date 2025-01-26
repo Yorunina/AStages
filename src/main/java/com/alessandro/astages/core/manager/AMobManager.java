@@ -37,8 +37,6 @@ public class AMobManager extends AManager<AMobRestriction, EntityType<?>, Entity
     }
 
     public void synchronizeWithClient(ServerPlayer player) {
-        restrictions.forEach((s, restrictions) -> {
-            restrictions.forEach(r -> ModNetworking.sendToPlayer(new MobSyncerS2CPacket(r.getId(), r.getStage(), r.getMobs(), r.get(Attributes.Mob.JADE_MOB_MESSAGE).get()), player));
-        });
+        getRestrictions().forEach(r -> ModNetworking.sendToPlayer(new MobSyncerS2CPacket(r.getId(), r.getStage(), r.getMobs(), r.get(Attributes.Mob.JADE_MOB_MESSAGE).get()), player));
     }
 }

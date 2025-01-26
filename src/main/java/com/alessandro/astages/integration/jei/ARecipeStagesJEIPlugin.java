@@ -21,6 +21,8 @@ import net.minecraftforge.fml.util.thread.EffectiveSide;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 @JeiPlugin
 public class ARecipeStagesJEIPlugin implements IModPlugin {
@@ -56,16 +58,15 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         updateRecipesForType(RecipeType.SMITHING, RecipeTypes.SMITHING);
     }
 
-    @SuppressWarnings("all")
     private <C extends Container, T extends Recipe<C>> void updateRecipesForType(RecipeType<T> vanillaType, mezz.jei.api.recipe.RecipeType<T> jeiType) {
         if (runtime == null) { return; }
 
         var map = AClientRestrictionManager.RECIPE_INSTANCE.getAllRecipesForType(vanillaType);
         List<T> recipeList;
-        var lookup = runtime.getRecipeManager().createRecipeLookup(jeiType).includeHidden().get();
+        Supplier<Stream<T>> lookup = () -> runtime.getRecipeManager().createRecipeLookup(jeiType).includeHidden().get();
 
         for (var stage : map.keySet()) {
-            recipeList = lookup.filter(c -> map.get(stage).contains(c.getId())).toList();
+            recipeList = lookup.get().filter(c -> map.get(stage).contains(c.getId())).toList();
 
             if (ClientPlayerStage.hasStage(stage)) {
                 runtime.getRecipeManager().unhideRecipes(jeiType, recipeList);

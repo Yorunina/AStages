@@ -50,7 +50,6 @@ public class AItemRestriction extends ARestriction<AItemRestriction, Predicate<I
             .addAttribute(Attributes.Item.PLACING_MESSAGE)
             .addAttribute(Attributes.Item.JADE_ITEM_MESSAGE)
             .addAttribute(Attributes.Item.JADE_BLOCK_MESSAGE);
-//            .addAttribute(Attributes.Item.A_USING_MESSAGE);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,7 @@ public class ARestrictionManager {
         ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
     }
 
+    @UnderDevelopment
     public static void reloadAfterScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) {
             return;
@@ -64,17 +66,13 @@ public class ARestrictionManager {
         ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
 
         // RECIPE
-        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(restriction.getId(), s, restriction.getPriority(), restriction.getType(), restriction.getRecipes()))));
+        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(r.getId(), r.getStage(), r.getPriority(), r.getType(), r.getRecipes())));
 
         // ORE
-        ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
-            ModNetworking.sendToClients(new OreSyncerS2CPacket(restriction.getId(), s, restriction.getOriginal(), restriction.getReplacement(), false));
-        }));
+        ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new OreSyncerS2CPacket(r.getId(), r.getStage(), r.getOriginal(), r.getReplacement(), false)));
 
         // MOB
-        ARestrictionManager.MOB_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
-            ModNetworking.sendToClients(new MobSyncerS2CPacket(restriction.getId(), restriction.getStage(), restriction.getMobs(), restriction.get(Attributes.Mob.JADE_MOB_MESSAGE).get()));
-        }));
+        ARestrictionManager.MOB_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new MobSyncerS2CPacket(r.getId(), r.getStage(), r.getMobs(), r.get(Attributes.Mob.JADE_MOB_MESSAGE).get())));
 
         // ORE STAGES
         synchronizeOreStages(null);

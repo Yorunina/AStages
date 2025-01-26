@@ -4,7 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.restriction.AItemRestriction;
 import com.alessandro.astages.store.AManager;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.AStagesUtil;import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -25,6 +25,7 @@ public class AItemManager extends AManager<AItemRestriction, Predicate<ItemStack
     }
 
     @Override
+    @UnderDevelopment
     public void addRestriction(AItemRestriction restriction) {
         super.addRestriction(restriction);
 
@@ -71,11 +72,9 @@ public class AItemManager extends AManager<AItemRestriction, Predicate<ItemStack
     public AItemRestriction getRestriction(ItemStack stack) {
         if (stack.isEmpty()) { return null; }
 
-        for (String stage : restrictions.keySet()) {
-            for (AItemRestriction restriction : restrictions.get(stage)) {
-                if (restriction.isRestricted(stack)) {
-                    return restriction;
-                }
+        for (AItemRestriction restriction : getRestrictions()) {
+            if (restriction.isRestricted(stack)) {
+                return restriction;
             }
         }
 

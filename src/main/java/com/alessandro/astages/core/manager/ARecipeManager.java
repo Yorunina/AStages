@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.manager;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.restriction.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
@@ -44,6 +45,8 @@ public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, 
     }
 
     public void synchronizeWithClient(ServerPlayer player) {
+        AStages.LOGGER.debug("CACHE: {}", CACHE);
+
         for (var type : CACHE.keySet()) {
             for (var restriction : CACHE.get(type)) {
                 ModNetworking.sendToPlayer(new JeiRecipeSyncerS2CPacket(restriction.getId(), restriction.getStage(), restriction.getPriority(), restriction.getType(), restriction.getRecipes()), player);

@@ -11,19 +11,20 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class BlockEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onAttachedCapabilities(@NotNull AttachCapabilitiesEvent<BlockEntity> event) {
+    public static void onAttachedCapabilities(AttachCapabilitiesEvent<BlockEntity> event) {
         event.addCapability(new ResourceLocation(AStages.MODID, "owners"), new BlockStageProvider());
     }
 
     @SubscribeEvent
-    public static void blockPlaced(BlockEvent.@NotNull EntityPlaceEvent event) {
+    public static void blockPlaced(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof Player player) {
             BlockPos pos = event.getPos();
 
