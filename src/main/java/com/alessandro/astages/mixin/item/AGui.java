@@ -36,8 +36,6 @@ public class AGui {
 
             // New part
             MutableComponent mutablecomponent = Component.empty();
-//            AItemRestriction restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
-//            var restriction = AClientRestrictionManager.ITEM_INSTANCE.isRenderItemNameRestricted(this.lastToolHighlight);
             var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
 
             if (restriction != null && !restriction.renderItemName()) {
@@ -78,9 +76,4 @@ public class AGui {
 
         this.minecraft.getProfiler().pop();
     }
-
-//    @Inject(method = "renderSelectedItemName(Lnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE", target = "r"))
-//    public void astages$renderSelectedItemName(GuiGraphics pGuiGraphics, CallbackInfo ci) {
-//
-//    }
 }

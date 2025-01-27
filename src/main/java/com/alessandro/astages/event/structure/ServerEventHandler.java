@@ -55,8 +55,6 @@ public class ServerEventHandler {
 
                 playerIsInStructure.put(playerUUID, newList);
             }
-
-            AStages.LOGGER.debug(playerIsInStructure.toString());
         }
 
         tick++;
@@ -73,9 +71,11 @@ public class ServerEventHandler {
                 var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
-                    event.setCanceled(true);
-                    restriction.displayMessage(Attributes.Structure.MINING_MESSAGE, structure, player);
-                    break;
+                    if (!restriction.isBlockBreakable(event.getState())) {
+                        event.setCanceled(true);
+                        restriction.displayMessage(Attributes.Structure.MINING_MESSAGE, structure, player);
+                        break;
+                    }
                 }
             }
         }
@@ -92,9 +92,12 @@ public class ServerEventHandler {
                 var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
                 if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
-                    event.setCanceled(true);
-                    restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
-                    break;
+                    var clickedBlock = event.getLevel().getBlockState(event.getPos());
+                    if (!restriction.isBlockInteractable(clickedBlock)) {
+                        event.setCanceled(true);
+                        restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
+                        break;
+                    }
                 }
             }
         }
@@ -110,9 +113,11 @@ public class ServerEventHandler {
                 var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
                 if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
-                    event.setCanceled(true);
-                    restriction.displayMessage(Attributes.Structure.ATTACK_MESSAGE, structure, player);
-                    break;
+                    if (!restriction.isEntityTargetable(event.getTarget().getType())) {
+                        event.setCanceled(true);
+                        restriction.displayMessage(Attributes.Structure.ATTACK_MESSAGE, structure, player);
+                        break;
+                    }
                 }
             }
         }
@@ -127,9 +132,11 @@ public class ServerEventHandler {
                 var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
-                    event.setCanceled(true);
-                    restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
-                    break;
+                    if (!restriction.isBlockPlaceable(event.getPlacedBlock())) {
+                        event.setCanceled(true);
+                        restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
+                        break;
+                    }
                 }
             }
         }

@@ -54,7 +54,6 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateTame(@NotNull ASimpleRestriction simple) {
-        // Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).removeIf();
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
     }
 

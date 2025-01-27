@@ -1,10 +1,10 @@
 package com.alessandro.astages.core.manager;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.restriction.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.syncer.JeiRecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.syncer.RequestJeiRecipeReloadS2CPacket;
 import com.alessandro.astages.store.AManager;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,13 +45,13 @@ public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, 
     }
 
     public void synchronizeWithClient(ServerPlayer player) {
-        AStages.LOGGER.debug("CACHE: {}", CACHE);
-
         for (var type : CACHE.keySet()) {
             for (var restriction : CACHE.get(type)) {
                 ModNetworking.sendToPlayer(new JeiRecipeSyncerS2CPacket(restriction.getId(), restriction.getStage(), restriction.getPriority(), restriction.getType(), restriction.getRecipes()), player);
             }
         }
+
+        ModNetworking.sendToPlayer(new RequestJeiRecipeReloadS2CPacket(), player);
 
         // restrictions.forEach((s, restrictions) -> restrictions.forEach(r -> ModNetworking.sendToPlayer(new JeiRecipeSyncerS2CPacket(r.getId(), s, r.getType(), r.getRecipes()), player)));
     }

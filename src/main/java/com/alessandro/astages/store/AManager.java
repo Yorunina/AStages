@@ -1,6 +1,7 @@
 package com.alessandro.astages.store;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
@@ -35,7 +36,7 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
     }
 
     public void addRestriction(R restriction) {
-        if (IDS.containsKey(restriction.getId())) {
+        if (IDS.containsKey(restriction.getId()) && AStagesCommon.ENABLE_LOGS.get()) {
             AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
             return;
         }

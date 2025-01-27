@@ -29,7 +29,10 @@ public class PlayerEventHandler {
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
 
         if (!event.getEntity().level().isClientSide) {
+            AStages.LOGGER.warn("AStages recipe sent to client!!");
+            var time = System.currentTimeMillis();
             ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
+            AStages.LOGGER.warn("AStages recipe sending in {} ms!", System.currentTimeMillis() - time);
             ARestrictionManager.ORE_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
             ARestrictionManager.MOB_INSTANCE.synchronizeWithClient((ServerPlayer) event.getEntity());
             ARestrictionManager.synchronizeOreStages((ServerPlayer) event.getEntity());

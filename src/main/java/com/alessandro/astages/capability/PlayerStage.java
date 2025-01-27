@@ -45,7 +45,7 @@ public class PlayerStage {
         MinecraftForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
-            ModNetworking.sendToPlayer(new StageDataSyncS2CPacket(stages), (ServerPlayer) player);
+            ModNetworking.sendToPlayer(new StageDataSyncS2CPacket(stages, operation), (ServerPlayer) player);
 
             if (!silentTitle && stage != null) {
                 if (player instanceof ServerPlayer serverPlayer) {

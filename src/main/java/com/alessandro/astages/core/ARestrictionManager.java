@@ -78,6 +78,7 @@ public class ARestrictionManager {
         synchronizeOreStages(null);
 
         ModNetworking.sendToClients(new RequestReRenderingS2CPacket());
+        ModNetworking.sendToClients(new RequestJeiRecipeReloadS2CPacket());
     }
 
     public static void synchronizeOreStages(ServerPlayer player) {

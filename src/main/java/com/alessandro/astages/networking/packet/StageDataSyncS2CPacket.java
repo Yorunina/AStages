@@ -1,6 +1,7 @@
 package com.alessandro.astages.networking.packet;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,9 +16,11 @@ import java.util.function.Supplier;
 
 public class StageDataSyncS2CPacket {
     private final List<String> stages;
+    private final PlayerStage.Operation operation;
 
-    public StageDataSyncS2CPacket(List<String> stages) {
+    public StageDataSyncS2CPacket(List<String> stages, PlayerStage.Operation operation) {
         this.stages = stages;
+        this.operation = operation;
     }
 
     public StageDataSyncS2CPacket(@NotNull FriendlyByteBuf buf) {
@@ -28,7 +31,8 @@ public class StageDataSyncS2CPacket {
             newStageList.add(new String(byteList));
         }
 
-        stages = newStageList;
+        this.stages = newStageList;
+        this.operation = buf.readEnum(PlayerStage.Operation.class);
     }
 
     public void toBytes(@NotNull FriendlyByteBuf buf) {
@@ -39,6 +43,7 @@ public class StageDataSyncS2CPacket {
         });
 
         buf.writeCollection(stagesAsByte, FriendlyByteBuf::writeByteArray);
+        buf.writeEnum(operation);
     }
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
@@ -56,7 +61,7 @@ public class StageDataSyncS2CPacket {
 
 
             ClientPlayerStage.set(stages);
-            MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent(new ArrayList<>(differences)));
+            MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent(new ArrayList<>(differences), operation));
         });
 
         ctx.get().setPacketHandled(true);
