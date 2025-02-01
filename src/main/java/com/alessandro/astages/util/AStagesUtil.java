@@ -157,4 +157,12 @@ public class AStagesUtil {
     public static @NotNull ItemStack blockToStack(Block block) {
         return new ItemStack(block);
     }
+
+    public static boolean itemStacksMatchesIgnoringCount(ItemStack stack, ItemStack other) {
+        if (stack == other) {
+            return true;
+        } else {
+            return ItemStack.isSameItemSameTags(stack, other);
+        }
+    }
 }

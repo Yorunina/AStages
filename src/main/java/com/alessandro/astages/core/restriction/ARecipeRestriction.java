@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.restriction;
 
+import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeOutputWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
@@ -17,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ARecipeRestriction extends ARestriction<ARecipeRestriction, RecipeWrapper, RecipeWrapper> implements AMarkable {
-    private RecipeType<?> type;
+    private RecipeType<?> type = null;
     private Item output = null;
+    private String modId = null;
     private final List<ResourceLocation> recipes = new ArrayList<>();
 
     private final RuntimeException TYPE_EXCEPTION = new RuntimeException("Trying to add recipes of different type for restriction with id: " + getId() + "!");
@@ -61,6 +63,11 @@ public class ARecipeRestriction extends ARestriction<ARecipeRestriction, RecipeW
         return this;
     }
 
+    public ARecipeRestriction restrict(@NotNull RecipeModWrapper wrapper) {
+        this.modId = wrapper.modId();
+        return this;
+    }
+
     @Override
     public boolean isRestricted(@NotNull RecipeWrapper wrapper) {
         if (type != wrapper.type()) {
@@ -77,6 +84,12 @@ public class ARecipeRestriction extends ARestriction<ARecipeRestriction, RecipeW
         return output.equals(wrapper.output());
     }
 
+    public boolean isRestricted(RecipeModWrapper wrapper) {
+        if (modId == null) { return false; }
+
+        return modId.equals(wrapper.modId());
+    }
+
     public RecipeType<?> getType() {
         return type;
     }
@@ -85,9 +98,16 @@ public class ARecipeRestriction extends ARestriction<ARecipeRestriction, RecipeW
         return recipes;
     }
 
+    public String getModId() {
+        return modId;
+    }
+
     @Override
     public void markAsDirty() {
-        ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
+        if (type != null && !recipes.isEmpty()) {
+            ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
+        }
+
         ModNetworking.sendToClients(new RequestJeiRecipeReloadS2CPacket());
     }
 }

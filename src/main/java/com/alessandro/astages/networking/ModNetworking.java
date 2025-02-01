@@ -93,6 +93,12 @@ public class ModNetworking {
             .consumerMainThread(JeiRecipeSyncerS2CPacket::handle)
             .add();
 
+        net.messageBuilder(JeiRecipeModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(JeiRecipeModSyncerS2CPacket::new)
+            .encoder(JeiRecipeModSyncerS2CPacket::toBytes)
+            .consumerMainThread(JeiRecipeModSyncerS2CPacket::handle)
+            .add();
+
         net.messageBuilder(RequestJeiRecipeReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(RequestJeiRecipeReloadS2CPacket::new)
             .encoder(RequestJeiRecipeReloadS2CPacket::toBytes)

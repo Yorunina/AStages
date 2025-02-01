@@ -67,14 +67,16 @@ public class ServerEventHandler {
             Player player = event.getPlayer();
             UUID playerUUID = player.getUUID();
 
-            for (var structure : playerIsInStructure.get(playerUUID)) {
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+            if (playerIsInStructure.containsKey(playerUUID)) {
+                for (var structure : playerIsInStructure.get(playerUUID)) {
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
-                    if (!restriction.isBlockBreakable(event.getState())) {
-                        event.setCanceled(true);
-                        restriction.displayMessage(Attributes.Structure.MINING_MESSAGE, structure, player);
-                        break;
+                    if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
+                        if (!restriction.isBlockBreakable(event.getState())) {
+                            event.setCanceled(true);
+                            restriction.displayMessage(Attributes.Structure.MINING_MESSAGE, structure, player);
+                            break;
+                        }
                     }
                 }
             }
@@ -88,15 +90,17 @@ public class ServerEventHandler {
             Player player = event.getEntity();
             UUID playerUUID = player.getUUID();
 
-            for (var structure : playerIsInStructure.get(playerUUID)) {
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+            if (playerIsInStructure.containsKey(playerUUID)) {
+                for (var structure : playerIsInStructure.get(playerUUID)) {
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
-                    var clickedBlock = event.getLevel().getBlockState(event.getPos());
-                    if (!restriction.isBlockInteractable(clickedBlock)) {
-                        event.setCanceled(true);
-                        restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
-                        break;
+                    if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
+                        var clickedBlock = event.getLevel().getBlockState(event.getPos());
+                        if (!restriction.isBlockInteractable(clickedBlock)) {
+                            event.setCanceled(true);
+                            restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
+                            break;
+                        }
                     }
                 }
             }
@@ -109,14 +113,16 @@ public class ServerEventHandler {
             Player player = event.getEntity();
             UUID playerUUID = player.getUUID();
 
-            for (var structure : playerIsInStructure.get(playerUUID)) {
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+            if (playerIsInStructure.containsKey(playerUUID)) {
+                for (var structure : playerIsInStructure.get(playerUUID)) {
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
-                    if (!restriction.isEntityTargetable(event.getTarget().getType())) {
-                        event.setCanceled(true);
-                        restriction.displayMessage(Attributes.Structure.ATTACK_MESSAGE, structure, player);
-                        break;
+                    if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
+                        if (!restriction.isEntityTargetable(event.getTarget().getType())) {
+                            event.setCanceled(true);
+                            restriction.displayMessage(Attributes.Structure.ATTACK_MESSAGE, structure, player);
+                            break;
+                        }
                     }
                 }
             }
@@ -128,14 +134,16 @@ public class ServerEventHandler {
         if (event.getEntity() instanceof ServerPlayer player) {
             UUID playerUUID = player.getUUID();
 
-            for (var structure : playerIsInStructure.get(playerUUID)) {
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+            if (playerIsInStructure.containsKey(playerUUID)) {
+                for (var structure : playerIsInStructure.get(playerUUID)) {
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
-                    if (!restriction.isBlockPlaceable(event.getPlacedBlock())) {
-                        event.setCanceled(true);
-                        restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
-                        break;
+                    if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
+                        if (!restriction.isBlockPlaceable(event.getPlacedBlock())) {
+                            event.setCanceled(true);
+                            restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
+                            break;
+                        }
                     }
                 }
             }
@@ -148,19 +156,21 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(player)) {
             UUID playerUUID = player.getUUID();
 
-            for (var structure : playerIsInStructure.get(playerUUID)) {
-                var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+            if (playerIsInStructure.containsKey(playerUUID)) {
+                for (var structure : playerIsInStructure.get(playerUUID)) {
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
 
-                if (restriction != null) {
-                    if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_BLOCKS)) {
-                        event.getAffectedBlocks().clear();
+                    if (restriction != null) {
+                        if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_BLOCKS)) {
+                            event.getAffectedBlocks().clear();
+                        }
+
+                        if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_ENTITIES)) {
+                            event.getAffectedEntities().clear();
+                        }
+
+                        break;
                     }
-
-                    if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_ENTITIES)) {
-                        event.getAffectedEntities().clear();
-                    }
-
-                    break;
                 }
             }
         }

@@ -11,7 +11,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.runtime.IJeiRuntime;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
@@ -29,6 +28,16 @@ import java.util.stream.Stream;
 public class ARecipeStagesJEIPlugin implements IModPlugin {
     private IJeiRuntime runtime;
     private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "recipe_jei");
+//    public static final List<mezz.jei.api.recipe.RecipeType<?>> SUPPORTED_TYPES = new ArrayList<>();
+//
+//    static {
+//        SUPPORTED_TYPES.add(RecipeTypes.CRAFTING);
+//        SUPPORTED_TYPES.add(RecipeTypes.SMELTING);
+//        SUPPORTED_TYPES.add(RecipeTypes.SMOKING);
+//        SUPPORTED_TYPES.add(RecipeTypes.CAMPFIRE_COOKING);
+//        SUPPORTED_TYPES.add(RecipeTypes.BLASTING);
+//        SUPPORTED_TYPES.add(RecipeTypes.SMITHING);
+//    }
 
     public ARecipeStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;
@@ -65,6 +74,8 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         updateRecipesForType(RecipeType.BLASTING, RecipeTypes.BLASTING);
         updateRecipesForType(RecipeType.SMITHING, RecipeTypes.SMITHING);
 
+        restrictAllRecipesForMods();
+
         AStages.LOGGER.warn("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
     }
 
@@ -86,9 +97,26 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         }
     }
 
-    private void restrictAllRecipesForMod() {
-        Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
-            .filter(r -> r.getId().getNamespace().equals("create"))
+    private void restrictAllRecipesForMods() {
+        for (var mod : AClientRestrictionManager.RECIPE_INSTANCE.MOD_CACHE) {
+            restrictAllRecipesForModAndType(RecipeTypes.CRAFTING, mod.modId(), mod.stage());
+            restrictAllRecipesForModAndType(RecipeTypes.SMELTING, mod.modId(), mod.stage());
+            restrictAllRecipesForModAndType(RecipeTypes.SMOKING, mod.modId(), mod.stage());
+            restrictAllRecipesForModAndType(RecipeTypes.CAMPFIRE_COOKING, mod.modId(), mod.stage());
+            restrictAllRecipesForModAndType(RecipeTypes.BLASTING, mod.modId(), mod.stage());
+            restrictAllRecipesForModAndType(RecipeTypes.SMITHING, mod.modId(), mod.stage());
+        }
+    }
+
+    private <C extends Container, T extends Recipe<C>> void restrictAllRecipesForModAndType(mezz.jei.api.recipe.RecipeType<T> type, String modId, String stage) {
+        var newList = runtime.getRecipeManager().createRecipeLookup(type).includeHidden().get()
+            .filter(r -> r.getId().getNamespace().equals(modId))
             .toList();
+
+        if (ClientPlayerStage.hasStage(stage)) {
+            runtime.getRecipeManager().unhideRecipes(type, newList);
+        } else {
+            runtime.getRecipeManager().hideRecipes(type, newList);
+        }
     }
 }

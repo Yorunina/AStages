@@ -7,6 +7,7 @@ import com.alessandro.astages.core.restriction.*;
 import com.alessandro.astages.core.stage.AStage;
 import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.core.wrapper.OreWrapper;
+import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
@@ -240,6 +241,15 @@ public class AStagesKubeJSUtil {
         for (ResourceLocation r : recipeIds) {
             restriction.restrict(new RecipeWrapper(recipeType, r));
         }
+
+        ARestrictionManager.RECIPE_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
+    public static ARecipeRestriction addRestrictionForModRecipe(String id, String stage, String modId) {
+        var restriction = new ARecipeRestriction(id, stage);
+        restriction.restrict(new RecipeModWrapper(modId));
 
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(restriction);
 

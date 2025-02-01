@@ -13,10 +13,12 @@ public class AClientRecipeManager implements AClientManager {
     public final Map<String, List<AClientRecipeRestriction>> restrictions = new HashMap<>();
     // Used for JEI/REI recipe hiding: contains all recipes TO HIDE!
     public final OrderedMultiMap<RecipeType<?>, AClientRecipeRestriction> CACHE = OrderedMultiMap.create();
+    public final List<AClientRecipeModRestriction> MOD_CACHE = new ArrayList<>();
 
     public void reloadBeforeScripts() {
         restrictions.clear();
         CACHE.clear();
+        MOD_CACHE.clear();
     }
 
     public void addRestriction(String stage, @NotNull AClientRecipeRestriction restriction) {
@@ -30,6 +32,10 @@ public class AClientRecipeManager implements AClientManager {
         restrictions.put(stage, newList);
 
         CACHE.put(restriction.type(), restriction);
+    }
+
+    public void addRestriction(AClientRecipeModRestriction restriction) {
+        MOD_CACHE.add(restriction);
     }
 
     public Map<String, Set<ResourceLocation>> getAllRecipesForType(RecipeType<?> type) {

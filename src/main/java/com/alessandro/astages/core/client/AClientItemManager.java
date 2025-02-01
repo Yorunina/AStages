@@ -5,6 +5,7 @@ import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.syncer.IsItemRestrictedC2SPacket;
 import com.alessandro.astages.util.AClientManager;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,14 +44,14 @@ public class AClientItemManager implements AClientManager {
         if (stack.isEmpty()) { return null; }
 
         for (var s : notRestricted) {
-            if (s.equals(stack, false)) {
+            if (AStagesUtil.itemStacksMatchesIgnoringCount(s, stack)) {
                 return null;
             }
         }
 
         for (String stage : restrictions.keySet()) {
             for (AClientItemRestriction restriction : restrictions.get(stage)) {
-                if (restriction.stack().equals(stack, false)) {
+                if (AStagesUtil.itemStacksMatchesIgnoringCount(restriction.stack(), stack)) {
                     if (ClientPlayerStage.hasStage(stage)) {
                         return null;
                     } else {
