@@ -6,11 +6,13 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.develop.ToBeTested;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -60,6 +62,30 @@ public class ServerEventHandler {
         tick++;
         if (tick >= AStagesCommon.TICK_STRUCTURE_UPDATING.get()) { tick = 0; }
     }
+
+    private static void teleportPlayerOutFromTheStructure(Player player) {
+        var range = 1;
+        var level = player.level();
+
+        level.getChunkAt(new BlockPos(0, 0, 0)).getHeight(Heightmap.Types.WORLD_SURFACE_WG, 0, 0);
+    }
+//
+//    private static void summonMobsOnPlayerEntering(Player player) {
+//        var entity = EntityType.ZOMBIE.create(player.level());
+//
+//        if (entity != null) {
+//            entity.addTag("astages/" + player.getUUID());
+//            entity.setPos(player.position());
+//            entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+//            entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+//            entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+//            entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+//            var sword = new ItemStack(Items.DIAMOND_SWORD);
+//            sword.enchant(Enchantments.SHARPNESS, 10000);
+//            entity.setItemInHand(InteractionHand.MAIN_HAND, sword);
+//            entity.setInvulnerable(true);
+//        }
+//    }
 
     @SubscribeEvent
     public static void onBlockBroken(BlockEvent.BreakEvent event) {

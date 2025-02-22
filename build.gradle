@@ -142,13 +142,13 @@ dependencies {
 
     // Botania
     // compileOnly fg.deobf("curse.maven:botania-225643:5594997")
-    // implementation fg.deobf("curse.maven:botania-225643:5002307")
-    // implementation fg.deobf("curse.maven:curios-309927:5680164")
-    // implementation fg.deobf("curse.maven:patchouli-306770:4966125")
+    implementation fg.deobf("curse.maven:botania-225643:5002307")
+    implementation fg.deobf("curse.maven:curios-309927:5680164")
+    implementation fg.deobf("curse.maven:patchouli-306770:4966125")
 
     // Mekanism
     // compileOnly fg.deobf("curse.maven:mekanism-268560:5662583")
-    // implementation fg.deobf("curse.maven:mekanism-268560:5662583")
+    implementation fg.deobf("curse.maven:mekanism-268560:5662583")
 
     // Thermal
     // implementation fg.deobf("curse.maven:thermal-expansion-69163:5372749")
@@ -161,8 +161,13 @@ dependencies {
     // compileOnly fg.deobf("com.teamcofh:thermal_expansion:${minecraft_version}-${thermal_expansion_version}")
 
     // Create
+    implementation fg.deobf("curse.maven:create-328085:5838779")
     // implementation fg.deobf("curse.maven:create-328085:5838779")
-    // implementation fg.deobf("curse.maven:create-328085:5838779")
+
+
+    // Fast Workbench
+    implementation fg.deobf("curse.maven:fastworkbench-288885:5101229")
+    implementation fg.deobf("curse.maven:placebo-283644:5414631")
 
     // In Control!
     compileOnly fg.deobf("curse.maven:in-control-257356:5932870")
@@ -217,7 +222,7 @@ dependencies {
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
     // Just Enough Resources
-    implementation fg.deobf("curse.maven:just-enough-resources-jer-240630:5057220")
+    // implementation fg.deobf("curse.maven:just-enough-resources-jer-240630:5057220")
 }
 
 tasks.named('processResources', ProcessResources).configure {

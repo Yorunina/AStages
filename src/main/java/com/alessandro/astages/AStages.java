@@ -5,6 +5,7 @@ import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.item.ModItems;
 import com.alessandro.astages.networking.ModNetworking;
+import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 public class AStages {
     public static final String MODID = "astages";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Stopwatch TIMER = Stopwatch.createUnstarted();
 
     public AStages() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -30,4 +32,8 @@ public class AStages {
 
         ModNetworking.register();
     }
+
+//    public static void wrapForTime() {
+//
+//    }
 }

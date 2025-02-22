@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "astages.refmap.json",
   "mixins": [
+    "AFastBenchUtil",
     "AModRuleCompatibilityLayer",
     "APlayerEventJS",
     "enchant.AEnchantmentMenu",
@@ -15,7 +16,8 @@
     "recipe.minecraft.ACraftingMenu",
     "recipe.minecraft.ASmithingMenu",
     "recipe.minecraft.AStonecutterMenu",
-    "screen.AServerPlayer"
+    "screen.AServerPlayer",
+    "structure.AEntity"
   ],
   "client": [
     "item.AGui",

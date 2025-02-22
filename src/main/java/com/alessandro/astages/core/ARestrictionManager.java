@@ -1,8 +1,13 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.manager.*;
+import com.alessandro.astages.core.restriction.item.RegisteredModels;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
+import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.TagSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ARestrictionType;
@@ -17,7 +22,8 @@ import java.util.Set;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
-    public static final AItemManager ITEM_INSTANCE = new AItemManager();
+    // public static final AItemManager ITEM_INSTANCE = new AItemManager();
+    public static final AItemManager NEW_ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
     public static final AStructureManager STRUCTURE_INSTANCE = new AStructureManager();
@@ -32,12 +38,15 @@ public class ARestrictionManager {
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
 
+    public static RegisteredModels MODELS = new RegisteredModels();
+
     public static void reloadBeforeScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) {
             return;
         }
 
-        ITEM_INSTANCE.reloadBeforeScripts();
+        // ITEM_INSTANCE.reloadBeforeScripts();
+        NEW_ITEM_INSTANCE.reloadBeforeScripts();
         DIMENSION_INSTANCE.reloadBeforeScripts();
         MOB_INSTANCE.reloadBeforeScripts();
         STRUCTURE_INSTANCE.reloadBeforeScripts();
@@ -56,29 +65,64 @@ public class ARestrictionManager {
     }
 
     @UnderDevelopment
+    public static void onPlayerLoggedIn(ServerPlayer player) {
+        // ITEMS
+        for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getItemRestrictions()) {
+            ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(r.getId(), r.getStage(), r.getItems()), player);
+        }
+
+        for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getModRestrictions()) {
+            ModNetworking.sendToPlayer(new ModSyncerS2CPacket(r.getId(), r.getStage(), r.getModId(), r.getIgnoredItems(), r.getIgnoredTags()), player);
+        }
+
+        for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getTagRestrictions()) {
+            ModNetworking.sendToPlayer(new TagSyncerS2CPacket(r.getId(), r.getStage(), r.getTag(), r.getIgnoredItems()), player);
+        }
+
+        // RECIPES
+//        AStages.LOGGER.warn("AStages recipe sent to client!!");
+//        var time = System.currentTimeMillis();
+        AStages.TIMER.start();
+        ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient(player);
+        AStages.TIMER.stop();
+        AStages.LOGGER.warn("AStages recipe sending in {}!", AStages.TIMER);
+
+        // MOBS
+        ARestrictionManager.MOB_INSTANCE.synchronizeWithClient(player);
+
+        // ORES
+        ARestrictionManager.ORE_INSTANCE.synchronizeWithClient(player);
+        ARestrictionManager.synchronizeOreStages(player);
+
+        ModNetworking.sendToClients(new JeiSyncerS2CPacket());
+    }
+
+    @UnderDevelopment
     public static void reloadAfterScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) {
             return;
         }
 
         // ITEMS AUTOMATICALLY -> question/answer system
+
+        // ITEMS
+
+
         // JEI
-        ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
+//        ModNetworking.sendToClients(new RequestJeiClientReloadS2CPacket());
 
-        // RECIPE
+        // RECIPES
+        // TODO: BROKEN RECIPES!
         ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(r.getId(), r.getStage(), r.getPriority(), r.getType(), r.getRecipes())));
+        ModNetworking.sendToClients(new RequestJeiRecipeReloadS2CPacket());
 
-        // ORE
-        ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new OreSyncerS2CPacket(r.getId(), r.getStage(), r.getOriginal(), r.getReplacement(), false)));
-
-        // MOB
+        // MOBS
         ARestrictionManager.MOB_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new MobSyncerS2CPacket(r.getId(), r.getStage(), r.getMobs(), r.get(Attributes.Mob.JADE_MOB_MESSAGE).get())));
 
-        // ORE STAGES
+        // ORES
+        ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach(r -> ModNetworking.sendToClients(new OreSyncerS2CPacket(r.getId(), r.getStage(), r.getOriginal(), r.getReplacement(), false)));
         synchronizeOreStages(null);
-
         ModNetworking.sendToClients(new RequestReRenderingS2CPacket());
-        ModNetworking.sendToClients(new RequestJeiRecipeReloadS2CPacket());
     }
 
     public static void synchronizeOreStages(ServerPlayer player) {
@@ -92,7 +136,8 @@ public class ARestrictionManager {
     @SuppressWarnings("unchecked")
     public static <T> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
         return switch (type) {
-            case ITEM -> (T) ITEM_INSTANCE.getRestriction(id);
+            // case ITEM -> (T) ITEM_INSTANCE.getRestriction(id);
+            case ITEM -> (T) NEW_ITEM_INSTANCE.getRestriction(id);
             case MOB -> (T) MOB_INSTANCE.getRestriction(id);
             case DIMENSION -> (T) DIMENSION_INSTANCE.getRestriction(id);
             case STRUCTURE -> (T) STRUCTURE_INSTANCE.getRestriction(id);

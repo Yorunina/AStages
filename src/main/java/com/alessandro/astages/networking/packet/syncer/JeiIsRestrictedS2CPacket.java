@@ -1,6 +1,5 @@
 package com.alessandro.astages.networking.packet.syncer;
 
-import com.alessandro.astages.integration.jei.AItemStagesJEIPlugin;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -26,7 +25,7 @@ public class JeiIsRestrictedS2CPacket {
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // Here we are on client
-            AItemStagesJEIPlugin.itemsToHide.add(stack);
+//            AItemStagesJEIPlugin.itemsToHide.add(stack);
         });
 
         ctx.get().setPacketHandled(true);

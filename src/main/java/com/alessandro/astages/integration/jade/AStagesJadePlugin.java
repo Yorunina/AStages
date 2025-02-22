@@ -53,30 +53,32 @@ public class AStagesJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
                 var stack = AStagesUtil.blockToStack(original);
-                var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
+//                var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(stack);
 
-                if (restriction != null) {
-                    tooltip.clear();
-
-                    if (restriction.jadeBlockMessage() != null) {
-                        tooltip.add(restriction.jadeBlockMessage());
-                    }
-                }
+                // TODO: To be re-implemented!
+//                if (restriction != null) {
+//                    tooltip.clear();
+//
+//                    if (restriction.jadeBlockMessage() != null) {
+//                        tooltip.add(restriction.jadeBlockMessage());
+//                    }
+//                }
             }
 
             if (accessor instanceof EntityAccessor entityAccessor) {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(itemEntity.getItem());
+//                    var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(itemEntity.getItem());
 
-                    if (restriction != null) {
-                        tooltip.clear();
-
-                        if (restriction.jadeItemMessage() != null) {
-                            tooltip.add(restriction.jadeItemMessage());
-                        }
-                    }
+                    // TODO: To be re-implemented!
+//                    if (restriction != null) {
+//                        tooltip.clear();
+//
+//                        if (restriction.jadeItemMessage() != null) {
+//                            tooltip.add(restriction.jadeItemMessage());
+//                        }
+//                    }
                 }
             }
         });

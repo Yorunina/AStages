@@ -3,6 +3,8 @@ package com.alessandro.astages.networking;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.TagSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,6 +61,25 @@ public class ModNetworking {
             .decoder(NullItemSyncerS2CPacket::new)
             .encoder(NullItemSyncerS2CPacket::toBytes)
             .consumerMainThread(NullItemSyncerS2CPacket::handle)
+            .add();
+
+        // NEW!
+        net.messageBuilder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::new)
+            .encoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::toBytes)
+            .consumerMainThread(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::handle)
+            .add();
+
+        net.messageBuilder(TagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(TagSyncerS2CPacket::new)
+            .encoder(TagSyncerS2CPacket::toBytes)
+            .consumerMainThread(TagSyncerS2CPacket::handle)
+            .add();
+
+        net.messageBuilder(ModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(ModSyncerS2CPacket::new)
+            .encoder(ModSyncerS2CPacket::toBytes)
+            .consumerMainThread(ModSyncerS2CPacket::handle)
             .add();
 
         // JEI

@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 
 public class AStagesAddArgument implements ArgumentType<String> {
@@ -35,15 +36,13 @@ public class AStagesAddArgument implements ArgumentType<String> {
     @Override
     public String parse(@NotNull StringReader stringReader) throws CommandSyntaxException {
         var stageString = stringReader.readUnquotedString();
-
         if (stageString == null) { throw ERROR_INVALID_STAGE.create(null); }
-
         return stageString;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, SuggestionsBuilder builder) {
-        var toReturn = ARestrictionManager.ALL_STAGES;
+        var toReturn = new HashSet<>(ARestrictionManager.ALL_STAGES);
         ClientPlayerStage.getPlayerStages().forEach(toReturn::remove);
 
         return SharedSuggestionProvider.suggest(toReturn.stream().sorted(), builder);

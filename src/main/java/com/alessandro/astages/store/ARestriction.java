@@ -67,7 +67,7 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implem
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof ARestriction<?,?,?>)) { return false; }
+        if (!(obj instanceof ARestriction<?, ?, ?>)) { return false; }
 
         return Objects.equals(((ARestriction<?, ?, ?>) obj).id, this.id) &&
             Objects.equals(((ARestriction<?, ?, ?>) obj).stage, this.stage);

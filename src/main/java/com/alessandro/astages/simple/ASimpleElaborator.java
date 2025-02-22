@@ -2,9 +2,12 @@ package com.alessandro.astages.simple;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.restriction.*;
+import com.alessandro.astages.core.restriction.old.AItemRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -21,13 +24,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@Info("To be RE-IMPLEMENTED!")
 public class ASimpleElaborator {
+    @UnderDevelopment
     public static void elaborateItem(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))));
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))));
     }
 
+    @UnderDevelopment
     public static void elaborateMod(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace())));
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace())));
     }
 
     public static void elaborateDimension(@NotNull ASimpleRestriction simple) {
@@ -68,6 +74,7 @@ public class ASimpleElaborator {
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
     }
 
+    @UnderDevelopment
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
         restriction.restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
@@ -81,7 +88,7 @@ public class ASimpleElaborator {
             .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
             .set(Attributes.BLOCK_BREAKING, true);
 
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+        // ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {

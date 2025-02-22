@@ -1,0 +1,45 @@
+package com.alessandro.astages.networking.packet;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Supplier;
+
+@ParametersAreNonnullByDefault
+public abstract class RestrictionSyncerPacket {
+    private final String id;
+    private final String stage;
+
+    public RestrictionSyncerPacket(String id, String stage) {
+        this.id = id;
+        this.stage = stage;
+    }
+
+    public RestrictionSyncerPacket(FriendlyByteBuf buf) {
+        id = buf.readUtf();
+        stage = buf.readUtf();
+    }
+
+    public void toBytes(FriendlyByteBuf buf) {
+        buf.writeUtf(id);
+        buf.writeUtf(stage);
+    }
+
+    public abstract void handle();
+
+    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(this::handle);
+
+        ctx.get().setPacketHandled(true);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getStage() {
+        return stage;
+    }
+}

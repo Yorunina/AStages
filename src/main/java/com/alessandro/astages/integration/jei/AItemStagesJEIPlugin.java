@@ -1,46 +1,54 @@
 package com.alessandro.astages.integration.jei;
 
-// import mezz.jei.api.forge.ForgeTypes
-
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.core.client.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
-import com.alessandro.astages.event.custom.actions.ClientJeiReloadEvent;
 import com.alessandro.astages.event.custom.actions.ClientJeiUpdateEvent;
 import com.alessandro.astages.integration.Mods;
-import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.syncer.IsJeiRestrictedC2SPacket;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.runtime.IIngredientManager;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 @JeiPlugin
 public class AItemStagesJEIPlugin implements IModPlugin {
+    private static final HashMap<String, List<ItemStack>> ITEM_CACHE = new HashMap<>();
+    // private static final HashMap<String, List<Object>> GENERIC_CACHE = new HashMap<>();
+//    private static final HashMap<IIngredientType, HashMap<String, List<Object>>> GENERIC_CACHE = new HashMap<>();
+    private static final HashMap<String, HashMap<IIngredientType<?>, List<Object>>> GENERIC_CACHE = new HashMap<>();
+
+
     private IJeiRuntime runtime;
     private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "item_jei");
-    public static final List<ItemStack> itemsToHide = Collections.synchronizedList(new ArrayList<>());
+//    public static final List<ItemStack> itemsToHide = Collections.synchronizedList(new ArrayList<>());
+//    public static List<ItemStack> asyncItemsToHide = new ArrayList<>();
 
     public AItemStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;
 
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> requestItemsToServer());
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RecipesUpdatedEvent.class, e -> requestItemsToServer());
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientJeiReloadEvent.class, e -> requestItemsToServer());
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
+                if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
+                    updateGui(e.getOperation(), e.getStagesSynced());
+                }
+            });
 
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientJeiUpdateEvent.class, e -> updateGui());
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientJeiUpdateEvent.class, e -> updateGui(null, null));
         }
     }
 
@@ -54,32 +62,148 @@ public class AItemStagesJEIPlugin implements IModPlugin {
         runtime = jeiRuntime;
     }
 
-    public void requestItemsToServer() {
+    @SuppressWarnings("unchecked")
+    public <T> void updateGui(@Nullable PlayerStage.Operation operation, @Nullable List<String> stages) {
         if (runtime != null) {
-            IIngredientManager ingredientManager = runtime.getIngredientManager();
+            // TODO: HYBRID
+            var manager = runtime.getIngredientManager();
+            if (stages == null || operation == null) { // Build Cache
+                AStages.LOGGER.debug("Started CACHE building!");
+                AStages.TIMER.start();
 
-            // Reset JEI
-            if (!itemsToHide.isEmpty()) {
-                ingredientManager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemsToHide);
-                itemsToHide.clear();
+                // Items
+                var ingredients = manager.getAllIngredients(VanillaTypes.ITEM_STACK);
+                ingredients.forEach(ingredient -> {
+                    var st = AClientRestrictionManager.NEW_ITEM_INSTANCE.getStagesForStack(ingredient);
+                    if (!st.isEmpty()) {
+                        st.forEach(s -> ITEM_CACHE.computeIfAbsent(s, e -> new ArrayList<>()).add(ingredient));
+                    }
+                });
+
+                // Other Types
+                manager.getRegisteredIngredientTypes().forEach(type -> {
+                    if (type != VanillaTypes.ITEM_STACK) {
+                        manager.getAllIngredients(type).forEach(ingredient -> {
+                            var rs = manager.getIngredientHelper(ingredient).getResourceLocation(ingredient);
+                            var st = AClientRestrictionManager.NEW_ITEM_INSTANCE.getStagesForResourceLocation(rs);
+
+                            for (var stage : st) {
+                                GENERIC_CACHE.computeIfAbsent(stage, s -> new HashMap<>())
+                                    .computeIfAbsent(type, t -> new ArrayList<>())
+                                    .add(ingredient);
+                            }
+                        });
+                    }
+                });
+
+                AStages.TIMER.stop();
+                AStages.LOGGER.debug("Ended CACHE building! In {}!", AStages.TIMER);
+
+                for (var stage : ITEM_CACHE.keySet()) {
+                    // You don't need to "add" stacks, is really weird, no?!
+                    if (!ClientPlayerStage.hasStage(stage)) {
+                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                    }
+                }
+
+                for (var stage : GENERIC_CACHE.keySet()) {
+                    if (!ClientPlayerStage.hasStage(stage)) {
+                        for (var type : GENERIC_CACHE.get(stage).keySet()) {
+                            manager.removeIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                        }
+                    }
+                }
+
+                return;
             }
 
-            ItemStack lastItem = (ItemStack) ingredientManager.getAllItemStacks().toArray()[ ingredientManager.getAllItemStacks().size() - 1];
-            // Get Restrictions
-            for (ItemStack stack : ingredientManager.getAllItemStacks()) {
-                ModNetworking.sendToServer(new IsJeiRestrictedC2SPacket(stack, stack.equals(lastItem, false)));
-            }
-        }
-    }
+            switch (operation) {
+                case REMOVE -> {
+                    for (var stage : stages) {
+                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
 
-    public void updateGui() {
-        if (runtime != null) {
-            IIngredientManager ingredientManager = runtime.getIngredientManager();
+                        for (var type : GENERIC_CACHE.get(stage).keySet()) {
+                            manager.removeIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                        }
+                    }
+                }
+                case ADD -> {
+                    for (var stage : stages) {
+                        manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
 
-            // Hide in JEI
-            if (!itemsToHide.isEmpty()) {
-                ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemsToHide);
+                        for (var type : GENERIC_CACHE.get(stage).keySet()) {
+                            manager.addIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                        }
+                    }
+                }
+                case REMOVE_ALL -> {
+                    for (var stage : ITEM_CACHE.keySet()) {
+                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                    }
+
+                    for (var stage : GENERIC_CACHE.keySet()) {
+                        for (var type : GENERIC_CACHE.get(stage).keySet()) {
+                            manager.removeIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                        }
+                    }
+                }
             }
+
+//            if (operation == PlayerStage.Operation.REMOVE) {
+//                for (var stage : stages) {
+//                    manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, CACHE.get(stage));
+//                }
+//            } else if (operation == PlayerStage.Operation.ADD) {
+//                for (var stage : stages) {
+//                    manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, CACHE.get(stage));
+//                }
+//            }
+
+
+//            var manager = runtime.getIngredientManager();
+//            var ingredients = manager.getAllIngredients(VanillaTypes.ITEM_STACK);
+//            if (!asyncItemsToHide.isEmpty()) {
+//                manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, asyncItemsToHide);
+//                asyncItemsToHide.clear();
+//            }
+
+            // TODO: ASYNCHRONOUS
+//            var executor = Executors.newFixedThreadPool(1);
+//            ForkJoinPool pool = new ForkJoinPool();
+//            AStages.LOGGER.debug("Number of JEI items: {}!", ingredients.size());
+//            executor.submit(() -> {
+//                asyncItemsToHide = pool.invoke(new JeiTask(ingredients, 0, ingredients.size()));
+//                Minecraft.getInstance().submit(() -> {
+//                    manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, asyncItemsToHide);
+//                    AStages.LOGGER.debug("Ended Async!");
+//                    if (Minecraft.getInstance().player != null) {
+//                        Minecraft.getInstance().player.sendSystemMessage(Component.literal("Now JEI is updated!"));
+//                    }
+//                });
+//            });
+
+            // TODO: PARALLELISM
+//            AStages.LOGGER.debug("Started Parallelism");
+//            AStages.TIMER.start();
+
+//            CompletableFuture.supplyAsync(() -> pool.invoke(new JeiTask(ingredients, 0, ingredients.size())))
+//                .thenAccept(result -> {
+//                    asyncItemsToHide = result;
+//
+//                    if (!result.isEmpty()) {
+//                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, result);
+//                        AStages.LOGGER.debug("Ended Async!");
+//                    }
+//                });
+
+//            asyncItemsToHide = pool.invoke(new JeiTask(ingredients, 0, ingredients.size()));
+//            if (!asyncItemsToHide.isEmpty()) {
+//                manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, asyncItemsToHide);
+//            }
+
+//            AStages.TIMER.stop();
+//            AStages.LOGGER.warn("AStages-JEI Parallelism took {}!", AStages.TIMER);
+//            AStages.LOGGER.debug("Ended Parallelism");
         }
     }
 }

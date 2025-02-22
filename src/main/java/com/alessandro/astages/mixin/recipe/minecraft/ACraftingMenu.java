@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +29,7 @@ public class ACraftingMenu {
         if (optional.isPresent()) {
             var recipe = optional.get();
             var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(serverPlayer, new RecipeWrapper(recipe.getType(), recipe.getId()));
+            AStages.LOGGER.debug(recipe.getId().toString());
 
             if (restriction != null) {
                 ci.cancel();

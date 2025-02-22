@@ -5,6 +5,7 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,9 +14,12 @@ import java.util.List;
 
 public class AStructureRestriction extends ARestriction<AStructureRestriction, ResourceLocation, ResourceLocation> {
     private final List<ResourceLocation> structures = new ArrayList<>();
-    private List<BlockState> allowedBreakableBlocks = null;
-    private List<BlockState> allowedPlaceableBlocks = null;
-    private List<BlockState> allowedInteractableBlocks = null;
+    private List<Block> allowedBreakableBlocks = null;
+    private List<Block> allowedPlaceableBlocks = null;
+    private List<Block> allowedInteractableBlocks = null;
+    private List<BlockState> allowedBreakableStates = null;
+    private List<BlockState> allowedPlaceableStates = null;
+    private List<BlockState> allowedInteractableStates = null;
     private List<EntityType<?>> allowedTargetableEntities = null;
 
     public AStructureRestriction(String id, String stage) {
@@ -63,18 +67,45 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
     }
 
     public boolean isBlockBreakable(BlockState state) {
-        if (allowedBreakableBlocks == null) { return false; }
-        return allowedBreakableBlocks.contains(state);
+        if (allowedBreakableBlocks != null) {
+            if (allowedBreakableBlocks.contains(state.getBlock())) {
+                return true;
+            }
+        }
+
+        if (allowedBreakableStates != null) {
+            return allowedBreakableStates.contains(state);
+        }
+
+        return false;
     }
 
     public boolean isBlockPlaceable(BlockState state) {
-        if (allowedPlaceableBlocks == null) { return false; }
-        return allowedPlaceableBlocks.contains(state);
+        if (allowedPlaceableBlocks != null) {
+            if (allowedPlaceableBlocks.contains(state.getBlock())) {
+                return true;
+            }
+        }
+
+        if (allowedPlaceableStates != null) {
+            return allowedPlaceableStates.contains(state);
+        }
+
+        return false;
     }
 
     public boolean isBlockInteractable(BlockState state) {
-        if (allowedInteractableBlocks == null) { return false; }
-        return allowedInteractableBlocks.contains(state);
+        if (allowedInteractableBlocks != null) {
+            if (allowedInteractableBlocks.contains(state.getBlock())) {
+                return true;
+            }
+        }
+
+        if (allowedInteractableStates != null) {
+            return allowedInteractableStates.contains(state);
+        }
+
+        return false;
     }
 
     public boolean isEntityTargetable(EntityType<?> entityType) {
@@ -124,24 +155,47 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
         return this;
     }
 
+
+
     @SuppressWarnings("unused")
-    public AStructureRestriction addAllowedBreakableBlocks(BlockState... states) {
+    public AStructureRestriction addAllowedBreakableStates(BlockState... states) {
+        if (allowedBreakableStates == null) { allowedBreakableStates = new ArrayList<>(); }
+        allowedBreakableStates.addAll(List.of(states));
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction addAllowedPlaceableStates(BlockState... states) {
+        if (allowedPlaceableStates == null) { allowedPlaceableStates = new ArrayList<>(); }
+        allowedPlaceableStates.addAll(List.of(states));
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction addAllowedInteractableStates(BlockState... states) {
+        if (allowedInteractableStates == null) { allowedInteractableStates = new ArrayList<>(); }
+        allowedInteractableStates.addAll(List.of(states));
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction addAllowedBreakableBlocks(Block... blocks) {
         if (allowedBreakableBlocks == null) { allowedBreakableBlocks = new ArrayList<>(); }
-        allowedBreakableBlocks.addAll(List.of(states));
+        allowedBreakableBlocks.addAll(List.of(blocks));
         return this;
     }
 
     @SuppressWarnings("unused")
-    public AStructureRestriction addAllowedPlaceableBlocks(BlockState... states) {
+    public AStructureRestriction addAllowedPlaceableBlocks(Block... blocks) {
         if (allowedPlaceableBlocks == null) { allowedPlaceableBlocks = new ArrayList<>(); }
-        allowedPlaceableBlocks.addAll(List.of(states));
+        allowedPlaceableBlocks.addAll(List.of(blocks));
         return this;
     }
 
     @SuppressWarnings("unused")
-    public AStructureRestriction addAllowedInteractableBlocks(BlockState... states) {
+    public AStructureRestriction addAllowedInteractableBlocks(Block... blocks) {
         if (allowedInteractableBlocks == null) { allowedInteractableBlocks = new ArrayList<>(); }
-        allowedInteractableBlocks.addAll(List.of(states));
+        allowedInteractableBlocks.addAll(List.of(blocks));
         return this;
     }
 

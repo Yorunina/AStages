@@ -1,4 +1,4 @@
-package com.alessandro.astages.core.client;
+package com.alessandro.astages.core.client.old;
 
 import com.alessandro.astages.util.AClientRestriction;
 import net.minecraft.network.chat.Component;

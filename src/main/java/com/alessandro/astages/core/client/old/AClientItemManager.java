@@ -1,6 +1,5 @@
-package com.alessandro.astages.core.client;
+package com.alessandro.astages.core.client.old;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.syncer.IsItemRestrictedC2SPacket;
@@ -11,7 +10,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 // SOLVED ISSUE WITH RECIPE
 
@@ -61,7 +63,7 @@ public class AClientItemManager implements AClientManager {
             }
         }
 
-        AStages.LOGGER.debug("REQUESTED FOR {}", stack);
+        // AStages.LOGGER.debug("REQUESTED FOR {}", stack);
         ModNetworking.sendToServer(new IsItemRestrictedC2SPacket(stack));
         return null;
     }

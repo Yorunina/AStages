@@ -1,6 +1,6 @@
 package com.alessandro.astages.networking.packet.syncer;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
+@Info("To be deleted!")
 public class NullItemSyncerS2CPacket {
     private final ItemStack stack;
 
@@ -25,7 +26,7 @@ public class NullItemSyncerS2CPacket {
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            AClientRestrictionManager.ITEM_INSTANCE.notRestricted(stack);
+            // AClientRestrictionManager.ITEM_INSTANCE.notRestricted(stack);
         });
 
         ctx.get().setPacketHandled(true);

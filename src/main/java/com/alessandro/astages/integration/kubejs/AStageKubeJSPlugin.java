@@ -46,6 +46,10 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
             event.add("DimensionAttributes", Attributes.Dimension.class);
             event.add("StructureAttributes", Attributes.Structure.class);
         }
+
+        if (event.getType().isClient()) {
+            event.add("AStagesClient", AStagesClientJSUtil.class);
+        }
     }
 
     @Override

@@ -1,0 +1,47 @@
+package com.alessandro.astages.networking.packet.item;
+
+import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.client.item.AClientTagRestriction;
+import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+
+@ParametersAreNonnullByDefault
+public class TagSyncerS2CPacket extends RestrictionSyncerPacket {
+    private final ResourceLocation tag;
+    private final List<Item> ignoredItems;
+
+    public TagSyncerS2CPacket(String id, String stage, ResourceLocation tag, List<Item> ignoredItems) {
+        super(id, stage);
+        this.tag = tag;
+        this.ignoredItems = ignoredItems;
+    }
+
+    public TagSyncerS2CPacket(FriendlyByteBuf buf) {
+        super(buf);
+        tag = buf.readResourceLocation();
+        ignoredItems = buf.readList(r -> r.readRegistryIdUnsafe(ForgeRegistries.ITEMS));
+    }
+
+    @Override
+    public void toBytes(FriendlyByteBuf buf) {
+        super.toBytes(buf);
+        buf.writeResourceLocation(tag);
+        buf.writeCollection(ignoredItems, (w, item) -> w.writeRegistryIdUnsafe(ForgeRegistries.ITEMS, item));
+    }
+
+    @Override
+    public void handle() {
+//        var restriction = new AClientTagRestriction(getId(), getStage(), tag, ignoredItems);
+//        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(getStage(), restriction);
+        var restriction = new AClientTagRestriction(getId(), getStage());
+        restriction.restrict(tag);
+        restriction.ignoreItems(ignoredItems);
+        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+    }
+}

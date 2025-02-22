@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking.packet.syncer;
 
-import com.alessandro.astages.core.client.AClientItemRestriction;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.client.old.AClientItemRestriction;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
+@Info("To be deleted!")
 public class ItemSyncerS2CPacket {
     private final String id;
     private final String stage;
@@ -58,7 +59,7 @@ public class ItemSyncerS2CPacket {
             // HERE WE ARE ON CLIENT!
             var restriction = new AClientItemRestriction(id, stage, stack, renderItemName, hideTooltip, tooltipMessage, jadeItemMessage, jadeBlockMessage);
 
-            AClientRestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
+//            AClientRestrictionManager.ITEM_INSTANCE.addRestriction(stage, restriction);
         });
 
         ctx.get().setPacketHandled(true);
