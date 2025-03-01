@@ -36,12 +36,16 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
         return false;
     }
 
-    public void ignoreItems(Item... items) {
+    @SuppressWarnings("unused")
+    public AItemModRestriction ignoreItems(Item... items) {
         ignoredItems.addAll(List.of(items));
+        return this;
     }
 
-    public final void ignoreTags(ResourceLocation... items) {
+    @SuppressWarnings("unused")
+    public AItemModRestriction ignoreTags(ResourceLocation... items) {
         ignoredTags.addAll(List.of(items));
+        return this;
     }
 
     public String getModId() {

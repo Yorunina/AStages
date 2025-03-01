@@ -66,7 +66,7 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
-
+                AStages.LOGGER.debug("RIGHT CLICK ITEM!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
         }
@@ -79,15 +79,16 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
-
-                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
+                AStages.LOGGER.debug(String.valueOf(restriction.get(Attributes.RIGHT_CLICK_INTERACTIONS)));
+                AStages.LOGGER.debug("RIGHT CLICK BLOCK!");
+                restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             } else if (restriction == null) {
                 var block = AStagesUtil.stateToStack(event.getLevel().getBlockState(event.getPos()));
                 restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(serverPlayer, block);
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {
                     event.setCanceled(true);
-
+                    AStages.LOGGER.debug("RIGHT CLICK BLOCK 2!");
                     restriction.displayMessage(Attributes.Item.USING_MESSAGE, block, event.getEntity());
                 }
             }
@@ -106,7 +107,7 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
-
+                AStages.LOGGER.debug("LEFT CLICK BLOCK!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
 //            else if (restriction == null) {
@@ -129,7 +130,7 @@ public class ServerEventHandler {
 
             if (restriction != null && (restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS) || restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS))) {
                 event.setCanceled(true);
-
+                AStages.LOGGER.debug("ENTITY INTERACT!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
         }
@@ -142,7 +143,7 @@ public class ServerEventHandler {
 
             if (restriction != null && (restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS) || restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS))) {
                 event.setCanceled(true);
-
+                AStages.LOGGER.debug("ENTITY INTERACT SPECIFIC!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
         }

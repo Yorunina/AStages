@@ -28,15 +28,11 @@ import java.util.List;
 @JeiPlugin
 public class AItemStagesJEIPlugin implements IModPlugin {
     private static final HashMap<String, List<ItemStack>> ITEM_CACHE = new HashMap<>();
-    // private static final HashMap<String, List<Object>> GENERIC_CACHE = new HashMap<>();
-//    private static final HashMap<IIngredientType, HashMap<String, List<Object>>> GENERIC_CACHE = new HashMap<>();
     private static final HashMap<String, HashMap<IIngredientType<?>, List<Object>>> GENERIC_CACHE = new HashMap<>();
 
 
     private IJeiRuntime runtime;
     private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "item_jei");
-//    public static final List<ItemStack> itemsToHide = Collections.synchronizedList(new ArrayList<>());
-//    public static List<ItemStack> asyncItemsToHide = new ArrayList<>();
 
     public AItemStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;
@@ -102,7 +98,19 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                 for (var stage : ITEM_CACHE.keySet()) {
                     // You don't need to "add" stacks, is really weird, no?!
                     if (!ClientPlayerStage.hasStage(stage)) {
-                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                        var itemList = ITEM_CACHE.get(stage);
+                        if (itemList.size() < 500) {
+                            manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                        } else {
+                            var mod = itemList.size() % 500;
+                            for (int i = 0; i <= itemList.size(); i += 500) {
+                                try {
+                                    manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemList.subList(i, i + 500));
+                                } catch (IndexOutOfBoundsException exception) {
+                                    manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemList.subList(itemList.size() - mod, itemList.size() - 1));
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -120,19 +128,53 @@ public class AItemStagesJEIPlugin implements IModPlugin {
             switch (operation) {
                 case REMOVE -> {
                     for (var stage : stages) {
-                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                        if (ITEM_CACHE.containsKey(stage)) {
+                            // manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                            var itemList = ITEM_CACHE.get(stage);
+                            if (itemList.size() < 500) {
+                                manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                            } else {
+                                var mod = itemList.size() % 500;
+                                for (int i = 0; i <= itemList.size(); i += 500) {
+                                    try {
+                                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemList.subList(i, i + 500));
+                                    } catch (IndexOutOfBoundsException exception) {
+                                        manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemList.subList(itemList.size() - mod, itemList.size() - 1));
+                                    }
+                                }
+                            }
+                        }
 
-                        for (var type : GENERIC_CACHE.get(stage).keySet()) {
-                            manager.removeIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                        if (GENERIC_CACHE.containsKey(stage)) {
+                            for (var type : GENERIC_CACHE.get(stage).keySet()) {
+                                manager.removeIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                            }
                         }
                     }
                 }
                 case ADD -> {
                     for (var stage : stages) {
-                        manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                        if (ITEM_CACHE.containsKey(stage)) {
+                            // manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                            var itemList = ITEM_CACHE.get(stage);
+                            if (itemList.size() < 500) {
+                                manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
+                            } else {
+                                var mod = itemList.size() % 500;
+                                for (int i = 0; i <= itemList.size(); i += 500) {
+                                    try {
+                                        manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemList.subList(i, i + 500));
+                                    } catch (IndexOutOfBoundsException exception) {
+                                        manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, itemList.subList(itemList.size() - mod, itemList.size() - 1));
+                                    }
+                                }
+                            }
+                        }
 
-                        for (var type : GENERIC_CACHE.get(stage).keySet()) {
-                            manager.addIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                        if (GENERIC_CACHE.containsKey(stage)) {
+                            for (var type : GENERIC_CACHE.get(stage).keySet()) {
+                                manager.addIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
+                            }
                         }
                     }
                 }

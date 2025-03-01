@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.restriction.item;
 
+import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +24,8 @@ public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestrictio
         return this;
     }
 
+    @UnderDevelopment
+    @Info("Probably a mismatch between anyMatch and noneMatch")
     @Override
     public boolean isRestricted(@NotNull ItemStack stack) {
         return !ignoredItems.contains(stack.getItem()) && stack.getTags().anyMatch(t -> t.location().equals(tag));

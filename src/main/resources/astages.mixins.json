@@ -9,6 +9,8 @@
     "AModRuleCompatibilityLayer",
     "APlayerEventJS",
     "enchant.AEnchantmentMenu",
+    "item.AItemStackRender",
+    "item.AJeiStarter",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",

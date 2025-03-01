@@ -1,6 +1,5 @@
 package com.alessandro.astages.core.restriction.item;
 
-import com.alessandro.astages.AStages;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -8,9 +7,11 @@ import java.util.HashMap;
 public class RegisteredModels {
     private final HashMap<ResourceLocation, AModel<?>> MODELS = new HashMap<>();
 
-    public <T> void registerModel(ResourceLocation id, AModel<T> model) {
-        if (MODELS.containsKey(id)) { AStages.LOGGER.error("Model with ID {} already found in registered models!", id); }
+    public <T> AModel<T> registerModel(ResourceLocation id, AModel<T> model) {
+        // if (MODELS.containsKey(id)) { AStages.LOGGER.error("Model with ID {} already found in registered models!", id); }
+        if (MODELS.containsKey(id)) { return null; }
         MODELS.put(id, model);
+        return model;
     }
 
     @SuppressWarnings("unchecked")

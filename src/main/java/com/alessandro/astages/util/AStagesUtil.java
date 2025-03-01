@@ -22,10 +22,20 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AStagesUtil {
+    public static <T> @NotNull HashMap<Integer, List<T>> mapDeepCopy(@NotNull HashMap<Integer, List<T>> original) {
+        HashMap<Integer, List<T>> copy = new HashMap<>();
+
+        for (Map.Entry<Integer, List<T>> entry : original.entrySet()) {
+            copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
+
+        return copy;
+    }
+
     public static Player getNearestPlayer(@NotNull Level level, Vec3 pos) {
         var players = level.players();
         var minDistance = Double.MAX_VALUE;

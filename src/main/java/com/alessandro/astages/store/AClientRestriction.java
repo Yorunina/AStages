@@ -8,6 +8,7 @@ public abstract class AClientRestriction<R extends AClientRestriction<R, U, V>, 
     private final String id;
     private final String stage;
     private int priority = 0;
+    private boolean hideInJei;
 
     protected AClientRestriction(String id, String stage) {
         this.id = id;
@@ -50,6 +51,17 @@ public abstract class AClientRestriction<R extends AClientRestriction<R, U, V>, 
     @SuppressWarnings({ "unchecked", "unused" })
     public R setPriority(int priority) {
         this.priority = priority;
+
+        return (R) this;
+    }
+
+    public boolean isHideInJei() {
+        return hideInJei;
+    }
+
+    @SuppressWarnings("unchecked")
+    public R setHideInJei(boolean hideInJei) {
+        this.hideInJei = hideInJei;
 
         return (R) this;
     }

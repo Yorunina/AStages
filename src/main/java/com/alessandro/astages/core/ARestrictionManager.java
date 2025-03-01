@@ -2,11 +2,11 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.manager.*;
-import com.alessandro.astages.core.restriction.item.RegisteredModels;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.PredicateSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.TagSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.syncer.*;
 import com.alessandro.astages.store.Attributes;
@@ -38,8 +38,6 @@ public class ARestrictionManager {
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
 
-    public static RegisteredModels MODELS = new RegisteredModels();
-
     public static void reloadBeforeScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) {
             return;
@@ -68,15 +66,19 @@ public class ARestrictionManager {
     public static void onPlayerLoggedIn(ServerPlayer player) {
         // ITEMS
         for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getItemRestrictions()) {
-            ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(r.getId(), r.getStage(), r.getItems()), player);
+            ModNetworking.sendToPlayer(new ItemSyncerS2CPacket(r.getId(), r.getStage(), r.getItems(), r.get(Attributes.HIDING_JEI)), player);
         }
 
         for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getModRestrictions()) {
-            ModNetworking.sendToPlayer(new ModSyncerS2CPacket(r.getId(), r.getStage(), r.getModId(), r.getIgnoredItems(), r.getIgnoredTags()), player);
+            ModNetworking.sendToPlayer(new ModSyncerS2CPacket(r.getId(), r.getStage(), r.getModId(), r.getIgnoredItems(), r.getIgnoredTags(), r.get(Attributes.HIDING_JEI)), player);
         }
 
         for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getTagRestrictions()) {
-            ModNetworking.sendToPlayer(new TagSyncerS2CPacket(r.getId(), r.getStage(), r.getTag(), r.getIgnoredItems()), player);
+            ModNetworking.sendToPlayer(new TagSyncerS2CPacket(r.getId(), r.getStage(), r.getTag(), r.getIgnoredItems(), r.get(Attributes.HIDING_JEI)), player);
+        }
+
+        for (var r : ARestrictionManager.NEW_ITEM_INSTANCE.getPredicateRestrictions()) {
+            ModNetworking.sendToPlayer(new PredicateSyncerS2CPacket(r.getId(), r.getStage(), r.getModelId(), r.get(Attributes.HIDING_JEI)), player);
         }
 
         // RECIPES

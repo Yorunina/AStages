@@ -5,6 +5,7 @@ import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.restriction.*;
 import com.alessandro.astages.core.restriction.item.AItemModRestriction;
+import com.alessandro.astages.core.restriction.item.AItemPredicateRestriction;
 import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.core.stage.AStage;
@@ -16,7 +17,6 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.develop.Info;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +25,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
@@ -114,14 +112,6 @@ public class AStagesKubeJSUtil {
 
     // ITEM Restrictions
     public static AItemRestriction addRestrictionForItem(String id, String stage, Item... items) {
-        // var restriction = new AItemRestriction(id, RestrictionType.RUNTIME);
-//        var restriction = new AItemRestriction(id, stage);
-//
-//        for (var item : items) {
-//            restriction.restrict(itemStack -> itemStack.is(item));
-//        }
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         var restriction = new AItemRestriction(id, stage);
         for (var item : items) {
             restriction.restrict(item);
@@ -132,108 +122,31 @@ public class AStagesKubeJSUtil {
     }
 
     @UnderDevelopment
-    public static AItemRestriction addRestrictionForPredicate(String id, String stage, Predicate<ItemStack> predicate) {
-        // var restriction = new AItemRestriction(id, RestrictionType.RUNTIME);
-//        var restriction = new AItemRestriction(id, stage);
-//        restriction.restrict(predicate);
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
-
-        return null;
-    }
-
-    public static AItemModRestriction addRestrictionForMod(String id, String stage, String modId) {
-//        var restriction = new AItemRestriction(id, stage);
-//        restriction.restrict(itemStack -> modId.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).getNamespace()));
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
-        var restriction = new AItemModRestriction(id, stage);
-        restriction.restrict(modId);
+    public static AItemPredicateRestriction addRestrictionForPredicate(String id, String stage, ResourceLocation modelId) {
+        var restriction = new AItemPredicateRestriction(id, stage);
+        restriction.restrict(modelId);
         ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }
 
-    public static AItemModRestriction addRestrictionForMod(String id, String stage, String modId, Item... ignored) {
-//        var restriction = new AItemRestriction(id, stage);
-//
-//        restriction.restrict(itemStack ->  {
-//            for (var i : ignored) {
-//                if (itemStack.is(i)) { return false; }
-//            }
-//
-//            return modId.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).getNamespace());
-//        });
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+    public static AItemModRestriction addRestrictionForMod(String id, String stage, String modId) {
         var restriction = new AItemModRestriction(id, stage);
         restriction.restrict(modId);
-        restriction.ignoreItems(ignored);
         ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }
 
     public static AItemTagRestriction addRestrictionForTag(String id, String stage, ResourceLocation name) {
-//        var tag = ItemTags.create(name);
-//        var restriction = new AItemRestriction(id, stage);
-//        restriction.restrict(itemStack -> itemStack.is(tag));
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         var restriction = new AItemTagRestriction(id, stage);
         restriction.restrict(name);
         ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
-    }
-
-    public static AItemTagRestriction addRestrictionForTagAndBlacklistItems(String id, String stage, ResourceLocation name, Item... ignored) {
-//        var tag = ItemTags.create(name);
-//        var restriction = new AItemRestriction(id, stage);
-//
-//        restriction.restrict(itemStack -> {
-//            for (var i : ignored) {
-//                if (itemStack.is(i)) { return false; }
-//            }
-//
-//            return itemStack.is(tag);
-//        });
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
-        var restriction = new AItemTagRestriction(id, stage);
-        restriction.restrict(name);
-        restriction.ignoreItems(ignored);
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
-
-        return restriction;
-    }
-
-    @Info("Doesn't make any sense! ")
-    public static AItemRestriction addRestrictionForTag(String id, String stage, ResourceLocation name, ResourceLocation... ignored) {
-//        var tag = ItemTags.create(name);
-//        var restriction = new AItemRestriction(id, stage);
-//
-//        restriction.restrict(itemStack -> {
-//            for (var i : ignored) {
-//                var t = ItemTags.create(i);
-//                if (itemStack.is(t)) { return false; }
-//            }
-//
-//            return itemStack.is(tag);
-//        });
-//
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
-
-        return null;
     }
 
     public static AItemRestriction addRestrictionForArmor(String id, String stage, Item... armors) {
-//        var restriction = new AItemRestriction(id, stage);
-//
-//        for (var armor : armors) {
-//            restriction.restrict(itemStack -> itemStack.is(armor));
-//        }
-
         var restriction = new AItemRestriction(id, stage);
         for (var armor : armors) {
             restriction.restrict(armor);
@@ -250,7 +163,6 @@ public class AStagesKubeJSUtil {
             .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
             .set(Attributes.BLOCK_BREAKING, true);
 
-//        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;

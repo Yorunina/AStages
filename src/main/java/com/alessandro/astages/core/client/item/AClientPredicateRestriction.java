@@ -1,21 +1,23 @@
-package com.alessandro.astages.core.restriction.item;
+package com.alessandro.astages.core.client.item;
 
 import com.alessandro.astages.core.AModelManager;
+import com.alessandro.astages.core.restriction.item.AModel;
+import com.alessandro.astages.store.AClientRestriction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Predicate;
 
-public class AItemPredicateRestriction extends ABaseItemRestriction<AItemPredicateRestriction, ResourceLocation> {
+public class AClientPredicateRestriction extends AClientRestriction<AClientPredicateRestriction, ResourceLocation, ItemStack> {
     private ResourceLocation modelId;
 
-    public AItemPredicateRestriction(String id, String stage) {
+    public AClientPredicateRestriction(String id, String stage) {
         super(id, stage);
     }
 
     @Override
-    public AItemPredicateRestriction restrict(ResourceLocation modelId) {
-        this.modelId = modelId;
+    public AClientPredicateRestriction restrict(ResourceLocation model) {
+        this.modelId = model;
         return this;
     }
 
@@ -23,9 +25,5 @@ public class AItemPredicateRestriction extends ABaseItemRestriction<AItemPredica
     @Override
     public boolean isRestricted(ItemStack stack) {
         return ((AModel<Predicate<ItemStack>>) AModelManager.MODELS.getModel(modelId)).getModelObject().test(stack);
-    }
-
-    public ResourceLocation getModelId() {
-        return modelId;
     }
 }

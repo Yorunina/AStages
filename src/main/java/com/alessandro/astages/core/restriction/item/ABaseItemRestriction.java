@@ -143,7 +143,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
 
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setCanItemBeRightClicked(boolean value) {
-        set(Attributes.LEFT_CLICK_INTERACTIONS, value);
+        set(Attributes.RIGHT_CLICK_INTERACTIONS, value);
         return this;
     }
 
