@@ -20,22 +20,16 @@ public class ServerEventHandler {
         if (event.getEntity() instanceof Player player) {
             ResourceLocation dimension = event.getDimension().location();
 
-            ADimensionRestriction restriction = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(player, dimension);
-//            ADimensionRestriction restrictionForCurrentDimension = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(currentDimension);
+            ResourceLocation currentDimension = player.level().dimension().location();
+            ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(player, currentDimension);
+            ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(player, dimension);
 
-//            if (restriction != null) {
-//                var isBidirectional = restriction.bidirectional;
-//
-//                if (isBidirectional) {
-//
-//                }
-//            }
-
-            // if (restriction != null && !restriction.bidirectional) {
-            if (restriction != null) {
+            if (fromDim != null && fromDim.isEnabled(Attributes.BIDIRECTIONAL)) {
                 event.setCanceled(true);
-
-                restriction.displayMessage(Attributes.Dimension.ENTER_MESSAGE, dimension, player);
+                fromDim.displayMessage(Attributes.Dimension.LEAVE_MESSAGE, dimension, player);
+            } else if (toDim != null) {
+                event.setCanceled(true);
+                toDim.displayMessage(Attributes.Dimension.ENTER_MESSAGE, dimension, player);
             }
         }
     }

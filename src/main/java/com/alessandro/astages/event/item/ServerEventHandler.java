@@ -2,12 +2,12 @@ package com.alessandro.astages.event.item;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -66,7 +66,6 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
-                AStages.LOGGER.debug("RIGHT CLICK ITEM!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
         }
@@ -79,16 +78,17 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
-                AStages.LOGGER.debug(String.valueOf(restriction.get(Attributes.RIGHT_CLICK_INTERACTIONS)));
-                AStages.LOGGER.debug("RIGHT CLICK BLOCK!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
-            } else if (restriction == null) {
+            }
+//            else if (restriction != null && restriction.isEnabled(Attributes.IGNORE_BLOCKS_AROUND) && restriction.isEnabled(Attributes.BLOCK_PLACING)) {
+//                return;
+//            }
+            else if (restriction == null) {
                 var block = AStagesUtil.stateToStack(event.getLevel().getBlockState(event.getPos()));
                 restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(serverPlayer, block);
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {
                     event.setCanceled(true);
-                    AStages.LOGGER.debug("RIGHT CLICK BLOCK 2!");
                     restriction.displayMessage(Attributes.Item.USING_MESSAGE, block, event.getEntity());
                 }
             }
@@ -107,7 +107,6 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
-                AStages.LOGGER.debug("LEFT CLICK BLOCK!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
 //            else if (restriction == null) {
@@ -130,7 +129,6 @@ public class ServerEventHandler {
 
             if (restriction != null && (restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS) || restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS))) {
                 event.setCanceled(true);
-                AStages.LOGGER.debug("ENTITY INTERACT!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
         }
@@ -143,7 +141,6 @@ public class ServerEventHandler {
 
             if (restriction != null && (restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS) || restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS))) {
                 event.setCanceled(true);
-                AStages.LOGGER.debug("ENTITY INTERACT SPECIFIC!");
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
         }
@@ -171,7 +168,7 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(event.getEntity())) {
             var player = event.getEntity();
             ItemStack stack = player.getMainHandItem();
-            ABaseItemRestriction<?, ?> restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(player, stack);
+            var restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(player, stack);
 
             if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
                 event.setCanceled(true);
@@ -192,6 +189,7 @@ public class ServerEventHandler {
     }
 
     @Info("To be RE-IMPLEMENTED!")
+    @UnderDevelopment
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!CommonEventSettings.isInventoryChanged) { return; }

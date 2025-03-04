@@ -32,6 +32,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.RIGHT_CLICK_INTERACTIONS)
             .addAttribute(Attributes.BLOCK_BREAKING)
             .addAttribute(Attributes.BLOCK_INTERACTIONS)
+            // .addAttribute(Attributes.IGNORE_BLOCKS_AROUND)
 
             .addAttribute(Attributes.PICK_UP_DELAY)
 
@@ -153,6 +154,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
         return this;
     }
 
+//    @SuppressWarnings("unused")
+//    public ABaseItemRestriction<R, U> setIgnoreBlocksAroundWhenPlacing(boolean value) {
+//        set(Attributes.IGNORE_BLOCKS_AROUND, value);
+//        return this;
+//    }
+
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setDropMessage(Function<ItemStack, Component> message) {
         set(Attributes.Item.DROP_MESSAGE, message);
@@ -200,6 +207,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
         set(Attributes.Item.JADE_BLOCK_MESSAGE, message);
         return this;
     }
+
     @Override
     public String toString() {
         return this.getId() + " " + this.get(Attributes.STORING_IN_INVENTORY);

@@ -1,10 +1,11 @@
-package com.alessandro.astages.core.restriction.item;
+package com.alessandro.astages.core;
 
+import com.alessandro.astages.store.AModel;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 
-public class RegisteredModels {
+public class ARegisteredModels {
     private final HashMap<ResourceLocation, AModel<?>> MODELS = new HashMap<>();
 
     public <T> AModel<T> registerModel(ResourceLocation id, AModel<T> model) {
@@ -12,11 +13,6 @@ public class RegisteredModels {
         if (MODELS.containsKey(id)) { return null; }
         MODELS.put(id, model);
         return model;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> AModel<T> getModel(ResourceLocation id, Class<T> clazz) {
-        return (AModel<T>) MODELS.get(id);
     }
 
     public AModel<?> getModel(ResourceLocation id) {

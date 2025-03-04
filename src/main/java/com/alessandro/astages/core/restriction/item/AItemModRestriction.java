@@ -43,8 +43,8 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
     }
 
     @SuppressWarnings("unused")
-    public AItemModRestriction ignoreTags(ResourceLocation... items) {
-        ignoredTags.addAll(List.of(items));
+    public AItemModRestriction ignoreTags(ResourceLocation... tags) {
+        ignoredTags.addAll(List.of(tags));
         return this;
     }
 

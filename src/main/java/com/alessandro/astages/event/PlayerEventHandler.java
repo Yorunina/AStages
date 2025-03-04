@@ -80,6 +80,13 @@ public class PlayerEventHandler {
 //        }
 //    }
 
+//    @SubscribeEvent
+//    public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
+//        if (event.player.getServer() != null) {
+//            AStages.LOGGER.debug(ServerStageData.getData(event.player.getServer()).get().toString());
+//        }
+//    }
+
     @Info("For whole inventory checking!")
     @SubscribeEvent
     public static void onStageSynced(StageSyncedPlayerEvent event) {

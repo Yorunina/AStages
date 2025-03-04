@@ -1,7 +1,7 @@
 package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.core.AModelManager;
-import com.alessandro.astages.core.restriction.item.AModel;
+import com.alessandro.astages.store.AModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 

@@ -22,7 +22,6 @@ public abstract class APlayerEventJS {
      * @reason support new stage system
      */
     @Info("Checks if the player has the specified game stage")
-    // @Inject(method = "hasGameStage", at = @At("HEAD"))
     @Overwrite
     public boolean hasGameStage(String stage) {
         AtomicBoolean toReturn = new AtomicBoolean(false);

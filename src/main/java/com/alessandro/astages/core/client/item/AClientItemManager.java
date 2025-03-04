@@ -107,9 +107,7 @@ public class AClientItemManager {
     }
 
     public AClientItemPropertyRestriction getRestriction(@NotNull ItemStack stack) {
-//        var key = CustomItemStackKey.build(stack);
         if (properties.containsKey(CustomItemStackKey.build(stack))) {
-            AStages.LOGGER.debug("FOUND RESTRICTION! {}", properties.size());
             var restriction = properties.get(CustomItemStackKey.build(stack));
             if (restriction != null) {
                 return ClientPlayerStage.hasStage(restriction.stage()) ? null : restriction;

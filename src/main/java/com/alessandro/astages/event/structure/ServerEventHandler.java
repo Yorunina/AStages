@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.structure;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.StructureData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
@@ -47,6 +48,7 @@ public class ServerEventHandler {
 
                 var newList = new ArrayList<ResourceLocation>();
                 manager.getAllStructuresAt(player.getOnPos()).keySet().forEach(structure -> {
+
                     var structureId = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(structure);
                     newList.add(structureId);
                 });
@@ -89,13 +91,26 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onBlockBroken(BlockEvent.BreakEvent event) {
+//        ServerLevel level = (ServerLevel) event.getLevel();
+//        level.getChunkSource().getDataStorage().computeIfAbsent()
+//        event.getPlayer().chunkPosition();
+
+
         if (canBeRunForPlayer(event.getPlayer())) {
             Player player = event.getPlayer();
+            if (player.getServer() == null) { return; }
+
             UUID playerUUID = player.getUUID();
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
                     var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+
+                    var blockPlacedByPlayer = StructureData.getData(player.getServer(), structure.toString()).isBlockPlacedByPlayer(event.getPos());
+                    if (blockPlacedByPlayer) {
+                        StructureData.getData(player.getServer(), structure.toString()).remove(event.getPos());
+                        continue;
+                    }
 
                     if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
                         if (!restriction.isBlockBreakable(event.getState())) {
@@ -158,11 +173,15 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            if (player.getServer() == null) { return; }
+
             UUID playerUUID = player.getUUID();
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
                     var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+
+                    StructureData.getData(player.getServer(), structure.toString()).add(event.getPos());
 
                     if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
                         if (!restriction.isBlockPlaceable(event.getPlacedBlock())) {

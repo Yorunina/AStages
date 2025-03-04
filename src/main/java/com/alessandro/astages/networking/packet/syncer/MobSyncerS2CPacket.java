@@ -16,11 +16,9 @@ public class MobSyncerS2CPacket {
     private final String id;
     private final String stage;
     private final List<EntityType<?>> types;
-    // private final EntityType<?> type;
     private final Component jadeMobMessage;
 
     public MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> types, Component jadeMobMessage) {
-    // public MobSyncerS2CPacket(String id, String stage, EntityType<?> type, Component jadeMobMessage) {
         this.id = id;
         this.stage = stage;
         this.types = types;
@@ -31,7 +29,6 @@ public class MobSyncerS2CPacket {
         id = buf.readUtf();
         stage = buf.readUtf();
         types = buf.readList(r -> r.readRegistryIdUnsafe(ForgeRegistries.ENTITY_TYPES));
-        // type = buf.readRegistryIdUnsafe(ForgeRegistries.ENTITY_TYPES);
         jadeMobMessage = buf.readComponent();
     }
 
@@ -39,7 +36,6 @@ public class MobSyncerS2CPacket {
         buf.writeUtf(id);
         buf.writeUtf(stage);
          buf.writeCollection(types, (b, type) -> b.writeRegistryIdUnsafe(ForgeRegistries.ENTITY_TYPES, type));
-        // buf.writeRegistryIdUnsafe(ForgeRegistries.ENTITY_TYPES, type);
         buf.writeComponent(jadeMobMessage);
     }
 

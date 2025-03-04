@@ -1,11 +1,10 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
+import com.alessandro.astages.networking.packet.syncer.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.syncer.*;
-import com.alessandro.astages.networking.packet.syncer.ItemSyncerS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -45,26 +44,13 @@ public class ModNetworking {
             .add();
 
         // ITEMS
-        net.messageBuilder(IsItemRestrictedC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-            .decoder(IsItemRestrictedC2SPacket::new)
-            .encoder(IsItemRestrictedC2SPacket::toBytes)
-            .consumerMainThread(IsItemRestrictedC2SPacket::handle)
-            .add();
-
         net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ItemSyncerS2CPacket::new)
             .encoder(ItemSyncerS2CPacket::toBytes)
             .consumerMainThread(ItemSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(NullItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(NullItemSyncerS2CPacket::new)
-            .encoder(NullItemSyncerS2CPacket::toBytes)
-            .consumerMainThread(NullItemSyncerS2CPacket::handle)
-            .add();
-
-        // NEW!
-        net.messageBuilder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::new)
             .encoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::toBytes)
             .consumerMainThread(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::handle)
@@ -101,28 +87,10 @@ public class ModNetworking {
             .add();
 
         // JEI
-        net.messageBuilder(IsJeiRestrictedC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-            .decoder(IsJeiRestrictedC2SPacket::new)
-            .encoder(IsJeiRestrictedC2SPacket::toBytes)
-            .consumerMainThread(IsJeiRestrictedC2SPacket::handle)
-            .add();
-
-        net.messageBuilder(JeiIsRestrictedS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(JeiIsRestrictedS2CPacket::new)
-            .encoder(JeiIsRestrictedS2CPacket::toBytes)
-            .consumerMainThread(JeiIsRestrictedS2CPacket::handle)
-            .add();
-
         net.messageBuilder(JeiSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(JeiSyncerS2CPacket::new)
             .encoder(JeiSyncerS2CPacket::toBytes)
             .consumerMainThread(JeiSyncerS2CPacket::handle)
-            .add();
-
-        net.messageBuilder(RequestJeiClientReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RequestJeiClientReloadS2CPacket::new)
-            .encoder(RequestJeiClientReloadS2CPacket::toBytes)
-            .consumerMainThread(RequestJeiClientReloadS2CPacket::handle)
             .add();
 
         // RECIPES

@@ -1,10 +1,12 @@
 package com.alessandro.astages.store;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -52,6 +54,21 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
         if (!restrictions.isEmpty()) {
             for (var restriction : restrictions) {
                 if (!AStagesUtil.hasStage(player, restriction.getStage())) {
+                    return restriction;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public <W> R getRestrictionFromCache(OrderedMultiMap<W, R> cache, W value, MinecraftServer server) {
+        var restrictions = cache.get(value);
+        var data = ServerStageData.getData(server);
+
+        if (!restrictions.isEmpty()) {
+            for (var restriction : restrictions) {
+                if (!data.has(restriction.getStage())) {
                     return restriction;
                 }
             }

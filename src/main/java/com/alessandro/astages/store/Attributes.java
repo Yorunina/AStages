@@ -39,6 +39,7 @@ public class Attributes {
     public static final Attribute<Boolean> ENCHANTING_TABLE = Attribute.create("enchanting_table", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> BLOCK_INTERACTIONS = Attribute.create("block_restrictions", AttributeTypes.BOOLEAN, true);
     public static final Attribute<Boolean> MOB_SPAWNING = Attribute.create("mob_spawning", AttributeTypes.BOOLEAN, false);
+    // public static final Attribute<Boolean> IGNORE_BLOCKS_AROUND = Attribute.create("ignore_blocks_around", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
@@ -87,7 +88,8 @@ public class Attributes {
 
     // DIMENSION
     public static class Dimension {
-        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension", resourceLocation).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", resourceLocation).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", resourceLocation).withStyle(ChatFormatting.RED));
     }
 
     // MOB

@@ -20,6 +20,9 @@ public class ALanguageProvider extends LanguageProvider {
         add("chat.astages.info.no_stages", "No stages unlocked for player %s!");
         add("chat.astages.info.has_stages", "Stages unlocked by %s:");
         add("chat.astages.info.list_item", " - %s");
+        add("chat.astages.info.server.no_stages", "No stages unlocked for current server!");
+        add("chat.astages.info.server.has_stages", "Stages unlocked in this server:");
+        add("chat.astages.info.server.list_item", " - %s");
 
         // ITEM
         add("tooltip.astages.item.hidden_name", "Unfamiliar Item");
@@ -34,7 +37,8 @@ public class ALanguageProvider extends LanguageProvider {
         add("tooltip.astages.item.jade_integration.block", "Unfamiliar Block");
 
         // DIMENSION
-        add("message.astages.dimension", "You can't visit this dimension!");
+        add("message.astages.dimension.enter", "You can't visit this dimension!");
+        add("message.astages.dimension.leave", "You can't leave this dimension!");
 
         // SCREEN
         add("message.astages.screen", "You can't open this menu!");

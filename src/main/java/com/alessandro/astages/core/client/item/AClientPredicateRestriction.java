@@ -1,7 +1,7 @@
 package com.alessandro.astages.core.client.item;
 
 import com.alessandro.astages.core.AModelManager;
-import com.alessandro.astages.core.restriction.item.AModel;
+import com.alessandro.astages.store.AModel;
 import com.alessandro.astages.store.AClientRestriction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +24,6 @@ public class AClientPredicateRestriction extends AClientRestriction<AClientPredi
     @SuppressWarnings("unchecked")
     @Override
     public boolean isRestricted(ItemStack stack) {
-        return ((AModel<Predicate<ItemStack>>) AModelManager.MODELS.getModel(modelId)).getModelObject().test(stack);
+        return ((AModel<Predicate<ItemStack>>) AModelManager.MODELS.getModel(modelId)).modelObject().test(stack);
     }
 }

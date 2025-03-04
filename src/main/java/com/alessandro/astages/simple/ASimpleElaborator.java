@@ -2,11 +2,11 @@ package com.alessandro.astages.simple;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.restriction.*;
-import com.alessandro.astages.core.restriction.old.AItemRestriction;
+import com.alessandro.astages.core.restriction.item.AItemModRestriction;
+import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.develop.Info;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -24,16 +24,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@Info("To be RE-IMPLEMENTED!")
 public class ASimpleElaborator {
     @UnderDevelopment
     public static void elaborateItem(@NotNull ASimpleRestriction simple) {
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)))));
+        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
     }
 
     @UnderDevelopment
     public static void elaborateMod(@NotNull ASimpleRestriction simple) {
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace())));
+        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(new AItemModRestriction(simple.id, simple.stage).restrict(simple.object));
     }
 
     public static void elaborateDimension(@NotNull ASimpleRestriction simple) {
@@ -55,8 +54,9 @@ public class ASimpleElaborator {
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
     }
 
+    @SuppressWarnings("unused")
     public static void elaborateBiome(@NotNull ASimpleRestriction simple) {
-
+        throw new UnsupportedOperationException("Biome elaboration not supported! Id of Restriction not allowed: " + simple.id + ".");
     }
 
     public static void elaborateTame(@NotNull ASimpleRestriction simple) {
@@ -77,18 +77,16 @@ public class ASimpleElaborator {
     @UnderDevelopment
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
-        restriction.restrict(stack -> stack.is(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
+        restriction.restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)));
         restriction.set(Attributes.HIDING_TOOLTIP, false)
             .set(Attributes.STORING_IN_INVENTORY, true)
-            .set(Attributes.STORING_IN_INVENTORY, true)
+            .set(Attributes.EQUIPPING, true)
             .set(Attributes.ATTACKING, true)
             .set(Attributes.HIDING_JEI, false)
             .set(Attributes.BLOCK_PLACING, true)
             .set(Attributes.LEFT_CLICK_INTERACTIONS, true)
             .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
             .set(Attributes.BLOCK_BREAKING, true);
-
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {
@@ -119,8 +117,8 @@ public class ASimpleElaborator {
         return addRestrictionForType(ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), ResourceArgument.getStructure(c, "structure").getType().toString());
     }
 
-    public static int commandBiome(CommandContext<CommandSourceStack> c) {
-        return 0;
+    public static int commandBiome(CommandContext<CommandSourceStack> ignoredC) {
+        throw new UnsupportedOperationException("Biome elaboration not supported!");
     }
 
     public static int commandTame(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {

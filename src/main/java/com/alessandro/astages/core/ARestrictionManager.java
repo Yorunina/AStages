@@ -3,7 +3,7 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.RequestReRenderingS2CPacket;
+import com.alessandro.astages.networking.packet.syncer.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.PredicateSyncerS2CPacket;
@@ -22,7 +22,6 @@ import java.util.Set;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
-    // public static final AItemManager ITEM_INSTANCE = new AItemManager();
     public static final AItemManager NEW_ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
@@ -39,11 +38,8 @@ public class ARestrictionManager {
     public static Set<String> ORE_STAGES = new HashSet<>();
 
     public static void reloadBeforeScripts() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            return;
-        }
+        if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
 
-        // ITEM_INSTANCE.reloadBeforeScripts();
         NEW_ITEM_INSTANCE.reloadBeforeScripts();
         DIMENSION_INSTANCE.reloadBeforeScripts();
         MOB_INSTANCE.reloadBeforeScripts();
@@ -82,12 +78,10 @@ public class ARestrictionManager {
         }
 
         // RECIPES
-//        AStages.LOGGER.warn("AStages recipe sent to client!!");
-//        var time = System.currentTimeMillis();
         AStages.TIMER.start();
         ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient(player);
         AStages.TIMER.stop();
-        AStages.LOGGER.warn("AStages recipe sending in {}!", AStages.TIMER);
+        AStages.LOGGER.info("AStages recipe sending in {}!", AStages.TIMER);
 
         // MOBS
         ARestrictionManager.MOB_INSTANCE.synchronizeWithClient(player);
@@ -101,9 +95,7 @@ public class ARestrictionManager {
 
     @UnderDevelopment
     public static void reloadAfterScripts() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            return;
-        }
+        if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
 
         // ITEMS AUTOMATICALLY -> question/answer system
 
@@ -138,7 +130,6 @@ public class ARestrictionManager {
     @SuppressWarnings("unchecked")
     public static <T> @Nullable T getRestrictionById(@NotNull ARestrictionType type, String id) {
         return switch (type) {
-            // case ITEM -> (T) ITEM_INSTANCE.getRestriction(id);
             case ITEM -> (T) NEW_ITEM_INSTANCE.getRestriction(id);
             case MOB -> (T) MOB_INSTANCE.getRestriction(id);
             case DIMENSION -> (T) DIMENSION_INSTANCE.getRestriction(id);

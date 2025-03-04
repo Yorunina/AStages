@@ -22,7 +22,8 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void checkMobSpawning(MobSpawnEvent.PositionCheck event) {
         Player nearestPlayer = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(nearestPlayer, event.getEntity().getType());
+        var server = event.getEntity().getServer();
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(event.getEntity().getType(), nearestPlayer, server);
 
         if (restriction != null && restriction.isDisabled(Attributes.MOB_SPAWNING)) {
             if (event.getSpawnType() == MobSpawnType.SPAWNER && restriction.isDisabled(Attributes.SPAWNER)) {

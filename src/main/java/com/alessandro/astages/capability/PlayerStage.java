@@ -1,6 +1,7 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
@@ -34,13 +35,20 @@ public class PlayerStage {
 
     private List<String> stages = new ArrayList<>();
 
+    public static void checkStage(String stage) {
+        if (AStageManager.isServerOnly(stage)) {
+            throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in server only!");
+        }
+    }
+
     @Info("Not required, for commands only!")
     public void setChangedFor(Player player, @NotNull Operation operation, String stage) {
         setChangedFor(player, operation, stage, false);
     }
 
-    @Info("TO BE TESTED!")
     public void setChangedFor(Player player, @NotNull Operation operation, @Nullable String stage, boolean silentTitle) {
+        checkStage(stage);
+
         StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stage);
         MinecraftForge.EVENT_BUS.post(event);
 
@@ -79,6 +87,7 @@ public class PlayerStage {
 
     public void addStage(String stage) {
         if (stages.contains(stage)) { return; }
+        checkStage(stage);
 
         stages.add(stage);
     }

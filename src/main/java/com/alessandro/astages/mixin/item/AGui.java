@@ -1,7 +1,6 @@
 package com.alessandro.astages.mixin.item;
 
 import com.alessandro.astages.core.client.AClientRestrictionManager;
-import com.alessandro.astages.util.develop.Info;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -31,7 +30,6 @@ public class AGui {
      * @reason Change hover name for item stages
      */
     @Overwrite(remap = false)
-    @Info("To be RE-IMPLEMENTED!")
     public void renderSelectedItemName(GuiGraphics guiGraphics, int yShift) {
         this.minecraft.getProfiler().push("selectedItemName");
         if (this.toolHighlightTimer > 0 && !this.lastToolHighlight.isEmpty()) {
@@ -49,18 +47,6 @@ public class AGui {
                     mutablecomponent.withStyle(ChatFormatting.ITALIC);
                 }
             }
-
-//            var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
-//
-//            if (restriction != null && !restriction.renderItemName()) {
-//                mutablecomponent.append(Component.translatable("tooltip.astages.item.hidden_name")).withStyle(ChatFormatting.RED);
-//            } else {
-//                mutablecomponent.append(this.lastToolHighlight.getHoverName()).withStyle(this.lastToolHighlight.getRarity().getStyleModifier());
-//
-//                if (this.lastToolHighlight.hasCustomHoverName()) {
-//                    mutablecomponent.withStyle(ChatFormatting.ITALIC);
-//                }
-//            }
 
             // Old part
             Component highlightTip = this.lastToolHighlight.getHighlightTip(mutablecomponent);

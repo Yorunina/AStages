@@ -26,16 +26,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AStagesUtil {
-    public static <T> @NotNull HashMap<Integer, List<T>> mapDeepCopy(@NotNull HashMap<Integer, List<T>> original) {
-        HashMap<Integer, List<T>> copy = new HashMap<>();
-
-        for (Map.Entry<Integer, List<T>> entry : original.entrySet()) {
-            copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
-        }
-
-        return copy;
-    }
-
     public static Player getNearestPlayer(@NotNull Level level, Vec3 pos) {
         var players = level.players();
         var minDistance = Double.MAX_VALUE;
@@ -61,26 +51,25 @@ public class AStagesUtil {
 
         var aStage = AStageManager.getStage(stage);
         if (aStage != null) {
-            fadeIn = aStage.fadeIn;
-            stay = aStage.stay;
-            fadeOut = aStage.fadeOut;
-
+            fadeIn = aStage.getFadeIn();
+            stay = aStage.getStay();
+            fadeOut = aStage.getFadeOut();
 
             if (operation == PlayerStage.Operation.ADD) {
-                if (aStage.addTitle != null) {
-                    title = aStage.addTitle;
+                if (aStage.getAddTitle() != null) {
+                    title = aStage.getAddTitle();
                 }
 
-                if (aStage.addSubTitle != null) {
-                    subtitle = aStage.addSubTitle;
+                if (aStage.getAddSubTitle() != null) {
+                    subtitle = aStage.getAddSubTitle();
                 }
             } else if (operation == PlayerStage.Operation.REMOVE) {
-                if (aStage.removeTitle != null) {
-                    title = aStage.removeTitle;
+                if (aStage.getRemoveTitle() != null) {
+                    title = aStage.getRemoveTitle();
                 }
 
-                if (aStage.removeSubTitle != null) {
-                    subtitle = aStage.removeSubTitle;
+                if (aStage.getRemoveSubTitle() != null) {
+                    subtitle = aStage.getRemoveSubTitle();
                 }
             }
         } else {

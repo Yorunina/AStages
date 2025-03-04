@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet;
+package com.alessandro.astages.networking.packet.syncer;
 
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import net.minecraft.network.FriendlyByteBuf;

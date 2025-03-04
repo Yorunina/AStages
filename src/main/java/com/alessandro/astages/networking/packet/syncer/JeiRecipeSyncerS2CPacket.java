@@ -18,16 +18,13 @@ public class JeiRecipeSyncerS2CPacket {
     private final int priority;
     private final RecipeType<?> type;
     private final List<ResourceLocation> recipes;
-//    private final boolean update;
 
     public JeiRecipeSyncerS2CPacket(String id, String stage, int priority, RecipeType<?> type, List<ResourceLocation> recipes) {
-    // public JeiRecipeSyncerS2CPacket(String id, String stage, int priority, RecipeType<?> type, List<ResourceLocation> recipes, boolean update) {
         this.id = id;
         this.stage = stage;
         this.priority = priority;
         this.type = type;
         this.recipes = recipes;
-//        this.update = update;
     }
 
     public JeiRecipeSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
@@ -36,7 +33,6 @@ public class JeiRecipeSyncerS2CPacket {
         priority = buf.readInt();
         type = buf.readRegistryIdUnsafe(ForgeRegistries.RECIPE_TYPES);
         recipes = buf.readList(FriendlyByteBuf::readResourceLocation);
-//        update = buf.readBoolean();
     }
 
     public void toBytes(@NotNull FriendlyByteBuf buf) {
@@ -45,17 +41,12 @@ public class JeiRecipeSyncerS2CPacket {
         buf.writeInt(priority);
         buf.writeRegistryIdUnsafe(ForgeRegistries.RECIPE_TYPES, type);
         buf.writeCollection(recipes, FriendlyByteBuf::writeResourceLocation);
-//        buf.writeBoolean(update);
     }
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             var restriction = new AClientRecipeRestriction(id, stage, priority, type, recipes);
             AClientRestrictionManager.RECIPE_INSTANCE.addRestriction(stage, restriction);
-
-//            if (update) {
-//                MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
-//            }
         });
 
         ctx.get().setPacketHandled(true);

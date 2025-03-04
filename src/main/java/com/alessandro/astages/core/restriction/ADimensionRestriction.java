@@ -21,9 +21,10 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
     @Override
     public @NotNull AttributeStore allowedAttributes() {
         return AttributeStore.builder()
-            .addAttribute(Attributes.BIDIRECTIONAL) // NOT YET IMPLEMENTED
+            .addAttribute(Attributes.BIDIRECTIONAL)
 
-            .addAttribute(Attributes.Dimension.ENTER_MESSAGE);
+            .addAttribute(Attributes.Dimension.ENTER_MESSAGE)
+            .addAttribute(Attributes.Dimension.LEAVE_MESSAGE);
     }
 
     @Override
@@ -53,6 +54,12 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
     @SuppressWarnings("unused")
     public ADimensionRestriction setDimensionMessage(Function<ResourceLocation, Component> message) {
         set(Attributes.Dimension.ENTER_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setLeaveDimensionMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Dimension.LEAVE_MESSAGE, message);
         return this;
     }
 }

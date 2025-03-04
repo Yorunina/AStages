@@ -1,6 +1,7 @@
 package com.alessandro.astages.core.restriction.item;
 
 import com.alessandro.astages.core.AModelManager;
+import com.alessandro.astages.store.AModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -22,7 +23,7 @@ public class AItemPredicateRestriction extends ABaseItemRestriction<AItemPredica
     @SuppressWarnings("unchecked")
     @Override
     public boolean isRestricted(ItemStack stack) {
-        return ((AModel<Predicate<ItemStack>>) AModelManager.MODELS.getModel(modelId)).getModelObject().test(stack);
+        return ((AModel<Predicate<ItemStack>>) AModelManager.MODELS.getModel(modelId)).modelObject().test(stack);
     }
 
     public ResourceLocation getModelId() {

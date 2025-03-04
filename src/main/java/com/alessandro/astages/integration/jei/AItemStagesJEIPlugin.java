@@ -64,7 +64,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
             // TODO: HYBRID
             var manager = runtime.getIngredientManager();
             if (stages == null || operation == null) { // Build Cache
-                AStages.LOGGER.debug("Started CACHE building!");
+                AStages.LOGGER.info("Started CACHE building!");
                 AStages.TIMER.start();
 
                 // Items
@@ -93,7 +93,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                 });
 
                 AStages.TIMER.stop();
-                AStages.LOGGER.debug("Ended CACHE building! In {}!", AStages.TIMER);
+                AStages.LOGGER.info("Ended CACHE building! In {}!", AStages.TIMER);
 
                 for (var stage : ITEM_CACHE.keySet()) {
                     // You don't need to "add" stacks, is really weird, no?!
