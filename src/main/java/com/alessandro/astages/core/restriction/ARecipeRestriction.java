@@ -4,8 +4,8 @@ import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeOutputWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.syncer.JeiRecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.syncer.RequestJeiRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
 import com.alessandro.astages.store.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.util.AMarkable;
@@ -105,9 +105,9 @@ public class ARecipeRestriction extends ARestriction<ARecipeRestriction, RecipeW
     @Override
     public void markAsDirty() {
         if (type != null && !recipes.isEmpty()) {
-            ModNetworking.sendToClients(new JeiRecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
+            ModNetworking.sendToClients(new RecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
         }
 
-        ModNetworking.sendToClients(new RequestJeiRecipeReloadS2CPacket());
+        ModNetworking.sendToClients(new RequestRecipeReloadS2CPacket());
     }
 }

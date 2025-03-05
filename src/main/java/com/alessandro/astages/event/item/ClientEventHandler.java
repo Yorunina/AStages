@@ -1,7 +1,7 @@
 package com.alessandro.astages.event.item;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +16,7 @@ public class ClientEventHandler {
     public static void onItemTooltip(@NotNull ItemTooltipEvent event) {
         if (event.getEntity() != null && !jeiGetter) {
             var stack = event.getItemStack();
-            var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(stack);
+            var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
 
             if (restriction != null && restriction.hideTooltip()) {
                 event.getToolTip().clear();

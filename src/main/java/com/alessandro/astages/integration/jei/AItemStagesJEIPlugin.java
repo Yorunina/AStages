@@ -3,9 +3,9 @@ package com.alessandro.astages.integration.jei;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
-import com.alessandro.astages.event.custom.actions.ClientJeiUpdateEvent;
+import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -40,11 +40,12 @@ public class AItemStagesJEIPlugin implements IModPlugin {
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
+                    AClientRestrictionManager.waitingForItemUpdate = true;
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
             });
 
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientJeiUpdateEvent.class, e -> updateGui(null, null));
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientItemUpdateEvent.class, e -> updateGui(null, null));
         }
     }
 
@@ -60,17 +61,20 @@ public class AItemStagesJEIPlugin implements IModPlugin {
 
     @SuppressWarnings("unchecked")
     public <T> void updateGui(@Nullable PlayerStage.Operation operation, @Nullable List<String> stages) {
-        if (runtime != null) {
+        if (runtime != null && AClientRestrictionManager.waitingForItemUpdate && !AClientRestrictionManager.jeiIsReloading) {
             // TODO: HYBRID
             var manager = runtime.getIngredientManager();
             if (stages == null || operation == null) { // Build Cache
                 AStages.LOGGER.info("Started CACHE building!");
                 AStages.TIMER.start();
 
+                GENERIC_CACHE.clear();
+                ITEM_CACHE.clear();
+
                 // Items
                 var ingredients = manager.getAllIngredients(VanillaTypes.ITEM_STACK);
                 ingredients.forEach(ingredient -> {
-                    var st = AClientRestrictionManager.NEW_ITEM_INSTANCE.getStagesForStack(ingredient);
+                    var st = AClientRestrictionManager.ITEM_INSTANCE.getStagesForStack(ingredient);
                     if (!st.isEmpty()) {
                         st.forEach(s -> ITEM_CACHE.computeIfAbsent(s, e -> new ArrayList<>()).add(ingredient));
                     }
@@ -81,7 +85,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                     if (type != VanillaTypes.ITEM_STACK) {
                         manager.getAllIngredients(type).forEach(ingredient -> {
                             var rs = manager.getIngredientHelper(ingredient).getResourceLocation(ingredient);
-                            var st = AClientRestrictionManager.NEW_ITEM_INSTANCE.getStagesForResourceLocation(rs);
+                            var st = AClientRestrictionManager.ITEM_INSTANCE.getStagesForResourceLocation(rs);
 
                             for (var stage : st) {
                                 GENERIC_CACHE.computeIfAbsent(stage, s -> new HashMap<>())
@@ -122,6 +126,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                     }
                 }
 
+                AClientRestrictionManager.waitingForItemUpdate = false;
                 return;
             }
 
@@ -190,6 +195,8 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                     }
                 }
             }
+
+            AClientRestrictionManager.waitingForItemUpdate = false;
 
 //            if (operation == PlayerStage.Operation.REMOVE) {
 //                for (var stage : stages) {

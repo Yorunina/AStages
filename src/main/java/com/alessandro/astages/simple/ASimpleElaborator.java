@@ -27,12 +27,12 @@ import java.util.Objects;
 public class ASimpleElaborator {
     @UnderDevelopment
     public static void elaborateItem(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
     }
 
     @UnderDevelopment
     public static void elaborateMod(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(new AItemModRestriction(simple.id, simple.stage).restrict(simple.object));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemModRestriction(simple.id, simple.stage).restrict(simple.object));
     }
 
     public static void elaborateDimension(@NotNull ASimpleRestriction simple) {

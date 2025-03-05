@@ -41,7 +41,7 @@ public class RequestItemPropertyC2SPacket {
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON SERVER!
-            var serverRestriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(id);
+            var serverRestriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(id);
 
             if (serverRestriction != null) {
                 if (!Objects.equals(serverRestriction.getId(), id)) { throw EXCEPTION.apply(id); }
@@ -55,7 +55,6 @@ public class RequestItemPropertyC2SPacket {
                     serverRestriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack)
                 ), ctx.get().getSender());
             } else {
-                // TODO: If no restrictions! WAIT -> client already know if there is a restriction or not!
                 throw NULL_EXCEPTION.apply(id);
             }
         });

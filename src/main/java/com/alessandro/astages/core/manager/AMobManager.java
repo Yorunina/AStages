@@ -2,9 +2,9 @@ package com.alessandro.astages.core.manager;
 
 import com.alessandro.astages.core.restriction.AMobRestriction;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.syncer.MobSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
 import com.alessandro.astages.store.AManager;
-import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.server.MinecraftServer;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class AMobManager extends AManager<AMobRestriction, EntityType<?>, EntityType<?>> implements ServerStageReadable<AMobRestriction, EntityType<?>> {
+public class AMobManager extends AManager<AMobRestriction, EntityType<?>, EntityType<?>> implements ServerStageReadable<AMobRestriction, EntityType<?>>, ClientSynchronizable {
     public final OrderedMultiMap<EntityType<?>, AMobRestriction> CACHE = OrderedMultiMap.create();
 
     @Override
@@ -52,7 +52,8 @@ public class AMobManager extends AManager<AMobRestriction, EntityType<?>, Entity
         return null;
     }
 
-    public void synchronizeWithClient(ServerPlayer player) {
-        getRestrictions().forEach(r -> ModNetworking.sendToPlayer(new MobSyncerS2CPacket(r.getId(), r.getStage(), r.getMobs(), r.get(Attributes.Mob.JADE_MOB_MESSAGE).get()), player));
+    @Override
+    public void synchronizeWithClient(@Nullable ServerPlayer player) {
+        getRestrictions().forEach(restriction -> ModNetworking.sendTo(player, new MobSyncerS2CPacket(restriction)));
     }
 }

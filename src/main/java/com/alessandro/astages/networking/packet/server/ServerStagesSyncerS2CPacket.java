@@ -1,6 +1,6 @@
-package com.alessandro.astages.networking.packet.syncer;
+package com.alessandro.astages.networking.packet.server;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
@@ -8,14 +8,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class OreStagesSyncerS2CPacket {
+public class ServerStagesSyncerS2CPacket {
     private final List<String> stages;
 
-    public OreStagesSyncerS2CPacket(List<String> stages) {
+    public ServerStagesSyncerS2CPacket(List<String> stages) {
         this.stages = stages;
     }
 
-    public OreStagesSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public ServerStagesSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
         stages = buf.readList(FriendlyByteBuf::readUtf);
     }
 
@@ -26,8 +26,8 @@ public class OreStagesSyncerS2CPacket {
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
-            AClientRestrictionManager.ORE_STAGES.clear();
-            AClientRestrictionManager.ORE_STAGES.addAll(stages);
+            AClientRestrictionManager.SERVER_STAGES.clear();
+            AClientRestrictionManager.SERVER_STAGES.addAll(stages);
         });
 
         ctx.get().setPacketHandled(true);

@@ -3,7 +3,7 @@ package com.alessandro.astages.integration.jei;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.integration.Mods;
@@ -28,16 +28,6 @@ import java.util.stream.Stream;
 public class ARecipeStagesJEIPlugin implements IModPlugin {
     private IJeiRuntime runtime;
     private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "recipe_jei");
-//    public static final List<mezz.jei.api.recipe.RecipeType<?>> SUPPORTED_TYPES = new ArrayList<>();
-//
-//    static {
-//        SUPPORTED_TYPES.add(RecipeTypes.CRAFTING);
-//        SUPPORTED_TYPES.add(RecipeTypes.SMELTING);
-//        SUPPORTED_TYPES.add(RecipeTypes.SMOKING);
-//        SUPPORTED_TYPES.add(RecipeTypes.CAMPFIRE_COOKING);
-//        SUPPORTED_TYPES.add(RecipeTypes.BLASTING);
-//        SUPPORTED_TYPES.add(RecipeTypes.SMITHING);
-//    }
 
     public ARecipeStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;
@@ -47,6 +37,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
+                    AClientRestrictionManager.waitingForRecipeUpdate = true;
                     updateRecipeGui();
                 }
             });
@@ -64,19 +55,22 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     }
 
     public void updateRecipeGui() {
-        AStages.LOGGER.warn("AStages client recipe update started!");
-        var time = System.currentTimeMillis();
+        if (runtime != null && AClientRestrictionManager.waitingForRecipeUpdate && !AClientRestrictionManager.jeiIsReloading) {
+            AStages.LOGGER.info("AStages client recipe update started!");
+            var time = System.currentTimeMillis();
 
-        updateRecipesForType(RecipeType.CRAFTING, RecipeTypes.CRAFTING);
-        updateRecipesForType(RecipeType.SMELTING, RecipeTypes.SMELTING);
-        updateRecipesForType(RecipeType.SMOKING, RecipeTypes.SMOKING);
-        updateRecipesForType(RecipeType.CAMPFIRE_COOKING, RecipeTypes.CAMPFIRE_COOKING);
-        updateRecipesForType(RecipeType.BLASTING, RecipeTypes.BLASTING);
-        updateRecipesForType(RecipeType.SMITHING, RecipeTypes.SMITHING);
+            updateRecipesForType(RecipeType.CRAFTING, RecipeTypes.CRAFTING);
+            updateRecipesForType(RecipeType.SMELTING, RecipeTypes.SMELTING);
+            updateRecipesForType(RecipeType.SMOKING, RecipeTypes.SMOKING);
+            updateRecipesForType(RecipeType.CAMPFIRE_COOKING, RecipeTypes.CAMPFIRE_COOKING);
+            updateRecipesForType(RecipeType.BLASTING, RecipeTypes.BLASTING);
+            updateRecipesForType(RecipeType.SMITHING, RecipeTypes.SMITHING);
 
-        restrictAllRecipesForMods();
+            restrictAllRecipesForMods();
 
-        AStages.LOGGER.warn("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
+            AStages.LOGGER.info("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
+            AClientRestrictionManager.waitingForRecipeUpdate = false;
+        }
     }
 
     private <C extends Container, T extends Recipe<C>> void updateRecipesForType(RecipeType<T> vanillaType, mezz.jei.api.recipe.RecipeType<T> jeiType) {

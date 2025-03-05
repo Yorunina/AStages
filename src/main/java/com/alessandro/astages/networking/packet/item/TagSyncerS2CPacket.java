@@ -1,8 +1,10 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.item.AClientTagRestriction;
+import com.alessandro.astages.core.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -16,6 +18,10 @@ public class TagSyncerS2CPacket extends RestrictionSyncerPacket {
     private final ResourceLocation tag;
     private final List<Item> ignoredItems;
     private final boolean hideInJei;
+
+    public TagSyncerS2CPacket(AItemTagRestriction restriction) {
+        this(restriction.getId(), restriction.getStage(), restriction.getTag(), restriction.getIgnoredItems(), restriction.get(Attributes.HIDING_JEI));
+    }
 
     public TagSyncerS2CPacket(String id, String stage, ResourceLocation tag, List<Item> ignoredItems, boolean hideInJei) {
         super(id, stage);
@@ -46,6 +52,6 @@ public class TagSyncerS2CPacket extends RestrictionSyncerPacket {
         var restriction = new AClientTagRestriction(getId(), getStage()).setHideInJei(hideInJei);
         restriction.restrict(tag);
         restriction.ignoreItems(ignoredItems);
-        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        AClientRestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 }

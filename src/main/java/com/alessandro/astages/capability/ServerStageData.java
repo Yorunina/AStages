@@ -1,8 +1,12 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.core.stage.AStageManager;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -14,10 +18,8 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-// @OnlyIn(Dist.DEDICATED_SERVER)
 public class ServerStageData extends SavedData {
     private static final String STAGE_ID = "astages_server_stages";
-    // private static final String STAGE_LIST_ID = "astages_server_stages_list";
     private List<String> serverStages = new ArrayList<>();
 
     public void add(String... stages) {
@@ -26,21 +28,29 @@ public class ServerStageData extends SavedData {
 
         serverStages.addAll(list);
         setDirty();
+        synchronizeChanges();
     }
 
     public void set(List<String> stages) {
         serverStages = stages;
         setDirty();
+        synchronizeChanges();
     }
 
     public void remove(String... stages) {
         serverStages.removeAll(List.of(stages));
         setDirty();
+        synchronizeChanges();
     }
 
     public void removeAll() {
         serverStages.clear();
         setDirty();
+        synchronizeChanges();
+    }
+
+    private void synchronizeChanges() {
+        ModNetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages));
     }
 
     public static void checkStage(String stage) {
@@ -63,18 +73,15 @@ public class ServerStageData extends SavedData {
     }
 
     public static ServerStageData load(CompoundTag nbt) {
-//        var tagList = tag.getList(STAGE_LIST_ID, Tag.TAG_STRING);
-//        var newData = create();
-//
-//        for (int i = 0; i < tagList.size(); i++) {
-//            newData.add(tagList.getString(i));
-//        }
-
         var newData = create();
-        var size = nbt.getInt("server_stage_size");
 
-        for (int i = 0; i < size; i++) {
-            newData.serverStages.add(nbt.getString("server_stage_" + i));
+        var listTag = (ListTag) nbt.get("server_stages");
+        if (listTag != null) {
+            listTag.forEach(tag -> {
+                if (tag instanceof StringTag stringTag) {
+                    newData.serverStages.add(stringTag.getAsString());
+                }
+            });
         }
 
         return newData;
@@ -83,21 +90,10 @@ public class ServerStageData extends SavedData {
     @Override
     public CompoundTag save(CompoundTag nbt) {
         if (serverStages.isEmpty()) { return nbt; }
-//        var tagList = new ListTag();
-//
-//        for (String serverStage : serverStages) {
-//            var tag = new CompoundTag();
-//            tag.putString("value", serverStage);
-//            tagList.add(tag);
-//        }
-//
-//        nbt.put(STAGE_LIST_ID, tagList);
 
-        nbt.putInt("server_stage_size", serverStages.size());
-
-        for (int i = 0; i < serverStages.size(); i++) {
-            nbt.putString("server_stage_" + i, serverStages.get(i));
-        }
+        var listTag = new ListTag();
+        serverStages.forEach(stage -> listTag.add(StringTag.valueOf(stage)));
+        nbt.put("server_stages", listTag);
 
         return nbt;
     }

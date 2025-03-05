@@ -2,7 +2,7 @@ package com.alessandro.astages.event.ore;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.client.AClientOreRestriction;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.render.AOreBakedModel;

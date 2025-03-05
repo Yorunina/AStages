@@ -1,16 +1,24 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.networking.packet.syncer.RequestReRenderingS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
-import com.alessandro.astages.networking.packet.syncer.*;
+import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+import org.jetbrains.annotations.Nullable;
 
 public class ModNetworking {
     private static SimpleChannel INSTANCE;
@@ -36,12 +44,6 @@ public class ModNetworking {
                 .encoder(StageDataSyncS2CPacket::toBytes)
                 .consumerMainThread(StageDataSyncS2CPacket::handle)
                 .add();
-
-        net.messageBuilder(RequestReRenderingS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RequestReRenderingS2CPacket::new)
-            .encoder(RequestReRenderingS2CPacket::toBytes)
-            .consumerMainThread(RequestReRenderingS2CPacket::handle)
-            .add();
 
         // ITEMS
         net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -87,29 +89,29 @@ public class ModNetworking {
             .add();
 
         // JEI
-        net.messageBuilder(JeiSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(JeiSyncerS2CPacket::new)
-            .encoder(JeiSyncerS2CPacket::toBytes)
-            .consumerMainThread(JeiSyncerS2CPacket::handle)
+        net.messageBuilder(RequestItemReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(RequestItemReloadS2CPacket::new)
+            .encoder(RequestItemReloadS2CPacket::toBytes)
+            .consumerMainThread(RequestItemReloadS2CPacket::handle)
             .add();
 
         // RECIPES
-        net.messageBuilder(JeiRecipeSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(JeiRecipeSyncerS2CPacket::new)
-            .encoder(JeiRecipeSyncerS2CPacket::toBytes)
-            .consumerMainThread(JeiRecipeSyncerS2CPacket::handle)
+        net.messageBuilder(RecipeSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(RecipeSyncerS2CPacket::new)
+            .encoder(RecipeSyncerS2CPacket::toBytes)
+            .consumerMainThread(RecipeSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(JeiRecipeModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(JeiRecipeModSyncerS2CPacket::new)
-            .encoder(JeiRecipeModSyncerS2CPacket::toBytes)
-            .consumerMainThread(JeiRecipeModSyncerS2CPacket::handle)
+        net.messageBuilder(RecipeModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(RecipeModSyncerS2CPacket::new)
+            .encoder(RecipeModSyncerS2CPacket::toBytes)
+            .consumerMainThread(RecipeModSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(RequestJeiRecipeReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RequestJeiRecipeReloadS2CPacket::new)
-            .encoder(RequestJeiRecipeReloadS2CPacket::toBytes)
-            .consumerMainThread(RequestJeiRecipeReloadS2CPacket::handle)
+        net.messageBuilder(RequestRecipeReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(RequestRecipeReloadS2CPacket::new)
+            .encoder(RequestRecipeReloadS2CPacket::toBytes)
+            .consumerMainThread(RequestRecipeReloadS2CPacket::handle)
             .add();
 
 
@@ -133,6 +135,13 @@ public class ModNetworking {
             .consumerMainThread(MobSyncerS2CPacket::handle)
             .add();
 
+        // SERVER
+        net.messageBuilder(ServerStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(ServerStagesSyncerS2CPacket::new)
+            .encoder(ServerStagesSyncerS2CPacket::toBytes)
+            .consumerMainThread(ServerStagesSyncerS2CPacket::handle)
+            .add();
+
         // RELOADING
         net.messageBuilder(RequestClientReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(RequestClientReloadS2CPacket::new)
@@ -151,5 +160,13 @@ public class ModNetworking {
 
     public static <MSG> void sendToClients(MSG message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);
+    }
+
+    public static <MSG> void sendTo(@Nullable ServerPlayer player, MSG message) {
+        if (player == null) { // If Null -> Whole Server!
+            ModNetworking.sendToClients(message);
+        } else {
+            ModNetworking.sendToPlayer(message, player);
+        }
     }
 }

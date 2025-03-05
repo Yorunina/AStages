@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet.locker;
+package com.alessandro.astages.networking.packet.trash.locker;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;

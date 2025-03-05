@@ -116,7 +116,7 @@ public class AStagesKubeJSUtil {
         for (var item : items) {
             restriction.restrict(item);
         }
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }
@@ -125,7 +125,7 @@ public class AStagesKubeJSUtil {
     public static AItemPredicateRestriction addRestrictionForPredicate(String id, String stage, ResourceLocation modelId) {
         var restriction = new AItemPredicateRestriction(id, stage);
         restriction.restrict(modelId);
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }
@@ -133,7 +133,7 @@ public class AStagesKubeJSUtil {
     public static AItemModRestriction addRestrictionForMod(String id, String stage, String modId) {
         var restriction = new AItemModRestriction(id, stage);
         restriction.restrict(modId);
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }
@@ -141,7 +141,7 @@ public class AStagesKubeJSUtil {
     public static AItemTagRestriction addRestrictionForTag(String id, String stage, ResourceLocation name) {
         var restriction = new AItemTagRestriction(id, stage);
         restriction.restrict(name);
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }
@@ -163,7 +163,7 @@ public class AStagesKubeJSUtil {
             .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
             .set(Attributes.BLOCK_BREAKING, true);
 
-        ARestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }

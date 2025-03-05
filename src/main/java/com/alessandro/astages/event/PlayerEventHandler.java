@@ -29,7 +29,8 @@ public class PlayerEventHandler {
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
 
         if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer player) {
-            ARestrictionManager.onPlayerLoggedIn(player);
+            ARestrictionManager.clientSynchronization(player);
+            ARestrictionManager.reflectServerStagesChangesToClients(player, player.server);
         }
     }
 

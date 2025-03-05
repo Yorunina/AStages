@@ -1,8 +1,10 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.item.AClientModRestriction;
+import com.alessandro.astages.core.restriction.item.AItemModRestriction;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -15,9 +17,12 @@ import java.util.List;
 public class ModSyncerS2CPacket extends RestrictionSyncerPacket {
     private final String modId;
     private final List<Item> ignoredItems;
-    // private final List<TagKey<Item>> tagsIgnored;
     private final List<ResourceLocation> ignoredTags;
     private final boolean hideInJei;
+
+    public ModSyncerS2CPacket(AItemModRestriction restriction) {
+        this(restriction.getId(), restriction.getStage(), restriction.getModId(), restriction.getIgnoredItems(), restriction.getIgnoredTags(), restriction.get(Attributes.HIDING_JEI));
+    }
 
     public ModSyncerS2CPacket(String id, String stage, String modId, List<Item> ignoredItems, List<ResourceLocation> ignoredTags, boolean hideInJei) {
         super(id, stage);
@@ -46,12 +51,10 @@ public class ModSyncerS2CPacket extends RestrictionSyncerPacket {
 
     @Override
     public void handle() {
-//        var restriction = new AClientModRestriction(getId(), getStage(), modId, ignoredItems, ignoredTags);
-//        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(getStage(), restriction);
         var restriction = new AClientModRestriction(getId(), getStage()).setHideInJei(hideInJei);
         restriction.restrict(modId);
         restriction.ignoreItems(ignoredItems);
         restriction.ignoreTags(ignoredTags);
-        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        AClientRestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 }

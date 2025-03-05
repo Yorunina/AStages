@@ -4,22 +4,23 @@ import com.alessandro.astages.core.restriction.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.syncer.JeiRecipeModSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.syncer.JeiRecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.syncer.RequestJeiRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.store.AManager;
+import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeType;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, RecipeWrapper> {
+public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, RecipeWrapper> implements ClientSynchronizable {
     public final OrderedMultiMap<RecipeType<?>, ARecipeRestriction> CACHE = OrderedMultiMap.create();
     public final List<ARecipeRestriction> MOD_CACHE = new ArrayList<>();
 
@@ -68,19 +69,12 @@ public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, 
         return null;
     }
 
-    public void synchronizeWithClient(ServerPlayer player) {
+    @Override
+    public void synchronizeWithClient(@Nullable ServerPlayer player) {
         for (var type : CACHE.keySet()) {
-            for (var restriction : CACHE.get(type)) {
-                ModNetworking.sendToPlayer(new JeiRecipeSyncerS2CPacket(restriction.getId(), restriction.getStage(), restriction.getPriority(), restriction.getType(), restriction.getRecipes()), player);
-            }
+            CACHE.get(type).forEach(restriction -> ModNetworking.sendTo(player, new RecipeSyncerS2CPacket(restriction)));
         }
 
-        for (var restriction : MOD_CACHE) {
-            ModNetworking.sendToPlayer(new JeiRecipeModSyncerS2CPacket(restriction.getId(), restriction.getStage(), restriction.getModId()), player);
-        }
-
-        ModNetworking.sendToPlayer(new RequestJeiRecipeReloadS2CPacket(), player);
-
-        // restrictions.forEach((s, restrictions) -> restrictions.forEach(r -> ModNetworking.sendToPlayer(new JeiRecipeSyncerS2CPacket(r.getId(), s, r.getType(), r.getRecipes()), player)));
+        MOD_CACHE.forEach(restriction -> ModNetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
     }
 }

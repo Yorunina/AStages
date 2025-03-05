@@ -1,8 +1,10 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.item.AClientItemRestriction;
+import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,6 +16,10 @@ import java.util.List;
 public class ItemSyncerS2CPacket extends RestrictionSyncerPacket {
     private final List<Item> items;
     private final boolean hideInJei;
+
+    public ItemSyncerS2CPacket(AItemRestriction restriction) {
+        this(restriction.getId(), restriction.getStage(), restriction.getItems(), restriction.get(Attributes.HIDING_JEI));
+    }
 
     public ItemSyncerS2CPacket(String id, String stage, List<Item> items, boolean hideInJei) {
         super(id, stage);
@@ -38,6 +44,6 @@ public class ItemSyncerS2CPacket extends RestrictionSyncerPacket {
     public void handle() {
         var restriction = new AClientItemRestriction(getId(), getStage()).setHideInJei(hideInJei);
         for (var item : items) { restriction.restrict(item); }
-        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+        AClientRestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 }

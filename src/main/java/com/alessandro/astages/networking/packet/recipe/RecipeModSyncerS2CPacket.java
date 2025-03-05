@@ -1,25 +1,32 @@
-package com.alessandro.astages.networking.packet.syncer;
+package com.alessandro.astages.networking.packet.recipe;
 
 import com.alessandro.astages.core.client.AClientRecipeModRestriction;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.restriction.ARecipeRestriction;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class JeiRecipeModSyncerS2CPacket {
+@Info("For now, required only by JEI.")
+public class RecipeModSyncerS2CPacket {
     private final String id;
     private final String stage;
     private final String modId;
 
-    public JeiRecipeModSyncerS2CPacket(String id, String stage, String modId) {
+    public RecipeModSyncerS2CPacket(@NotNull ARecipeRestriction restriction) {
+        this(restriction.getId(), restriction.getStage(), restriction.getModId());
+    }
+
+    public RecipeModSyncerS2CPacket(String id, String stage, String modId) {
         this.id = id;
         this.stage = stage;
         this.modId = modId;
     }
 
-    public JeiRecipeModSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public RecipeModSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
         this.id = buf.readUtf();
         this.stage = buf.readUtf();
         this.modId = buf.readUtf();

@@ -1,6 +1,6 @@
-package com.alessandro.astages.networking.packet.syncer;
+package com.alessandro.astages.networking.packet.reload;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,8 @@
 package com.alessandro.astages.core.client.item;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.integration.jei.CustomItemStackKey;
 import com.alessandro.astages.networking.ModNetworking;
@@ -30,7 +29,7 @@ public class AClientItemManager {
     static {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
             if (e.getOperation() != PlayerStage.Operation.GET) {
-                AClientRestrictionManager.NEW_ITEM_INSTANCE.clearProperties();
+                AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
             }
         });
     }
@@ -118,7 +117,7 @@ public class AClientItemManager {
 
         var id = getRestrictionIdForStack(stack);
         if (id != null) {
-            AStages.LOGGER.debug("Requested for stack: {}, id: {}", stack, id);
+//            AStages.LOGGER.debug("Requested for stack: {}, id: {}", stack, id);
             ModNetworking.sendToServer(new RequestItemPropertyC2SPacket(id, ids.get(id).getStage(), stack));
         } else {
             properties.put(CustomItemStackKey.build(stack), null);

@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet.syncer;
+package com.alessandro.astages.networking.packet.trash;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;

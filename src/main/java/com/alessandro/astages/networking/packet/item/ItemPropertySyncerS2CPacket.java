@@ -1,6 +1,6 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.item.AClientItemPropertyRestriction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -56,7 +56,7 @@ public class ItemPropertySyncerS2CPacket {
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             var restriction = new AClientItemPropertyRestriction(id, stage, stack, renderItemName, hideTooltip, tooltipMessage, jadeItemMessage, jadeBlockMessage);
-            AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(restriction);
+            AClientRestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         });
 
         ctx.get().setPacketHandled(true);

@@ -1,6 +1,7 @@
 package com.alessandro.astages.command;
 
 import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.command.argument.AStagesServerRemoveArgument;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.ChatFormatting;
@@ -17,8 +18,8 @@ public class AStagesServerCommands {
             .then(Commands.literal("add").then(Commands.argument("stage", StringArgumentType.string())
                 .executes(context -> addServerStageCommand(context.getSource().getServer(), StringArgumentType.getString(context, "stage")))
             ))
-            .then(Commands.literal("remove").then(Commands.argument("stage", StringArgumentType.string())
-                .executes(context -> removeServerStageCommand(context.getSource().getServer(), StringArgumentType.getString(context, "stage")))
+            .then(Commands.literal("remove").then(Commands.argument("stage", AStagesServerRemoveArgument.stages())
+                .executes(context -> removeServerStageCommand(context.getSource().getServer(), AStagesServerRemoveArgument.getStage(context, "stage")))
             ))
             .then(Commands.literal("remove_all")
                 .executes(context -> removeAllServerStageCommand(context.getSource().getServer()))

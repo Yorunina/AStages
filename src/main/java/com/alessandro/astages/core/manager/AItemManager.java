@@ -4,17 +4,25 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.restriction.item.*;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.PredicateSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.TagSyncerS2CPacket;
+import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.util.AStagesUtil;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AItemManager {
+public class AItemManager implements ClientSynchronizable {
     private final List<ABaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseItemRestriction<?, ?>> IDS = new HashMap<>();
 
@@ -47,10 +55,10 @@ public class AItemManager {
         restrictions.clear();
         IDS.clear();
 
-//        items.clear();
-//        mods.clear();
-//        tags.clear();
-//        predicates.clear();
+        items.clear();
+        mods.clear();
+        tags.clear();
+        predicates.clear();
     }
 
     public ABaseItemRestriction<?, ?> getRestriction(String id) {
@@ -60,26 +68,6 @@ public class AItemManager {
     public ABaseItemRestriction<?, ?> getRestriction(Player player, ItemStack stack) {
         return restrictions.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
-
-//    public void addRestriction(@NotNull ABaseItemRestriction<?, ?> restriction) {
-//        if (IDS.containsKey(restriction.getId()) && AStagesCommon.ENABLE_LOGS.get()) {
-//            AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
-//            return;
-//        }
-//
-//        IDS.put(restriction.getId(), restriction);
-//        restrictions.add(restriction);
-//
-//        if (restriction instanceof AItemRestriction) {
-//            items.add((AItemRestriction) restriction);
-//        } else if (restriction instanceof AItemModRestriction) {
-//            mods.add((AItemModRestriction) restriction);
-//        } else if (restriction instanceof AItemTagRestriction) {
-//            tags.add((AItemTagRestriction) restriction);
-//        }
-//
-//        ARestrictionManager.ALL_STAGES.add(restriction.getStage());
-//    }
 
     public void addRestriction(AItemRestriction restriction) {
         if (commonAddOperations(restriction)) {
@@ -118,17 +106,11 @@ public class AItemManager {
         return true;
     }
 
-//    public ABaseItemRestriction<?, ?> getRestrictionFromCache(OrderedMultiMap<ItemStack, ABaseItemRestriction<?, ?>> cache, ItemStack value, Player player) {
-//        var restrictions = cache.get(value);
-//
-//        if (!restrictions.isEmpty()) {
-//            for (var restriction : restrictions) {
-//                if (!AStagesUtil.hasStage(player, restriction.getStage())) {
-//                    return restriction;
-//                }
-//            }
-//        }
-//
-//        return null;
-//    }
+    @Override
+    public void synchronizeWithClient(@Nullable ServerPlayer player) {
+        items.forEach(restriction -> ModNetworking.sendTo(player, new ItemSyncerS2CPacket(restriction)));
+        tags.forEach(restriction -> ModNetworking.sendTo(player, new TagSyncerS2CPacket(restriction)));
+        mods.forEach(restriction -> ModNetworking.sendTo(player, new ModSyncerS2CPacket(restriction)));
+        predicates.forEach(restriction -> ModNetworking.sendTo(player, new PredicateSyncerS2CPacket(restriction)));
+    }
 }
