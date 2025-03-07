@@ -52,11 +52,11 @@ public class ModNetworking {
             .consumerMainThread(ItemSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::new)
-            .encoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::toBytes)
-            .consumerMainThread(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::handle)
-            .add();
+//        net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//            .decoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::new)
+//            .encoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::toBytes)
+//            .consumerMainThread(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::handle)
+//            .add();
 
         net.messageBuilder(TagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(TagSyncerS2CPacket::new)

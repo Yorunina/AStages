@@ -9,6 +9,7 @@ import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.PredicateSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.TagSyncerS2CPacket;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +31,9 @@ public class AItemManager implements ClientSynchronizable {
     private final List<AItemModRestriction> mods = new ArrayList<>();
     private final List<AItemTagRestriction> tags = new ArrayList<>();
     private final List<AItemPredicateRestriction> predicates = new ArrayList<>();
+
+    private final List<ABaseItemRestriction<?, ?>> INVENTORY_CACHE = new ArrayList<>();
+    private final List<ABaseItemRestriction<?, ?>> EQUIPMENT_CACHE = new ArrayList<>();
 
     public List<AItemRestriction> getItemRestrictions() {
         return items;
@@ -59,6 +63,21 @@ public class AItemManager implements ClientSynchronizable {
         mods.clear();
         tags.clear();
         predicates.clear();
+
+        INVENTORY_CACHE.clear();
+        EQUIPMENT_CACHE.clear();
+    }
+
+    public void reloadAfterScripts() {
+        restrictions.forEach(restriction -> {
+            if (restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
+                INVENTORY_CACHE.add(restriction);
+            }
+
+            if (restriction.isDisabled(Attributes.EQUIPPING)) {
+                EQUIPMENT_CACHE.add(restriction);
+            }
+        });
     }
 
     public ABaseItemRestriction<?, ?> getRestriction(String id) {
@@ -67,6 +86,14 @@ public class AItemManager implements ClientSynchronizable {
 
     public ABaseItemRestriction<?, ?> getRestriction(Player player, ItemStack stack) {
         return restrictions.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+    }
+
+    public ABaseItemRestriction<?, ?> getInventoryRestriction(Player player, ItemStack stack) {
+        return INVENTORY_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+    }
+
+    public ABaseItemRestriction<?, ?> getEquipmentRestriction(Player player, ItemStack stack) {
+        return EQUIPMENT_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
 
     public void addRestriction(AItemRestriction restriction) {

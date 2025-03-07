@@ -83,6 +83,8 @@ public class ARestrictionManager {
     public static void reloadAfterScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
+
+        ARestrictionManager.ITEM_INSTANCE.reloadAfterScripts();
     }
 
     @SuppressWarnings("unchecked")

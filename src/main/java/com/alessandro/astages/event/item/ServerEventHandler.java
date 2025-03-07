@@ -2,7 +2,7 @@ package com.alessandro.astages.event.item;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.item.AItemRestriction;
+import com.alessandro.astages.core.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
@@ -206,42 +206,42 @@ public class ServerEventHandler {
                     ItemStack slotContent = inventory.getItem(i);
 
                     if (!slotContent.isEmpty()) {
-                        AItemRestriction restriction;
+                        ABaseItemRestriction<?, ?> restriction;
 
                         if (i >= armorStart && i <= armorEnd) {
-//                            restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
+                            restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
                         } else {
-//                            restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
+                            restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
                         }
 
-//                        if (restriction != null) {
-//                            restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
-//
-//                            inventory.setItem(i, ItemStack.EMPTY);
-//                            player.drop(slotContent, false);
-//                        }
+                        if (restriction != null) {
+                            restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
+
+                            inventory.setItem(i, ItemStack.EMPTY);
+                            player.drop(slotContent, false);
+                        }
                     }
                 }
             } else {
                 ItemStack slotContent = inventory.getItem(CommonEventSettings.slotChanged);
 
                 if (!slotContent.isEmpty()) {
-                    AItemRestriction restriction;
+                    ABaseItemRestriction<?, ?> restriction;
 
                     if (CommonEventSettings.slotChanged >= armorStart && CommonEventSettings.slotChanged <= armorEnd) {
-//                        restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
                     } else {
-//                        restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
                     }
 
-//                    if (restriction != null) {
-//                        restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
-//
-//                        inventory.setItem(CommonEventSettings.slotChanged, ItemStack.EMPTY);
-//                        player.drop(slotContent, false);
-//
-//                        AStages.LOGGER.debug(inventory.getItem(CommonEventSettings.slotChanged).toString());
-//                    }
+                    if (restriction != null) {
+                        restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
+
+                        inventory.setItem(CommonEventSettings.slotChanged, ItemStack.EMPTY);
+                        player.drop(slotContent, false);
+
+                        AStages.LOGGER.debug(inventory.getItem(CommonEventSettings.slotChanged).toString());
+                    }
                 }
             }
 
