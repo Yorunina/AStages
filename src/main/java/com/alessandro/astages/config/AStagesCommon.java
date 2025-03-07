@@ -9,6 +9,8 @@ public class AStagesCommon {
 
     public static final ModConfigSpec.ConfigValue<Boolean> ENABLE_TITLE_AFTER_STAGE_ADDING;
     public static final ModConfigSpec.EnumValue<ChatFormatting> TITLE_COLOR;
+    public static final ModConfigSpec.ConfigValue<Integer> TICK_STRUCTURE_UPDATING;
+    public static final ModConfigSpec.ConfigValue<Boolean> ENABLE_LOGS;
 
     static {
         BUILDER.push("Configs for AStages Mod");
@@ -18,6 +20,12 @@ public class AStagesCommon {
 
         TITLE_COLOR = BUILDER.comment("If previous setting is enabled, set the color of the title that appears")
             .defineEnum("Title color", ChatFormatting.RED);
+
+        TICK_STRUCTURE_UPDATING = BUILDER.comment("Every how many ticks the updating of the structures in which the player is located is required")
+            .define("Tick Structure Updating", 1);
+
+        ENABLE_LOGS = BUILDER.comment("Show logs related to dev things!")
+            .define("Enable Logs", true);
 
         BUILDER.pop();
 

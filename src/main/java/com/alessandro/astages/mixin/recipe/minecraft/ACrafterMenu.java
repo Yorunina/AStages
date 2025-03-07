@@ -1,16 +1,40 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.CrafterMenu;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.CrafterBlock;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(CrafterMenu.class)
 public class ACrafterMenu {
-//    @Inject(method = "refreshRecipeResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V"))
-//    private void astages$refreshRecipeResult(CallbackInfo ci, @Local Level level, @Local CraftingInput craftinginput) {
-//        ItemStack newStack = CrafterBlock.getPotentialResults(level, craftinginput).map((recipeHolder) -> {
-//            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction()
-//
-//            recipeHolder.value().assemble(craftinginput, level.registryAccess());
-//        }).orElse(ItemStack.EMPTY);
-//    }
+    @Shadow @Final private ResultContainer resultContainer;
+
+    @Inject(method = "refreshRecipeResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/CrafterBlock;getPotentialResults(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/crafting/CraftingInput;)Ljava/util/Optional;"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    private void astages$refreshRecipeResult(@NotNull CallbackInfo ci, ServerPlayer serverPlayer, Level level, CraftingInput craftingInput) {
+        ItemStack itemstack = CrafterBlock.getPotentialResults(level, craftingInput).map((recipeHolder) -> {
+            var recipe = recipeHolder.value();
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(serverPlayer, new RecipeWrapper(recipe.getType(), recipeHolder.id()));
+
+            if (restriction != null) { return ItemStack.EMPTY; }
+
+            return recipe.assemble(craftingInput, level.registryAccess());
+        }).orElse(ItemStack.EMPTY);
+
+        this.resultContainer.setItem(0, itemstack);
+
+        ci.cancel();
+    }
 }

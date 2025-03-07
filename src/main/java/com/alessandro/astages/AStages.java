@@ -4,6 +4,7 @@ import com.alessandro.astages.block.ModBlocks;
 import com.alessandro.astages.capability.AProvider;
 import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.item.ModItems;
+import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 public class AStages {
     public static final String MODID = "astages";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Stopwatch TIMER = Stopwatch.createUnstarted();
 
     public AStages(IEventBus modEventBus, ModContainer ignoredModContainer) {
         AProvider.ATTACHMENT_TYPES.register(modEventBus);

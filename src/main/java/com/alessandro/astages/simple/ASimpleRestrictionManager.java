@@ -4,9 +4,10 @@ import com.alessandro.astages.AStages;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.neoforged.fml.loading.FMLPaths;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ASimpleRestrictionManager {
     public static Map<ASimpleRestrictionType, List<ASimpleRestriction>> RESTRICTIONS = null;
     private static int canBeReloadable = 0;
@@ -27,10 +30,11 @@ public class ASimpleRestrictionManager {
 
     public static void addRestriction(ASimpleRestrictionType type, String id, String stage, String object) {
         var newList = RESTRICTIONS.getOrDefault(type, new ArrayList<>());
-        newList.add(new ASimpleRestriction(id, stage, object));
+        var restriction = new ASimpleRestriction(id, stage, object);
+        newList.add(restriction);
         RESTRICTIONS.put(type, newList);
 
-        synchronizeWithServer();
+        synchronizeWithServer(type, restriction);
 
         canBeReloadable++;
 
@@ -40,21 +44,19 @@ public class ASimpleRestrictionManager {
         }
     }
 
-    public static void synchronizeWithServer() {
-        for (var entry : RESTRICTIONS.entrySet()) {
-            switch (entry.getKey()) {
-                case ITEM -> entry.getValue().forEach(ASimpleElaborator::elaborateItem);
-                case MOD -> entry.getValue().forEach(ASimpleElaborator::elaborateMod);
-                case DIMENSION -> entry.getValue().forEach(ASimpleElaborator::elaborateDimension);
-                case GUI -> entry.getValue().forEach(ASimpleElaborator::elaborateGui);
-                case ORE -> entry.getValue().forEach(ASimpleElaborator::elaborateOre);
-                case STRUCTURE -> entry.getValue().forEach(ASimpleElaborator::elaborateStructure);
-                case BIOME -> entry.getValue().forEach(simple -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!"));
-                case TAME -> entry.getValue().forEach(ASimpleElaborator::elaborateTame);
-                case MOUNT -> entry.getValue().forEach(ASimpleElaborator::elaborateMount);
-                case RECIPE -> entry.getValue().forEach(ASimpleElaborator::elaborateRecipe);
-                case ARMOR -> entry.getValue().forEach(ASimpleElaborator::elaborateArmor);
-            }
+    public static void synchronizeWithServer(ASimpleRestrictionType type, ASimpleRestriction restriction) {
+        switch (type) {
+            case ITEM -> ASimpleElaborator.elaborateItem(restriction);
+            case MOD -> ASimpleElaborator.elaborateMod(restriction);
+            case DIMENSION -> ASimpleElaborator.elaborateDimension(restriction);
+            case GUI -> ASimpleElaborator.elaborateGui(restriction);
+            case ORE -> ASimpleElaborator.elaborateOre(restriction);
+            case STRUCTURE -> ASimpleElaborator.elaborateStructure(restriction);
+            case BIOME -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
+            case TAME -> ASimpleElaborator.elaborateTame(restriction);
+            case MOUNT -> ASimpleElaborator.elaborateMount(restriction);
+            case RECIPE -> ASimpleElaborator.elaborateRecipe(restriction);
+            case ARMOR -> ASimpleElaborator.elaborateArmor(restriction);
         }
     }
 
@@ -69,7 +71,11 @@ public class ASimpleRestrictionManager {
             if (RESTRICTIONS == null) {
                 RESTRICTIONS = new HashMap<>();
             } else {
-                synchronizeWithServer();
+                for (var type : RESTRICTIONS.keySet()) {
+                    for (var restriction : RESTRICTIONS.get(type)) {
+                        synchronizeWithServer(type, restriction);
+                    }
+                }
             }
         } catch (IOException exception) {
             AStages.LOGGER.error(exception.getLocalizedMessage());
@@ -87,7 +93,7 @@ public class ASimpleRestrictionManager {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static @NotNull File getConfigFileWithRestrictions() {
+    public static File getConfigFileWithRestrictions() {
         File saveDir = new File(FMLPaths.CONFIGDIR.get().toFile(), "astages");
 
         if (!saveDir.exists()) {

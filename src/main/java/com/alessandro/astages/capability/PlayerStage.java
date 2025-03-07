@@ -12,11 +12,13 @@ import com.alessandro.astages.util.develop.Info;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -24,6 +26,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.IntFunction;
 
 public class PlayerStage implements INBTSerializable<CompoundTag> {
     public enum Status {
@@ -31,7 +34,28 @@ public class PlayerStage implements INBTSerializable<CompoundTag> {
     }
 
     public enum Operation {
-        ADD, REMOVE, REMOVE_ALL, GET, LOGIN
+        ADD(0), REMOVE(1), REMOVE_ALL(2), GET(3), LOGIN(4);
+
+        private final int id;
+
+        Operation(int id) {
+            this.id = id;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        @Contract(pure = true)
+        public static int getId(@NotNull Operation operation) {
+            return operation.id();
+        }
+
+        public static final IntFunction<Operation> BY_ID = ByIdMap.continuous(
+            Operation::getId,
+            Operation.values(),
+            ByIdMap.OutOfBoundsStrategy.ZERO
+        );
     }
 
     private List<String> stages = new ArrayList<>();
@@ -57,7 +81,7 @@ public class PlayerStage implements INBTSerializable<CompoundTag> {
         NeoForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
-            PacketDistributor.sendToPlayer((ServerPlayer) player, new StageDataSyncS2CPacket(stages));
+            PacketDistributor.sendToPlayer((ServerPlayer) player, new StageDataSyncS2CPacket(stages, operation));
 
             if (!silentTitle && stage != null) {
                 if (player instanceof ServerPlayer serverPlayer) {

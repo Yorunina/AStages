@@ -1,10 +1,17 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.manager.*;
-import com.alessandro.astages.networking.packet.syncer.*;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.util.ARestrictionType;
-import net.minecraft.core.registries.BuiltInRegistries;
+import com.alessandro.astages.util.develop.UnderDevelopment;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -16,12 +23,9 @@ import java.util.Set;
 
 public class ARestrictionManager {
     // ADD SLOT RESTRICTION
-    // ADD ENCHANTMENT RESTRICTION
-
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
     public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
     public static final AMobManager MOB_INSTANCE = new AMobManager();
-//    public static final ATimeManager TIME_INSTANCE = new ATimeManager();
     public static final AStructureManager STRUCTURE_INSTANCE = new AStructureManager();
     public static final ARecipeManager RECIPE_INSTANCE = new ARecipeManager();
     public static final AScreenManager SCREEN_INSTANCE = new AScreenManager();
@@ -35,9 +39,7 @@ public class ARestrictionManager {
     public static Set<String> ORE_STAGES = new HashSet<>();
 
     public static void reloadBeforeScripts() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            return;
-        }
+        if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
 
         ITEM_INSTANCE.reloadBeforeScripts();
         DIMENSION_INSTANCE.reloadBeforeScripts();
@@ -53,38 +55,37 @@ public class ARestrictionManager {
 
         ALL_STAGES.clear();
         ORE_STAGES.clear();
-        
+
         PacketDistributor.sendToAllPlayers(new RequestClientReloadS2CPacket());
     }
 
-    public static void reloadAfterScripts() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            AStages.LOGGER.debug("SERVER is NULL!");
-            return;
-        }
+    public static void clientSynchronization(@Nullable ServerPlayer player) {
+        AStages.TIMER.start();
 
-        // ITEMS AUTOMATICALLY -> question/answer system
-        // JEI
-        PacketDistributor.sendToAllPlayers(new RequestJeiClientReloadS2CPacket());
+        ARestrictionManager.ITEM_INSTANCE.synchronizeWithClient(player);
+        ARestrictionManager.RECIPE_INSTANCE.synchronizeWithClient(player);
+        ARestrictionManager.MOB_INSTANCE.synchronizeWithClient(player);
+        ARestrictionManager.ORE_INSTANCE.synchronizeWithClient(player);
 
-        // RECIPE
-        ARestrictionManager.RECIPE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> PacketDistributor.sendToAllPlayers(new JeiRecipeSyncerS2CPacket(restriction.getId(), s, BuiltInRegistries.RECIPE_TYPE.wrapAsHolder(restriction.getType()), restriction.getRecipes()))));
+        ModNetworking.sendTo(player, new RequestItemReloadS2CPacket());
+        ModNetworking.sendTo(player, new RequestRecipeReloadS2CPacket());
+        ModNetworking.sendTo(player, new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()));
 
-        // ORE
-        ARestrictionManager.ORE_INSTANCE.getRestrictions().forEach((s, r) -> r.forEach(restriction -> {
-            PacketDistributor.sendToAllPlayers(new OreSyncerS2CPacket(restriction.getId(), s, restriction.getOriginal(), restriction.getReplacement(), false));
-        }));
-
-        // ORE STAGES
-        synchronizeOreStages(null);
+        AStages.TIMER.stop();
+        AStages.LOGGER.info("AStages synchronization took {}!", AStages.TIMER);
     }
 
-    public static void synchronizeOreStages(ServerPlayer player) {
-        if (player == null) {
-            PacketDistributor.sendToAllPlayers(new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()));
-        } else {
-            PacketDistributor.sendToPlayer(player, new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()));
-        }
+    public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
+        var data = ServerStageData.getData(server);
+        ModNetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get()));
+    }
+
+    @UnderDevelopment
+    public static void reloadAfterScripts() {
+        if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
+        clientSynchronization(null);
+
+        ARestrictionManager.ITEM_INSTANCE.reloadAfterScripts();
     }
 
     @SuppressWarnings("unchecked")

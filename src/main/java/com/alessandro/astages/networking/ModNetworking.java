@@ -1,15 +1,27 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.networking.packet.RenderAtLoginS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
-import com.alessandro.astages.networking.packet.syncer.*;
+import com.alessandro.astages.networking.packet.item.*;
+import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(modid = AStages.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModNetworking {
@@ -19,30 +31,42 @@ public class ModNetworking {
 
         // STAGES
         registrar.playToClient(StageDataSyncS2CPacket.TYPE, StageDataSyncS2CPacket.STREAM_CODEC, StageDataSyncS2CPacket::handle);
-        registrar.playToClient(RenderAtLoginS2CPacket.TYPE, RenderAtLoginS2CPacket.STREAM_CODEC, RenderAtLoginS2CPacket::handle);
 
-        // ITEM
-        registrar.playToServer(IsItemRestrictedC2SPacket.TYPE, IsItemRestrictedC2SPacket.STREAM_CODEC, IsItemRestrictedC2SPacket::handle);
+        // ITEMS
         registrar.playToClient(ItemSyncerS2CPacket.TYPE, ItemSyncerS2CPacket.STREAM_CODEC, ItemSyncerS2CPacket::handle);
-        registrar.playToClient(NullItemSyncerS2CPacket.TYPE, NullItemSyncerS2CPacket.STREAM_CODEC, NullItemSyncerS2CPacket::handle);
+        registrar.playToClient(TagSyncerS2CPacket.TYPE, TagSyncerS2CPacket.STREAM_CODEC, TagSyncerS2CPacket::handle);
+        registrar.playToClient(ModSyncerS2CPacket.TYPE, ModSyncerS2CPacket.STREAM_CODEC, ModSyncerS2CPacket::handle);
+        registrar.playToClient(PredicateSyncerS2CPacket.TYPE, PredicateSyncerS2CPacket.STREAM_CODEC, PredicateSyncerS2CPacket::handle);
+        registrar.playToClient(ItemPropertySyncerS2CPacket.TYPE, ItemPropertySyncerS2CPacket.STREAM_CODEC, ItemPropertySyncerS2CPacket::handle);
+        registrar.playToServer(RequestItemPropertyC2SPacket.TYPE, RequestItemPropertyC2SPacket.STREAM_CODEC, RequestItemPropertyC2SPacket::handle);
 
         // JEI
-        registrar.playToServer(IsJeiRestrictedC2SPacket.TYPE, IsJeiRestrictedC2SPacket.STREAM_CODEC, IsJeiRestrictedC2SPacket::handle);
-        registrar.playToClient(JeiIsRestrictedS2CPacket.TYPE, JeiIsRestrictedS2CPacket.STREAM_CODEC, JeiIsRestrictedS2CPacket::handle);
-        registrar.playToClient(JeiSyncerS2CPacket.TYPE, JeiSyncerS2CPacket.STREAM_CODEC, JeiSyncerS2CPacket::handle);
-        registrar.playToClient(RequestJeiClientReloadS2CPacket.TYPE, RequestJeiClientReloadS2CPacket.STREAM_CODEC, RequestJeiClientReloadS2CPacket::handle);
+        registrar.playToClient(RequestItemReloadS2CPacket.TYPE, RequestItemReloadS2CPacket.STREAM_CODEC, RequestItemReloadS2CPacket::handle);
 
-        // RECIPES
-        registrar.playToClient(JeiRecipeSyncerS2CPacket.TYPE, JeiRecipeSyncerS2CPacket.STREAM_CODEC, JeiRecipeSyncerS2CPacket::handle);
+        // RECIPE
+        registrar.playToClient(RecipeSyncerS2CPacket.TYPE, RecipeSyncerS2CPacket.STREAM_CODEC, RecipeSyncerS2CPacket::handle);
+        registrar.playToClient(RecipeModSyncerS2CPacket.TYPE, RecipeModSyncerS2CPacket.STREAM_CODEC, RecipeModSyncerS2CPacket::handle);
+        registrar.playToClient(RequestRecipeReloadS2CPacket.TYPE, RequestRecipeReloadS2CPacket.STREAM_CODEC, RequestRecipeReloadS2CPacket::handle);
 
         // ORES
         registrar.playToClient(OreSyncerS2CPacket.TYPE, OreSyncerS2CPacket.STREAM_CODEC, OreSyncerS2CPacket::handle);
         registrar.playToClient(OreStagesSyncerS2CPacket.TYPE, OreStagesSyncerS2CPacket.STREAM_CODEC, OreStagesSyncerS2CPacket::handle);
 
+        // MOB
+        registrar.playToClient(MobSyncerS2CPacket.TYPE, MobSyncerS2CPacket.STREAM_CODEC, MobSyncerS2CPacket::handle);
+
+        // SERVER
+        registrar.playToClient(ServerStagesSyncerS2CPacket.TYPE, ServerStagesSyncerS2CPacket.STREAM_CODEC, ServerStagesSyncerS2CPacket::handle);
+
         // RELOADING
         registrar.playToClient(RequestClientReloadS2CPacket.TYPE, RequestClientReloadS2CPacket.STREAM_CODEC, RequestClientReloadS2CPacket::handle);
+    }
 
-        // AREA PROTECTED
-//        registrar.playToServer(IsItemRestrictedC2SPacket.TYPE, IsItemRestrictedC2SPacket.STREAM_CODEC, IsItemRestrictedC2SPacket::handle);
+    public static void sendTo(@Nullable ServerPlayer player, CustomPacketPayload payload) {
+        if (player == null) { // If Null -> Whole Server!
+            PacketDistributor.sendToAllPlayers(payload);
+        } else {
+            PacketDistributor.sendToPlayer(player, payload);
+        }
     }
 }

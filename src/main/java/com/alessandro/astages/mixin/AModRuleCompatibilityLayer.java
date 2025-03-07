@@ -20,25 +20,23 @@ public class AModRuleCompatibilityLayer {
 
     @Inject(method = "hasGameStage", at = @At("RETURN"), cancellable = true)
     public void hasGameStage(@NotNull Player player, String stage, @NotNull CallbackInfoReturnable<Boolean> cir) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-        cir.setReturnValue(data.getStages().contains(stage));
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        cir.setReturnValue(playerStage.getStages().contains(stage));
     }
 
     @Inject(method = "addGameStage", at = @At("HEAD"), cancellable = true)
     public void addGameStage(@NotNull Player player, String stage, @NotNull CallbackInfo ci) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-
-        data.addStage(stage);
-        data.setChangedFor(player, PlayerStage.Operation.ADD, stage);
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        playerStage.addStage(stage);
+        playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stage);
         ci.cancel();
     }
 
     @Inject(method = "addGameStage", at = @At("HEAD"), cancellable = true)
     public void removeGameStage(@NotNull Player player, String stage, @NotNull CallbackInfo ci) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-
-        data.removeStage(stage);
-        data.setChangedFor(player, PlayerStage.Operation.REMOVE, stage);
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        playerStage.removeStage(stage);
+        playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stage);
         ci.cancel();
     }
 }

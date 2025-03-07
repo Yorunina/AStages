@@ -50,28 +50,26 @@ public class AStagesModificationCommands {
     }
 
     private static int addStageCommand(Player player, String stageToAdd, boolean silentChat, boolean silentTitle) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-
-        data.addStage(stageToAdd);
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        playerStage.addStage(stageToAdd);
 
         if (!silentChat) {
             player.sendSystemMessage(Component.translatable("chat.astages.add", stageToAdd).withStyle(ChatFormatting.GREEN));
         }
 
-        data.setChangedFor(player, PlayerStage.Operation.ADD, stageToAdd, silentTitle);
+        playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stageToAdd, silentTitle);
 
         return 1;
     }
 
     private static int removeStageCommand(Player player, String stageToRemove, boolean silentChat, boolean silentTitle) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-
-        if (data.removeStage(stageToRemove) == PlayerStage.Status.SUCCESS) {
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        if (playerStage.removeStage(stageToRemove) == PlayerStage.Status.SUCCESS) {
             if (!silentChat) {
                 player.sendSystemMessage(Component.translatable("chat.astages.remove", stageToRemove).withStyle(ChatFormatting.GREEN));
             }
 
-            data.setChangedFor(player, PlayerStage.Operation.REMOVE, stageToRemove, silentTitle);
+            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stageToRemove, silentTitle);
         } else {
             if (!silentChat) {
                 player.sendSystemMessage(Component.translatable("chat.astages.not_present", stageToRemove).withStyle(ChatFormatting.RED));
@@ -82,26 +80,26 @@ public class AStagesModificationCommands {
     }
 
     private static int removeAllStagesCommand(Player player, boolean silentChat, boolean silentTitle) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-
-        data.removeAllStages();
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        playerStage.removeAllStages();
 
         if (!silentChat) {
             player.sendSystemMessage(Component.translatable("chat.astages.remove_all").withStyle(ChatFormatting.GREEN));
         }
 
-        data.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, null, silentTitle);
+        playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, null, silentTitle);
+
 
         return 1;
     }
 
     private static int infoCommand(ServerPlayer executor, Player player) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
-        if (data.getStages().isEmpty()) {
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        if (playerStage.getStages().isEmpty()) {
             executor.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", player.getName()).withStyle(ChatFormatting.RED));
         } else {
             executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", player.getName()).withStyle(ChatFormatting.GREEN));
-            for (var stage : data.getStages()) {
+            for (var stage : playerStage.getStages()) {
                 executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
             }
         }

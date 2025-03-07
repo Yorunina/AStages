@@ -42,7 +42,7 @@ public class Attribute<T> {
     public String toString() {
         return "Attribute{" +
             "id='" + id + '\'' +
-            ", type=" + type +
+            ", recipeType=" + type +
             ", defaultValue=" + defaultValue +
             '}';
     }

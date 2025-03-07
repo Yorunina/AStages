@@ -11,7 +11,28 @@ public class PlayerInventoryChangedEvent extends PlayerEvent {
     public PlayerInventoryChangedEvent(Player player, ItemStack item, int slot) {
         super(player);
         this.item = item;
-        this.slot = slot;
+
+        // Solving hotbar indexes
+        if (slot >= 36 && slot <= 44) {
+            this.slot = slot - 36;
+
+        // Solving second-hand index
+        } else if (slot == 45) {
+            this.slot = 40;
+
+        // Solving armor indexes
+        } else if (slot == 5) {
+            this.slot = 39;
+        } else if (slot == 6) {
+            this.slot = 38;
+        } else if (slot == 7) {
+            this.slot = 37;
+        } else if (slot == 8) {
+            this.slot = 36;
+
+        } else {
+            this.slot = slot;
+        }
     }
 
     public ItemStack getItem() {

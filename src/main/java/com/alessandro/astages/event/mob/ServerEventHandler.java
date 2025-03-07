@@ -20,29 +20,28 @@ import java.util.Objects;
 public class ServerEventHandler {
     @SubscribeEvent
     public static void checkMobSpawning(MobSpawnEvent.PositionCheck event) {
-
-//        if (event.getSpawnType() == MobSpawnType.SPAWNER)
-//            return;
-//        event.ge
         Player nearestPlayer = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
-//        Player nearestPlayer = event.getLevel().getNearestPlayer(a -> (), event.getEntity());
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(nearestPlayer, event.getEntity().getType());
+        var server = event.getEntity().getServer();
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(event.getEntity().getType(), nearestPlayer, server);
 
-        if (restriction != null) {
+        if (restriction != null && restriction.isDisabled(Attributes.MOB_SPAWNING)) {
             if (event.getSpawnType() == MobSpawnType.SPAWNER && restriction.isDisabled(Attributes.SPAWNER)) {
                 event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
                 return;
             }
 
-            if (restriction.getAttribute(Attributes.DIMENSION) != null) {
-                event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
-                return;
+            var dimension = restriction.get(Attributes.DIMENSION);
+            if (restriction.get(Attributes.DIMENSION) != null) {
+                if (event.getEntity().level().dimension().location() == dimension) {
+                    event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
+                    return;
+                }
             }
 
-            if (restriction.getAttribute(Attributes.REPLACE) != null) {
+            if (restriction.get(Attributes.REPLACE) != null) {
                 var level = event.getLevel().getLevel();
 
-                Entity newEntity = Objects.requireNonNull(restriction.getAttribute(Attributes.REPLACE).create(level));
+                Entity newEntity = Objects.requireNonNull(restriction.get(Attributes.REPLACE).create(level));
                 newEntity.setPos(event.getX(), event.getY(), event.getZ());
                 level.addFreshEntity(newEntity);
 

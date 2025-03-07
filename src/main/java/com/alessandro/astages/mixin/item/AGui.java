@@ -1,6 +1,6 @@
 package com.alessandro.astages.mixin.item;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -38,7 +38,7 @@ public class AGui {
             var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
 
             if (restriction != null && !restriction.renderItemName()) {
-                mutablecomponent.append(Component.translatable("tooltip.astages.hidden_name")).withStyle(ChatFormatting.RED);
+                mutablecomponent.append(Component.translatable("tooltip.astages.item.hidden_name")).withStyle(ChatFormatting.RED);
             } else {
                 mutablecomponent.append(this.lastToolHighlight.getHoverName()).withStyle(this.lastToolHighlight.getRarity().getStyleModifier());
 

@@ -26,9 +26,9 @@ import java.util.Optional;
 public class ACampfireBlock {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "useItemOn", at = @At(value = "INVOKE", target = "Ljava/util/Optional;isPresent()Z"), cancellable = true)
-    public void astages$use(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<ItemInteractionResult> cir, @Local @NotNull Optional<RecipeHolder<CampfireCookingRecipe>> recipeHolder) {
-        if (recipeHolder.isPresent()) {
-            var recipe = recipeHolder.get();
+    public void astages$use(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<ItemInteractionResult> cir, @Local @NotNull Optional<RecipeHolder<CampfireCookingRecipe>> optional) {
+        if (optional.isPresent()) {
+            var recipe = optional.get();
             var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(player, new RecipeWrapper(recipe.value().getType(), recipe.id()));
 
             if (restriction != null) {

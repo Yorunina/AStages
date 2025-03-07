@@ -26,7 +26,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @EventBusSubscriber(modid = AStages.MODID)
 public class ServerEventHandler {
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent.Pre event) {
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!CommonEventSettings.isInventoryChanged) { return; }
 
         if (!event.getEntity().level().isClientSide && !(event.getEntity() instanceof FakePlayer)) {
@@ -78,6 +78,7 @@ public class ServerEventHandler {
         if (stack.getItem() instanceof EnchantedBookItem) {
             if (stack.has(DataComponents.STORED_ENCHANTMENTS)) {
                 var data = stack.get(DataComponents.STORED_ENCHANTMENTS); // Where enchantments are stored!
+                if (data == null) { return false; }
                 var enchantments = data.entrySet();
 
                 for (var holder : enchantments) {
@@ -96,6 +97,7 @@ public class ServerEventHandler {
         } else {
             if (stack.has(DataComponents.ENCHANTMENTS)) {
                 var data = stack.get(DataComponents.ENCHANTMENTS); // Where enchantments are stored!
+                if (data == null) { return false; }
                 var enchantments = data.entrySet();
 
                 for (var holder : enchantments) {
@@ -123,6 +125,7 @@ public class ServerEventHandler {
 
         if (itemStack.has(DataComponents.ENCHANTMENTS)) {
             var data = itemStack.get(DataComponents.ENCHANTMENTS); // Where enchantments are stored!
+            if (data == null) { return newStack; }
             var enchantments = data.entrySet();
 
             for (var holder : enchantments) {
@@ -139,6 +142,7 @@ public class ServerEventHandler {
 
         if (itemStack.has(DataComponents.STORED_ENCHANTMENTS)) {
             var data = itemStack.get(DataComponents.STORED_ENCHANTMENTS); // Where enchantments are stored!
+            if (data == null) { return newStack; }
             var enchantments = data.entrySet();
 
             for (var holder : enchantments) {

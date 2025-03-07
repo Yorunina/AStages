@@ -1,9 +1,9 @@
 package com.alessandro.astages.integration.jade;
 
-import com.alessandro.astages.core.client.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +35,24 @@ public class AStagesJadePlugin implements IWailaPlugin {
         });
 
         registration.addTooltipCollectedCallback((tooltip, accessor) -> {
+            if (accessor instanceof EntityAccessor entityAccessor) {
+                var entity = entityAccessor.getEntity();
+                var type = entity.getType();
+
+                var restriction = AClientRestrictionManager.MOB_INSTANCE.getRestriction(type);
+
+                if (restriction != null) {
+                    tooltip.getTooltip().clear();
+
+                    if (restriction.jadeMobMessage() != null) {
+                        tooltip.getTooltip().add(restriction.jadeMobMessage());
+                    }
+                }
+            }
+
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
-                var stack = new ItemStack(original);
+                var stack = AStagesUtil.blockToStack(original);
                 var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
 
                 if (restriction != null) {
@@ -47,6 +62,18 @@ public class AStagesJadePlugin implements IWailaPlugin {
                         tooltip.getTooltip().add(restriction.jadeBlockMessage());
                     }
                 }
+
+
+//                var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(stack);
+
+                // TODO: To be re-implemented!
+//                if (restriction != null) {
+//                    tooltip.clear();
+//
+//                    if (restriction.jadeBlockMessage() != null) {
+//                        tooltip.add(restriction.jadeBlockMessage());
+//                    }
+//                }
             }
 
             if (accessor instanceof EntityAccessor entityAccessor) {
@@ -62,6 +89,17 @@ public class AStagesJadePlugin implements IWailaPlugin {
                             tooltip.getTooltip().add(restriction.jadeItemMessage());
                         }
                     }
+
+//                    var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(itemEntity.getItem());
+
+                    // TODO: To be re-implemented!
+//                    if (restriction != null) {
+//                        tooltip.clear();
+//
+//                        if (restriction.jadeItemMessage() != null) {
+//                            tooltip.add(restriction.jadeItemMessage());
+//                        }
+//                    }
                 }
             }
         });

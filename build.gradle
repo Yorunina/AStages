@@ -177,6 +177,10 @@ dependencies {
     // In Control!
     implementation "curse.maven:in-control-257356:5932871"
 
+    // Fast Workbench & Placebo
+    implementation "curse.maven:fastworkbench-288885:5670423"
+    implementation "curse.maven:placebo-283644:6105436"
+
     // these two are unfortunately needed since fg.deobf doesn't respect transitive dependencies yet
     // implementation "dev.latvian.mods:rhino-neoforge:2101.2.5-build.54"
     // implementation "dev.architectury:architectury-neoforge:15.0.1"

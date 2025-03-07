@@ -38,7 +38,7 @@ public class AttributeStore extends HashMap<Attribute<?>, Object> {
 
     @SuppressWarnings("unchecked")
     public <T> T getAttribute(Attribute<T> attribute) {
-        return (T) getOrDefault(attribute, attribute.getDefaultValue());
+        return (T) get(attribute); // getOrDefault(attribute, attribute.getDefaultValue());
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -47,4 +47,14 @@ public class AttributeStore extends HashMap<Attribute<?>, Object> {
 
         return this;
     }
+
+    //    public AttributeStore deepCopy(AttributeStore other) {
+//        AttributeStore copy = new AttributeStore();
+//
+//        for (Entry<Attribute<?>, Object> entry : other.entrySet()) {
+//            copy.put(entry.getKey(), entry.getValue());
+//        }
+//
+//        return copy;
+//    }
 }

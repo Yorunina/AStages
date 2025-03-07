@@ -38,10 +38,9 @@ public enum AStagesBlockComponentProvider implements IBlockComponentProvider, IS
     public void appendServerData(CompoundTag compoundTag, @NotNull BlockAccessor blockAccessor) {
         BlockEntity blockEntity = blockAccessor.getBlockEntity();
 
-        var data = blockEntity.getData(AProvider.BLOCK_STAGE);
-
+        var blockStage = blockEntity.getData(AProvider.BLOCK_STAGE);
         if (blockAccessor.getPlayer().getServer() != null) {
-            var player = AStagesUtil.getPlayerFromUUID(blockAccessor.getPlayer().getServer(), data.getOwner());
+            var player = AStagesUtil.getPlayerFromUUID(blockAccessor.getPlayer().getServer(), blockStage.getOwner());
 
             if (player != null) {
                 compoundTag.putString(OWNER_KEY, player.getName().getString());

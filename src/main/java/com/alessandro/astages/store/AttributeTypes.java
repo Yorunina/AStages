@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class AttributeTypes {
     public static final AttributeType<Boolean> BOOLEAN = AttributeType.create(Boolean.class);
@@ -21,6 +22,7 @@ public class AttributeTypes {
 
     public static final AttributeType<Function<ItemStack, Component>> STACK_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Function<Entity, Component>> ENTITY_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
+    public static final AttributeType<Supplier<Component>> VOID_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Function<ResourceLocation, Component>> RESOURCE_LOCATION_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Function<MenuType<?>, Component>> MENU_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
 }

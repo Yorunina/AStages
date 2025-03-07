@@ -4,11 +4,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.common.util.INBTSerializable;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class BlockStage implements INBTSerializable<CompoundTag> {
     public static String OWNER_KEY = "owner";
     private UUID owner;
@@ -28,12 +30,12 @@ public class BlockStage implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public @UnknownNullability CompoundTag serializeNBT(HolderLookup.@NotNull Provider provider) {
+    public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
         return saveNBTData();
     }
 
     @Override
-    public void deserializeNBT(HolderLookup.@NotNull Provider provider, @NotNull CompoundTag tag) {
+    public void deserializeNBT(HolderLookup.Provider provider, @Nullable CompoundTag tag) {
         loadNBTData(tag);
     }
 
@@ -47,7 +49,7 @@ public class BlockStage implements INBTSerializable<CompoundTag> {
         return nbt;
     }
 
-    public void loadNBTData(CompoundTag nbt) {
+    public void loadNBTData(@Nullable CompoundTag nbt) {
         if (nbt != null) {
             owner = nbt.contains(OWNER_KEY) ? nbt.getUUID(OWNER_KEY) : null;
         }

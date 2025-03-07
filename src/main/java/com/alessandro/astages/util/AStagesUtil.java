@@ -22,7 +22,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AStagesUtil {
     public static Player getNearestPlayer(@NotNull Level level, Vec3 pos) {
@@ -50,26 +51,25 @@ public class AStagesUtil {
 
         var aStage = AStageManager.getStage(stage);
         if (aStage != null) {
-            fadeIn = aStage.fadeIn;
-            stay = aStage.stay;
-            fadeOut = aStage.fadeOut;
-
+            fadeIn = aStage.getFadeIn();
+            stay = aStage.getStay();
+            fadeOut = aStage.getFadeOut();
 
             if (operation == PlayerStage.Operation.ADD) {
-                if (aStage.addTitle != null) {
-                    title = aStage.addTitle;
+                if (aStage.getAddTitle() != null) {
+                    title = aStage.getAddTitle();
                 }
 
-                if (aStage.addSubTitle != null) {
-                    subtitle = aStage.addSubTitle;
+                if (aStage.getAddSubTitle() != null) {
+                    subtitle = aStage.getAddSubTitle();
                 }
             } else if (operation == PlayerStage.Operation.REMOVE) {
-                if (aStage.removeTitle != null) {
-                    title = aStage.removeTitle;
+                if (aStage.getRemoveTitle() != null) {
+                    title = aStage.getRemoveTitle();
                 }
 
-                if (aStage.removeSubTitle != null) {
-                    subtitle = aStage.removeSubTitle;
+                if (aStage.getRemoveSubTitle() != null) {
+                    subtitle = aStage.getRemoveSubTitle();
                 }
             }
         } else {
@@ -128,9 +128,12 @@ public class AStagesUtil {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasStage(@NotNull Player player, String stage) {
-        var data = player.getData(AProvider.PLAYER_STAGE);
+        AtomicBoolean toReturn = new AtomicBoolean(false);
 
-        return data.getStages().contains(stage);
+        var playerStage = player.getData(AProvider.PLAYER_STAGE);
+        toReturn.set(playerStage.getStages().contains(stage));
+
+        return toReturn.get();
     }
 
     public static Player getPlayerFromUUID(@NotNull MinecraftServer server, UUID uuid) {
@@ -153,5 +156,13 @@ public class AStagesUtil {
     @Contract("_ -> new")
     public static @NotNull ItemStack blockToStack(Block block) {
         return new ItemStack(block);
+    }
+
+    public static boolean itemStacksMatchesIgnoringCount(ItemStack stack, ItemStack other) {
+        if (stack == other) {
+            return true;
+        } else {
+            return ItemStack.isSameItemSameComponents(stack, other);
+        }
     }
 }

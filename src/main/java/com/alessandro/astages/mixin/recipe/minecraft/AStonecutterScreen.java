@@ -1,8 +1,10 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
 import org.spongepowered.asm.mixin.Mixin;
 
+@UnderDevelopment
 @Mixin(StonecutterScreen.class)
 public class AStonecutterScreen {
 //    @Inject(method = "renderRecipes", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)

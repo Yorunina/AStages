@@ -1,8 +1,10 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.world.inventory.StonecutterMenu;
 import org.spongepowered.asm.mixin.Mixin;
 
+@UnderDevelopment
 @Mixin(StonecutterMenu.class)
 public class AStonecutterMenu {
 //    @Shadow private List<StonecutterRecipe> recipes;

@@ -1,10 +1,11 @@
 package com.alessandro.astages.mixin;
 
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import com.alessandro.astages.util.develop.UnderDevelopment;
+import dev.latvian.mods.kubejs.item.ItemClickedKubeEvent;
 import org.spongepowered.asm.mixin.Mixin;
 
-// @Mixin(value = KubePlayerEvent.class, remap = false)
-@Mixin(value = PlayerInteractEvent.RightClickBlock.class, remap = false)
+@UnderDevelopment
+@Mixin(value = ItemClickedKubeEvent.class, remap = false)
 public abstract class APlayerEventJS {
 //    @Shadow public abstract @Nullable Player getPlayer();
 
@@ -13,12 +14,13 @@ public abstract class APlayerEventJS {
      * @reason support new stage system
      */
 //    @Info("Checks if the player has the specified game stage")
-//    // @Inject(method = "hasGameStage", at = @At("HEAD"))
 //    @Overwrite
 //    public boolean hasGameStage(String stage) {
-//        var data = Objects.requireNonNull(getPlayer()).getData(AProvider.PLAYER_STAGE);
+//        AtomicBoolean toReturn = new AtomicBoolean(false);
 //
-//        return data.getStages().contains(stage);
+//        Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
+//
+//        return toReturn.get();
 //    }
 
     /**
@@ -28,9 +30,10 @@ public abstract class APlayerEventJS {
 //    @Info("Adds the specified game stage to the player")
 //    @Overwrite
 //    public void addGameStage(String stage) {
-//        var data = Objects.requireNonNull(getPlayer()).getData(AProvider.PLAYER_STAGE);
-//        data.addStage(stage);
-//        data.setChangedFor(getPlayer(), PlayerStage.Operation.ADD, stage);
+//        Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
+//            playerStage.addStage(stage);
+//            playerStage.setChangedFor(getPlayer(), PlayerStage.Operation.ADD, stage);
+//        });
 //    }
 
     /**
@@ -40,8 +43,9 @@ public abstract class APlayerEventJS {
 //    @Info("Removes the specified game stage from the player")
 //    @Overwrite
 //    public void removeGameStage(String stage) {
-//        var data = Objects.requireNonNull(getPlayer()).getData(AProvider.PLAYER_STAGE);
-//        data.removeStage(stage);
-//        data.setChangedFor(getPlayer(), PlayerStage.Operation.REMOVE, stage);
+//        Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
+//            playerStage.removeStage(stage);
+//            playerStage.setChangedFor(getPlayer(), PlayerStage.Operation.REMOVE, stage);
+//        });
 //    }
 }

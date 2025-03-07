@@ -2,9 +2,12 @@ package com.alessandro.astages.simple;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.restriction.*;
+import com.alessandro.astages.core.restriction.item.AItemModRestriction;
+import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -22,12 +25,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class ASimpleElaborator {
+    @UnderDevelopment
     public static void elaborateItem(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)))));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object))));
     }
 
+    @UnderDevelopment
     public static void elaborateMod(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(stack -> simple.object.equalsIgnoreCase(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(stack.getItem())).getNamespace())));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemModRestriction(simple.id, simple.stage).restrict(simple.object));
     }
 
     public static void elaborateDimension(@NotNull ASimpleRestriction simple) {
@@ -49,17 +54,17 @@ public class ASimpleElaborator {
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
     }
 
+    @SuppressWarnings("unused")
     public static void elaborateBiome(@NotNull ASimpleRestriction simple) {
-
+        throw new UnsupportedOperationException("Biome elaboration not supported! Id of Restriction not allowed: " + simple.id + ".");
     }
 
     public static void elaborateTame(@NotNull ASimpleRestriction simple) {
-        // Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).removeIf();
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, true).setAttribute(Attributes.TAMABLE, false));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
     }
 
     public static void elaborateMount(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).setAttribute(Attributes.BREEDABLE, true).setAttribute(Attributes.MOUNTABLE, false).setAttribute(Attributes.TAMABLE, true));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
     }
 
     public static void elaborateRecipe(@NotNull ASimpleRestriction simple) {
@@ -69,23 +74,19 @@ public class ASimpleElaborator {
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
     }
 
+    @UnderDevelopment
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeUsed(true).setCanBeDig(true));
-        // ARestrictionManager.ITEM_INSTANCE.addRestriction(simple.stage, new AItemRestriction(simple.id, simple.stage).restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)))).setRenderItemName(true).setHideTooltip(false).setCanPickedUp(true).setCanBeStoredInInventory(true).setCanAttack(true).setHideInJEI(false).setCanBePlaced(true).setCanItemBeLeftClicked(true).setCanItemBeRightClicked(true).setCanBeDig(true));
-
         var restriction = new AItemRestriction(simple.id, simple.stage);
-        restriction.restrict(stack -> stack.is(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object))));
-        restriction.setAttribute(Attributes.HIDING_TOOLTIP, false)
-            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
-            .setAttribute(Attributes.STORING_IN_INVENTORY, true)
-            .setAttribute(Attributes.ATTACKING, true)
-            .setAttribute(Attributes.HIDING_JEI, false)
-            .setAttribute(Attributes.BLOCK_PLACING, true)
-            .setAttribute(Attributes.LEFT_CLICK_INTERACTIONS, true)
-            .setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
-            .setAttribute(Attributes.BLOCK_BREAKING, true);
-
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+        restriction.restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)));
+        restriction.set(Attributes.HIDING_TOOLTIP, false)
+            .set(Attributes.STORING_IN_INVENTORY, true)
+            .set(Attributes.EQUIPPING, true)
+            .set(Attributes.ATTACKING, true)
+            .set(Attributes.HIDING_JEI, false)
+            .set(Attributes.BLOCK_PLACING, true)
+            .set(Attributes.LEFT_CLICK_INTERACTIONS, true)
+            .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
+            .set(Attributes.BLOCK_BREAKING, true);
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {
@@ -116,8 +117,8 @@ public class ASimpleElaborator {
         return addRestrictionForType(ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), ResourceArgument.getStructure(c, "structure").key().toString());
     }
 
-    public static int commandBiome(CommandContext<CommandSourceStack> c) {
-        return 0;
+    public static int commandBiome(CommandContext<CommandSourceStack> ignoredC) {
+        throw new UnsupportedOperationException("Biome elaboration not supported!");
     }
 
     public static int commandTame(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
@@ -130,7 +131,7 @@ public class ASimpleElaborator {
 
     public static int commandRecipe(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
         return addRestrictionForType(ASimpleRestrictionType.RECIPE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
-            Objects.requireNonNull(Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(ResourceLocationArgument.getRecipe(c, "recipe").value().getType()))) +
+            Objects.requireNonNull(Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(ResourceLocationArgument.getRecipe(c, "recipe").value().getType())).toString()) +
                 "//" +
                 Objects.requireNonNull(ResourceLocationArgument.getRecipe(c, "recipe").id().toString())
         );

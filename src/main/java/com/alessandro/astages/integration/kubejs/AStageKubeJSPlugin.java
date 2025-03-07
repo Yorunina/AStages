@@ -2,6 +2,7 @@ package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
@@ -18,11 +19,24 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
         }
     }
 
+//    @Override
+//    public void registerClasses(@NotNull ScriptType recipeType, @NotNull ClassFilter filter) {
+//        if (recipeType.isServer()) {
+//            filter.allow(Attributes.class);
+//        }
+//    }
+
+
+//    @Override
+//    public void registerClasses(ScriptType recipeType, ClassFilter filter) {
+//        super.registerClasses(recipeType, filter);
+//    }
+
+
     @Override
     public void registerBindings(BindingRegistry bindings) {
         if (!Mods.KUBEJS.isLoaded()) return;
 
-        // bindings.type() == ScriptType.SERVER
         if (bindings.type().isServer()) {
             bindings.add("AStages", AStagesKubeJSUtil.class);
             bindings.add("Attributes", Attributes.class);
@@ -31,6 +45,14 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
             bindings.add("PetAttributes", Attributes.Pet.class);
             bindings.add("DimensionAttributes", Attributes.Dimension.class);
             bindings.add("StructureAttributes", Attributes.Structure.class);
+        }
+
+        if (bindings.type().isClient()) {
+            bindings.add("AStagesClient", AStagesClientJSUtil.class);
+        }
+
+        if (bindings.type().isClient() || bindings.type().isServer()) {
+            bindings.add("AModels", AStagesModelJSUtil.class);
         }
     }
 
@@ -49,12 +71,28 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
     }
 
     @Override
-    public void afterScriptsLoaded(ScriptManager manager) {
-        ARestrictionManager.reloadAfterScripts();
+    public void beforeScriptsLoaded(ScriptManager manager) {
+        ARestrictionManager.reloadBeforeScripts();
+        AStageManager.reloadBeforeScripts();
     }
 
     @Override
-    public void beforeScriptsLoaded(ScriptManager manager) {
-        ARestrictionManager.reloadBeforeScripts();
+    public void afterScriptsLoaded(ScriptManager manager) {
+        ARestrictionManager.reloadAfterScripts();
+        AStageManager.reloadAfterScripts();
     }
+
+//    @Override
+//    public void onServerReload() {
+//        // AFTER SERVER SCRIPT RELOADING!
+//        ARestrictionManager.reloadAfterScripts();
+//        AStageManager.reloadAfterScripts();
+//    }
+//
+//    @Override
+//    public void clearCaches() {
+//        // BEFORE SERVER SCRIPT RELOADING!
+//        ARestrictionManager.reloadBeforeScripts();
+//        AStageManager.reloadBeforeScripts();
+//    }
 }
