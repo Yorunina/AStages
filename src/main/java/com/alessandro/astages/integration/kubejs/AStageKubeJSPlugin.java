@@ -7,6 +7,7 @@ import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.ATime;
 import dev.latvian.mods.kubejs.event.EventGroupRegistry;
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
@@ -18,20 +19,6 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
             KubeJSStageEventHandler.init();
         }
     }
-
-//    @Override
-//    public void registerClasses(@NotNull ScriptType recipeType, @NotNull ClassFilter filter) {
-//        if (recipeType.isServer()) {
-//            filter.allow(Attributes.class);
-//        }
-//    }
-
-
-//    @Override
-//    public void registerClasses(ScriptType recipeType, ClassFilter filter) {
-//        super.registerClasses(recipeType, filter);
-//    }
-
 
     @Override
     public void registerBindings(BindingRegistry bindings) {
@@ -45,6 +32,7 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
             bindings.add("PetAttributes", Attributes.Pet.class);
             bindings.add("DimensionAttributes", Attributes.Dimension.class);
             bindings.add("StructureAttributes", Attributes.Structure.class);
+            bindings.add("ATime", ATime.class);
         }
 
         if (bindings.type().isClient()) {

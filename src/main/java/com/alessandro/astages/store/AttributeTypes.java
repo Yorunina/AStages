@@ -2,6 +2,7 @@ package com.alessandro.astages.store;
 
 import com.alessandro.astages.util.ACompareCondition;
 import com.google.common.reflect.TypeToken;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +18,7 @@ public class AttributeTypes {
     public static final AttributeType<Integer> INTEGER = AttributeType.create(Integer.class);
     public static final AttributeType<ResourceLocation> RESOURCE_LOCATION = AttributeType.create(ResourceLocation.class);
     public static final AttributeType<ACompareCondition> COMPARE_CONDITION = AttributeType.create(ACompareCondition.class);
+    public static final AttributeType<ChatFormatting> CHAT_FORMATTING = AttributeType.create(ChatFormatting.class);
 
     public static final AttributeType<EntityType<?>> ENTITY = AttributeType.create(new TypeToken<>() { });
 

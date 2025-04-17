@@ -1,3 +1,3 @@
 package com.alessandro.astages.core.wrapper;
 
-public record RecipeModWrapper(String modId) implements IRecipeWrapper { }
+public record RecipeModWrapper(String modId) { }

@@ -23,6 +23,14 @@ public class ALanguageProvider extends LanguageProvider {
         add("chat.astages.info.server.no_stages", "No stages unlocked for current server!");
         add("chat.astages.info.server.has_stages", "Stages unlocked in this server:");
         add("chat.astages.info.server.list_item", " - %s");
+        add("chat.astages.timer.reset_all", "Timers and access reset correctly for restriction %s!");
+        add("chat.astages.timer.reset_timer", "Timers reset correctly for restriction %s!");
+        add("chat.astages.timer.reset_access", "Access reset correctly for restriction %s!");
+        add("chat.astages.timer.set_timer", "Timers set correctly for restriction %s with value %s!");
+        add("chat.astages.timer.set_access", "Access set correctly for restriction %s with value %s!");
+        add("chat.astages.timer.increase_access", "Access increased correctly for restriction %s by value %s!");
+        add("chat.astages.timer.decrease_access", "Access decreased correctly for restriction %s by value %s!");
+        add("chat.astages.timer.invalid_value_access", "Invalid value for restriction %s!");
 
         // ITEM
         add("tooltip.astages.item.hidden_name", "Unfamiliar Item");
@@ -39,6 +47,9 @@ public class ALanguageProvider extends LanguageProvider {
         // DIMENSION
         add("message.astages.dimension.enter", "You can't visit this dimension!");
         add("message.astages.dimension.leave", "You can't leave this dimension!");
+        add("message.astages.dimension.expired", "Exhausted attempts to enter in this dimension!");
+        add("message.astages.dimension.access.left", "You have %s access left!");
+        add("message.astages.dimension.access.zero", "You can no longer enter this dimension!"); // You cannot enter this dimension anymore
 
         // SCREEN
         add("message.astages.screen", "You can't open this menu!");
@@ -64,5 +75,8 @@ public class ALanguageProvider extends LanguageProvider {
 
         // MOB
         add("message.astages.mob", "Unknown Entity!");
+
+        // REGION
+        add("message.astages.region", "You can't interact in this region!");
     }
 }

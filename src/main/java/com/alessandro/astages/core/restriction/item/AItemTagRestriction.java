@@ -28,6 +28,8 @@ public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestrictio
     @Info("Probably a mismatch between anyMatch and noneMatch")
     @Override
     public boolean isRestricted(@NotNull ItemStack stack) {
+        if (stack.isEmpty()) { return false; }
+
         return !ignoredItems.contains(stack.getItem()) && stack.getTags().anyMatch(t -> t.location().equals(tag));
     }
 

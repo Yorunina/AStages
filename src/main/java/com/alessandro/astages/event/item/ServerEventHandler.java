@@ -7,7 +7,6 @@ import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.develop.Info;
-import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -187,8 +186,6 @@ public class ServerEventHandler {
         CommonEventSettings.playersHaveOtherInventoriesOpened.put(event.getEntity().getUUID(), false);
     }
 
-    @Info("To be RE-IMPLEMENTED!")
-    @UnderDevelopment
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         if (!CommonEventSettings.isInventoryChanged) { return; }

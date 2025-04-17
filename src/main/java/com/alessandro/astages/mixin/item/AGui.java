@@ -2,76 +2,30 @@ package com.alessandro.astages.mixin.item;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.FastColor;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.function.UnaryOperator;
 
 @Mixin(Gui.class)
 public class AGui {
-    @Final @Shadow private Minecraft minecraft;
-    @Shadow private int toolHighlightTimer;
     @Shadow private ItemStack lastToolHighlight;
 
-    @Unique
-    private Gui gui$self() {
-        return (Gui) (Object) this;
-    }
+    @Redirect(method = "renderSelectedItemName(Lnet/minecraft/client/gui/GuiGraphics;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Ljava/util/function/UnaryOperator;)Lnet/minecraft/network/chat/MutableComponent;"))
+    public MutableComponent renderSelectedItemName(MutableComponent instance, UnaryOperator<Style> styleFunc) {
+        var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
 
-    /**
-     * @author Alessandro
-     * @reason Change hover name for item stages
-     */
-    @Overwrite(remap = false)
-    public void renderSelectedItemName(GuiGraphics guiGraphics, int yShift) {
-        this.minecraft.getProfiler().push("selectedItemName");
-        if (this.toolHighlightTimer > 0 && !this.lastToolHighlight.isEmpty()) {
-            // New part
-            MutableComponent mutablecomponent = Component.empty();
-            var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(this.lastToolHighlight);
-
-            if (restriction != null && !restriction.renderItemName()) {
-                mutablecomponent.append(Component.translatable("tooltip.astages.item.hidden_name")).withStyle(ChatFormatting.RED);
-            } else {
-                mutablecomponent.append(this.lastToolHighlight.getHoverName()).withStyle(this.lastToolHighlight.getRarity().getStyleModifier());
-
-                if (this.lastToolHighlight.has(DataComponents.CUSTOM_NAME)) {
-                    mutablecomponent.withStyle(ChatFormatting.ITALIC);
-                }
-            }
-
-            // Old part
-            Component highlightTip = this.lastToolHighlight.getHighlightTip(mutablecomponent);
-            int i = gui$self().getFont().width(highlightTip);
-            int j = (guiGraphics.guiWidth() - i) / 2;
-            int k = guiGraphics.guiHeight() - Math.max(yShift, 59);
-            if (this.minecraft.gameMode != null && !this.minecraft.gameMode.canHurtPlayer()) {
-                k += 14;
-            }
-
-            int l = (int)((float)this.toolHighlightTimer * 256.0F / 10.0F);
-            if (l > 255) {
-                l = 255;
-            }
-
-            if (l > 0) {
-                Font font = IClientItemExtensions.of(this.lastToolHighlight).getFont(this.lastToolHighlight, IClientItemExtensions.FontContext.SELECTED_ITEM_NAME);
-                if (font == null) {
-                    guiGraphics.drawStringWithBackdrop(gui$self().getFont(), highlightTip, j, k, i, FastColor.ARGB32.color(l, -1));
-                } else {
-                    j = (guiGraphics.guiWidth() - font.width(highlightTip)) / 2;
-                    guiGraphics.drawStringWithBackdrop(font, highlightTip, j, k, i, FastColor.ARGB32.color(l, -1));
-                }
-            }
+        if (restriction != null && !restriction.renderItemName()) {
+            return Component.empty().append(Component.translatable("tooltip.astages.item.hidden_name")).withStyle(ChatFormatting.RED);
         }
 
-        this.minecraft.getProfiler().pop();
+        return instance;
     }
 }

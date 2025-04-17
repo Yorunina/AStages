@@ -46,10 +46,17 @@ public class AMobManager extends AManager<AMobRestriction, EntityType<?>, Entity
 
     @Override
     public AMobRestriction getRestriction(EntityType<?> type, @Nullable Player player, @Nullable MinecraftServer server) {
-        if (server != null) { return getRestriction(server, type); } // Priority to server restrictions!
-        if (player != null) { return getRestriction(player, type); }
+        AMobRestriction serverRestriction = null;
+        AMobRestriction playerRestriction = null;
 
-        return null;
+        if (server != null) { serverRestriction = getRestriction(server, type); }
+        if (player != null) { playerRestriction = getRestriction(player, type); }
+
+        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
+            return null;
+        }
+
+        return playerRestriction;
     }
 
     @Override

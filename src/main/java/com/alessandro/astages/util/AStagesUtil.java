@@ -6,6 +6,7 @@ import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.stage.AStageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -22,10 +23,13 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.UUID;
 
 public class AStagesUtil {
+    public static Player getNearestPlayer(@NotNull Level level, @NotNull BlockPos pos) {
+        return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
+    }
+
     public static Player getNearestPlayer(@NotNull Level level, Vec3 pos) {
         var players = level.players();
         var minDistance = Double.MAX_VALUE;
@@ -128,12 +132,8 @@ public class AStagesUtil {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasStage(@NotNull Player player, String stage) {
-        AtomicBoolean toReturn = new AtomicBoolean(false);
-
         var playerStage = player.getData(AProvider.PLAYER_STAGE);
-        toReturn.set(playerStage.getStages().contains(stage));
-
-        return toReturn.get();
+        return playerStage.getStages().contains(stage);
     }
 
     public static Player getPlayerFromUUID(@NotNull MinecraftServer server, UUID uuid) {

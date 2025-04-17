@@ -9,6 +9,7 @@
     "AModRuleCompatibilityLayer",
     "APlayerEventJS",
     "enchant.AEnchantmentMenu",
+    "food.ALivingEntity",
     "item.AJeiStarter",
     "ore.ABlockStateExtension",
     "ore.APlayer",

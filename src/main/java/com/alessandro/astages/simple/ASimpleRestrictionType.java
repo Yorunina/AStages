@@ -11,5 +11,5 @@ public enum ASimpleRestrictionType {
     TAME,
     MOUNT,
     RECIPE,
-    ARMOR;
+    ARMOR
 }

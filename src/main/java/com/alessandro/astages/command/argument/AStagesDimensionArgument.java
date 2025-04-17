@@ -1,6 +1,6 @@
 package com.alessandro.astages.command.argument;
 
-import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -14,35 +14,37 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-public class AStagesRemoveArgument implements ArgumentType<String> {
-    private static final Collection<String> EXAMPLES = Arrays.asList("test_stage_1", "test_stage_2");
-    private static final DynamicCommandExceptionType ERROR_INVALID_STAGE = new DynamicCommandExceptionType(s -> Component.literal("Invalid stage argument: " + s));
+@ParametersAreNonnullByDefault
+public class AStagesDimensionArgument implements ArgumentType<String> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("test_dimension_id_1", "test_dimension_id_2");
+    private static final DynamicCommandExceptionType ERROR_INVALID_ID = new DynamicCommandExceptionType(s -> Component.literal("Invalid id argument: " + s));
 
     @Contract(value = " -> new", pure = true)
-    public static @NotNull AStagesRemoveArgument stages() {
-        return new AStagesRemoveArgument();
+    public static @NotNull AStagesDimensionArgument dimensionIds() {
+        return new AStagesDimensionArgument();
     }
 
-    public static String getStage(@NotNull CommandContext<CommandSourceStack> context, String name) {
+    public static String getDimensionId(@NotNull CommandContext<CommandSourceStack> context, String name) {
         return context.getArgument(name, String.class);
     }
 
     @Override
-    public String parse(@NotNull StringReader stringReader) throws CommandSyntaxException {
-        var stageString = stringReader.readUnquotedString();
+    public String parse(StringReader stringReader) throws CommandSyntaxException {
+        var dimensionIdString = stringReader.readUnquotedString();
 
-        if (stageString == null) { throw ERROR_INVALID_STAGE.create(null); }
+        if (dimensionIdString == null) { throw ERROR_INVALID_ID.create(null); }
 
-        return stageString;
+        return dimensionIdString;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(ClientPlayerStage.getPlayerStages().stream().sorted(), builder);
+        return SharedSuggestionProvider.suggest(AClientRestrictionManager.DIMENSION_IDS, builder);
     }
 
     @Override

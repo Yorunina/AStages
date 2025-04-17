@@ -1,6 +1,7 @@
 package com.alessandro.astages.command;
 
 import com.alessandro.astages.capability.AProvider;
+import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.command.argument.AStagesAddArgument;
 import com.alessandro.astages.command.argument.AStagesRemoveArgument;
@@ -46,6 +47,9 @@ public class AStagesModificationCommands {
             .then(Commands.literal("info").then(Commands.argument("player", EntityArgument.player())
                 .executes(context -> infoCommand(Objects.requireNonNull(context.getSource().getPlayer()), EntityArgument.getPlayer(context, "player")))
             ))
+            .then(Commands.literal("client_info")
+                .executes(context -> clientInfoCommand(Objects.requireNonNull(context.getSource().getPlayer())))
+            )
         );
     }
 
@@ -100,6 +104,19 @@ public class AStagesModificationCommands {
         } else {
             executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", player.getName()).withStyle(ChatFormatting.GREEN));
             for (var stage : playerStage.getStages()) {
+                executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
+            }
+        }
+
+        return 1;
+    }
+
+    private static int clientInfoCommand(ServerPlayer executor) {
+        if (ClientPlayerStage.getPlayerStages().isEmpty()) {
+            executor.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", executor.getName()).withStyle(ChatFormatting.RED));
+        } else {
+            executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", executor.getName()).withStyle(ChatFormatting.GREEN));
+            for (var stage : ClientPlayerStage.getPlayerStages()) {
                 executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
             }
         }

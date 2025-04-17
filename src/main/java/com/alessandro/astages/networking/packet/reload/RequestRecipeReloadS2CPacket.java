@@ -20,7 +20,7 @@ public record RequestRecipeReloadS2CPacket() implements AStagesPacket {
 
     @Override
     public void run(IPayloadContext context) {
-        AClientRestrictionManager.waitingForRecipeUpdate = true;
+        AClientRestrictionManager.setWaitingForRecipeUpdate(true);
         NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
     }
 

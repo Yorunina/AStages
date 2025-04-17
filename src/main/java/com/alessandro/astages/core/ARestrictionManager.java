@@ -4,13 +4,13 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -34,6 +34,7 @@ public class ARestrictionManager {
     public static final AEnchantManager ENCHANT_INSTANCE = new AEnchantManager();
     public static final ACropManager CROP_INSTANCE = new ACropManager();
     public static final AEffectManager EFFECT_INSTANCE = new AEffectManager();
+    public static final ARegionManager REGION_INSTANCE = new ARegionManager();
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
@@ -70,6 +71,7 @@ public class ARestrictionManager {
         ModNetworking.sendTo(player, new RequestItemReloadS2CPacket());
         ModNetworking.sendTo(player, new RequestRecipeReloadS2CPacket());
         ModNetworking.sendTo(player, new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()));
+        ModNetworking.sendTo(player, new DimensionIdsSyncerS2CPacket(ARestrictionManager.DIMENSION_INSTANCE.getIds()));
 
         AStages.TIMER.stop();
         AStages.LOGGER.info("AStages synchronization took {}!", AStages.TIMER);
@@ -80,12 +82,15 @@ public class ARestrictionManager {
         ModNetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get()));
     }
 
-    @UnderDevelopment
     public static void reloadAfterScripts() {
+        ARestrictionManager.ITEM_INSTANCE.reloadAfterScripts();
+
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
+    }
 
-        ARestrictionManager.ITEM_INSTANCE.reloadAfterScripts();
+    public static void clearClientOnLogin(ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, new RequestClientReloadS2CPacket());
     }
 
     @SuppressWarnings("unchecked")

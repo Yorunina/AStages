@@ -26,6 +26,8 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
 
     @Override
     public boolean isRestricted(@NotNull ItemStack stack) {
+        if (stack.isEmpty()) { return false; }
+
         var registry = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if (registry != null) {
             return !ignoredItems.contains(stack.getItem()) &&

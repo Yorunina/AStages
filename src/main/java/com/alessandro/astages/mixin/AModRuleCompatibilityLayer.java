@@ -6,37 +6,50 @@ import mcjty.incontrol.compat.ModRuleCompatibilityLayer;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(value = ModRuleCompatibilityLayer.class, remap = false)
 public class AModRuleCompatibilityLayer {
-    @Inject(method = "hasGameStages", at = @At("RETURN"), cancellable = true)
-    public void hasGameStages(@NotNull CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(true);
+    /**
+     * @author Alessandro
+     * @reason AStages integration
+     */
+    @Overwrite
+    public boolean hasGameStages() {
+        return true;
     }
 
-    @Inject(method = "hasGameStage", at = @At("RETURN"), cancellable = true)
-    public void hasGameStage(@NotNull Player player, String stage, @NotNull CallbackInfoReturnable<Boolean> cir) {
+    /**
+     * @author Alessandro
+     * @reason AStages integration
+     */
+    @Overwrite
+    public boolean hasGameStage(@NotNull Player player, String stage) {
         var playerStage = player.getData(AProvider.PLAYER_STAGE);
-        cir.setReturnValue(playerStage.getStages().contains(stage));
+        return playerStage.getStages().contains(stage);
     }
 
-    @Inject(method = "addGameStage", at = @At("HEAD"), cancellable = true)
-    public void addGameStage(@NotNull Player player, String stage, @NotNull CallbackInfo ci) {
+    /**
+     * @author Alessandro
+     * @reason AStages integration
+     */
+    @Overwrite
+    public void addGameStage(@NotNull Player player, String stage) {
         var playerStage = player.getData(AProvider.PLAYER_STAGE);
+
         playerStage.addStage(stage);
         playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stage);
-        ci.cancel();
     }
 
-    @Inject(method = "addGameStage", at = @At("HEAD"), cancellable = true)
-    public void removeGameStage(@NotNull Player player, String stage, @NotNull CallbackInfo ci) {
+    /**
+     * @author Alessandro
+     * @reason AStages integration
+     */
+    @Overwrite
+    public void removeGameStage(@NotNull Player player, String stage) {
         var playerStage = player.getData(AProvider.PLAYER_STAGE);
+
         playerStage.removeStage(stage);
         playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stage);
-        ci.cancel();
     }
 }

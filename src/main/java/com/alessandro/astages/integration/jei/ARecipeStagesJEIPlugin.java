@@ -38,7 +38,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
             NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
-                    AClientRestrictionManager.waitingForRecipeUpdate = true;
+                    AClientRestrictionManager.setWaitingForRecipeUpdate(true);
                     updateRecipeGui();
                 }
             });
@@ -60,17 +60,18 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
             AStages.LOGGER.info("AStages client recipe update started!");
             var time = System.currentTimeMillis();
 
+            restrictAllRecipesForMods();
+
             updateRecipesForType(RecipeType.CRAFTING, RecipeTypes.CRAFTING);
             updateRecipesForType(RecipeType.SMELTING, RecipeTypes.SMELTING);
             updateRecipesForType(RecipeType.SMOKING, RecipeTypes.SMOKING);
             updateRecipesForType(RecipeType.CAMPFIRE_COOKING, RecipeTypes.CAMPFIRE_COOKING);
             updateRecipesForType(RecipeType.BLASTING, RecipeTypes.BLASTING);
             updateRecipesForType(RecipeType.SMITHING, RecipeTypes.SMITHING);
-
-            restrictAllRecipesForMods();
+            updateRecipesForType(RecipeType.STONECUTTING, RecipeTypes.STONECUTTING);
 
             AStages.LOGGER.info("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
-            AClientRestrictionManager.waitingForRecipeUpdate = false;
+            AClientRestrictionManager.setWaitingForRecipeUpdate(false);
         }
     }
 
@@ -100,6 +101,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
             restrictAllRecipesForModAndType(RecipeTypes.CAMPFIRE_COOKING, mod.modId(), mod.stage());
             restrictAllRecipesForModAndType(RecipeTypes.BLASTING, mod.modId(), mod.stage());
             restrictAllRecipesForModAndType(RecipeTypes.SMITHING, mod.modId(), mod.stage());
+            restrictAllRecipesForModAndType(RecipeTypes.STONECUTTING, mod.modId(), mod.stage());
         }
     }
 

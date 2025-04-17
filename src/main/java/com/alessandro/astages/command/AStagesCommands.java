@@ -1,7 +1,6 @@
 package com.alessandro.astages.command;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.simple.AStagesSimpleRestrictionsCommands;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -17,5 +16,6 @@ public class AStagesCommands {
         AStagesModificationCommands.register(dispatcher);
         AStagesSimpleRestrictionsCommands.register(dispatcher, context);
         AStagesServerCommands.register(dispatcher);
+        AStagesTimerCommands.register(dispatcher);
     }
 }

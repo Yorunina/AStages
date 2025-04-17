@@ -1,8 +1,9 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.client.AClientMobManager;
 import com.alessandro.astages.core.client.AClientOreManager;
-import com.alessandro.astages.core.client.AClientRecipeManager;
+import com.alessandro.astages.core.client.recipe.AClientRecipeManager;
 import com.alessandro.astages.core.client.item.AClientItemManager;
 
 import java.util.HashSet;
@@ -17,6 +18,7 @@ public class AClientRestrictionManager {
 
     public static final Set<String> ORE_STAGES = new HashSet<>();
     public static final Set<String> SERVER_STAGES = new HashSet<>();
+    public static final Set<String> DIMENSION_IDS = new HashSet<>();
 
     public static boolean waitingForItemUpdate = false;
     public static boolean waitingForRecipeUpdate = false;
@@ -24,7 +26,7 @@ public class AClientRestrictionManager {
     public static boolean jeiIsReloading = false;
 
     public static void reloadBeforeScripts() {
-        jeiIsReloading = true;
+        setJeiIsReloading(false);
 
         ITEM_INSTANCE.reloadBeforeScripts();
         RECIPE_INSTANCE.reloadBeforeScripts();
@@ -46,5 +48,19 @@ public class AClientRestrictionManager {
         }
 
         return false;
+    }
+
+    public static void setJeiIsReloading(boolean jeiIsReloading) {
+        AClientRestrictionManager.jeiIsReloading = jeiIsReloading;
+        AStages.LOGGER.debug("Jei Is Reloading: {}", jeiIsReloading);
+    }
+
+    public static void setWaitingForItemUpdate(boolean waitingForItemUpdate) {
+        AClientRestrictionManager.waitingForItemUpdate = waitingForItemUpdate;
+    }
+
+    public static void setWaitingForRecipeUpdate(boolean waitingForRecipeUpdate) {
+        AClientRestrictionManager.waitingForRecipeUpdate = waitingForRecipeUpdate;
+        AStages.LOGGER.debug("Waiting For Recipe Update: {}", waitingForRecipeUpdate);
     }
 }

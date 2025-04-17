@@ -22,8 +22,7 @@ public class AJeiStarter {
 
     @Inject(method = "start", at = @At(value = "INVOKE", target = "Lmezz/jei/common/Internal;setRuntime(Lmezz/jei/api/runtime/IJeiRuntime;)V", shift = At.Shift.AFTER))
     public void start(CallbackInfo ci) {
-        AStages.LOGGER.debug(EffectiveSide.get().name());
-        AClientRestrictionManager.jeiIsReloading = false;
+        AClientRestrictionManager.setJeiIsReloading(false);
         NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
         NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
     }
