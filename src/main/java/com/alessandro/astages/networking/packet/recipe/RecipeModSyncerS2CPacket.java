@@ -1,8 +1,8 @@
 package com.alessandro.astages.networking.packet.recipe;
 
-import com.alessandro.astages.core.client.AClientRecipeModRestriction;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.restriction.ARecipeRestriction;
+import com.alessandro.astages.core.client.recipe.AClientRecipeModRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -16,7 +16,7 @@ public class RecipeModSyncerS2CPacket {
     private final String stage;
     private final String modId;
 
-    public RecipeModSyncerS2CPacket(@NotNull ARecipeRestriction restriction) {
+    public RecipeModSyncerS2CPacket(@NotNull ARecipeModRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getModId());
     }
 

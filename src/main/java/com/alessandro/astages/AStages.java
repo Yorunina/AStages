@@ -29,11 +29,6 @@ public class AStages {
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
-
         ModNetworking.register();
     }
-
-//    public static void wrapForTime() {
-//
-//    }
 }

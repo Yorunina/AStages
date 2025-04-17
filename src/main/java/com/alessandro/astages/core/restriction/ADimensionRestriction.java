@@ -3,8 +3,11 @@ package com.alessandro.astages.core.restriction;
 import com.alessandro.astages.store.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.ATime;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,6 +17,10 @@ import java.util.function.Function;
 public class ADimensionRestriction extends ARestriction<ADimensionRestriction, ResourceLocation, ResourceLocation> {
     private final List<ResourceLocation> dimensions = new ArrayList<>();
 
+    private static final String nbtId = "astages_dimension_timer_";
+    private static final String nbtAccess = "astages_dimension_access_";
+    private ATime maxStayTimer = null;
+
     public ADimensionRestriction(String id, String stage) {
         super(id, stage);
     }
@@ -21,10 +28,16 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
     @Override
     public @NotNull AttributeStore allowedAttributes() {
         return AttributeStore.builder()
+            .addAttribute(Attributes.ALLOW_ACCESS)
             .addAttribute(Attributes.BIDIRECTIONAL)
 
+            .addAttribute(Attributes.MAX_ACCESS)
+
+            .addAttribute(Attributes.CHAT_FORMATTING)
+
             .addAttribute(Attributes.Dimension.ENTER_MESSAGE)
-            .addAttribute(Attributes.Dimension.LEAVE_MESSAGE);
+            .addAttribute(Attributes.Dimension.LEAVE_MESSAGE)
+            .addAttribute(Attributes.Dimension.EXPIRED_MESSAGE);
     }
 
     @Override
@@ -45,9 +58,57 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
         return false;
     }
 
+    public List<ResourceLocation> getDimensions() {
+        return dimensions;
+    }
+
+    @Contract(pure = true)
+    public static @NotNull String getNbtIdForRestrictionId(String restrictionId) {
+        return nbtId + restrictionId;
+    }
+
+    @Contract(pure = true)
+    public static @NotNull String getNbtAccessForRestrictionId(String restrictionId) {
+        return nbtAccess + restrictionId;
+    }
+
     @SuppressWarnings("unused")
     public ADimensionRestriction setBidirectional(boolean value) {
         set(Attributes.BIDIRECTIONAL, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setMaxStayTimer(ATime timer) {
+        maxStayTimer = timer;
+        return this;
+    }
+
+    public Integer getMaxStayTimer() {
+        if (maxStayTimer == null) {
+            return null;
+        }
+
+        return maxStayTimer.getTicks();
+    }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setMaxAccess(int value) {
+        set(Attributes.MAX_ACCESS, value);
+        return this;
+    }
+
+    public String getNbtId() {
+        return nbtId + this.getId();
+    }
+
+    public String getNbtAccess() {
+        return nbtAccess + this.getId();
+    }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setTimerFormatting(ChatFormatting value) {
+        set(Attributes.CHAT_FORMATTING, value);
         return this;
     }
 
@@ -60,6 +121,12 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
     @SuppressWarnings("unused")
     public ADimensionRestriction setLeaveDimensionMessage(Function<ResourceLocation, Component> message) {
         set(Attributes.Dimension.LEAVE_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setExpiredDimensionMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Dimension.EXPIRED_MESSAGE, message);
         return this;
     }
 }

@@ -7,10 +7,9 @@ import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.ATime;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
-import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.kubejs.util.ClassFilter;
 import org.jetbrains.annotations.NotNull;
 
 public class AStageKubeJSPlugin extends KubeJSPlugin {
@@ -18,19 +17,6 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
         }
-    }
-
-//    @Override
-//    public void registerClasses(@NotNull ScriptType type, @NotNull ClassFilter filter) {
-//        if (type.isServer()) {
-//            filter.allow(Attributes.class);
-//        }
-//    }
-
-
-    @Override
-    public void registerClasses(ScriptType type, ClassFilter filter) {
-        super.registerClasses(type, filter);
     }
 
     @Override
@@ -45,6 +31,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
             event.add("PetAttributes", Attributes.Pet.class);
             event.add("DimensionAttributes", Attributes.Dimension.class);
             event.add("StructureAttributes", Attributes.Structure.class);
+            event.add("ATime", ATime.class);
         }
 
         if (event.getType().isClient()) {

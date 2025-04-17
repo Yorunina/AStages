@@ -39,17 +39,23 @@ public class Attributes {
     public static final Attribute<Boolean> ENCHANTING_TABLE = Attribute.create("enchanting_table", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> BLOCK_INTERACTIONS = Attribute.create("block_restrictions", AttributeTypes.BOOLEAN, true);
     public static final Attribute<Boolean> MOB_SPAWNING = Attribute.create("mob_spawning", AttributeTypes.BOOLEAN, false);
-    // public static final Attribute<Boolean> IGNORE_BLOCKS_AROUND = Attribute.create("ignore_blocks_around", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> SPAWN_WITH_DIFFERENT_EQUIPMENT = Attribute.create("spawn_with_different_equipment", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> ALLOW_ACCESS = Attribute.create("allow_access", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
     public static final Attribute<Integer> LEVEL = Attribute.create("level", AttributeTypes.INTEGER, null);
+    public static final Attribute<Integer> MIN_LIGHT_LEVEL = Attribute.create("min_light_level", AttributeTypes.INTEGER, null);
+    public static final Attribute<Integer> MAX_LIGHT_LEVEL = Attribute.create("max_light_level", AttributeTypes.INTEGER, null);
+    public static final Attribute<Integer> MAX_ACCESS = Attribute.create("max_access", AttributeTypes.INTEGER, 1);
 
     public static final Attribute<ResourceLocation> DIMENSION = Attribute.create("dimension", AttributeTypes.RESOURCE_LOCATION, null);
 
     public static final Attribute<EntityType<?>> REPLACE = Attribute.create("replace", AttributeTypes.ENTITY, null);
 
     public static final Attribute<ACompareCondition> COMPARE_CONDITION = Attribute.create("compare_condition", AttributeTypes.COMPARE_CONDITION, null);
+
+    public static final Attribute<ChatFormatting> CHAT_FORMATTING = Attribute.create("chat_formatting", AttributeTypes.CHAT_FORMATTING, ChatFormatting.GOLD);
 
     // If the creation of subclasses is HORRIBLE, change the default value to null and request, when you add an attribute to the attribute store, to check if a new default value is set
     // ITEM
@@ -90,10 +96,16 @@ public class Attributes {
     public static class Dimension {
         public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", resourceLocation).withStyle(ChatFormatting.RED));
         public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", resourceLocation).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", resourceLocation).withStyle(ChatFormatting.RED));
     }
 
     // MOB
     public static class Mob {
         public static final Attribute<Supplier<Component>> JADE_MOB_MESSAGE = Attribute.create("jade_mob_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob").withStyle(ChatFormatting.RED));
+    }
+
+    // REGION
+    public static class Region {
+        public static final Attribute<Supplier<Component>> INTERACT_MESSAGE = Attribute.create("interact_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.region").withStyle(ChatFormatting.RED));
     }
 }

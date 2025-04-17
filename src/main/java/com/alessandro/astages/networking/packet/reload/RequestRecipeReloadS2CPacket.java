@@ -18,7 +18,7 @@ public class RequestRecipeReloadS2CPacket {
 
     public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            AClientRestrictionManager.waitingForRecipeUpdate = true;
+            AClientRestrictionManager.setWaitingForRecipeUpdate(true);
             MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
         });
 

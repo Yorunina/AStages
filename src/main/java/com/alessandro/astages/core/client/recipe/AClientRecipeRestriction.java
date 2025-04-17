@@ -1,4 +1,4 @@
-package com.alessandro.astages.core.client;
+package com.alessandro.astages.core.client.recipe;
 
 import com.alessandro.astages.util.AClientRestriction;
 import net.minecraft.resources.ResourceLocation;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public record AClientRecipeRestriction(String id, String stage, int priority, RecipeType<?> type,
-                                       List<ResourceLocation> recipes) implements AClientRestriction, Comparable<AClientRecipeRestriction> {
+                                       List<ResourceLocation> recipes) implements AClientRestriction, Comparable<AClientRecipeRestriction>, AClientBaseRecipeRestriction {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof AClientRecipeRestriction)) { return false; }

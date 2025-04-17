@@ -1,56 +1,77 @@
 package com.alessandro.astages.core.manager;
 
-import com.alessandro.astages.core.restriction.ARecipeRestriction;
-import com.alessandro.astages.core.wrapper.RecipeModWrapper;
+import com.alessandro.astages.AStages;
+import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.restriction.recipe.ABaseRecipeRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeModRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
-import com.alessandro.astages.store.AManager;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, RecipeWrapper> implements ClientSynchronizable {
-    public final OrderedMultiMap<RecipeType<?>, ARecipeRestriction> CACHE = OrderedMultiMap.create();
-    public final List<ARecipeRestriction> MOD_CACHE = new ArrayList<>();
+public class ARecipeManager implements ClientSynchronizable {
+    private final List<ABaseRecipeRestriction<?, ?, ?>> restrictions = new ArrayList<>();
+    private final Map<String, ABaseRecipeRestriction<?, ?, ?>> IDS = new HashMap<>();
 
-    @Override
+    private final List<ARecipeRestriction> recipes = new ArrayList<>();
+    private final OrderedMultiMap<ResourceLocation, ARecipeRestriction> RECIPE_CACHE = OrderedMultiMap.create();
+    private final List<ARecipeModRestriction> mods = new ArrayList<>();
+
+    public List<ABaseRecipeRestriction<?, ?, ?>> getRestrictions() {
+        return restrictions;
+    }
+
+    public List<ARecipeRestriction> getRecipeRestrictions() {
+        return recipes;
+    }
+
+    public List<ARecipeModRestriction> getModRestrictions() {
+        return mods;
+    }
+
     public void reloadBeforeScripts() {
-        super.reloadBeforeScripts();
-        CACHE.clear();
-        MOD_CACHE.clear();
+        restrictions.clear();
+        IDS.clear();
+
+        recipes.clear();
+        RECIPE_CACHE.clear();
+        mods.clear();
     }
 
-    @Override
-    public void addRestriction(ARecipeRestriction restriction) {
-        super.addRestriction(restriction);
-        if (restriction.getType() != null) {
-            CACHE.put(restriction.getType(), restriction);
-        } else if (restriction.getModId() != null) {
-            MOD_CACHE.add(restriction);
-        }
+    public ABaseRecipeRestriction<?, ?, ?> getRestriction(String id) {
+        return IDS.getOrDefault(id, null);
     }
 
-    @Override
-    public ARecipeRestriction getRestriction(Player player, RecipeWrapper wrapper) {
-        var modRestriction = getRestriction(player, new RecipeModWrapper(wrapper.recipe().getNamespace()));
+    public ABaseRecipeRestriction<?, ?, ?> getRestriction(Player player, RecipeWrapper wrapper) {
+        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
         if (modRestriction != null) { return modRestriction; }
 
-        var restrictions = CACHE.get(wrapper.type());
+        return getRestrictionFromCache(RECIPE_CACHE, wrapper.recipe(), player);
+    }
+
+    public ARecipeRestriction getRestrictionFromCache(OrderedMultiMap<ResourceLocation, ARecipeRestriction> cache, ResourceLocation value, Player player) {
+        var restrictions = cache.get(value);
 
         if (!restrictions.isEmpty()) {
             for (var restriction : restrictions) {
-                if (restriction.isRestricted(wrapper) && !AStagesUtil.hasStage(player, restriction.getStage())) {
+                if (!AStagesUtil.hasStage(player, restriction.getStage())) {
                     return restriction;
                 }
             }
@@ -59,22 +80,41 @@ public class ARecipeManager extends AManager<ARecipeRestriction, RecipeWrapper, 
         return null;
     }
 
-    public ARecipeRestriction getRestriction(Player player, RecipeModWrapper wrapper) {
-        for (var restriction : MOD_CACHE) {
-            if (restriction.isRestricted(wrapper) && !AStagesUtil.hasStage(player, restriction.getStage())) {
-                return restriction;
+    public void addRestriction(ARecipeRestriction restriction) {
+        if (commonAddOperations(restriction)) {
+            recipes.add(restriction);
+
+            for (var recipe : restriction.getRecipes()) {
+                RECIPE_CACHE.put(recipe, restriction);
             }
         }
+    }
 
-        return null;
+    public void addRestriction(ARecipeModRestriction restriction) {
+        if (commonAddOperations(restriction)) {
+            mods.add(restriction);
+        }
+    }
+
+    private boolean commonAddOperations(@NotNull ABaseRecipeRestriction<?, ?, ?> restriction) {
+        if (IDS.containsKey(restriction.getId())) {
+            if (AStagesCommon.ENABLE_LOGS.get()) {
+                AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
+            }
+
+            return false;
+        }
+
+        IDS.put(restriction.getId(), restriction);
+        restrictions.add(restriction);
+
+        ARestrictionManager.ALL_STAGES.add(restriction.getStage());
+        return true;
     }
 
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
-        for (var type : CACHE.keySet()) {
-            CACHE.get(type).forEach(restriction -> ModNetworking.sendTo(player, new RecipeSyncerS2CPacket(restriction)));
-        }
-
-        MOD_CACHE.forEach(restriction -> ModNetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
+        recipes.forEach(restriction -> ModNetworking.sendTo(player, new RecipeSyncerS2CPacket(restriction)));
+        mods.forEach(restriction -> ModNetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
     }
 }

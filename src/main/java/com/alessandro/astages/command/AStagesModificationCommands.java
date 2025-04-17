@@ -1,5 +1,6 @@
 package com.alessandro.astages.command;
 
+import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.command.argument.AStagesAddArgument;
@@ -46,6 +47,9 @@ public class AStagesModificationCommands {
             .then(Commands.literal("info").then(Commands.argument("player", EntityArgument.player())
                 .executes(context -> infoCommand(Objects.requireNonNull(context.getSource().getPlayer()), EntityArgument.getPlayer(context, "player")))
             ))
+            .then(Commands.literal("client_info")
+                .executes(context -> clientInfoCommand(Objects.requireNonNull(context.getSource().getPlayer())))
+            )
         );
     }
 
@@ -106,6 +110,19 @@ public class AStagesModificationCommands {
                 }
             }
         });
+
+        return 1;
+    }
+
+    private static int clientInfoCommand(ServerPlayer executor) {
+        if (ClientPlayerStage.getPlayerStages().isEmpty()) {
+            executor.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", executor.getName()).withStyle(ChatFormatting.RED));
+        } else {
+            executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", executor.getName()).withStyle(ChatFormatting.GREEN));
+            for (var stage : ClientPlayerStage.getPlayerStages()) {
+                executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
+            }
+        }
 
         return 1;
     }

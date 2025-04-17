@@ -47,14 +47,4 @@ public class AttributeStore extends HashMap<Attribute<?>, Object> {
 
         return this;
     }
-
-    //    public AttributeStore deepCopy(AttributeStore other) {
-//        AttributeStore copy = new AttributeStore();
-//
-//        for (Entry<Attribute<?>, Object> entry : other.entrySet()) {
-//            copy.put(entry.getKey(), entry.getValue());
-//        }
-//
-//        return copy;
-//    }
 }

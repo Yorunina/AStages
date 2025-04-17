@@ -1,8 +1,8 @@
 package com.alessandro.astages.networking.packet.recipe;
 
-import com.alessandro.astages.core.client.AClientRecipeRestriction;
+import com.alessandro.astages.core.client.recipe.AClientRecipeRestriction;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.restriction.ARecipeRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

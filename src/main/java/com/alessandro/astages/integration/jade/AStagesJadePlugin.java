@@ -62,18 +62,6 @@ public class AStagesJadePlugin implements IWailaPlugin {
                         tooltip.add(restriction.jadeBlockMessage());
                     }
                 }
-
-
-//                var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(stack);
-
-                // TODO: To be re-implemented!
-//                if (restriction != null) {
-//                    tooltip.clear();
-//
-//                    if (restriction.jadeBlockMessage() != null) {
-//                        tooltip.add(restriction.jadeBlockMessage());
-//                    }
-//                }
             }
 
             if (accessor instanceof EntityAccessor entityAccessor) {
@@ -89,17 +77,6 @@ public class AStagesJadePlugin implements IWailaPlugin {
                             tooltip.add(restriction.jadeItemMessage());
                         }
                     }
-
-//                    var restriction = AClientRestrictionManager.NEW_ITEM_INSTANCE.getRestriction(itemEntity.getItem());
-
-                    // TODO: To be re-implemented!
-//                    if (restriction != null) {
-//                        tooltip.clear();
-//
-//                        if (restriction.jadeItemMessage() != null) {
-//                            tooltip.add(restriction.jadeItemMessage());
-//                        }
-//                    }
                 }
             }
         });

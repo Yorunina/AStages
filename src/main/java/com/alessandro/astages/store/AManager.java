@@ -29,6 +29,8 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
         IDS.clear();
     }
 
+    public void reloadAfterScripts() { }
+
     public R getRestriction(String id) {
         return IDS.getOrDefault(id, null);
     }
@@ -37,15 +39,22 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
         return restrictions.stream().filter(r -> r.isRestricted(object) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
 
+    public List<String> getIds() {
+        return IDS.keySet().stream().toList();
+    }
+
     public void addRestriction(R restriction) {
-        if (IDS.containsKey(restriction.getId()) && AStagesCommon.ENABLE_LOGS.get()) {
-            AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
+        if (IDS.containsKey(restriction.getId())) {
+            if (AStagesCommon.ENABLE_LOGS.get()) {
+                AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
+            }
+
             return;
         }
 
         IDS.put(restriction.getId(), restriction);
         restrictions.add(restriction);
-        ARestrictionManager.ALL_STAGES.add(restriction.getStage());
+        if (considerGlobalStages()) { ARestrictionManager.ALL_STAGES.add(restriction.getStage()); }
     }
 
     public <W> R getRestrictionFromCache(OrderedMultiMap<W, R> cache, W value, Player player) {
@@ -75,5 +84,9 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
         }
 
         return null;
+    }
+
+    public boolean considerGlobalStages() {
+        return true;
     }
 }

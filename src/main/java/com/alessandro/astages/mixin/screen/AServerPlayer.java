@@ -34,7 +34,6 @@ public class AServerPlayer {
 
         if (restriction != null) {
             restriction.displayMessage(Attributes.Screen.OPEN_MESSAGE, abstractcontainermenu.getType(), serverPlayer$self());
-
             cir.setReturnValue(OptionalInt.of(containerCounter));
         }
     }

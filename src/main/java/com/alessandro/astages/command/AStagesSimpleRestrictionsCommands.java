@@ -1,5 +1,6 @@
-package com.alessandro.astages.simple;
+package com.alessandro.astages.command;
 
+import com.alessandro.astages.simple.ASimpleElaborator;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandBuildContext;

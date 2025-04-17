@@ -23,6 +23,8 @@ public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Ite
 
     @Override
     public boolean isRestricted(@NotNull ItemStack stack) {
+        if (stack.isEmpty()) { return false; }
+
         return items.contains(stack.getItem());
     }
 

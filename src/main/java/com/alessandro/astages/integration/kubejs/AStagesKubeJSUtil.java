@@ -8,6 +8,8 @@ import com.alessandro.astages.core.restriction.item.AItemModRestriction;
 import com.alessandro.astages.core.restriction.item.AItemPredicateRestriction;
 import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.restriction.item.AItemTagRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeModRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.stage.AStage;
 import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.core.wrapper.OreWrapper;
@@ -19,6 +21,7 @@ import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -201,8 +204,8 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-    public static ARecipeRestriction addRestrictionForModRecipe(String id, String stage, String modId) {
-        var restriction = new ARecipeRestriction(id, stage);
+    public static ARecipeModRestriction addRestrictionForModRecipe(String id, String stage, String modId) {
+        var restriction = new ARecipeModRestriction(id, stage);
         restriction.restrict(new RecipeModWrapper(modId));
 
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(restriction);
@@ -301,6 +304,43 @@ public class AStagesKubeJSUtil {
         restriction.restrict(effect);
 
         ARestrictionManager.EFFECT_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
+    // REGION Restrictions
+    public static ARegionRestriction addRestrictionForRegion(String id, String stage, ARegionRestriction.Type type, BlockPos center, int deltaX, int deltaY, int deltaZ) {
+        var restriction = new ARegionRestriction(id, stage);
+        restriction.setArea(type, center, deltaX, deltaY, deltaZ);
+
+        ARestrictionManager.REGION_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
+    public static ARegionRestriction addRestrictionForRegion(String id, String stage, ARegionRestriction.Type type, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        var restriction = new ARegionRestriction(id, stage);
+        restriction.setArea(type, minX, minY, minZ, maxX, maxY, maxZ);
+
+        ARestrictionManager.REGION_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
+    public static ARegionRestriction addRestrictionForRegion(String id, String stage, ARegionRestriction.Type type, BlockPos center, int radius) {
+        var restriction = new ARegionRestriction(id, stage);
+        restriction.setArea(type, center, radius);
+
+        ARestrictionManager.REGION_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
+
+    public static ARegionRestriction addRestrictionForRegion(String id, String stage, ARegionRestriction.Type type, @NotNull BlockPos from, @NotNull BlockPos to) {
+        var restriction = new ARegionRestriction(id, stage);
+        restriction.setArea(type, from, to);
+
+        ARestrictionManager.REGION_INSTANCE.addRestriction(restriction);
 
         return restriction;
     }

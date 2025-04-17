@@ -25,9 +25,7 @@ public abstract class APlayerEventJS {
     @Overwrite
     public boolean hasGameStage(String stage) {
         AtomicBoolean toReturn = new AtomicBoolean(false);
-
         Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
-
         return toReturn.get();
     }
 

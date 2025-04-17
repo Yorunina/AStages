@@ -11,6 +11,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModArguments {
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, AStages.MODID);
 
+    @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> DIMENSION_IDS_ARGUMENT = ARGUMENT_TYPES.register("dimension_ids", () -> ArgumentTypeInfos.registerByClass(AStagesDimensionArgument.class, SingletonArgumentInfo.contextFree(AStagesDimensionArgument::dimensionIds)));
+
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> ADD_STAGES_ARGUMENT = ARGUMENT_TYPES.register("add_stages", () -> ArgumentTypeInfos.registerByClass(AStagesAddArgument.class, SingletonArgumentInfo.contextFree(AStagesAddArgument::stages)));
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> REMOVE_STAGES_ARGUMENT = ARGUMENT_TYPES.register("remove_stages", () -> ArgumentTypeInfos.registerByClass(AStagesRemoveArgument.class, SingletonArgumentInfo.contextFree(AStagesRemoveArgument::stages)));
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> REMOVE_SERVER_STAGES_ARGUMENT = ARGUMENT_TYPES.register("remove_server_stages", () -> ArgumentTypeInfos.registerByClass(AStagesServerRemoveArgument.class, SingletonArgumentInfo.contextFree(AStagesServerRemoveArgument::stages)));

@@ -6,6 +6,7 @@ import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.stage.AStageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -26,6 +27,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AStagesUtil {
+    public static Player getNearestPlayer(@NotNull Level level, @NotNull BlockPos pos) {
+        return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
+    }
+
     public static Player getNearestPlayer(@NotNull Level level, Vec3 pos) {
         var players = level.players();
         var minDistance = Double.MAX_VALUE;
@@ -129,9 +134,7 @@ public class AStagesUtil {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasStage(@NotNull Player player, String stage) {
         AtomicBoolean toReturn = new AtomicBoolean(false);
-
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
-
         return toReturn.get();
     }
 

@@ -121,8 +121,11 @@ public class AItemManager implements ClientSynchronizable {
     }
 
     private boolean commonAddOperations(@NotNull ABaseItemRestriction<?, ?> restriction) {
-        if (IDS.containsKey(restriction.getId()) && AStagesCommon.ENABLE_LOGS.get()) {
-            AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
+        if (IDS.containsKey(restriction.getId())) {
+            if (AStagesCommon.ENABLE_LOGS.get()) {
+                AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
+            }
+
             return false;
         }
 

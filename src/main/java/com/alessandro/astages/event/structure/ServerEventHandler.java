@@ -65,6 +65,20 @@ public class ServerEventHandler {
         if (tick >= AStagesCommon.TICK_STRUCTURE_UPDATING.get()) { tick = 0; }
     }
 
+//    @SubscribeEvent
+    public static void testTick(TickEvent.PlayerTickEvent event) {
+        // if (ARestrictionManager.STRUCTURE_INSTANCE.getRestrictions().isEmpty()) { return; }
+        if (event.player.level().isClientSide) { return; }
+        if (event.phase == TickEvent.Phase.START) { return; }
+        if (event.player.getServer() == null) { return; }
+
+        if (event.player instanceof ServerPlayer player) {
+            StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
+            var result = AStructureUtils.isCloseToStructure(player, manager, player.getServer().getLevel(player.level().dimension()));
+            AStages.LOGGER.debug(result.toString());
+        }
+    }
+
     private static void teleportPlayerOutFromTheStructure(Player player) {
         var range = 1;
         var level = player.level();

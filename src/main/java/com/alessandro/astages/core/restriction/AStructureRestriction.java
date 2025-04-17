@@ -155,8 +155,6 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
         return this;
     }
 
-
-
     @SuppressWarnings("unused")
     public AStructureRestriction addAllowedBreakableStates(BlockState... states) {
         if (allowedBreakableStates == null) { allowedBreakableStates = new ArrayList<>(); }

@@ -6,6 +6,7 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AChangeable;
 import com.alessandro.astages.util.AMarkable;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -68,6 +69,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
         return toReturn;
     }
 
+    @UnderDevelopment
     @Override
     public void setChanged() {
         // ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions(this);

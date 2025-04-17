@@ -23,6 +23,8 @@ public class AItemPredicateRestriction extends ABaseItemRestriction<AItemPredica
     @SuppressWarnings("unchecked")
     @Override
     public boolean isRestricted(ItemStack stack) {
+        if (stack.isEmpty()) { return false; }
+
         return ((AModel<Predicate<ItemStack>>) AModelManager.MODELS.getModel(modelId)).modelObject().test(stack);
     }
 

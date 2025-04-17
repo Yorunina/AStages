@@ -2,6 +2,7 @@ package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
@@ -51,12 +52,6 @@ public class ModNetworking {
             .encoder(ItemSyncerS2CPacket::toBytes)
             .consumerMainThread(ItemSyncerS2CPacket::handle)
             .add();
-
-//        net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-//            .decoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::new)
-//            .encoder(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::toBytes)
-//            .consumerMainThread(com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket::handle)
-//            .add();
 
         net.messageBuilder(TagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(TagSyncerS2CPacket::new)
@@ -133,6 +128,13 @@ public class ModNetworking {
             .decoder(MobSyncerS2CPacket::new)
             .encoder(MobSyncerS2CPacket::toBytes)
             .consumerMainThread(MobSyncerS2CPacket::handle)
+            .add();
+
+        // DIMENSION
+        net.messageBuilder(DimensionIdsSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(DimensionIdsSyncerS2CPacket::new)
+            .encoder(DimensionIdsSyncerS2CPacket::toBytes)
+            .consumerMainThread(DimensionIdsSyncerS2CPacket::handle)
             .add();
 
         // SERVER

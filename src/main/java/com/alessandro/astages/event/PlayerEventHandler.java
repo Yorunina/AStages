@@ -16,12 +16,14 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class PlayerEventHandler {
     @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.@NotNull PlayerLoggedInEvent event) {
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().level().isClientSide) {
             event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> playerStage.setChangedFor(event.getEntity(), PlayerStage.Operation.GET, null));
         }
@@ -29,13 +31,14 @@ public class PlayerEventHandler {
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
 
         if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer player) {
-            ARestrictionManager.clientSynchronization(player);
+            ARestrictionManager.clearClientOnLogin(player);
             ARestrictionManager.reflectServerStagesChangesToClients(player, player.server);
+            ARestrictionManager.clientSynchronization(player);
         }
     }
 
     @SubscribeEvent
-    public static void onAttachedCapabilities(@NotNull AttachCapabilitiesEvent<Entity> event) {
+    public static void onAttachedCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             if (!event.getObject().getCapability(PlayerStageProvider.PLAYER_STAGE).isPresent()) {
                 event.addCapability(new ResourceLocation(AStages.MODID, "properties"), new PlayerStageProvider());
@@ -44,7 +47,7 @@ public class PlayerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerCloned(PlayerEvent.@NotNull Clone event) {
+    public static void onPlayerCloned(PlayerEvent.Clone event) {
         event.getOriginal().reviveCaps();
 
         event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
@@ -60,33 +63,16 @@ public class PlayerEventHandler {
 
     @Info("For inventory checking!")
     @SubscribeEvent
-    public static void onContainerOpen(@NotNull PlayerContainerEvent event) {
+    public static void onContainerOpen(PlayerContainerEvent event) {
         event.getContainer().addSlotListener(new AInventorySlotListener(event.getEntity()));
     }
 
     @Info("For inventory checking!")
     @SubscribeEvent
-    public static void onInventoryChanged(@NotNull PlayerInventoryChangedEvent event) {
+    public static void onInventoryChanged(PlayerInventoryChangedEvent event) {
         CommonEventSettings.isInventoryChanged = true;
         CommonEventSettings.slotChanged = event.getSlot();
     }
-
-//    @Info("For armor checking!")
-//    @SubscribeEvent
-//    public static void livingEquipmentChanged(@NotNull LivingEquipmentChangeEvent event) {
-//        if (event.getEntity() instanceof Player) {
-//            ServerEventHandler.isInventoryChanged = true;
-//            CommonEventSettings.isInventoryChanged = true;
-//            CommonEventSettings.slotChanged = event.getSlot().getIndex();
-//        }
-//    }
-
-//    @SubscribeEvent
-//    public static void onPlayerTick(TickEvent.@NotNull PlayerTickEvent event) {
-//        if (event.player.getServer() != null) {
-//            AStages.LOGGER.debug(ServerStageData.getData(event.player.getServer()).get().toString());
-//        }
-//    }
 
     @Info("For whole inventory checking!")
     @SubscribeEvent
