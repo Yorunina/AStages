@@ -7,6 +7,7 @@ import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -24,9 +25,9 @@ public record ItemPropertySyncerS2CPacket(String id, String stage, ItemStack sta
         ItemStack.STREAM_CODEC, ItemPropertySyncerS2CPacket::stack,
         ByteBufCodecs.BOOL, ItemPropertySyncerS2CPacket::renderItemName,
         ByteBufCodecs.BOOL, ItemPropertySyncerS2CPacket::hideTooltip,
-        ACodes.COMPONENT, ItemPropertySyncerS2CPacket::tooltipMessage,
-        ACodes.COMPONENT, ItemPropertySyncerS2CPacket::jadeItemMessage,
-        ACodes.COMPONENT, ItemPropertySyncerS2CPacket::jadeBlockMessage,
+        ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::tooltipMessage,
+        ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::jadeItemMessage,
+        ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::jadeBlockMessage,
         ItemPropertySyncerS2CPacket::new
     );
 

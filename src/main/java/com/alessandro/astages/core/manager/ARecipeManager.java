@@ -4,6 +4,8 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.restriction.recipe.ABaseRecipeRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeModRestriction;
+import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;

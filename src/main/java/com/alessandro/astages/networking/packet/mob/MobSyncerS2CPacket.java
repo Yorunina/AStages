@@ -4,12 +4,12 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.AClientMobRestriction;
 import com.alessandro.astages.core.restriction.AMobRestriction;
-import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -29,7 +29,7 @@ public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> ty
         ByteBufCodecs.STRING_UTF8, MobSyncerS2CPacket::id,
         ByteBufCodecs.STRING_UTF8, MobSyncerS2CPacket::stage,
         ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs.list()), MobSyncerS2CPacket::types,
-        ACodes.COMPONENT, MobSyncerS2CPacket::jadeMobMessage,
+        ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), MobSyncerS2CPacket::jadeMobMessage,
         MobSyncerS2CPacket::new
     );
 

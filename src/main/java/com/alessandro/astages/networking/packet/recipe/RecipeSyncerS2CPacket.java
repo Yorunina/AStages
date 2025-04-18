@@ -7,7 +7,7 @@ import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.util.develop.Info;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,7 +27,7 @@ public record RecipeSyncerS2CPacket(String id, String stage, int priority, Recip
         ByteBufCodecs.STRING_UTF8, RecipeSyncerS2CPacket::id,
         ByteBufCodecs.STRING_UTF8, RecipeSyncerS2CPacket::stage,
         ByteBufCodecs.INT, RecipeSyncerS2CPacket::priority,
-        ByteBufCodecs.registry(Registries.RECIPE_TYPE), RecipeSyncerS2CPacket::recipeType,
+        ByteBufCodecs.fromCodecWithRegistries(BuiltInRegistries.RECIPE_TYPE.byNameCodec()), RecipeSyncerS2CPacket::recipeType,
         ACodes.RESOURCE_LOCATION.apply(ByteBufCodecs.list()), RecipeSyncerS2CPacket::recipes,
         RecipeSyncerS2CPacket::new
     );

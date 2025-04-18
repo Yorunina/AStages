@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -120,8 +121,9 @@ public class ServerEventHandler {
 
     public static @NotNull ItemStack removeAllRestrictedEnchantmentFromStack(Player player, ItemStack itemStack) {
         ItemStack newStack = itemStack.copy();
-        newStack.remove(DataComponents.ENCHANTMENTS);
-        newStack.remove(DataComponents.STORED_ENCHANTMENTS);
+//        newStack.remove(DataComponents.ENCHANTMENTS);
+//        newStack.remove(DataComponents.STORED_ENCHANTMENTS);
+        clearStack(newStack);
 
         if (itemStack.has(DataComponents.ENCHANTMENTS)) {
             var data = itemStack.get(DataComponents.ENCHANTMENTS); // Where enchantments are stored!
@@ -158,5 +160,23 @@ public class ServerEventHandler {
         }
 
         return newStack;
+    }
+
+    public static ItemStack clearStack(ItemStack stack) {
+        if (stack.has(DataComponents.ENCHANTMENTS)) {
+            ItemEnchantments data = stack.get(DataComponents.ENCHANTMENTS);
+            if (data != null) {
+                stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+            }
+        }
+
+        if (stack.has(DataComponents.STORED_ENCHANTMENTS)) {
+            ItemEnchantments data = stack.get(DataComponents.STORED_ENCHANTMENTS);
+            if (data != null) {
+                stack.set(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
+            }
+        }
+
+        return stack;
     }
 }

@@ -1,12 +1,12 @@
 package com.alessandro.astages.core.restriction.recipe;
 
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
 import com.alessandro.astages.util.AMarkable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -52,9 +52,9 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
     @Override
     public void markAsDirty() {
         if (type != null && !recipes.isEmpty()) {
-            ModNetworking.sendToClients(new RecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
+            PacketDistributor.sendToAllPlayers(new RecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
         }
 
-        ModNetworking.sendToClients(new RequestRecipeReloadS2CPacket());
+        PacketDistributor.sendToAllPlayers(new RequestRecipeReloadS2CPacket());
     }
 }

@@ -2,7 +2,6 @@ package com.alessandro.astages.networking;
 
 import com.mojang.datafixers.util.Function8;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -12,12 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
 public class ACodes {
-    public static final StreamCodec<ByteBuf, Component> COMPONENT = ByteBufCodecs.STRING_UTF8.map(
-        // String -> Component
-        Component::literal,
-        // Component -> String
-        Component::getString
-    );
 
     public static final StreamCodec<ByteBuf, ResourceLocation> RESOURCE_LOCATION = ByteBufCodecs.STRING_UTF8.map(
         // String -> ResourceLocation

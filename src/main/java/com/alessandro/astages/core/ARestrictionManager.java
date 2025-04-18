@@ -107,6 +107,7 @@ public class ARestrictionManager {
             case ENCHANT -> (T) ENCHANT_INSTANCE.getRestriction(id);
             case CROP -> (T) CROP_INSTANCE.getRestriction(id);
             case EFFECT -> (T) EFFECT_INSTANCE.getRestriction(id);
+            case REGION -> (T) REGION_INSTANCE.getRestriction(id);
         };
     }
 }

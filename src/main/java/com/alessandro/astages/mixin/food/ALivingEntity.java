@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.food;
 
+import com.alessandro.astages.event.custom.LivingEntityEatEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
