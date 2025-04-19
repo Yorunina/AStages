@@ -49,7 +49,7 @@ public class MobSyncerS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             var restriction = new AClientMobRestriction(id, stage, types, jadeMobMessage);
-            AClientRestrictionManager.MOB_INSTANCE.addRestriction(id, restriction);
+            AClientRestrictionManager.MOB_INSTANCE.addRestriction(stage, restriction);
         });
 
         ctx.get().setPacketHandled(true);

@@ -28,11 +28,11 @@ public class ServerEventHandler {
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(event.getEntity().getType(), nearestPlayer, server);
 
         if (restriction != null) {
-            var flag = restriction.isValueNull(Attributes.DIMENSION) && restriction.getDisabledSpawnTypes().isEmpty() &&
-                restriction.getRestrictedBiomes().isEmpty() && restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) &&
-                restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL);
+//            var flag = restriction.isValueNull(Attributes.DIMENSION) && restriction.getDisabledSpawnTypes().isEmpty() &&
+//                restriction.getRestrictedBiomes().isEmpty() && restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) &&
+//                restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL);
 
-            if (restriction.isDisabled(Attributes.MOB_SPAWNING) && flag) {
+            if (restriction.isDisabled(Attributes.MOB_SPAWNING)/* && flag*/) {
                 preventSpawning(event, restriction, level);
                 return;
             }
