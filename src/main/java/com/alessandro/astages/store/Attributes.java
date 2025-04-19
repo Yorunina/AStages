@@ -94,9 +94,9 @@ public class Attributes {
 
     // DIMENSION
     public static class Dimension {
-        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", resourceLocation).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", resourceLocation).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", resourceLocation).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
     }
 
     // MOB

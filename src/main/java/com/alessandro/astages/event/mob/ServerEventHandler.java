@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -19,13 +19,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
-    public static void checkMobSpawning(FinalizeSpawnEvent event) {
+    public static void checkMobSpawning(MobSpawnEvent.PositionCheck event) {
         Player nearestPlayer = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
         var server = event.getEntity().getServer();
         var level = event.getEntity().level();
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(event.getEntity().getType(), nearestPlayer, server);
 
-        if (restriction != null && restriction.isDisabled(Attributes.MOB_SPAWNING)) {
+        if (restriction != null) {
+            if (restriction.isDisabled(Attributes.MOB_SPAWNING)) {
+                preventSpawning(event, restriction, level);
+                return;
+            }
+
             if (restriction.getDisabledSpawnTypes().contains(event.getSpawnType())) {
                 preventSpawning(event, restriction, level);
                 return;
@@ -39,7 +44,6 @@ public class ServerEventHandler {
             }
 
             var biome = level.getBiome(event.getEntity().blockPosition()).getKey();
-
             if (biome != null) {
                 var biomeRS = biome.location();
                 if (restriction.getRestrictedBiomes().contains(biomeRS)) {
@@ -68,7 +72,7 @@ public class ServerEventHandler {
         }
     }
 
-    private static void preventSpawning(FinalizeSpawnEvent event, AMobRestriction restriction, Level level) {
+    private static void preventSpawning(MobSpawnEvent.PositionCheck event, AMobRestriction restriction, Level level) {
         // If prevent spawn, you can place the replacer!
         if (!restriction.isValueNull(Attributes.REPLACE)) {
             LivingEntity newEntity = (LivingEntity) restriction.get(Attributes.REPLACE).create(level);
@@ -87,6 +91,6 @@ public class ServerEventHandler {
             }
         }
 
-        event.setSpawnCancelled(true);
+        event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
     }
 }

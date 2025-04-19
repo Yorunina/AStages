@@ -40,7 +40,7 @@ public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> ty
     @Override
     public void run(IPayloadContext context) {
         var restriction = new AClientMobRestriction(id, stage, types, jadeMobMessage);
-        AClientRestrictionManager.MOB_INSTANCE.addRestriction(id, restriction);
+        AClientRestrictionManager.MOB_INSTANCE.addRestriction(stage, restriction);
     }
 
     @Override

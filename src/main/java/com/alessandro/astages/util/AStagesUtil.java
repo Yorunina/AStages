@@ -103,6 +103,10 @@ public class AStagesUtil {
         return capitalizeWords(input.getPath().replace('_', ' '));
     }
 
+    public static @NotNull String dimensionToDescription(@NotNull ResourceLocation input) {
+        return capitalizeWords(input.getPath().replace('_', ' '));
+    }
+
     public static @NotNull String capitalizeWords(@NotNull String input) {
         // split the input string into an array of words
         String[] words = input.split("\\s");
