@@ -40,7 +40,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
-                    AClientRestrictionManager.waitingForItemUpdate = true;
+                    AClientRestrictionManager.setWaitingForItemUpdate(true);
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
             });
@@ -126,7 +126,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                     }
                 }
 
-                AClientRestrictionManager.waitingForItemUpdate = false;
+                AClientRestrictionManager.setWaitingForItemUpdate(false);
                 return;
             }
 

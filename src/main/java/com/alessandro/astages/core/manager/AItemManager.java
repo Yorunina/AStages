@@ -18,11 +18,13 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
 public class AItemManager implements ClientSynchronizable {
     private final List<ABaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseItemRestriction<?, ?>> IDS = new HashMap<>();
@@ -31,6 +33,11 @@ public class AItemManager implements ClientSynchronizable {
     private final List<AItemModRestriction> mods = new ArrayList<>();
     private final List<AItemTagRestriction> tags = new ArrayList<>();
     private final List<AItemPredicateRestriction> predicates = new ArrayList<>();
+
+    // Every time, apply in THIS order!
+//    private final OrderedMultiMap<String, AItemModRestriction> MOD_CACHE = OrderedMultiMap.create();
+//    private final Map<ResourceLocation, AItemTagRestriction> TAG_CACHE = new HashMap<>();
+//    private final Map<Item, AItemRestriction> ITEM_CACHE = new HashMap<>();
 
     private final List<ABaseItemRestriction<?, ?>> INVENTORY_CACHE = new ArrayList<>();
     private final List<ABaseItemRestriction<?, ?>> EQUIPMENT_CACHE = new ArrayList<>();
@@ -64,6 +71,10 @@ public class AItemManager implements ClientSynchronizable {
         tags.clear();
         predicates.clear();
 
+//        MOD_CACHE.clear();
+//        TAG_CACHE.clear();
+//        ITEM_CACHE.clear();
+
         INVENTORY_CACHE.clear();
         EQUIPMENT_CACHE.clear();
     }
@@ -87,6 +98,17 @@ public class AItemManager implements ClientSynchronizable {
     public ABaseItemRestriction<?, ?> getRestriction(Player player, ItemStack stack) {
         return restrictions.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
+
+//    public ABaseItemRestriction<?, ?> speedUpGetRestriction(Player player, ItemStack stack) {
+//        var modId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace();
+//        for (AItemModRestriction restriction : MOD_CACHE.get(modId)) {
+//            if (!AStagesUtil.hasStage(player, restriction.getStage())) {
+//                return restriction;
+//            }
+//        }
+//    }
+
+    // private ABaseItemRestriction<?>
 
     public ABaseItemRestriction<?, ?> getInventoryRestriction(Player player, ItemStack stack) {
         return INVENTORY_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
