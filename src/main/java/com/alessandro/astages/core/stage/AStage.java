@@ -13,6 +13,8 @@ public class AStage {
     private Component removeTitle;
     private Component addSubTitle;
     private Component removeSubTitle;
+    private Component addChatMessage;
+    private Component removeChatMessage;
     private int fadeIn = 20;
     private int fadeOut = 20;
     private int stay = 60;
@@ -79,6 +81,24 @@ public class AStage {
 
     public AStage setRemoveSubTitle(Component removeSubTitle) {
         this.removeSubTitle = removeSubTitle;
+        return this;
+    }
+
+    public Component getAddChatMessage() {
+        return addChatMessage;
+    }
+
+    public AStage setAddChatMessage(Component addChatMessage) {
+        this.addChatMessage = addChatMessage;
+        return this;
+    }
+
+    public Component getRemoveChatMessage() {
+        return removeChatMessage;
+    }
+
+    public AStage setRemoveChatMessage(Component removeChatMessage) {
+        this.removeChatMessage = removeChatMessage;
         return this;
     }
 
