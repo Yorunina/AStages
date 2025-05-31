@@ -1,11 +1,14 @@
 package com.alessandro.astages.integration.jei;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CustomItemStackKey {
     private final ItemStack stack;
 
@@ -14,7 +17,7 @@ public class CustomItemStackKey {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull CustomItemStackKey build(ItemStack stack) {
+    public static CustomItemStackKey build(ItemStack stack) {
         return new CustomItemStackKey(stack);
     }
 

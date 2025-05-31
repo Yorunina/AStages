@@ -6,10 +6,9 @@ import com.alessandro.astages.core.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.*;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.store.ReloadType;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,7 +55,7 @@ public class ARestrictionManager {
         ALL_STAGES.clear();
         ORE_STAGES.clear();
 
-        ModNetworking.sendToClients(new RequestClientReloadS2CPacket());
+        ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
     }
 
     public static void clientSynchronization(@Nullable ServerPlayer player) {
@@ -67,8 +66,8 @@ public class ARestrictionManager {
         ARestrictionManager.MOB_INSTANCE.synchronizeWithClient(player);
         ARestrictionManager.ORE_INSTANCE.synchronizeWithClient(player);
 
-        ModNetworking.sendTo(player, new RequestItemReloadS2CPacket());
-        ModNetworking.sendTo(player, new RequestRecipeReloadS2CPacket());
+        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.ITEM));
+        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.RECIPE));
         ModNetworking.sendTo(player, new OreStagesSyncerS2CPacket(ARestrictionManager.ORE_STAGES.stream().toList()));
         ModNetworking.sendTo(player, new DimensionIdsSyncerS2CPacket(ARestrictionManager.DIMENSION_INSTANCE.getIds()));
 
@@ -89,7 +88,7 @@ public class ARestrictionManager {
     }
 
     public static void clearClientOnLogin(ServerPlayer player) {
-        ModNetworking.sendToPlayer(new RequestClientReloadS2CPacket(), player);
+        ModNetworking.sendToPlayer(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE), player);
     }
 
     @SuppressWarnings("unchecked")

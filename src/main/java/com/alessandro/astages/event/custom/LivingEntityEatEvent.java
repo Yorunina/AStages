@@ -26,6 +26,4 @@ public class LivingEntityEatEvent extends EntityEvent {
             return null;
         }
     }
-
-
 }

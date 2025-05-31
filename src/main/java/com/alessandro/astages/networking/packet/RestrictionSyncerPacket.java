@@ -2,7 +2,6 @@ package com.alessandro.astages.networking.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
@@ -29,9 +28,8 @@ public abstract class RestrictionSyncerPacket {
 
     public abstract void handle();
 
-    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(this::handle);
-
         ctx.get().setPacketHandled(true);
     }
 

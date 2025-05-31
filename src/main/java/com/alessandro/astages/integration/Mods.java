@@ -1,10 +1,11 @@
 package com.alessandro.astages.integration;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraftforge.fml.ModList;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
+@MethodsReturnNonnullByDefault
 public enum Mods {
     JEI,
     KUBEJS,
@@ -14,7 +15,7 @@ public enum Mods {
         return ModList.get().isLoaded(asId());
     }
 
-    public @NotNull String asId() {
+    public String asId() {
         return toString().toLowerCase(Locale.ROOT);
     }
 }

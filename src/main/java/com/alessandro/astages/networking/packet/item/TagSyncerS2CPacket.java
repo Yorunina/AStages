@@ -47,8 +47,6 @@ public class TagSyncerS2CPacket extends RestrictionSyncerPacket {
 
     @Override
     public void handle() {
-//        var restriction = new AClientTagRestriction(getId(), getStage(), tag, ignoredItems);
-//        AClientRestrictionManager.NEW_ITEM_INSTANCE.addRestriction(getStage(), restriction);
         var restriction = new AClientTagRestriction(getId(), getStage()).setHideInJei(hideInJei);
         restriction.restrict(tag);
         restriction.ignoreItems(ignoredItems);

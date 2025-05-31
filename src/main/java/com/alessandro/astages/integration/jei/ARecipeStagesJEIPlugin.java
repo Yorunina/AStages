@@ -11,6 +11,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
@@ -18,12 +19,14 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 @JeiPlugin
 public class ARecipeStagesJEIPlugin implements IModPlugin {
     private IJeiRuntime runtime;
@@ -45,12 +48,12 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     }
 
     @Override
-    public @NotNull ResourceLocation getPluginUid() {
+    public ResourceLocation getPluginUid() {
         return PLUGIN_ID;
     }
 
     @Override
-    public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         runtime = jeiRuntime;
 //        var recipe = runtime.getRecipeManager().createRecipeLookup(RecipeTypes.CRAFTING).includeHidden().get().filter(r -> r.getId().equals(new ResourceLocation("minecraft", "birch_wood"))).findFirst().get();
 //        runtime.getRecipeManager().hideRecipes(RecipeTypes.CRAFTING, List.of(recipe));

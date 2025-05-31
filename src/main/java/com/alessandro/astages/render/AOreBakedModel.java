@@ -2,6 +2,7 @@ package com.alessandro.astages.render;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AStagesUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -12,11 +13,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AOreBakedModel implements IDynamicBakedModel {
     public final String stage;
     public final BakedModel original;
@@ -33,7 +36,7 @@ public class AOreBakedModel implements IDynamicBakedModel {
     }
 
     @Override
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, @NotNull RandomSource randomSource, @NotNull ModelData modelData, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource, ModelData modelData, @Nullable RenderType renderType) {
         return getCorrectModel().getQuads(blockState, direction, randomSource, modelData, renderType);
     }
 
@@ -59,12 +62,12 @@ public class AOreBakedModel implements IDynamicBakedModel {
 
     @Override
     @SuppressWarnings("deprecation")
-    public @NotNull TextureAtlasSprite getParticleIcon() {
+    public TextureAtlasSprite getParticleIcon() {
         return getCorrectModel().getParticleIcon();
     }
 
     @Override
-    public @NotNull ItemOverrides getOverrides() {
+    public ItemOverrides getOverrides() {
         return getCorrectModel().getOverrides();
     }
 

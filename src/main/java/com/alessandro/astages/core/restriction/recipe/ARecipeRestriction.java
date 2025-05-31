@@ -3,7 +3,8 @@ package com.alessandro.astages.core.restriction.recipe;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.store.ReloadType;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.util.AMarkable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -55,6 +56,7 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
             ModNetworking.sendToClients(new RecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
         }
 
-        ModNetworking.sendToClients(new RequestRecipeReloadS2CPacket());
+        // ModNetworking.sendToClients(new RequestRecipeReloadS2CPacket());
+        ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.RECIPE));
     }
 }

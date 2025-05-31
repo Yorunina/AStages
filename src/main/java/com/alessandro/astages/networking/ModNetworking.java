@@ -9,9 +9,7 @@ import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -83,13 +81,6 @@ public class ModNetworking {
             .consumerMainThread(RequestItemPropertyC2SPacket::handle)
             .add();
 
-        // JEI
-        net.messageBuilder(RequestItemReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RequestItemReloadS2CPacket::new)
-            .encoder(RequestItemReloadS2CPacket::toBytes)
-            .consumerMainThread(RequestItemReloadS2CPacket::handle)
-            .add();
-
         // RECIPES
         net.messageBuilder(RecipeSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(RecipeSyncerS2CPacket::new)
@@ -102,13 +93,6 @@ public class ModNetworking {
             .encoder(RecipeModSyncerS2CPacket::toBytes)
             .consumerMainThread(RecipeModSyncerS2CPacket::handle)
             .add();
-
-        net.messageBuilder(RequestRecipeReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RequestRecipeReloadS2CPacket::new)
-            .encoder(RequestRecipeReloadS2CPacket::toBytes)
-            .consumerMainThread(RequestRecipeReloadS2CPacket::handle)
-            .add();
-
 
         // ORES
         net.messageBuilder(OreSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -145,11 +129,11 @@ public class ModNetworking {
             .add();
 
         // RELOADING
-        net.messageBuilder(RequestClientReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(RequestClientReloadS2CPacket::new)
-            .encoder(RequestClientReloadS2CPacket::toBytes)
-            .consumerMainThread(RequestClientReloadS2CPacket::handle)
-            .add();
+        net.messageBuilder(RequestReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(RequestReloadS2CPacket::new)
+                .encoder(RequestReloadS2CPacket::toBytes)
+                .consumerMainThread(RequestReloadS2CPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

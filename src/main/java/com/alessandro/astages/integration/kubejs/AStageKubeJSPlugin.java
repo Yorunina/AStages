@@ -10,8 +10,10 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ATime;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class AStageKubeJSPlugin extends KubeJSPlugin {
     static {
         if (Mods.KUBEJS.isLoaded()) {
@@ -20,7 +22,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
     }
 
     @Override
-    public void registerBindings(@NotNull BindingsEvent event) {
+    public void registerBindings(BindingsEvent event) {
         if (!Mods.KUBEJS.isLoaded()) return;
 
         if (event.getType().isServer()) {

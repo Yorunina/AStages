@@ -6,18 +6,20 @@ import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.NotNull;
 import snownee.jade.api.*;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 @WailaPlugin
 public class AStagesJadePlugin implements IWailaPlugin {
     @Override
-    public void register(@NotNull IWailaCommonRegistration registration) {
+    public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(AStagesBlockComponentProvider.INSTANCE, BlockEntity.class);
     }
 
     @Override
-    public void registerClient(@NotNull IWailaClientRegistration registration) {
+    public void registerClient(IWailaClientRegistration registration) {
         if (!Mods.JADE.isLoaded()) { return; }
         registration.registerBlockComponent(AStagesBlockComponentProvider.INSTANCE, Block.class);
 
