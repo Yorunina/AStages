@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class AStagesSimpleRestrictionsCommands {
     public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-        dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2)).then(Commands.literal("restrict")
-            .then(Commands.argument("id", StringArgumentType.string()).then(Commands.argument("stage", StringArgumentType.string())
+        dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2))
+            .then(Commands.literal("restrict").then(Commands.argument("id", StringArgumentType.string()).then(Commands.argument("stage", StringArgumentType.string())
                 .then(Commands.literal("item").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandItem)))
                 .then(Commands.literal("mod").then(Commands.argument("mod", StringArgumentType.string()).executes(ASimpleElaborator::commandMod)))
                 .then(Commands.literal("dimension").then(Commands.argument("dimension", DimensionArgument.dimension()).executes(ASimpleElaborator::commandDimension)))
@@ -30,6 +30,7 @@ public class AStagesSimpleRestrictionsCommands {
                 .then(Commands.literal("recipe").then(Commands.argument("recipe", ResourceLocationArgument.id()).executes(ASimpleElaborator::commandRecipe)))
                 .then(Commands.literal("armor").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandArmor)))
             ))
+            .then(Commands.literal("remove_restrict").then(Commands.argument("id", StringArgumentType.string()).executes(ASimpleElaborator::removeRestriction)))
         ));
     }
 }
