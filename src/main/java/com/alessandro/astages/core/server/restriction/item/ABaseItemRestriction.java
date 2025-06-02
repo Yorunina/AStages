@@ -1,6 +1,6 @@
-package com.alessandro.astages.core.restriction.item;
+package com.alessandro.astages.core.server.restriction.item;
 
-import com.alessandro.astages.store.ARestriction;
+import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
@@ -161,6 +161,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
 //        set(Attributes.IGNORE_BLOCKS_AROUND, value);
 //        return this;
 //    }
+
+    @SuppressWarnings("unused")
+    public ABaseItemRestriction<R, U> setHiddenName(Function<ItemStack, Component> message) {
+        set(Attributes.Item.HIDDEN_NAME, message);
+        return this;
+    }
 
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setDropMessage(Function<ItemStack, Component> message) {
