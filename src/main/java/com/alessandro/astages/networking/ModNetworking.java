@@ -1,11 +1,11 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
@@ -51,22 +51,22 @@ public class ModNetworking {
             .consumerMainThread(ItemSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(TagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(TagSyncerS2CPacket::new)
-            .encoder(TagSyncerS2CPacket::toBytes)
-            .consumerMainThread(TagSyncerS2CPacket::handle)
+        net.messageBuilder(ItemTagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(ItemTagSyncerS2CPacket::new)
+            .encoder(ItemTagSyncerS2CPacket::toBytes)
+            .consumerMainThread(ItemTagSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(ModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(ModSyncerS2CPacket::new)
-            .encoder(ModSyncerS2CPacket::toBytes)
-            .consumerMainThread(ModSyncerS2CPacket::handle)
+        net.messageBuilder(ItemModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(ItemModSyncerS2CPacket::new)
+            .encoder(ItemModSyncerS2CPacket::toBytes)
+            .consumerMainThread(ItemModSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(PredicateSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(PredicateSyncerS2CPacket::new)
-            .encoder(PredicateSyncerS2CPacket::toBytes)
-            .consumerMainThread(PredicateSyncerS2CPacket::handle)
+        net.messageBuilder(ItemPredicateSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(ItemPredicateSyncerS2CPacket::new)
+            .encoder(ItemPredicateSyncerS2CPacket::toBytes)
+            .consumerMainThread(ItemPredicateSyncerS2CPacket::handle)
             .add();
 
         net.messageBuilder(ItemPropertySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
@@ -101,12 +101,6 @@ public class ModNetworking {
             .consumerMainThread(OreSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(OreStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(OreStagesSyncerS2CPacket::new)
-            .encoder(OreStagesSyncerS2CPacket::toBytes)
-            .consumerMainThread(OreStagesSyncerS2CPacket::handle)
-            .add();
-
         // MOB
         net.messageBuilder(MobSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(MobSyncerS2CPacket::new)
@@ -133,6 +127,12 @@ public class ModNetworking {
                 .decoder(RequestReloadS2CPacket::new)
                 .encoder(RequestReloadS2CPacket::toBytes)
                 .consumerMainThread(RequestReloadS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(RequestRestrictionDeleteS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(RequestRestrictionDeleteS2CPacket::new)
+                .encoder(RequestRestrictionDeleteS2CPacket::toBytes)
+                .consumerMainThread(RequestRestrictionDeleteS2CPacket::handle)
                 .add();
     }
 

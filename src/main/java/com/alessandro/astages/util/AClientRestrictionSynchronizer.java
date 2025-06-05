@@ -1,5 +1,3 @@
 package com.alessandro.astages.util;
 
-public @interface AClientRestrictionSynchronizer {
-
-}
+public @interface AClientRestrictionSynchronizer { }

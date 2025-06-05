@@ -1,10 +1,11 @@
 package com.alessandro.astages.simple;
 
+import com.alessandro.astages.command.argument.AStagesSimpleRestrictionTypeArgument;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.*;
-import com.alessandro.astages.core.restriction.item.AItemModRestriction;
-import com.alessandro.astages.core.restriction.item.AItemRestriction;
-import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
+import com.alessandro.astages.core.server.restriction.*;
+import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
+import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
+import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
@@ -75,7 +76,6 @@ public class ASimpleElaborator {
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
     }
 
-    @UnderDevelopment
     public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
         restriction.restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)));
@@ -149,7 +149,7 @@ public class ASimpleElaborator {
     }
 
     public static int removeRestriction(CommandContext<CommandSourceStack> c) {
-        ASimpleRestrictionManager.removeRestriction("simple/" + StringArgumentType.getString(c, "id"));
+        ASimpleRestrictionManager.removeRestriction("simple/" + StringArgumentType.getString(c, "id"), AStagesSimpleRestrictionTypeArgument.getType(c, "type"));
 
         return 1;
     }

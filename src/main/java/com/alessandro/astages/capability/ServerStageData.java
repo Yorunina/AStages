@@ -63,6 +63,7 @@ public class ServerStageData extends SavedData {
         return serverStages;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean has(String stage) {
         return serverStages.contains(stage);
     }

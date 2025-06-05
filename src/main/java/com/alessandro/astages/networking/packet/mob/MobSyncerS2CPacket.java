@@ -1,8 +1,8 @@
 package com.alessandro.astages.networking.packet.mob;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.AClientMobRestriction;
-import com.alessandro.astages.core.restriction.AMobRestriction;
+import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
+import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
 import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,7 +42,13 @@ public class MobSyncerS2CPacket extends RestrictionSyncerPacket {
 
     @Override
     public void handle() {
-        var restriction = new AClientMobRestriction(getId(), getStage(), types, jadeMobMessage);
+        var restriction = new AClientMobRestriction(getId(), getStage())
+                .set(Attributes.Mob.JADE_MOB_MESSAGE, () -> jadeMobMessage);
+
+        for (var type : types) {
+            restriction.restrict(type);
+        }
+
         AClientRestrictionManager.MOB_INSTANCE.addRestriction(getStage(), restriction);
     }
 }

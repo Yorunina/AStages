@@ -1,0 +1,181 @@
+package com.alessandro.astages.core.client.manager;
+
+import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.client.restriction.item.*;
+import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
+import com.alessandro.astages.integration.jei.CustomItemStackKey;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacket;
+import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.client.AClientMinimalManager;
+import com.alessandro.astages.util.ARestrictionType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.*;
+
+@ParametersAreNonnullByDefault
+public class AClientItemManager implements AClientMinimalManager<AClientBaseItemRestriction<?, ?>> {
+    private final List<AClientBaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
+    private final HashMap<String, AClientBaseItemRestriction<?, ?>> IDS = new HashMap<>();
+
+    private final List<AClientItemRestriction> items = new ArrayList<>();
+    private final List<AClientItemTagRestriction> tags = new ArrayList<>();
+    private final List<AClientItemModRestriction> mods = new ArrayList<>();
+    private final List<AClientItemPredicateRestriction> predicates = new ArrayList<>();
+
+    private final HashMap<CustomItemStackKey, AClientItemPropertyRestriction> properties = new HashMap<>();
+
+    static {
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
+            if (e.getOperation() != PlayerStage.Operation.GET) {
+                AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
+            }
+        });
+    }
+
+    public List<AClientItemRestriction> getItemRestrictions() {
+        return items;
+    }
+
+    public List<AClientItemTagRestriction> getTagRestrictions() {
+        return tags;
+    }
+
+    public List<AClientItemModRestriction> getModRestrictions() {
+        return mods;
+    }
+
+    public List<AClientItemPredicateRestriction> getPredicates() {
+        return predicates;
+    }
+
+    public List<AClientBaseItemRestriction<?, ?>> getRestrictions() {
+        return restrictions;
+    }
+
+    public void clearProperties() {
+        properties.clear();
+    }
+
+    public void reloadBeforeScripts() {
+        restrictions.clear();
+        items.clear();
+        tags.clear();
+        mods.clear();
+        clearProperties();
+    }
+
+    public void addRestriction(AClientItemRestriction restriction) {
+        commonAddOperations(restriction);
+        items.add(restriction);
+    }
+
+    public void addRestriction(AClientItemTagRestriction restriction) {
+        commonAddOperations(restriction);
+        tags.add(restriction);
+    }
+
+    public void addRestriction(AClientItemModRestriction restriction) {
+        commonAddOperations(restriction);
+        mods.add(restriction);
+    }
+
+    public void addRestriction(AClientItemPredicateRestriction restriction) {
+        commonAddOperations(restriction);
+        predicates.add(restriction);
+
+    }
+
+    public void addRestriction(AClientItemPropertyRestriction restriction) {
+        properties.put(CustomItemStackKey.build(restriction.stack()), restriction);
+    }
+
+    private void commonAddOperations(AClientBaseItemRestriction<?, ?> restriction) {
+        restrictions.add(restriction);
+        IDS.put(restriction.getId(), restriction);
+    }
+
+    @Override
+    public AClientBaseItemRestriction<?, ?> getRestriction(String id) {
+        return IDS.getOrDefault(id, null);
+    }
+
+    public AClientBaseItemRestriction<?, ?> getRestriction(ItemStack stack) {
+        return restrictions.stream().filter(r -> r.isRestricted(stack) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
+    }
+
+    public String getRestrictionIdForStack(ItemStack stack) {
+        for (var restriction : restrictions) {
+            if (restriction.isRestricted(stack)) {
+                return restriction.getId();
+            }
+        }
+
+        return null;
+    }
+
+    public AClientItemPropertyRestriction getProperties(ItemStack stack) {
+        if (properties.containsKey(CustomItemStackKey.build(stack))) {
+            var restriction = properties.get(CustomItemStackKey.build(stack));
+            if (restriction != null) {
+                return ClientPlayerStage.hasStage(restriction.stage()) ? null : restriction;
+            } else {
+                return null;
+            }
+        }
+
+        var id = getRestrictionIdForStack(stack);
+        if (id != null) {
+//            AStages.LOGGER.debug("Requested for stack: {}, id: {}", stack, id);
+            ModNetworking.sendToServer(new RequestItemPropertyC2SPacket(id, IDS.get(id).getStage(), stack));
+        } else {
+            properties.put(CustomItemStackKey.build(stack), null);
+        }
+
+        return null;
+    }
+
+    public Set<String> getStagesForStack(ItemStack stack) {
+        Set<String> toReturn = new HashSet<>();
+
+        restrictions.forEach(restriction -> {
+            if (restriction.isRestricted(stack) && restriction.isEnabled(Attributes.HIDING_JEI)) { toReturn.add(restriction.getStage()); }
+        });
+
+        return toReturn;
+    }
+
+    public Set<String> getStagesForResourceLocation(ResourceLocation resourceLocation) {
+        Set<String> toReturn = new HashSet<>();
+
+        mods.forEach(restriction -> {
+            if (Objects.equals(restriction.getModId(), resourceLocation.getNamespace()) && restriction.isEnabled(Attributes.HIDING_JEI)) {
+                toReturn.add(restriction.getStage());
+            }
+        });
+
+        return toReturn;
+    }
+
+    @Override
+    public void removeRestriction(String id) {
+        restrictions.removeIf(restriction -> restriction.getId().equals(id));
+        items.removeIf(restriction -> restriction.getId().equals(id));
+        mods.removeIf(restriction -> restriction.getId().equals(id));
+        tags.removeIf(restriction -> restriction.getId().equals(id));
+        predicates.removeIf(restriction -> restriction.getId().equals(id));
+        IDS.remove(id);
+        clearProperties();
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.ITEM;
+    }
+}

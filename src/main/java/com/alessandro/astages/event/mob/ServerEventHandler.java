@@ -2,7 +2,7 @@ package com.alessandro.astages.event.mob;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.AMobRestriction;
+import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.Entity;

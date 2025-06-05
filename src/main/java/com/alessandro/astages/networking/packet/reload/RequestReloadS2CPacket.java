@@ -4,7 +4,7 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
-import com.alessandro.astages.store.ReloadType;
+import com.alessandro.astages.util.ReloadType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;

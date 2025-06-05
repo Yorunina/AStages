@@ -1,8 +1,9 @@
 package com.alessandro.astages.networking.packet.recipe;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.recipe.AClientRecipeRestriction;
-import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
+import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestriction;
+import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,7 +48,13 @@ public class RecipeSyncerS2CPacket extends RestrictionSyncerPacket {
 
     @Override
     public void handle() {
-        var restriction = new AClientRecipeRestriction(getId(), getStage(), priority, type, recipes);
-        AClientRestrictionManager.RECIPE_INSTANCE.addRestriction(getStage(), restriction);
+        var restriction = new AClientRecipeRestriction(getId(), getStage())
+                .setPriority(priority);
+
+        for (ResourceLocation recipe : recipes) {
+            restriction.restrict(new RecipeWrapper(type, recipe));
+        }
+
+        AClientRestrictionManager.RECIPE_INSTANCE.addRestriction(restriction);
     }
 }

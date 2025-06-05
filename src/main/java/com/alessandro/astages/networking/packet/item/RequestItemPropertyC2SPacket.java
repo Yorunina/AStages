@@ -48,8 +48,6 @@ public class RequestItemPropertyC2SPacket {
                 if (!Objects.equals(serverRestriction.getStage(), stage)) { throw EXCEPTION.apply(id); }
 
                 ModNetworking.sendToPlayer(new ItemPropertySyncerS2CPacket(id, stage, stack,
-                    serverRestriction.get(Attributes.RENDERING_NAME),
-                    serverRestriction.get(Attributes.HIDING_TOOLTIP),
                     serverRestriction.get(Attributes.Item.HIDDEN_NAME).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_ITEM_MESSAGE).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack)

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class OrderedMultiMap<K, V extends Comparable<V>> {
     private final Map<K, SortedSet<V>> map;
@@ -25,6 +26,10 @@ public class OrderedMultiMap<K, V extends Comparable<V>> {
         return map.keySet();
     }
 
+    public Set<Map.Entry<K, SortedSet<V>>> entrySet() {
+        return map.entrySet();
+    }
+
     public void put(K key, V value) {
         map.computeIfAbsent(key, k -> new TreeSet<>()).add(value);
     }
@@ -39,6 +44,21 @@ public class OrderedMultiMap<K, V extends Comparable<V>> {
 
     public void clear() {
         map.clear();
+    }
+
+    public void removeValues(Predicate<V> predicate) {
+        var iterator = map.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            var values = entry.getValue();
+
+            values.removeIf(predicate);
+
+            if (values.isEmpty()) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override

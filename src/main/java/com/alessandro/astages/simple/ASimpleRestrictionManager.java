@@ -1,6 +1,7 @@
 package com.alessandro.astages.simple;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.core.ARestrictionManager;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -110,7 +111,7 @@ public class ASimpleRestrictionManager {
         return file;
     }
 
-    public static void removeRestriction(String id) {
-
+    public static void removeRestriction(String id, ASimpleRestrictionType type) {
+        ARestrictionManager.removeRestriction(id, type.convert());
     }
 }

@@ -1,7 +1,7 @@
 package com.alessandro.astages.command;
 
 import com.alessandro.astages.command.argument.AStagesDimensionArgument;
-import com.alessandro.astages.core.restriction.ADimensionRestriction;
+import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.ChatFormatting;

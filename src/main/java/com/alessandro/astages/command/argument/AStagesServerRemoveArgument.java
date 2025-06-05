@@ -8,31 +8,34 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AStagesServerRemoveArgument implements ArgumentType<String> {
     private static final Collection<String> EXAMPLES = Arrays.asList("test_stage_1", "test_stage_2");
     private static final DynamicCommandExceptionType ERROR_INVALID_STAGE = new DynamicCommandExceptionType(s -> Component.literal("Invalid stage argument: " + s));
 
     @Contract(value = " -> new", pure = true)
-    public static @NotNull AStagesServerRemoveArgument stages() {
+    public static AStagesServerRemoveArgument stages() {
         return new AStagesServerRemoveArgument();
     }
 
-    public static String getStage(@NotNull CommandContext<CommandSourceStack> context, String name) {
+    public static String getStage(CommandContext<CommandSourceStack> context, String name) {
         return context.getArgument(name, String.class);
     }
 
     @Override
-    public String parse(@NotNull StringReader stringReader) throws CommandSyntaxException {
+    public String parse(StringReader stringReader) throws CommandSyntaxException {
         var stageString = stringReader.readUnquotedString();
 
         if (stageString == null) { throw ERROR_INVALID_STAGE.create(null); }
