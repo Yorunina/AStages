@@ -24,6 +24,7 @@ public class AttributeTypes {
 
     public static final AttributeType<Function<ItemStack, Component>> STACK_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Function<Entity, Component>> ENTITY_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
+    public static final AttributeType<Function<String, Component>> STRING_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Supplier<Component>> VOID_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Function<ResourceLocation, Component>> RESOURCE_LOCATION_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });
     public static final AttributeType<Function<MenuType<?>, Component>> MENU_TO_COMPONENT = AttributeType.create(new TypeToken<>() { });

@@ -2,8 +2,8 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.restriction.ARegionRestriction;
-import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.store.ServerStageReadable;
+import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;

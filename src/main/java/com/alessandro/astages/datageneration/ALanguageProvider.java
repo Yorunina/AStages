@@ -77,6 +77,7 @@ public class ALanguageProvider extends LanguageProvider {
         add("message.astages.mob", "Unknown Entity!");
 
         // REGION
-        add("message.astages.region", "You can't interact in this region!");
+        add("message.astages.region.interact", "You can't interact in this region!");
+        add("message.astages.region.command", "Command disabled in this region!");
     }
 }

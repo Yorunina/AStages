@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
@@ -77,6 +78,25 @@ public class ServerEventHandler {
                     if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_ENTITIES)) {
                         event.getAffectedEntities().clear();
                     }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCommandExecuted(CommandEvent event) {
+        var serverPlayer = event.getParseResults().getContext().getSource().getPlayer();
+        var stringCommand = event.getParseResults().getReader().getString();
+
+        if (canBeRunForPlayer(serverPlayer)) {
+            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(serverPlayer.getOnPos(), serverPlayer, serverPlayer.getServer());
+
+            if (restriction != null && restriction.isDisabled(Attributes.PERFORM_COMMANDS)) {
+                var foundedCommands = restriction.getDisabledCommands().stream().filter(stringCommand::contains).count();
+
+                if (foundedCommands != 0) {
+                    event.setCanceled(true);
+                    restriction.displayMessage(Attributes.Region.COMMAND_MESSAGE, stringCommand, serverPlayer);
                 }
             }
         }
