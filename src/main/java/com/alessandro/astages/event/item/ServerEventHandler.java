@@ -77,6 +77,10 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
+                if (event.getEntity() instanceof ServerPlayer player) {
+                    var slot = player.getInventory().selected;
+                    player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+                }
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
 //            else if (restriction != null && restriction.isEnabled(Attributes.IGNORE_BLOCKS_AROUND) && restriction.isEnabled(Attributes.BLOCK_PLACING)) {
@@ -88,13 +92,12 @@ public class ServerEventHandler {
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {
                     event.setCanceled(true);
+                    if (event.getEntity() instanceof ServerPlayer player) {
+                        var slot = player.getInventory().selected;
+                        player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+                    }
                     restriction.displayMessage(Attributes.Item.USING_MESSAGE, block, event.getEntity());
                 }
-            }
-
-            if (event.getEntity() instanceof ServerPlayer player) {
-                var slot = player.getInventory().selected;
-                player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
             }
         }
     }
