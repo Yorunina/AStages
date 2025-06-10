@@ -33,7 +33,7 @@ public abstract class AClientManager<R extends AClientRestriction<R, U, V>, U, V
         return restrictions.stream().filter(r -> r.isRestricted(object) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
     }
 
-    public void addRestriction(String stage, R restriction) {
+    public void addRestriction(R restriction) {
         IDS.put(restriction.getId(), restriction);
         restrictions.add(restriction);
     }

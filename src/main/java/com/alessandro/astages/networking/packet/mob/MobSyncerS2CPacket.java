@@ -49,6 +49,6 @@ public class MobSyncerS2CPacket extends RestrictionSyncerPacket {
             restriction.restrict(type);
         }
 
-        AClientRestrictionManager.MOB_INSTANCE.addRestriction(getStage(), restriction);
+        AClientRestrictionManager.MOB_INSTANCE.addRestriction(restriction);
     }
 }

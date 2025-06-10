@@ -27,11 +27,12 @@ public class AClientOreManager extends AClientManager<AClientOreRestriction, Ore
     }
 
     @Override
-    public void addRestriction(String stage, AClientOreRestriction restriction) {
-        super.addRestriction(stage, restriction);
+    public void addRestriction(AClientOreRestriction restriction) {
+        super.addRestriction(restriction);
 
         AClientRestrictionManager.ORE_STAGES.add(restriction.getStage());
         CACHE.put(restriction.getOriginal(), restriction);
+        RESTRICTIONS_BY_STAGE.put(restriction.getStage(), restriction);
     }
 
     @Override

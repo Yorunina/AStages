@@ -42,6 +42,6 @@ public class OreSyncerS2CPacket extends RestrictionSyncerPacket {
         var restriction = new AClientOreRestriction(getId(), getStage())
                 .restrict(new OreWrapper(original, replacement));
 
-        AClientRestrictionManager.ORE_INSTANCE.addRestriction(getStage(), restriction);
+        AClientRestrictionManager.ORE_INSTANCE.addRestriction(restriction);
     }
 }
