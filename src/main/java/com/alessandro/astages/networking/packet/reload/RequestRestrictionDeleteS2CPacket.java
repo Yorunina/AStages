@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.dev;
+package com.alessandro.astages.networking.packet.reload;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;

@@ -5,7 +5,7 @@ import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.*;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;

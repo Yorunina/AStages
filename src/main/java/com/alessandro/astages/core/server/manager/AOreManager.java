@@ -4,7 +4,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AOreRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;

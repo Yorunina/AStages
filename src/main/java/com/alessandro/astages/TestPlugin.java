@@ -31,4 +31,12 @@ public class TestPlugin implements AStagesPlugin {
     public ARegionManager LOOT_INSTANCE() {
         return (ARegionManager) ARestrictionManager.getInstance("loot");
     }
+
+//    public enum Manager {
+//        LOOT_INSTANCE((ARegionManager) ARestrictionManager.getInstance("loot"));
+//
+//        Manager(ARegionManager loot) {
+//
+//        }
+//    }
 }

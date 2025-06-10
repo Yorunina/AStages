@@ -2,7 +2,7 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.ServerStageReadable;

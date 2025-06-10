@@ -8,7 +8,7 @@ import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestricti
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;

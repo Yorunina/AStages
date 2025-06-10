@@ -171,8 +171,8 @@ dependencies {
 
 
     // Fast Workbench
-    compileOnly fg.deobf("curse.maven:fastworkbench-288885:5101229")
-    compileOnly fg.deobf("curse.maven:placebo-283644:5414631")
+    implementation fg.deobf("curse.maven:fastworkbench-288885:5101229")
+    implementation fg.deobf("curse.maven:placebo-283644:5414631")
 
     // In Control!
     compileOnly fg.deobf("curse.maven:in-control-257356:5932870")
