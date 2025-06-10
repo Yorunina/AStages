@@ -1,6 +1,5 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,13 +24,13 @@ import java.util.Optional;
 public class ACraftingMenu {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "slotChangedCraftingGrid", at = @At(value = "INVOKE", target = "Ljava/util/Optional;get()Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    private static void astages$slotChanged(AbstractContainerMenu pMenu, Level pLevel, Player pPlayer, CraftingContainer pContainer, ResultContainer pResult, CallbackInfo ci, ServerPlayer serverPlayer, ItemStack $$6, @NotNull Optional<CraftingRecipe> optional) {
+    private static void astages$slotChanged(AbstractContainerMenu pMenu, Level pLevel, Player pPlayer, CraftingContainer container, ResultContainer resultSlots, CallbackInfo ci, ServerPlayer serverPlayer, ItemStack $$6, @NotNull Optional<CraftingRecipe> optional) {
         if (optional.isPresent()) {
             var recipe = optional.get();
             var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(serverPlayer, new RecipeWrapper(recipe.getType(), recipe.getId()));
-            AStages.LOGGER.debug(recipe.getId().toString());
 
             if (restriction != null) {
+                resultSlots.clearContent();
                 ci.cancel();
             }
         }
