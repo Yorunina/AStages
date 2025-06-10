@@ -37,7 +37,7 @@ public class AStagesRestrictionTypeArgument implements ArgumentType<ARestriction
         var typeString = stringReader.readUnquotedString();
 
         try {
-            return ARestrictionType.valueOf(typeString);
+            return ARestrictionType.getType(typeString);
         } catch (IllegalArgumentException exception) {
             throw ERROR_INVALID_TYPE.create(typeString);
         }
