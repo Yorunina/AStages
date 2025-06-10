@@ -3,10 +3,12 @@ package com.alessandro.astages.simple;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public enum ASimpleRestrictionType {
     ITEM,
@@ -29,10 +31,14 @@ public enum ASimpleRestrictionType {
         var toReturn = new ArrayList<String>();
 
         for (var type : values()) {
-            toReturn.add(type.getId());
+            toReturn.add(type.name().toLowerCase(Locale.ROOT));
         }
 
         return toReturn;
+    }
+
+    public static ASimpleRestrictionType getType(String name) {
+        return ASimpleRestrictionType.valueOf(name.toUpperCase(Locale.ROOT));
     }
 
     public ARestrictionType convert() {

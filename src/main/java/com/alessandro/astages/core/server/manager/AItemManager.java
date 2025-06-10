@@ -6,19 +6,18 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.*;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.dev.RequestRestrictionDeleteS2CPacket;
-import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
-import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
+import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -149,7 +148,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         }
     }
 
-    private boolean commonAddOperations(@NotNull ABaseItemRestriction<?, ?> restriction) {
+    private boolean commonAddOperations(ABaseItemRestriction<?, ?> restriction) {
         if (IDS.containsKey(restriction.getId())) {
             if (AStagesCommon.ENABLE_LOGS.get()) {
                 AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
@@ -163,6 +162,19 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
 
         ARestrictionManager.ALL_STAGES.add(restriction.getStage());
         return true;
+    }
+
+    public void recalculateInventoryAndEquipment(ABaseItemRestriction<?, ?> restriction) {
+        INVENTORY_CACHE.removeIf(r -> r.getId().equals(restriction.getId()));
+        EQUIPMENT_CACHE.removeIf(r -> r.getId().equals(restriction.getId()));
+
+        if (restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
+            INVENTORY_CACHE.add(restriction);
+        }
+
+        if (restriction.isDisabled(Attributes.EQUIPPING)) {
+            EQUIPMENT_CACHE.add(restriction);
+        }
     }
 
     public void removeRestriction(String id) {

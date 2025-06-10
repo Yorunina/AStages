@@ -8,4 +8,8 @@ public interface AMinimalManager<R> {
     R getRestriction(String id);
 
     void removeRestriction(String id);
+
+    void reloadBeforeScripts();
+
+    void reloadAfterScripts();
 }

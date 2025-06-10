@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction.item;
 
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -31,5 +33,11 @@ public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Ite
 
     public List<Item> getItems() {
         return items;
+    }
+
+    @Override
+    public void markAsDirty() {
+        ModNetworking.sendTo(null, new ItemSyncerS2CPacket(this));
+        super.markAsDirty();
     }
 }

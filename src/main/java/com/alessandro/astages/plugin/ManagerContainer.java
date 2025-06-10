@@ -1,0 +1,24 @@
+package com.alessandro.astages.plugin;
+
+import com.alessandro.astages.store.server.AMinimalManager;
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@MethodsReturnNonnullByDefault
+public class ManagerContainer {
+    private final Map<Object, AMinimalManager<?>> MANAGERS = new HashMap<>();
+
+    public static ManagerContainer initialize() {
+        return new ManagerContainer();
+    }
+
+    public void register(Object type, AMinimalManager<?> manager) {
+        MANAGERS.put(type, manager);
+    }
+
+    public Map<Object, AMinimalManager<?>> get() {
+        return MANAGERS;
+    }
+}

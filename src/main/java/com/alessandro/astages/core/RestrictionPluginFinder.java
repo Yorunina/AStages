@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Deprecated(forRemoval = true)
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class RestrictionPluginFinder {

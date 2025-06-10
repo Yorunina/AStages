@@ -4,6 +4,7 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.stage.AStageManager;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -21,17 +22,20 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AStagesUtil {
-    public static Player getNearestPlayer(@NotNull Level level, @NotNull BlockPos pos) {
+    public static @Nullable Player getNearestPlayer(Level level, BlockPos pos) {
         return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
     }
 
-    public static Player getNearestPlayer(@NotNull Level level, Vec3 pos) {
+    public static @Nullable Player getNearestPlayer(Level level, Vec3 pos) {
         var players = level.players();
         var minDistance = Double.MAX_VALUE;
         Player toReturn = null;
@@ -95,20 +99,20 @@ public class AStagesUtil {
     }
 
     @Contract("_ -> !null")
-    public static @NotNull String stageToDescription(@NotNull String input) {
+    public static String stageToDescription(String input) {
         return capitalizeWords(input.replace('_', ' '));
     }
 
     @Contract("_ -> !null")
-    public static @NotNull String structureToDescription(@NotNull ResourceLocation input) {
+    public static String structureToDescription(ResourceLocation input) {
         return capitalizeWords(input.getPath().replace('_', ' '));
     }
 
-    public static @NotNull String dimensionToDescription(@NotNull ResourceLocation input) {
+    public static String dimensionToDescription(ResourceLocation input) {
         return capitalizeWords(input.getPath().replace('_', ' '));
     }
 
-    public static @NotNull String capitalizeWords(@NotNull String input) {
+    public static String capitalizeWords(String input) {
         // split the input string into an array of words
         String[] words = input.split("\\s");
 
@@ -136,17 +140,17 @@ public class AStagesUtil {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean hasStage(@NotNull Player player, String stage) {
+    public static boolean hasStage(Player player, String stage) {
         AtomicBoolean toReturn = new AtomicBoolean(false);
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
         return toReturn.get();
     }
 
-    public static Player getPlayerFromUUID(@NotNull MinecraftServer server, UUID uuid) {
+    public static @Nullable Player getPlayerFromUUID(MinecraftServer server, UUID uuid) {
         return server.getPlayerList().getPlayer(uuid);
     }
 
-    public static @NotNull BakedModel getBakedModelFromState(BlockState state) {
+    public static BakedModel getBakedModelFromState(BlockState state) {
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
     }
 
@@ -155,12 +159,12 @@ public class AStagesUtil {
     }
 
     @Contract("_ -> new")
-    public static @NotNull ItemStack stateToStack(@NotNull BlockState state) {
+    public static ItemStack stateToStack(BlockState state) {
         return new ItemStack(state.getBlock());
     }
 
     @Contract("_ -> new")
-    public static @NotNull ItemStack blockToStack(Block block) {
+    public static ItemStack blockToStack(Block block) {
         return new ItemStack(block);
     }
 

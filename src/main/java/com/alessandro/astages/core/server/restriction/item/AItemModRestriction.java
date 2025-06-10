@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction.item;
 
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -61,5 +63,11 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
 
     public List<ResourceLocation> getIgnoredTags() {
         return ignoredTags;
+    }
+
+    @Override
+    public void markAsDirty() {
+        ModNetworking.sendTo(null, new ItemModSyncerS2CPacket(this));
+        super.markAsDirty();
     }
 }
