@@ -12,6 +12,7 @@ public class ModArguments {
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, AStages.MODID);
 
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> DIMENSION_IDS_ARGUMENT = ARGUMENT_TYPES.register("dimension_ids", () -> ArgumentTypeInfos.registerByClass(AStagesDimensionArgument.class, SingletonArgumentInfo.contextFree(AStagesDimensionArgument::dimensionIds)));
+    @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIMPLE_RESTRICTION_IDS_ARGUMENT = ARGUMENT_TYPES.register("simple_restriction_ids", () -> ArgumentTypeInfos.registerByClass(AStagesSimpleRestrictionsIdsArgument.class, SingletonArgumentInfo.contextFree(AStagesSimpleRestrictionsIdsArgument::simpleRestrictionIds)));
 
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> ADD_STAGES_ARGUMENT = ARGUMENT_TYPES.register("add_stages", () -> ArgumentTypeInfos.registerByClass(AStagesAddArgument.class, SingletonArgumentInfo.contextFree(AStagesAddArgument::stages)));
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> REMOVE_STAGES_ARGUMENT = ARGUMENT_TYPES.register("remove_stages", () -> ArgumentTypeInfos.registerByClass(AStagesRemoveArgument.class, SingletonArgumentInfo.contextFree(AStagesRemoveArgument::stages)));

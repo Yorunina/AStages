@@ -11,6 +11,7 @@ import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.simple.SimpleStagesSyncerS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -121,6 +122,13 @@ public class ModNetworking {
             .encoder(ServerStagesSyncerS2CPacket::toBytes)
             .consumerMainThread(ServerStagesSyncerS2CPacket::handle)
             .add();
+
+        // SIMPLE
+        net.messageBuilder(SimpleStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SimpleStagesSyncerS2CPacket::new)
+                .encoder(SimpleStagesSyncerS2CPacket::toBytes)
+                .consumerMainThread(SimpleStagesSyncerS2CPacket::handle)
+                .add();
 
         // RELOADING
         net.messageBuilder(RequestReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
