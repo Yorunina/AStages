@@ -166,9 +166,13 @@ dependencies {
     // compileOnly fg.deobf("com.teamcofh:thermal_expansion:${minecraft_version}-${thermal_expansion_version}")
 
     // Create
-    implementation fg.deobf("curse.maven:create-328085:5838779")
+    implementation fg.deobf("curse.maven:create-328085:6641603")
+    // implementation fg.deobf("curse.maven:create-328085:5838779")
     // implementation fg.deobf("curse.maven:create-328085:5838779")
 
+    // Multiblocked 2
+    implementation fg.deobf("curse.maven:multiblocked2-1104057:6643101")
+    implementation fg.deobf("curse.maven:ldlib-626676:6497741")
 
     // Fast Workbench
     implementation fg.deobf("curse.maven:fastworkbench-288885:5101229")
