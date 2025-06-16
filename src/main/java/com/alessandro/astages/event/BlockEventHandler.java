@@ -2,7 +2,6 @@ package com.alessandro.astages.event;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.BlockStageProvider;
-import com.lowdragmc.mbd2.common.machine.definition.config.event.MachinePlacedEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -42,14 +41,14 @@ public class BlockEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void machinePlaced(MachinePlacedEvent event) {
-        AStages.LOGGER.debug("Fired Machine Place!");
-
-        event.getPlayer().level().getBlockEntity(event.getMachine().getPos()).getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> {
-            AStages.LOGGER.debug("Set!");
-            blockStage.setOwner(event.getPlayer().getUUID());
-        });
+//    @SubscribeEvent
+//    public static void machinePlaced(MachinePlacedEvent event) {
+//        AStages.LOGGER.debug("Fired Machine Place!");
+//
+//        event.getPlayer().level().getBlockEntity(event.getMachine().getPos()).getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> {
+//            AStages.LOGGER.debug("Set!");
+//            blockStage.setOwner(event.getPlayer().getUUID());
+//        });
 
 //        AStages.LOGGER.debug(event.getMachine().getCapability(BlockStageProvider.BLOCK_STAGE).resolve().toString());
 //
@@ -59,5 +58,5 @@ public class BlockEventHandler {
 //        tag.putString("astages:owners", event.getPlayer().getUUID().toString());
 //        AStages.LOGGER.debug(event.getMachine().getCustomData().toString());
 //        event.getMachine().getCustomData().getCompound("ForgeCaps").putUUID("astages:owners", event.getPlayer().getUUID());
-    }
+//    }
 }

@@ -16,6 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base class for almost all Managers related to AStages!
+ *
+ * @param <R> The restriction associated to this manager
+ * @param <U> For restrict method object type
+ * @param <V> For isRestricted method object type
+ */
 @ParametersAreNonnullByDefault
 public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements AMinimalManager<R> {
     private final List<R> restrictions = new ArrayList<>();

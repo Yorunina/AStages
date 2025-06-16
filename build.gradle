@@ -147,13 +147,13 @@ dependencies {
 
     // Botania
     // compileOnly fg.deobf("curse.maven:botania-225643:5594997")
-    implementation fg.deobf("curse.maven:botania-225643:5002307")
-    implementation fg.deobf("curse.maven:curios-309927:5680164")
-    implementation fg.deobf("curse.maven:patchouli-306770:4966125")
+    compileOnly fg.deobf("curse.maven:botania-225643:5002307")
+    compileOnly fg.deobf("curse.maven:curios-309927:5680164")
+    compileOnly fg.deobf("curse.maven:patchouli-306770:4966125")
 
     // Mekanism
     // compileOnly fg.deobf("curse.maven:mekanism-268560:5662583")
-    implementation fg.deobf("curse.maven:mekanism-268560:5662583")
+    compileOnly fg.deobf("curse.maven:mekanism-268560:5662583")
 
     // Thermal
     // implementation fg.deobf("curse.maven:thermal-expansion-69163:5372749")
@@ -166,17 +166,17 @@ dependencies {
     // compileOnly fg.deobf("com.teamcofh:thermal_expansion:${minecraft_version}-${thermal_expansion_version}")
 
     // Create
-    implementation fg.deobf("curse.maven:create-328085:6641603")
+    compileOnly fg.deobf("curse.maven:create-328085:6641603")
     // implementation fg.deobf("curse.maven:create-328085:5838779")
     // implementation fg.deobf("curse.maven:create-328085:5838779")
 
     // Multiblocked 2
-    implementation fg.deobf("curse.maven:multiblocked2-1104057:6643101")
-    implementation fg.deobf("curse.maven:ldlib-626676:6497741")
+    compileOnly fg.deobf("curse.maven:multiblocked2-1104057:6643101")
+    compileOnly fg.deobf("curse.maven:ldlib-626676:6497741")
 
     // Fast Workbench
-    implementation fg.deobf("curse.maven:fastworkbench-288885:5101229")
-    implementation fg.deobf("curse.maven:placebo-283644:5414631")
+    compileOnly fg.deobf("curse.maven:fastworkbench-288885:5101229")
+    compileOnly fg.deobf("curse.maven:placebo-283644:5414631")
 
     // In Control!
     compileOnly fg.deobf("curse.maven:in-control-257356:5932870")
@@ -225,7 +225,7 @@ dependencies {
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
 
     // Cold Sweat
-    implementation fg.deobf("curse.maven:cold-sweat-506194:6258866")
+    compileOnly fg.deobf("curse.maven:cold-sweat-506194:6258866")
 
     // Radium/Lithium
     // implementation fg.deobf("curse.maven:radium-reforged-570017:5706069")

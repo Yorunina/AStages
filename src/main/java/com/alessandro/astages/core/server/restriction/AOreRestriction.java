@@ -11,6 +11,7 @@ import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -25,7 +26,7 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     }
 
     @Override
-    public AttributeStore allowedAttributes() {
+    public @NotNull AttributeStore allowedAttributes() {
         return AttributeStore.builder();
     }
 

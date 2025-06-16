@@ -21,13 +21,12 @@ public enum ARestrictionType {
     ENCHANT,
     CROP,
     EFFECT,
-    REGION;
+    REGION,
+    LOOT;
 
     public String getId() {
         return toString().toLowerCase(Locale.ROOT);
     }
-
-
 
     public static List<String> types() {
         var toReturn = new ArrayList<String>();

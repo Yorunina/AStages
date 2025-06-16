@@ -12,6 +12,7 @@
     "enchant.AEnchantmentMenu",
     "food.ALivingEntity",
     "item.AJeiStarter",
+    "loot.ARandomizableContainerBlockEntity",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
