@@ -154,6 +154,7 @@ public class ServerEventHandler {
                         if (!restriction.isBlockInteractable(clickedBlock)) {
                             event.setCanceled(true);
                             restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
+                            AStagesUtil.updateSelectedSlot(player);
                             break;
                         }
                     }
@@ -201,6 +202,7 @@ public class ServerEventHandler {
                         if (!restriction.isBlockPlaceable(event.getPlacedBlock())) {
                             event.setCanceled(true);
                             restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
+                            AStagesUtil.updateSelectedSlot(player);
                             break;
                         }
                     }

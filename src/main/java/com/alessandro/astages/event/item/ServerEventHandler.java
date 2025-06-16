@@ -7,7 +7,6 @@ import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.develop.Info;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -78,8 +77,7 @@ public class ServerEventHandler {
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
                 if (event.getEntity() instanceof ServerPlayer player) {
-                    var slot = player.getInventory().selected;
-                    player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+                    AStagesUtil.updateSelectedSlot(player);
                 }
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
@@ -93,8 +91,7 @@ public class ServerEventHandler {
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {
                     event.setCanceled(true);
                     if (event.getEntity() instanceof ServerPlayer player) {
-                        var slot = player.getInventory().selected;
-                        player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+                        AStagesUtil.updateSelectedSlot(player);
                     }
                     restriction.displayMessage(Attributes.Item.USING_MESSAGE, block, event.getEntity());
                 }
@@ -156,10 +153,7 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
                 event.setCanceled(true);
-                // Synchronize changes with client!
-                var slot = player.getInventory().selected;
-                player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
-
+                AStagesUtil.updateSelectedSlot(player);
                 restriction.displayMessage(Attributes.Item.PLACING_MESSAGE, stack, player);
             }
         }

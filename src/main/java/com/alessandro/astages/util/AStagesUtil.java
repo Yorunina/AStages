@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -31,6 +32,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AStagesUtil {
+    public static void updateSelectedSlot(Player player) {
+        updateSelectedSlot((ServerPlayer) player);
+    }
+
+    public static void updateSelectedSlot(ServerPlayer player) {
+        // Synchronize changes with client!
+        var slot = player.getInventory().selected;
+        player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+    }
+
     public static @Nullable Player getNearestPlayer(Level level, BlockPos pos) {
         return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
     }
