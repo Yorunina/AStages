@@ -2,7 +2,6 @@ package com.alessandro.astages.mixin.loot;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
@@ -21,8 +20,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @Mixin(RandomizableContainerBlockEntity.class)
 public abstract class ARandomizableContainerBlockEntity {
-    @Shadow protected abstract NonNullList<ItemStack> getItems();
-
     @Shadow public abstract ItemStack getItem(int pIndex);
 
     @Shadow public abstract ItemStack removeItem(int pIndex, int pCount);
