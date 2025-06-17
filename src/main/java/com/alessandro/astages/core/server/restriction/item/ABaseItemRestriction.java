@@ -1,6 +1,7 @@
 package com.alessandro.astages.core.server.restriction.item;
 
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
@@ -91,7 +92,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     }
 
     public ABaseItemRestriction<?, ?> associateLootRestriction() {
-        return associateLootRestriction(getId() + "_loot");
+        return associateLootRestriction(getId() + ALootRestriction.IDENTIFIER);
     }
 
     @SuppressWarnings("unused")

@@ -1,9 +1,10 @@
 package com.alessandro.astages.core.server.restriction;
 
 import com.alessandro.astages.core.wrapper.EquipmentWrapper;
-import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.server.ARestriction;
+import com.alessandro.astages.util.AFilter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -55,6 +56,18 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
 
     public List<EntityType<?>> getMobs() {
         return mobs;
+    }
+
+    public AMobRestriction associateLootRestriction(String id) {
+        var restriction = new ALootRestriction(id, getStage());
+        for (var mob : mobs) { restriction.restrictForEntities(mob); }
+        restriction.setEntityFilter(AFilter.ALL);
+
+        return this;
+    }
+
+    public AMobRestriction associateLootRestriction() {
+        return associateLootRestriction(getId() + ALootRestriction.IDENTIFIER);
     }
 
     @SuppressWarnings("unused")

@@ -23,6 +23,8 @@ import java.util.function.Function;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemStack> {
+    public static String IDENTIFIER = "/loot";
+
     private final List<Item> restrictedItems = new ArrayList<>();
     private final List<ResourceLocation> restrictedTags = new ArrayList<>();
     private final List<String> restrictedMods = new ArrayList<>();
