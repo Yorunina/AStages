@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction.item;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
 import com.alessandro.astages.util.develop.Info;
@@ -54,5 +56,15 @@ public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestrictio
     public void markAsDirty() {
         ModNetworking.sendTo(null, new ItemTagSyncerS2CPacket(this));
         super.markAsDirty();
+    }
+
+    @Override
+    public AItemTagRestriction associateLootRestriction(String id) {
+        var restriction = new ALootRestriction(id, getStage());
+        restriction.restrictTags(tag);
+        for (var item : ignoredItems) { restriction.ignoredItems(item); }
+        ARestrictionManager.LOOT_INSTANCE.addRestriction(restriction);
+
+        return this;
     }
 }

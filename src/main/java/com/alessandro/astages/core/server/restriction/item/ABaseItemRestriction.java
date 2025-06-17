@@ -86,6 +86,14 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
         CommonEventSettings.slotChanged = null;
     }
 
+    public ABaseItemRestriction<?, ?> associateLootRestriction(String id) {
+        return this;
+    }
+
+    public ABaseItemRestriction<?, ?> associateLootRestriction() {
+        return associateLootRestriction(getId() + "_loot");
+    }
+
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setPickUpDelay(int value) {
         set(Attributes.PICK_UP_DELAY, value);

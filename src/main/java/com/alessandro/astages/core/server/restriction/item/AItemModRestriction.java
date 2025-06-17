@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction.item;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -69,5 +71,16 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
     public void markAsDirty() {
         ModNetworking.sendTo(null, new ItemModSyncerS2CPacket(this));
         super.markAsDirty();
+    }
+
+    @Override
+    public AItemModRestriction associateLootRestriction(String id) {
+        var restriction = new ALootRestriction(id, getStage());
+        restriction.restrictMods(modId);
+        for (var tag : ignoredTags) { restriction.ignoredTags(tag); }
+        for (var item : ignoredItems) { restriction.ignoredItems(item); }
+        ARestrictionManager.LOOT_INSTANCE.addRestriction(restriction);
+
+        return this;
     }
 }
