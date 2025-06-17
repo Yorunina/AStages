@@ -2,7 +2,7 @@ package com.alessandro.astages.core.server.restriction.recipe;
 
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.util.AMarkable;
+import com.alessandro.astages.store.AMarkable;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 
 import javax.annotation.ParametersAreNonnullByDefault;

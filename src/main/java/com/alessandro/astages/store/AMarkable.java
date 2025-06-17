@@ -1,4 +1,4 @@
-package com.alessandro.astages.util;
+package com.alessandro.astages.store;
 
 import com.alessandro.astages.util.develop.Info;
 

@@ -3,6 +3,7 @@ package com.alessandro.astages.core.server.restriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
+import com.alessandro.astages.util.AFilter;
 import com.alessandro.astages.util.develop.Info;
 import com.google.errorprone.annotations.DoNotCall;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -28,7 +29,9 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     private final List<Item> ignoredItems = new ArrayList<>();
     private final List<ResourceLocation> ignoredTags = new ArrayList<>();
 
+    private AFilter entityFilter = AFilter.PARTIAL;
     private final List<EntityType<?>> entities = new ArrayList<>();
+    private AFilter lootTableFilter = AFilter.PARTIAL;
     private final List<ResourceLocation> lootTables = new ArrayList<>();
 
     private Function<ItemStack, ItemStack> replacer;
@@ -91,6 +94,16 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return this;
     }
 
+    public ALootRestriction setEntityFilter(AFilter filter) {
+        entityFilter = filter;
+        return this;
+    }
+
+    public ALootRestriction setLootTableFilter(AFilter filter) {
+        lootTableFilter = filter;
+        return this;
+    }
+
     // /give Dev chest{BlockEntityTag:{LootTable:"chests/village/village_toolsmith"}}
     // /setblock ~ ~1 ~ minecraft:chest{LootTable:"minecraft:chests/simple_dungeon"}
 
@@ -132,10 +145,14 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
 
     public boolean isRestricted(ItemStack stack, @Nullable EntityType<?> entityType, @Nullable ResourceLocation lootTable) {
         if (entityType != null) {
+            if (entityFilter == AFilter.ALL) { return entities.contains(entityType); }
+
             return entities.contains(entityType) && isRestricted(stack);
         }
 
         if (lootTable != null) {
+            if (lootTableFilter == AFilter.ALL) { return lootTables.contains(lootTable); }
+
             return lootTables.contains(lootTable) && isRestricted(stack);
         }
 
