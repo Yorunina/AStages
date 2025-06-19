@@ -25,7 +25,6 @@ public class AFastBenchUtil {
         AFastBenchUtil.astages$player = player;
     }
 
-
     @Inject(method = "findRecipe", at = @At("RETURN"), remap = false, cancellable = true)
     private static void astages$findRecipe(CraftingContainer inv, Level world, CallbackInfoReturnable<Recipe<CraftingContainer>> cir) {
         if (astages$player != null) {

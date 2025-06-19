@@ -3,6 +3,7 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.manager.*;
+import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
@@ -123,6 +124,7 @@ public class ARestrictionManager {
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
         APluginManager.callMethod(ServerLifecycleHooks.getCurrentServer(), AStagesPlugin::reloadAfterScripts);
+        CommonEventSettings.allInventoryChanged();
     }
 
     public static void clearClientOnLogin(ServerPlayer player) {
@@ -148,4 +150,6 @@ public class ARestrictionManager {
     public static @Nullable AMinimalManager<?> getInstance(Object type) {
         return EXTERNAL_MANAGERS.getOrDefault(type, null);
     }
+
+    // TODO: solve recipe restriction for survival inventory
 }

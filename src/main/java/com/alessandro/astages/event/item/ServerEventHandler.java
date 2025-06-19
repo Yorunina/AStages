@@ -186,7 +186,7 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (!CommonEventSettings.isInventoryChanged) { return; }
+        if (!CommonEventSettings.requireSlotCheck()) { return; }
 
         if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
             Player player = event.player;
@@ -195,7 +195,7 @@ public class ServerEventHandler {
             final int armorStart = inventory.items.size();
             final int armorEnd = armorStart + inventory.armor.size();
 
-            if (CommonEventSettings.slotChanged == null || CommonEventSettings.playersHaveOtherInventoriesOpened.getOrDefault(event.player.getUUID(), false)) {
+            if (CommonEventSettings.getSlotChanged() == null || CommonEventSettings.playersHaveOtherInventoriesOpened.getOrDefault(event.player.getUUID(), false)) {
                 for (int i = 0; i < inventory.getContainerSize(); i++) {
                     ItemStack slotContent = inventory.getItem(i);
 
@@ -217,12 +217,12 @@ public class ServerEventHandler {
                     }
                 }
             } else {
-                ItemStack slotContent = inventory.getItem(CommonEventSettings.slotChanged);
+                ItemStack slotContent = inventory.getItem(CommonEventSettings.getSlotChanged());
 
                 if (!slotContent.isEmpty()) {
                     ABaseItemRestriction<?, ?> restriction;
 
-                    if (CommonEventSettings.slotChanged >= armorStart && CommonEventSettings.slotChanged <= armorEnd) {
+                    if (CommonEventSettings.getSlotChanged() >= armorStart && CommonEventSettings.getSlotChanged() <= armorEnd) {
                         restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
                     } else {
                         restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
@@ -231,15 +231,15 @@ public class ServerEventHandler {
                     if (restriction != null) {
                         restriction.displayMessage(Attributes.Item.DROP_MESSAGE, slotContent, player);
 
-                        inventory.setItem(CommonEventSettings.slotChanged, ItemStack.EMPTY);
+                        inventory.setItem(CommonEventSettings.getSlotChanged(), ItemStack.EMPTY);
                         player.drop(slotContent, false);
 
-                        AStages.LOGGER.debug(inventory.getItem(CommonEventSettings.slotChanged).toString());
+                        AStages.LOGGER.debug(inventory.getItem(CommonEventSettings.getSlotChanged()).toString());
                     }
                 }
             }
 
-            CommonEventSettings.isInventoryChanged = false;
+            CommonEventSettings.resetSlotChanged();
         }
     }
 

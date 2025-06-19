@@ -72,14 +72,12 @@ public class PlayerEventHandler {
     @Info("For inventory checking!")
     @SubscribeEvent
     public static void onInventoryChanged(PlayerInventoryChangedEvent event) {
-        CommonEventSettings.isInventoryChanged = true;
-        CommonEventSettings.slotChanged = event.getSlot();
+        CommonEventSettings.slotChanged(event.getSlot());
     }
 
     @Info("For whole inventory checking!")
     @SubscribeEvent
     public static void onStageSynced(StageSyncedPlayerEvent event) {
-        CommonEventSettings.isInventoryChanged = true;
-        CommonEventSettings.slotChanged = null;
+        CommonEventSettings.allInventoryChanged();
     }
 }
