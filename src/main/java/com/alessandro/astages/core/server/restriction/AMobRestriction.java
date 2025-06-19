@@ -63,7 +63,7 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
     }
 
     public AMobRestriction associateLootRestriction(String id) {
-        var restriction = new ALootRestriction(id, getStage());
+        var restriction = new ALootRestriction(id, getStage()).applyForEveryLootTableAndDrop(true);
         for (var mob : mobs) { restriction.restrictForEntities(mob); }
         restriction.setEntityFilter(AFilter.ALL);
 

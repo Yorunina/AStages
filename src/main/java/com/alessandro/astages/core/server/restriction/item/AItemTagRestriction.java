@@ -56,7 +56,7 @@ public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestrictio
 
     @Override
     public AItemTagRestriction associateLootRestriction(String id) {
-        var restriction = new ALootRestriction(id, getStage());
+        var restriction = new ALootRestriction(id, getStage()).applyForEveryLootTableAndDrop(true);
         restriction.restrictTags(tag);
         for (var item : ignoredItems) { restriction.ignoredItems(item); }
         ARestrictionManager.LOOT_INSTANCE.addRestriction(restriction);
