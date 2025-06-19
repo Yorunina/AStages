@@ -4,11 +4,10 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
+import com.alessandro.astages.store.AMarkable;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.ARestriction;
-import com.alessandro.astages.store.AMarkable;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -52,10 +51,8 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     }
 
     @Override
-    @UnderDevelopment
     public void markAsDirty() {
         ModNetworking.sendToClients(new OreSyncerS2CPacket(getId(), getStage(), original, replacement));
         ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.ORE));
-        // ARestrictionManager.synchronizeOreStages(null); // TODO
     }
 }

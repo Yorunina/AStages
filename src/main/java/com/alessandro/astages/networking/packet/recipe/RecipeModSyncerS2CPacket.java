@@ -14,24 +14,28 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @Info("For now, required only by JEI.")
 public class RecipeModSyncerS2CPacket extends RestrictionSyncerPacket {
+    private final int priority;
     private final String modId;
 
     public RecipeModSyncerS2CPacket(@NotNull ARecipeModRestriction restriction) {
-        this(restriction.getId(), restriction.getStage(), restriction.getModId());
+        this(restriction.getId(), restriction.getStage(), restriction.getPriority(), restriction.getModId());
     }
 
-    public RecipeModSyncerS2CPacket(String id, String stage, String modId) {
+    public RecipeModSyncerS2CPacket(String id, String stage, int priority, String modId) {
         super(id, stage);
+        this.priority = priority;
         this.modId = modId;
     }
 
     public RecipeModSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
         super(buf);
+        this.priority = buf.readInt();
         this.modId = buf.readUtf();
     }
 
     public void toBytes(@NotNull FriendlyByteBuf buf) {
         super.toBytes(buf);
+        buf.writeInt(priority);
         buf.writeUtf(modId);
     }
 

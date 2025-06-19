@@ -164,4 +164,16 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
         set(Attributes.Mob.JADE_MOB_MESSAGE, message);
         return this;
     }
+
+    @SuppressWarnings("unused")
+    public AMobRestriction setAttackMessage(Supplier<Component> message) {
+        set(Attributes.Mob.ATTACK_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AMobRestriction setInteractionMessage(Supplier<Component> message) {
+        set(Attributes.Mob.INTERACTION_MESSAGE, message);
+        return this;
+    }
 }

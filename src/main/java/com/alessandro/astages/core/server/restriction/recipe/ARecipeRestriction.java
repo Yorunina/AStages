@@ -53,10 +53,9 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
     @Override
     public void markAsDirty() {
         if (type != null && !recipes.isEmpty()) {
-            ModNetworking.sendToClients(new RecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
+            ModNetworking.sendToClients(new RecipeSyncerS2CPacket(this));
         }
 
-        // ModNetworking.sendToClients(new RequestRecipeReloadS2CPacket());
         ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.RECIPE));
     }
 }
