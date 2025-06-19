@@ -39,6 +39,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.BLOCK_BREAKING)
             .addAttribute(Attributes.BLOCK_INTERACTIONS)
             // .addAttribute(Attributes.IGNORE_BLOCKS_AROUND)
+            .addAttribute(Attributes.CURIO_EQUIPPING)
 
             .addAttribute(Attributes.PICK_UP_DELAY)
 
@@ -50,7 +51,8 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.Item.MINING_MESSAGE)
             .addAttribute(Attributes.Item.PLACING_MESSAGE)
             .addAttribute(Attributes.Item.JADE_ITEM_MESSAGE)
-            .addAttribute(Attributes.Item.JADE_BLOCK_MESSAGE);
+            .addAttribute(Attributes.Item.JADE_BLOCK_MESSAGE)
+            .addAttribute(Attributes.Item.CURIOS_MESSAGE);
     }
 
     @Override
@@ -83,8 +85,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     public void markAsDirty() {
         setChanged();
         ModNetworking.sendTo(null, new RequestReloadS2CPacket(ReloadType.ITEM));
-        CommonEventSettings.isInventoryChanged = true;
-        CommonEventSettings.slotChanged = null;
+        CommonEventSettings.allInventoryChanged();
     }
 
     public ABaseItemRestriction<?, ?> associateLootRestriction(String id) {
@@ -180,6 +181,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
 //    }
 
     @SuppressWarnings("unused")
+    public ABaseItemRestriction<R, U> setCanBeEquippedInCurioSlots(boolean value) {
+        set(Attributes.CURIO_EQUIPPING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setHiddenName(Function<ItemStack, Component> message) {
         set(Attributes.Item.HIDDEN_NAME, message);
         return this;
@@ -230,6 +237,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setJadeBlockMessage(Function<ItemStack, Component> message) {
         set(Attributes.Item.JADE_BLOCK_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ABaseItemRestriction<R, U> setCurioMessage(Function<ItemStack, Component> message) {
+        set(Attributes.Item.CURIOS_MESSAGE, message);
         return this;
     }
 

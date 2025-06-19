@@ -44,6 +44,8 @@ public class Attributes {
     public static final Attribute<Boolean> PERFORM_COMMANDS = Attribute.create("perform_commands", AttributeTypes.BOOLEAN, true);
     public static final Attribute<Boolean> HAS_REPLACER = Attribute.create("has_replacer", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> HAS_CHECKER = Attribute.create("has_checker", AttributeTypes.BOOLEAN, false);
+    // public static final Attribute<Boolean> HURT = Attribute.create("hurt", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> CURIO_EQUIPPING = Attribute.create("curio_equipping", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
@@ -72,6 +74,7 @@ public class Attributes {
         public static final Attribute<Function<ItemStack, Component>> PLACING_MESSAGE = Attribute.create("placing_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.place", stack.getHoverName()).withStyle(ChatFormatting.RED));
         public static final Attribute<Function<ItemStack, Component>> JADE_ITEM_MESSAGE = Attribute.create("jade_item_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.jade_integration.item", stack.getHoverName()).withStyle(ChatFormatting.RED));
         public static final Attribute<Function<ItemStack, Component>> JADE_BLOCK_MESSAGE = Attribute.create("jade_block_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.jade_integration.block", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> CURIOS_MESSAGE = Attribute.create("curios_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.curios_integration", stack.getHoverName()).withStyle(ChatFormatting.RED));
     }
 
     // PET

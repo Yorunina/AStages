@@ -43,6 +43,7 @@ public class ALanguageProvider extends LanguageProvider {
         add("message.astages.item.place", "You couldn't place the %s.");
         add("tooltip.astages.item.jade_integration.item", "Unfamiliar Item");
         add("tooltip.astages.item.jade_integration.block", "Unfamiliar Block");
+        add("tooltip.astages.item.curios_integration", "Unfamiliar Curio");
 
         // DIMENSION
         add("message.astages.dimension.enter", "You can't visit this dimension!");
