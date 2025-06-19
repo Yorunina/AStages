@@ -48,7 +48,8 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     @Override
     public @NotNull AttributeStore allowedAttributes() {
         return AttributeStore.builder()
-            .addAttribute(Attributes.HAS_REPLACER);
+            .addAttribute(Attributes.HAS_REPLACER)
+            .addAttribute(Attributes.APPLY_EVERYWHERE);
     }
 
     @Override
@@ -119,6 +120,12 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return this;
     }
 
+    @SuppressWarnings("unused")
+    public ALootRestriction applyForEveryLootTableAndDrop(boolean value) {
+        set(Attributes.APPLY_EVERYWHERE, value);
+        return this;
+    }
+
     @Override
     public boolean isRestricted(ItemStack stack) {
         if (stack.isEmpty()) { return false; }
@@ -156,6 +163,10 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     }
 
     public boolean isRestricted(ItemStack stack, @Nullable EntityType<?> entityType, @Nullable ResourceLocation lootTable) {
+        if (get(Attributes.APPLY_EVERYWHERE)) {
+            return isRestricted(stack);
+        }
+
         if (entityType != null) {
             if (entityFilter == AFilter.ALL) { return entities.contains(entityType); }
 

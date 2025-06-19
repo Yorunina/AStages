@@ -46,6 +46,7 @@ public class Attributes {
     public static final Attribute<Boolean> HAS_CHECKER = Attribute.create("has_checker", AttributeTypes.BOOLEAN, false);
     // public static final Attribute<Boolean> HURT = Attribute.create("hurt", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> CURIO_EQUIPPING = Attribute.create("curio_equipping", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> APPLY_EVERYWHERE = Attribute.create("apply_everywhere", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
