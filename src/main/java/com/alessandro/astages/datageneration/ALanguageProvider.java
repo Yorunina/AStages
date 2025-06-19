@@ -75,7 +75,9 @@ public class ALanguageProvider extends LanguageProvider {
         // add("astages.ftbquests.reward.title", "AStages Title");
 
         // MOB
-        add("message.astages.mob", "Unknown Entity!");
+        add("message.astages.mob.jade_integration", "Unknown Entity!");
+        add("message.astages.mob.interaction", "You can't interact with an unknown Entity!");
+        add("message.astages.mob.attack", "You can't attack an unknown Entity!");
 
         // REGION
         add("message.astages.region.interact", "You can't interact in this region!");

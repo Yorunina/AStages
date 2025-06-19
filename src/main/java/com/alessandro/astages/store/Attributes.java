@@ -107,7 +107,9 @@ public class Attributes {
 
     // MOB
     public static class Mob {
-        public static final Attribute<Supplier<Component>> JADE_MOB_MESSAGE = Attribute.create("jade_mob_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob").withStyle(ChatFormatting.RED));
+        public static final Attribute<Supplier<Component>> JADE_MOB_MESSAGE = Attribute.create("jade_mob_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.jade_integration").withStyle(ChatFormatting.RED));
+        public static final Attribute<Supplier<Component>> INTERACTION_MESSAGE = Attribute.create("interaction_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.interaction").withStyle(ChatFormatting.RED));
+        public static final Attribute<Supplier<Component>> ATTACK_MESSAGE = Attribute.create("attack_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.attack").withStyle(ChatFormatting.RED));
     }
 
     // REGION

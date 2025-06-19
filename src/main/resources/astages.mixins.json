@@ -13,6 +13,7 @@
     "food.ALivingEntity",
     "item.AJeiStarter",
     "loot.ARandomizableContainerBlockEntity",
+    "mob.AMob",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
