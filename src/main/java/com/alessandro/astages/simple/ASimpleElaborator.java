@@ -28,10 +28,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("removal")
 @ParametersAreNonnullByDefault
 public class ASimpleElaborator {
     public static void elaborateItem(ASimpleRestriction simple) {
-        var restriction = new AItemRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)));
+        var restriction = new AItemRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         restriction.markAsDirty();
 
@@ -53,7 +54,7 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateGui(ASimpleRestriction simple) {
-        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(ForgeRegistries.MENU_TYPES.getValue(new ResourceLocation(simple.object))));
+        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.MENU_TYPES.getValue(new ResourceLocation(simple.object)))));
 
         commonOperations(simple);
     }
@@ -101,7 +102,7 @@ public class ASimpleElaborator {
 
     public static void elaborateArmor(ASimpleRestriction simple) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
-        restriction.restrict(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object)));
+        restriction.restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
         restriction.set(Attributes.HIDING_TOOLTIP, false)
             .set(Attributes.STORING_IN_INVENTORY, true)
             .set(Attributes.EQUIPPING, true)

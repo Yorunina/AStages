@@ -1,25 +1,19 @@
 package com.alessandro.astages.block;
 
 import com.alessandro.astages.AStages;
-import net.minecraft.client.particle.FireworkParticles;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
+@SuppressWarnings("removal")
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 @ParametersAreNonnullByDefault
 public class ServerEventHandler {
