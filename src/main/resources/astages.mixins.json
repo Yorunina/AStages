@@ -8,7 +8,6 @@
     "AFastBenchUtil",
     "AModRuleCompatibilityLayer",
     "APlayerEventJS",
-    "ASchematicannonBlockEntity",
     "enchant.AEnchantmentMenu",
     "food.ALivingEntity",
     "item.AJeiStarter",
