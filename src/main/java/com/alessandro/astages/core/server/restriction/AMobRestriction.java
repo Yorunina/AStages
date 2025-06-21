@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.EquipmentWrapper;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
@@ -63,9 +64,10 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
     }
 
     public AMobRestriction associateLootRestriction(String id) {
-        var restriction = new ALootRestriction(id, getStage()).applyForEveryLootTableAndDrop(true);
+        var restriction = new ALootRestriction(id, getStage());
         for (var mob : mobs) { restriction.restrictForEntities(mob); }
         restriction.setEntityFilter(AFilter.ALL);
+        ARestrictionManager.LOOT_INSTANCE.addRestriction(restriction);
 
         return this;
     }
