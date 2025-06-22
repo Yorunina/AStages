@@ -6,19 +6,20 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.networking.AStagesPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@MethodsReturnNonnullByDefault
 public record StageDataSyncS2CPacket(List<String> stages, PlayerStage.Operation operation) implements AStagesPacket {
     public static final CustomPacketPayload.Type<StageDataSyncS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "stage_data_sync_s2c_packet"));
 
@@ -47,7 +48,7 @@ public record StageDataSyncS2CPacket(List<String> stages, PlayerStage.Operation 
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

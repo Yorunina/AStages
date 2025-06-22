@@ -17,5 +17,6 @@ public class AStagesCommands {
         AStagesSimpleRestrictionsCommands.register(dispatcher, context);
         AStagesServerCommands.register(dispatcher);
         AStagesTimerCommands.register(dispatcher);
+        AStagesInfoCommands.register(dispatcher);
     }
 }

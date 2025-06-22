@@ -2,8 +2,10 @@ package com.alessandro.astages.core.restriction;
 
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
+import com.alessandro.astages.store.ReloadType;
 import com.alessandro.astages.util.AMarkable;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.world.level.block.state.BlockState;
@@ -47,7 +49,8 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     @Override
     @UnderDevelopment
     public void markAsDirty() {
-        PacketDistributor.sendToAllPlayers(new OreSyncerS2CPacket(getId(), getStage(), original, replacement, true));
+        PacketDistributor.sendToAllPlayers(new OreSyncerS2CPacket(getId(), getStage(), original, replacement));
+        PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.ORE));
         // ARestrictionManager.synchronizeOreStages(null); // TODO
     }
 }

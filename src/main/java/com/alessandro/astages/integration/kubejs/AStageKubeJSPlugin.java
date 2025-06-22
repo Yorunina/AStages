@@ -13,6 +13,9 @@ import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
 import dev.latvian.mods.kubejs.script.ScriptManager;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class AStageKubeJSPlugin implements KubeJSPlugin {
     static {
         if (Mods.KUBEJS.isLoaded()) {

@@ -7,6 +7,7 @@ import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.util.develop.Info;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 @Info("For now, required only by JEI.")
 public record RecipeSyncerS2CPacket(String id, String stage, int priority, RecipeType<?> recipeType, List<ResourceLocation> recipes) implements AStagesPacket {
     public static final CustomPacketPayload.Type<RecipeSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "recipe_syncer_s2c_packet"));
@@ -43,7 +45,7 @@ public record RecipeSyncerS2CPacket(String id, String stage, int priority, Recip
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

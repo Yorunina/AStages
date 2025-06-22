@@ -6,6 +6,7 @@ import com.alessandro.astages.core.client.item.AClientItemRestriction;
 import com.alessandro.astages.core.restriction.item.AItemRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,12 +15,12 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public record ItemSyncerS2CPacket(String id, String stage, List<Item> items, boolean hideInJei) implements AStagesPacket {
     public static final CustomPacketPayload.Type<ItemSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "item_syncer_s2c_packet"));
 
@@ -43,7 +44,7 @@ public record ItemSyncerS2CPacket(String id, String stage, List<Item> items, boo
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

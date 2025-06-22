@@ -12,19 +12,22 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.util.thread.EffectiveSide;
 import net.neoforged.neoforge.common.NeoForge;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 @JeiPlugin
 public class AItemStagesJEIPlugin implements IModPlugin {
     private static final HashMap<String, List<ItemStack>> ITEM_CACHE = new HashMap<>();
@@ -50,12 +53,12 @@ public class AItemStagesJEIPlugin implements IModPlugin {
     }
 
     @Override
-    public @NotNull ResourceLocation getPluginUid() {
+    public ResourceLocation getPluginUid() {
         return PLUGIN_ID;
     }
 
     @Override
-    public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         runtime = jeiRuntime;
     }
 

@@ -7,17 +7,18 @@ import com.alessandro.astages.core.restriction.item.AItemPredicateRestriction;
 import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public record PredicateSyncerS2CPacket(String id, String stage, ResourceLocation modelId, boolean hideInJei) implements AStagesPacket {
     public static final CustomPacketPayload.Type<PredicateSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "predicate_syncer_s2c_packet"));
 
@@ -41,7 +42,7 @@ public record PredicateSyncerS2CPacket(String id, String stage, ResourceLocation
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

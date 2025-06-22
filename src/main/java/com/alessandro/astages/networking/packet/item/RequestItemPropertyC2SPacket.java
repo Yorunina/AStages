@@ -4,6 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,11 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Function;
 
+@MethodsReturnNonnullByDefault
 public record RequestItemPropertyC2SPacket(String id, String stage, ItemStack stack) implements AStagesPacket {
     private static final Function<String, RuntimeException> EXCEPTION = id -> new RuntimeException("Illegal identifier synchronization: " + id + " de-synchronized between server and client!");
     private static final Function<String, RuntimeException> NULL_EXCEPTION = id -> new NullPointerException("Illegal null synchronization: " + id + " not found on server!");
@@ -55,7 +56,7 @@ public record RequestItemPropertyC2SPacket(String id, String stage, ItemStack st
 
     @Contract(pure = true)
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

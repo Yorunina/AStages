@@ -110,7 +110,7 @@ repositories {
 
     maven {
         // saps.dev Maven (KubeJS and Rhino)
-        url = "https://maven.latvians.dev/minecraft"
+        url = "https://maven.latvians.dev/releases"
         content {
             includeGroup "dev.latvian.mods"
         }

@@ -9,9 +9,7 @@ import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestClientReloadS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestItemReloadS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestRecipeReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,13 +39,9 @@ public class ModNetworking {
         registrar.playToClient(ItemPropertySyncerS2CPacket.TYPE, ItemPropertySyncerS2CPacket.STREAM_CODEC, ItemPropertySyncerS2CPacket::handle);
         registrar.playToServer(RequestItemPropertyC2SPacket.TYPE, RequestItemPropertyC2SPacket.STREAM_CODEC, RequestItemPropertyC2SPacket::handle);
 
-        // JEI
-        registrar.playToClient(RequestItemReloadS2CPacket.TYPE, RequestItemReloadS2CPacket.STREAM_CODEC, RequestItemReloadS2CPacket::handle);
-
         // RECIPE
         registrar.playToClient(RecipeSyncerS2CPacket.TYPE, RecipeSyncerS2CPacket.STREAM_CODEC, RecipeSyncerS2CPacket::handle);
         registrar.playToClient(RecipeModSyncerS2CPacket.TYPE, RecipeModSyncerS2CPacket.STREAM_CODEC, RecipeModSyncerS2CPacket::handle);
-        registrar.playToClient(RequestRecipeReloadS2CPacket.TYPE, RequestRecipeReloadS2CPacket.STREAM_CODEC, RequestRecipeReloadS2CPacket::handle);
 
         // ORES
         registrar.playToClient(OreSyncerS2CPacket.TYPE, OreSyncerS2CPacket.STREAM_CODEC, OreSyncerS2CPacket::handle);
@@ -63,7 +57,7 @@ public class ModNetworking {
         registrar.playToClient(ServerStagesSyncerS2CPacket.TYPE, ServerStagesSyncerS2CPacket.STREAM_CODEC, ServerStagesSyncerS2CPacket::handle);
 
         // RELOADING
-        registrar.playToClient(RequestClientReloadS2CPacket.TYPE, RequestClientReloadS2CPacket.STREAM_CODEC, RequestClientReloadS2CPacket::handle);
+        registrar.playToClient(RequestReloadS2CPacket.TYPE, RequestReloadS2CPacket.STREAM_CODEC, RequestReloadS2CPacket::handle);
     }
 
     public static void sendTo(@Nullable ServerPlayer player, CustomPacketPayload payload) {

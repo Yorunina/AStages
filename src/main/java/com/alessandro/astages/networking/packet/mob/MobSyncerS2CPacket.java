@@ -6,6 +6,7 @@ import com.alessandro.astages.core.client.AClientMobRestriction;
 import com.alessandro.astages.core.restriction.AMobRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -16,12 +17,12 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> types, Component jadeMobMessage) implements AStagesPacket {
     public static final CustomPacketPayload.Type<MobSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "mob_syncer_s2c_packet"));
 
@@ -44,7 +45,7 @@ public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> ty
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
+    public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }
