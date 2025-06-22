@@ -103,7 +103,7 @@ public class AStagesKubeJSUtil {
     public static AStage customizeStage(String s) {
         var stage = new AStage(s);
 
-        AStageManager.STAGES.add(stage);
+        AStageManager.addStage(stage);
 
         return stage;
     }

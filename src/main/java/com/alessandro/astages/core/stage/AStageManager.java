@@ -3,13 +3,15 @@ package com.alessandro.astages.core.stage;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
+import java.util.Map;
 
+@ParametersAreNonnullByDefault
 public class AStageManager {
-    public static final List<AStage> STAGES = new StageArrayList<>();
+    private static final Map<String, AStage> STAGES = new HashMap<>();
 
     public static void reloadBeforeScripts() {
         if (ServerLifecycleHooks.getCurrentServer() == null) {
@@ -24,7 +26,7 @@ public class AStageManager {
             return;
         }
 
-        STAGES.forEach(stage -> {
+        STAGES.values().forEach(stage -> {
             if (!stage.isServerOnly()) {
                 ARestrictionManager.ALL_STAGES.add(stage.getStage());
             }
@@ -47,18 +49,15 @@ public class AStageManager {
         return false;
     }
 
-    @Contract(pure = true)
-    public static @Nullable AStage getStage(String stage) {
-        for (var s : STAGES) {
-            if (s.getStage().equals(stage)) {
-                return s;
-            }
+    public static void addStage(AStage stage) {
+        if (STAGES.containsKey(stage.getStage())) {
+            AStages.LOGGER.debug("Trying to modify stage {} twice! Operation not allowed!", stage.getStage());
         }
 
-        return null;
+        STAGES.put(stage.getStage(), stage);
     }
 
-    public static List<AStage> getStages() {
-        return STAGES;
+    public static @Nullable AStage getStage(String stage) {
+        return STAGES.getOrDefault(stage, null);
     }
 }
