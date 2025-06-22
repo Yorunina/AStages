@@ -109,4 +109,8 @@ public class ASimpleRestrictionManager {
 
         return file;
     }
+
+    public static void removeRestriction(String id) {
+
+    }
 }

@@ -147,4 +147,10 @@ public class ASimpleElaborator {
 
         return 1;
     }
+
+    public static int removeRestriction(CommandContext<CommandSourceStack> c) {
+        ASimpleRestrictionManager.removeRestriction("simple/" + StringArgumentType.getString(c, "id"));
+
+        return 1;
+    }
 }
