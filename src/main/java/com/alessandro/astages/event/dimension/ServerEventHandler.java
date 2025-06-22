@@ -2,7 +2,7 @@ package com.alessandro.astages.event.dimension;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.ADimensionRestriction;
+import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.alessandro.astages.store.Attributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

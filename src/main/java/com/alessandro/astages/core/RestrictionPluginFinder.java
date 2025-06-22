@@ -1,6 +1,6 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.store.ARestriction;
+import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeType;
 import com.alessandro.astages.util.AClientRestrictionSynchronizer;
 import com.google.common.reflect.TypeToken;

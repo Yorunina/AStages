@@ -3,7 +3,7 @@ package com.alessandro.astages.networking.packet.mob;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.AClientMobRestriction;
-import com.alessandro.astages.core.restriction.AMobRestriction;
+import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
 import net.minecraft.MethodsReturnNonnullByDefault;

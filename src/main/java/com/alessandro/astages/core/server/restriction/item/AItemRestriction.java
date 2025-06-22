@@ -1,6 +1,5 @@
-package com.alessandro.astages.core.client.item;
+package com.alessandro.astages.core.server.restriction.item;
 
-import com.alessandro.astages.store.client.AClientRestriction;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -8,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AClientItemRestriction extends AClientRestriction<AClientItemRestriction, Item, ItemStack> {
+public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Item> {
     private final List<Item> items = new ArrayList<>();
 
-    public AClientItemRestriction(String id, String stage) {
+    public AItemRestriction(String id, String stage) {
         super(id, stage);
     }
 
     @Override
-    public AClientItemRestriction restrict(Item item) {
+    public AItemRestriction restrict(Item item) {
         items.add(item);
 
         return this;
@@ -24,6 +23,8 @@ public class AClientItemRestriction extends AClientRestriction<AClientItemRestri
 
     @Override
     public boolean isRestricted(@NotNull ItemStack stack) {
+        if (stack.isEmpty()) { return false; }
+
         return items.contains(stack.getItem());
     }
 

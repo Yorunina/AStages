@@ -1,5 +1,6 @@
 package com.alessandro.astages.store;
 
+import com.alessandro.astages.store.server.ARestriction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;

@@ -3,7 +3,7 @@ package com.alessandro.astages.networking.packet.recipe;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.recipe.AClientRecipeModRestriction;
-import com.alessandro.astages.core.restriction.recipe.ARecipeModRestriction;
+import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.MethodsReturnNonnullByDefault;

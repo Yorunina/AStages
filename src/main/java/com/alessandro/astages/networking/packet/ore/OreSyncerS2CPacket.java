@@ -3,7 +3,7 @@ package com.alessandro.astages.networking.packet.ore;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.AClientOreRestriction;
-import com.alessandro.astages.core.restriction.AOreRestriction;
+import com.alessandro.astages.core.server.restriction.AOreRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

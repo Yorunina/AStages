@@ -2,7 +2,7 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ServerStageData;
-import com.alessandro.astages.core.manager.*;
+import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;

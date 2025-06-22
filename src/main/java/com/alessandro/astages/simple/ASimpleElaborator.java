@@ -1,10 +1,10 @@
 package com.alessandro.astages.simple;
 
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.restriction.*;
-import com.alessandro.astages.core.restriction.item.AItemModRestriction;
-import com.alessandro.astages.core.restriction.item.AItemRestriction;
-import com.alessandro.astages.core.restriction.recipe.ARecipeRestriction;
+import com.alessandro.astages.core.server.restriction.*;
+import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
+import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
+import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;

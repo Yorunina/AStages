@@ -6,7 +6,7 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.integration.jei.CustomItemStackKey;
 import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacket;
-import com.alessandro.astages.store.AClientRestriction;
+import com.alessandro.astages.store.client.AClientRestriction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
