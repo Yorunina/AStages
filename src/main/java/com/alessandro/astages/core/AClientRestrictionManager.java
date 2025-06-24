@@ -24,6 +24,8 @@ public class AClientRestrictionManager {
 
     @Info("For automatic command completion")
     public static final Set<String> DIMENSION_IDS = new HashSet<>();
+    @Info("For automatic command completion")
+    public static final Set<String> SIMPLE_IDS = new HashSet<>();
 
     public static boolean waitingForItemUpdate = false;
     public static boolean waitingForRecipeUpdate = false;
@@ -46,6 +48,9 @@ public class AClientRestrictionManager {
         MOB_INSTANCE.reloadBeforeScripts();
 
         ORE_STAGES.clear();
+        SERVER_STAGES.clear();
+        DIMENSION_IDS.clear();
+        SIMPLE_IDS.clear();
     }
 
     public static boolean isOreStage(String stage) {

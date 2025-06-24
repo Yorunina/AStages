@@ -1,5 +1,6 @@
 package com.alessandro.astages.command.argument;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -12,7 +13,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Contract;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
@@ -21,31 +21,31 @@ import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AStagesDimensionArgument implements ArgumentType<String> {
-    private static final Collection<String> EXAMPLES = Arrays.asList("test_dimension_id_1", "test_dimension_id_2");
+public class AStagesSimpleRestrictionsIdsArgument implements ArgumentType<String> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("test_simple_id_1", "test_simple_id_2");
     private static final DynamicCommandExceptionType ERROR_INVALID_ID = new DynamicCommandExceptionType(s -> Component.literal("Invalid id argument: " + s));
 
-    @Contract(value = " -> new", pure = true)
-    public static AStagesDimensionArgument dimensionIds() {
-        return new AStagesDimensionArgument();
+    public static AStagesSimpleRestrictionsIdsArgument simpleRestrictionIds() {
+        return new AStagesSimpleRestrictionsIdsArgument();
     }
 
-    public static String getDimensionId(CommandContext<CommandSourceStack> context, String name) {
+    public static String getSimpleRestrictionId(CommandContext<CommandSourceStack> context, String name) {
         return context.getArgument(name, String.class);
     }
 
     @Override
     public String parse(StringReader stringReader) throws CommandSyntaxException {
-        var dimensionIdString = stringReader.readUnquotedString();
+        var simpleRestrictionId = stringReader.readUnquotedString();
 
-        if (dimensionIdString == null) { throw ERROR_INVALID_ID.create(null); }
+        if (simpleRestrictionId == null) { throw ERROR_INVALID_ID.create(null); }
 
-        return dimensionIdString;
+        return simpleRestrictionId;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(AClientRestrictionManager.DIMENSION_IDS, builder);
+        AStages.LOGGER.debug("Suggestion list: {}", AClientRestrictionManager.SIMPLE_IDS);
+        return SharedSuggestionProvider.suggest(AClientRestrictionManager.SIMPLE_IDS, builder);
     }
 
     @Override

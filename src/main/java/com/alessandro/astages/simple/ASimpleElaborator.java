@@ -1,6 +1,7 @@
 package com.alessandro.astages.simple;
 
 import com.alessandro.astages.command.argument.AStagesSimpleRestrictionTypeArgument;
+import com.alessandro.astages.command.argument.AStagesSimpleRestrictionsIdsArgument;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.*;
 import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
@@ -9,7 +10,7 @@ import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.develop.UnderDevelopment;
+import com.alessandro.astages.util.SyncOperation;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -24,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
@@ -32,20 +34,28 @@ public class ASimpleElaborator {
         var restriction = new AItemRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)));
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         restriction.markAsDirty();
+
+        commonOperations(simple);
     }
 
     public static void elaborateMod(ASimpleRestriction simple) {
         var restriction = new AItemModRestriction(simple.id, simple.stage).restrict(simple.object);
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         restriction.markAsDirty();
+
+        commonOperations(simple);
     }
 
     public static void elaborateDimension(ASimpleRestriction simple) {
         ARestrictionManager.DIMENSION_INSTANCE.addRestriction(new ADimensionRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
+
+        commonOperations(simple);
     }
 
     public static void elaborateGui(ASimpleRestriction simple) {
         ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.MENU.get(ResourceLocation.parse(simple.object))));
+
+        commonOperations(simple);
     }
 
     public static void elaborateOre(ASimpleRestriction simple) {
@@ -53,10 +63,14 @@ public class ASimpleElaborator {
         BlockState original = Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(splice[0]))).defaultBlockState();
         var replacement = Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(splice[1]))).defaultBlockState();
         ARestrictionManager.ORE_INSTANCE.addRestriction(new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement)));
+
+        commonOperations(simple);
     }
 
     public static void elaborateStructure(ASimpleRestriction simple) {
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
+
+        commonOperations(simple);
     }
 
     @SuppressWarnings("unused")
@@ -66,10 +80,14 @@ public class ASimpleElaborator {
 
     public static void elaborateTame(ASimpleRestriction simple) {
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
+
+        commonOperations(simple);
     }
 
     public static void elaborateMount(ASimpleRestriction simple) {
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
+
+        commonOperations(simple);
     }
 
     public static void elaborateRecipe(ASimpleRestriction simple) {
@@ -77,9 +95,10 @@ public class ASimpleElaborator {
         var type = BuiltInRegistries.RECIPE_TYPE.get(ResourceLocation.parse(splice[0]));
         var id = ResourceLocation.parse(splice[1]);
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
+
+        commonOperations(simple);
     }
 
-    @UnderDevelopment
     public static void elaborateArmor(ASimpleRestriction simple) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
         restriction.restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)));
@@ -92,6 +111,8 @@ public class ASimpleElaborator {
             .set(Attributes.LEFT_CLICK_INTERACTIONS, true)
             .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
             .set(Attributes.BLOCK_BREAKING, true);
+
+        commonOperations(simple);
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {
@@ -148,13 +169,22 @@ public class ASimpleElaborator {
 
     private static int addRestrictionForType(ASimpleRestrictionType type, String id, String stage, String object) {
         ASimpleRestrictionManager.addRestriction(type, "simple/" + id, stage, object);
+        commonCommandOperations(id);
 
         return 1;
     }
 
     public static int removeRestriction(CommandContext<CommandSourceStack> c) {
-        ASimpleRestrictionManager.removeRestriction("simple/" + StringArgumentType.getString(c, "id"), AStagesSimpleRestrictionTypeArgument.getType(c, "type"));
+        ASimpleRestrictionManager.removeRestriction("simple/" + AStagesSimpleRestrictionsIdsArgument.getSimpleRestrictionId(c, "id"), AStagesSimpleRestrictionTypeArgument.getType(c, "type"));
 
         return 1;
+    }
+
+    public static void commonOperations(ASimpleRestriction simple) {
+        ARestrictionManager.SIMPLE_IDS.add(simple.id.substring(7)); // Remove simple/ marker!
+    }
+
+    public static void commonCommandOperations(String id) {
+        ARestrictionManager.reflectSimpleIdsChangesToClients(null, List.of(id), SyncOperation.ADD);
     }
 }

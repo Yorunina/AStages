@@ -2,6 +2,7 @@ package com.alessandro.astages.simple;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.util.SyncOperation;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -117,5 +118,11 @@ public class ASimpleRestrictionManager {
     public static void removeRestriction(String id, ASimpleRestrictionType type) {
         ARestrictionManager.removeRestriction(id, type.convert());
         RESTRICTIONS.get(type).removeIf(restriction -> restriction.id.equals(id));
+        ARestrictionManager.SIMPLE_IDS.remove(id);
+        ARestrictionManager.reflectSimpleIdsChangesToClients(null, List.of(id.substring(7)), SyncOperation.REMOVE);
+
+        if (RESTRICTIONS.get(type).isEmpty()) {
+            RESTRICTIONS.remove(type);
+        }
     }
 }

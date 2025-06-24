@@ -7,12 +7,14 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.simple.SimpleStagesSyncerS2CPacket;
 import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.ForPlugins;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
+import com.alessandro.astages.util.SyncOperation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -20,10 +22,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @ParametersAreNonnullByDefault
 public class ARestrictionManager {
@@ -46,6 +45,7 @@ public class ARestrictionManager {
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
+    public static Set<String> SIMPLE_IDS = new HashSet<>();
 
     static {
         ASSOCIATION_MAP.put(ITEM_INSTANCE.associatedType(), ITEM_INSTANCE);
@@ -80,6 +80,7 @@ public class ARestrictionManager {
 
         ALL_STAGES.clear();
         ORE_STAGES.clear();
+        SIMPLE_IDS.clear();
 
         PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
 
@@ -107,6 +108,10 @@ public class ARestrictionManager {
     public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
         var data = ServerStageData.getData(server);
         ModNetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get()));
+    }
+
+    public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, List<String> ids, SyncOperation operation) {
+        ModNetworking.sendTo(player, new SimpleStagesSyncerS2CPacket(ids, operation));
     }
 
     public static void reloadAfterScripts() {

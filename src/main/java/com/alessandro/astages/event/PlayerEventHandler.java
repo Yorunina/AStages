@@ -6,6 +6,7 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
+import com.alessandro.astages.util.SyncOperation;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,6 +15,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 
 @ParametersAreNonnullByDefault
 @EventBusSubscriber(modid = AStages.MODID)
@@ -30,6 +32,7 @@ public class PlayerEventHandler {
         if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer player) {
             ARestrictionManager.clearClientOnLogin(player);
             ARestrictionManager.reflectServerStagesChangesToClients(player, player.server);
+            ARestrictionManager.reflectSimpleIdsChangesToClients(player, new ArrayList<>(ARestrictionManager.SIMPLE_IDS), SyncOperation.ADD);
             ARestrictionManager.clientSynchronization(player);
         }
     }
