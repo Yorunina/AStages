@@ -4,7 +4,12 @@ import com.alessandro.astages.block.ModBlocks;
 import com.alessandro.astages.capability.AProvider;
 import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.item.ModItems;
+import com.alessandro.astages.plugin.APluginFinder;
+import com.alessandro.astages.plugin.APluginManager;
+import com.alessandro.astages.plugin.AStagesPlugin;
+import com.alessandro.astages.plugin.ManagerContainer;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -27,5 +32,13 @@ public class AStages {
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC);
+
+        APluginFinder.getAllPlugins();
+
+        var managerContainer = ManagerContainer.initialize();
+        APluginManager.callMethod(managerContainer, AStagesPlugin::registerManagers);
+        ARestrictionManager.EXTERNAL_MANAGERS.putAll(managerContainer.get());
+
+
     }
 }

@@ -32,8 +32,8 @@ public class AStagesSimpleRestrictionsCommands {
                 .then(Commands.literal("mount").then(Commands.argument("mount", ResourceArgument.resource(context, Registries.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ASimpleElaborator::commandMount)))
                 .then(Commands.literal("recipe").then(Commands.argument("recipe", ResourceLocationArgument.id()).executes(ASimpleElaborator::commandRecipe)))
                 .then(Commands.literal("armor").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandArmor)))
-            ))
+            )))
             .then(Commands.literal("remove_restrict").then(Commands.argument("type", AStagesSimpleRestrictionTypeArgument.types()).executes(ASimpleElaborator::removeRestriction)))
-        ));
+        );
     }
 }

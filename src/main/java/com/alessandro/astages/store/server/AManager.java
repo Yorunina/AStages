@@ -25,11 +25,13 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
         return restrictions;
     }
 
+    @Override
     public void reloadBeforeScripts() {
         restrictions.clear();
         IDS.clear();
     }
 
+    @Override
     public void reloadAfterScripts() { }
 
     public R getRestriction(String id) {
@@ -87,11 +89,13 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
         return null;
     }
 
+    @Override
     public void removeRestriction(String id) {
         IDS.remove(id);
         restrictions.removeIf(restriction -> restriction.getId().equals(id));
     }
 
+    @Override
     public ARestrictionType associatedType() {
         return null;
     }

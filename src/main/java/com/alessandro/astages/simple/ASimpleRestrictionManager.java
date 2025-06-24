@@ -62,7 +62,10 @@ public class ASimpleRestrictionManager {
     }
 
     public static void readFromFile() {
-        if (RESTRICTIONS != null) { AStages.LOGGER.error("SKIPPED READING!"); }
+        if (RESTRICTIONS != null) {
+            AStages.LOGGER.error("SKIPPED READING!");
+            return;
+        }
 
         AStages.LOGGER.debug("READING IN PROGRESS...");
 
@@ -113,5 +116,6 @@ public class ASimpleRestrictionManager {
 
     public static void removeRestriction(String id, ASimpleRestrictionType type) {
         ARestrictionManager.removeRestriction(id, type.convert());
+        RESTRICTIONS.get(type).removeIf(restriction -> restriction.id.equals(id));
     }
 }

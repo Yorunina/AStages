@@ -1,11 +1,16 @@
 package com.alessandro.astages.core.server.restriction.item;
 
-import com.alessandro.astages.store.server.ARestriction;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.event.CommonEventSettings;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.AChangeable;
 import com.alessandro.astages.util.AMarkable;
+import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -72,11 +77,16 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @UnderDevelopment
     @Override
     public void setChanged() {
-        // ARestrictionManager.ITEM_INSTANCE.reloadInventoryAndEquipmentRestrictions(this);
+        ARestrictionManager.ITEM_INSTANCE.recalculateInventoryAndEquipment(this);
     }
 
     @Override
-    public void markAsDirty() { }
+    public void markAsDirty() {
+        setChanged();
+        ModNetworking.sendTo(null, new RequestReloadS2CPacket(ReloadType.ITEM));
+        CommonEventSettings.isInventoryChanged = true;
+        CommonEventSettings.slotChanged = null;
+    }
 
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setPickUpDelay(int value) {

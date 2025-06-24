@@ -22,54 +22,57 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class ASimpleElaborator {
-    @UnderDevelopment
-    public static void elaborateItem(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object))));
+    public static void elaborateItem(ASimpleRestriction simple) {
+        var restriction = new AItemRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)));
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+        restriction.markAsDirty();
     }
 
-    @UnderDevelopment
-    public static void elaborateMod(@NotNull ASimpleRestriction simple) {
-        ARestrictionManager.ITEM_INSTANCE.addRestriction(new AItemModRestriction(simple.id, simple.stage).restrict(simple.object));
+    public static void elaborateMod(ASimpleRestriction simple) {
+        var restriction = new AItemModRestriction(simple.id, simple.stage).restrict(simple.object);
+        ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
+        restriction.markAsDirty();
     }
 
-    public static void elaborateDimension(@NotNull ASimpleRestriction simple) {
+    public static void elaborateDimension(ASimpleRestriction simple) {
         ARestrictionManager.DIMENSION_INSTANCE.addRestriction(new ADimensionRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
     }
 
-    public static void elaborateGui(@NotNull ASimpleRestriction simple) {
+    public static void elaborateGui(ASimpleRestriction simple) {
         ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.MENU.get(ResourceLocation.parse(simple.object))));
     }
 
-    public static void elaborateOre(@NotNull ASimpleRestriction simple) {
+    public static void elaborateOre(ASimpleRestriction simple) {
         String[] splice = simple.object.split("//");
         BlockState original = Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(splice[0]))).defaultBlockState();
         var replacement = Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(splice[1]))).defaultBlockState();
         ARestrictionManager.ORE_INSTANCE.addRestriction(new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement)));
     }
 
-    public static void elaborateStructure(@NotNull ASimpleRestriction simple) {
+    public static void elaborateStructure(ASimpleRestriction simple) {
         ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(ResourceLocation.parse(simple.object)));
     }
 
     @SuppressWarnings("unused")
-    public static void elaborateBiome(@NotNull ASimpleRestriction simple) {
+    public static void elaborateBiome(ASimpleRestriction simple) {
         throw new UnsupportedOperationException("Biome elaboration not supported! Id of Restriction not allowed: " + simple.id + ".");
     }
 
-    public static void elaborateTame(@NotNull ASimpleRestriction simple) {
+    public static void elaborateTame(ASimpleRestriction simple) {
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
     }
 
-    public static void elaborateMount(@NotNull ASimpleRestriction simple) {
+    public static void elaborateMount(ASimpleRestriction simple) {
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
     }
 
-    public static void elaborateRecipe(@NotNull ASimpleRestriction simple) {
+    public static void elaborateRecipe(ASimpleRestriction simple) {
         String[] splice = simple.object.split("//");
         var type = BuiltInRegistries.RECIPE_TYPE.get(ResourceLocation.parse(splice[0]));
         var id = ResourceLocation.parse(splice[1]);
@@ -77,7 +80,7 @@ public class ASimpleElaborator {
     }
 
     @UnderDevelopment
-    public static void elaborateArmor(@NotNull ASimpleRestriction simple) {
+    public static void elaborateArmor(ASimpleRestriction simple) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
         restriction.restrict(BuiltInRegistries.ITEM.get(ResourceLocation.parse(simple.object)));
         restriction.set(Attributes.HIDING_TOOLTIP, false)
@@ -143,7 +146,7 @@ public class ASimpleElaborator {
         return addRestrictionForType(ASimpleRestrictionType.ARMOR, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
     }
 
-    private static int addRestrictionForType(@NotNull ASimpleRestrictionType type, String id, String stage, String object) {
+    private static int addRestrictionForType(ASimpleRestrictionType type, String id, String stage, String object) {
         ASimpleRestrictionManager.addRestriction(type, "simple/" + id, stage, object);
 
         return 1;

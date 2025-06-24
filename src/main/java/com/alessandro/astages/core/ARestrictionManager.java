@@ -7,6 +7,9 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.plugin.APluginManager;
+import com.alessandro.astages.plugin.AStagesPlugin;
+import com.alessandro.astages.plugin.ForPlugins;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
@@ -25,6 +28,7 @@ import java.util.Set;
 @ParametersAreNonnullByDefault
 public class ARestrictionManager {
     public static final Map<ARestrictionType, AMinimalManager<?>> ASSOCIATION_MAP = new HashMap<>();
+    @ForPlugins public static final Map<Object, AMinimalManager<?>> EXTERNAL_MANAGERS = new HashMap<>();
 
     // ADD SLOT RESTRICTION
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
@@ -72,11 +76,14 @@ public class ARestrictionManager {
         ENCHANT_INSTANCE.reloadBeforeScripts();
         CROP_INSTANCE.reloadBeforeScripts();
         EFFECT_INSTANCE.reloadBeforeScripts();
+        REGION_INSTANCE.reloadBeforeScripts();
 
         ALL_STAGES.clear();
         ORE_STAGES.clear();
 
         PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
+
+        APluginManager.callMethod(AStagesPlugin::reloadBeforeScripts);
     }
 
     public static void clientSynchronization(@Nullable ServerPlayer player) {
@@ -93,6 +100,8 @@ public class ARestrictionManager {
 
         AStages.TIMER.stop();
         AStages.LOGGER.info("AStages synchronization took {}!", AStages.TIMER);
+
+        APluginManager.callMethod(player, AStagesPlugin::clientSynchronization);
     }
 
     public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
@@ -102,13 +111,16 @@ public class ARestrictionManager {
 
     public static void reloadAfterScripts() {
         ARestrictionManager.ITEM_INSTANCE.reloadAfterScripts();
+        APluginManager.callMethod(AStagesPlugin::reloadAfterScripts);
 
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
+        APluginManager.callMethod(ServerLifecycleHooks.getCurrentServer(), AStagesPlugin::reloadAfterScripts);
     }
 
     public static void clearClientOnLogin(ServerPlayer player) {
         PacketDistributor.sendToPlayer(player, new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
+        APluginManager.callMethod(AStagesPlugin::clearClientOnLogin);
     }
 
     public static void removeRestriction(String id, ARestrictionType type) {
@@ -118,5 +130,15 @@ public class ARestrictionManager {
     @SuppressWarnings("unchecked")
     public static <T> @Nullable T getRestrictionById(String id, ARestrictionType type) {
         return (T) ASSOCIATION_MAP.get(type).getRestriction(id);
+    }
+
+    @ForPlugins
+    public static void registerManager(Object type, AMinimalManager<?> manager) {
+        EXTERNAL_MANAGERS.put(type, manager);
+    }
+
+    @ForPlugins
+    public static @Nullable AMinimalManager<?> getInstance(Object type) {
+        return EXTERNAL_MANAGERS.getOrDefault(type, null);
     }
 }

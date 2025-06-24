@@ -37,7 +37,7 @@ public class AStagesSimpleRestrictionTypeArgument implements ArgumentType<ASimpl
         var typeString = stringReader.readUnquotedString();
 
         try {
-            return ASimpleRestrictionType.valueOf(typeString);
+            return ASimpleRestrictionType.getType(typeString);
         } catch (IllegalArgumentException exception) {
             throw ERROR_INVALID_TYPE.create(typeString);
         }

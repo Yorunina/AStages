@@ -57,6 +57,10 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         mods.clear();
     }
 
+    @Override
+    public void reloadAfterScripts() { }
+
+    @Override
     public ABaseRecipeRestriction<?, ?, ?> getRestriction(String id) {
         return IDS.getOrDefault(id, null);
     }
@@ -114,6 +118,7 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         return true;
     }
 
+    @Override
     public void removeRestriction(String id) {
         restrictions.removeIf(restriction -> restriction.getId().equals(id));
         recipes.removeIf(restriction -> restriction.getId().equals(id));
@@ -130,6 +135,7 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         mods.forEach(restriction -> ModNetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
     }
 
+    @Override
     public ARestrictionType associatedType() {
         return ARestrictionType.RECIPE;
     }
