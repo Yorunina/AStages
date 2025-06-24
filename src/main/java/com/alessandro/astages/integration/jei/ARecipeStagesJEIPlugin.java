@@ -97,14 +97,14 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     }
 
     private void restrictAllRecipesForMods() {
-        for (var mod : AClientRestrictionManager.RECIPE_INSTANCE.MOD_CACHE) {
-            restrictAllRecipesForModAndType(RecipeTypes.CRAFTING, mod.modId(), mod.stage());
-            restrictAllRecipesForModAndType(RecipeTypes.SMELTING, mod.modId(), mod.stage());
-            restrictAllRecipesForModAndType(RecipeTypes.SMOKING, mod.modId(), mod.stage());
-            restrictAllRecipesForModAndType(RecipeTypes.CAMPFIRE_COOKING, mod.modId(), mod.stage());
-            restrictAllRecipesForModAndType(RecipeTypes.BLASTING, mod.modId(), mod.stage());
-            restrictAllRecipesForModAndType(RecipeTypes.SMITHING, mod.modId(), mod.stage());
-            restrictAllRecipesForModAndType(RecipeTypes.STONECUTTING, mod.modId(), mod.stage());
+        for (var mod : AClientRestrictionManager.RECIPE_INSTANCE.mods) {
+            restrictAllRecipesForModAndType(RecipeTypes.CRAFTING, mod.getModId(), mod.getStage());
+            restrictAllRecipesForModAndType(RecipeTypes.SMELTING, mod.getModId(), mod.getStage());
+            restrictAllRecipesForModAndType(RecipeTypes.SMOKING, mod.getModId(), mod.getStage());
+            restrictAllRecipesForModAndType(RecipeTypes.CAMPFIRE_COOKING, mod.getModId(), mod.getStage());
+            restrictAllRecipesForModAndType(RecipeTypes.BLASTING, mod.getModId(), mod.getStage());
+            restrictAllRecipesForModAndType(RecipeTypes.SMITHING, mod.getModId(), mod.getStage());
+            restrictAllRecipesForModAndType(RecipeTypes.STONECUTTING, mod.getModId(), mod.getStage());
         }
     }
 

@@ -4,6 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.server.MinecraftServer;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
+public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements AMinimalManager<R> {
     private final List<R> restrictions = new ArrayList<>();
     private final Map<String, R> IDS = new HashMap<>();
 
@@ -83,6 +84,15 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> {
             }
         }
 
+        return null;
+    }
+
+    public void removeRestriction(String id) {
+        IDS.remove(id);
+        restrictions.removeIf(restriction -> restriction.getId().equals(id));
+    }
+
+    public ARestrictionType associatedType() {
         return null;
     }
 

@@ -1,5 +1,6 @@
 package com.alessandro.astages.command;
 
+import com.alessandro.astages.command.argument.AStagesSimpleRestrictionTypeArgument;
 import com.alessandro.astages.simple.ASimpleElaborator;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -32,7 +33,7 @@ public class AStagesSimpleRestrictionsCommands {
                 .then(Commands.literal("recipe").then(Commands.argument("recipe", ResourceLocationArgument.id()).executes(ASimpleElaborator::commandRecipe)))
                 .then(Commands.literal("armor").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandArmor)))
             ))
-            .then(Commands.literal("remove_restrict").then(Commands.argument("id", StringArgumentType.string()).executes(ASimpleElaborator::removeRestriction)))
+            .then(Commands.literal("remove_restrict").then(Commands.argument("type", AStagesSimpleRestrictionTypeArgument.types()).executes(ASimpleElaborator::removeRestriction)))
         ));
     }
 }

@@ -5,12 +5,15 @@ import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.*;
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.item.ModSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.item.PredicateSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.item.TagSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
+import com.alessandro.astages.store.server.AMinimalManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public class AItemManager implements ClientSynchronizable {
+public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>, ClientSynchronizable {
     private final List<ABaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseItemRestriction<?, ?>> IDS = new HashMap<>();
 
@@ -90,6 +93,10 @@ public class AItemManager implements ClientSynchronizable {
         return restrictions.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
 
+    public List<ABaseItemRestriction<?,?>> getAllRestrictions(ItemStack stack) {
+        return restrictions.stream().filter(r -> r.isRestricted(stack)).toList();
+    }
+
     public ABaseItemRestriction<?, ?> getInventoryRestriction(Player player, ItemStack stack) {
         return INVENTORY_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
@@ -138,11 +145,28 @@ public class AItemManager implements ClientSynchronizable {
         return true;
     }
 
+    public void removeRestriction(String id) {
+        restrictions.removeIf(restriction -> restriction.getId().equals(id));
+        items.removeIf(restriction -> restriction.getId().equals(id));
+        mods.removeIf(restriction -> restriction.getId().equals(id));
+        tags.removeIf(restriction -> restriction.getId().equals(id));
+        predicates.removeIf(restriction -> restriction.getId().equals(id));
+        INVENTORY_CACHE.removeIf(restriction -> restriction.getId().equals(id));
+        EQUIPMENT_CACHE.removeIf(restriction -> restriction.getId().equals(id));
+        IDS.remove(id);
+
+        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+    }
+
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
         items.forEach(restriction -> ModNetworking.sendTo(player, new ItemSyncerS2CPacket(restriction)));
-        tags.forEach(restriction -> ModNetworking.sendTo(player, new TagSyncerS2CPacket(restriction)));
-        mods.forEach(restriction -> ModNetworking.sendTo(player, new ModSyncerS2CPacket(restriction)));
-        predicates.forEach(restriction -> ModNetworking.sendTo(player, new PredicateSyncerS2CPacket(restriction)));
+        tags.forEach(restriction -> ModNetworking.sendTo(player, new ItemTagSyncerS2CPacket(restriction)));
+        mods.forEach(restriction -> ModNetworking.sendTo(player, new ItemModSyncerS2CPacket(restriction)));
+        predicates.forEach(restriction -> ModNetworking.sendTo(player, new ItemPredicateSyncerS2CPacket(restriction)));
+    }
+
+    public ARestrictionType associatedType() {
+        return ARestrictionType.ITEM;
     }
 }

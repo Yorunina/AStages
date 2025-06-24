@@ -6,10 +6,12 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
-import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
-import com.alessandro.astages.store.ReloadType;
+import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.ReloadType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockState> implements ClientSynchronizable {
-    public final OrderedMultiMap<BlockState, AOreRestriction> CACHE = OrderedMultiMap.create();
+    private final OrderedMultiMap<BlockState, AOreRestriction> CACHE = OrderedMultiMap.create();
 
     @Override
     public void reloadBeforeScripts() {
@@ -41,8 +43,21 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     }
 
     @Override
+    public void removeRestriction(String id) {
+        super.removeRestriction(id);
+        CACHE.removeValues(restriction -> restriction.getId().equals(id));
+
+        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+    }
+
+    @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
-        getRestrictions().forEach(restriction -> ModNetworking.sendTo(player, new OreSyncerS2CPacket(restriction/*, true*/)));
+        getRestrictions().forEach(restriction -> ModNetworking.sendTo(player, new OreSyncerS2CPacket(restriction)));
         ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.ORE));
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.ORE;
     }
 }

@@ -2,7 +2,7 @@ package com.alessandro.astages.networking.packet.item;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.item.AClientItemPropertyRestriction;
+import com.alessandro.astages.core.client.restriction.item.AClientItemPropertyRestriction;
 import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -17,16 +17,14 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 @MethodsReturnNonnullByDefault
-public record ItemPropertySyncerS2CPacket(String id, String stage, ItemStack stack, boolean renderItemName, boolean hideTooltip, Component tooltipMessage, Component jadeItemMessage, Component jadeBlockMessage) implements AStagesPacket {
+public record ItemPropertySyncerS2CPacket(String id, String stage, ItemStack stack, Component hiddenName, Component jadeItemMessage, Component jadeBlockMessage) implements AStagesPacket {
     public static final CustomPacketPayload.Type<ItemPropertySyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "item_property_syncer_s2c_packet"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemPropertySyncerS2CPacket> STREAM_CODEC = ACodes.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemPropertySyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, ItemPropertySyncerS2CPacket::id,
         ByteBufCodecs.STRING_UTF8, ItemPropertySyncerS2CPacket::stage,
         ItemStack.STREAM_CODEC, ItemPropertySyncerS2CPacket::stack,
-        ByteBufCodecs.BOOL, ItemPropertySyncerS2CPacket::renderItemName,
-        ByteBufCodecs.BOOL, ItemPropertySyncerS2CPacket::hideTooltip,
-        ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::tooltipMessage,
+        ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::hiddenName,
         ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::jadeItemMessage,
         ByteBufCodecs.fromCodec(ComponentSerialization.CODEC), ItemPropertySyncerS2CPacket::jadeBlockMessage,
         ItemPropertySyncerS2CPacket::new
@@ -34,7 +32,7 @@ public record ItemPropertySyncerS2CPacket(String id, String stage, ItemStack sta
 
     @Override
     public void run(IPayloadContext context) {
-        var restriction = new AClientItemPropertyRestriction(id, stage, stack, renderItemName, hideTooltip, tooltipMessage, jadeItemMessage, jadeBlockMessage);
+        var restriction = new AClientItemPropertyRestriction(id, stage, stack, hiddenName, jadeItemMessage, jadeBlockMessage);
         AClientRestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }
 

@@ -2,6 +2,7 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.core.server.restriction.AScreenRestriction;
 import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
@@ -30,5 +31,16 @@ public class AScreenManager extends AManager<AScreenRestriction, MenuType<?>, Me
     @Override
     public AScreenRestriction getRestriction(Player player, MenuType<?> type) {
         return getRestrictionFromCache(CACHE, type, player);
+    }
+
+    @Override
+    public void removeRestriction(String id) {
+        super.removeRestriction(id);
+        CACHE.removeValues(restriction -> restriction.getId().equals(id));
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.SCREEN;
     }
 }

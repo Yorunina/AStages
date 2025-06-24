@@ -1,4 +1,4 @@
-package com.alessandro.astages.store;
+package com.alessandro.astages.util;
 
 import net.minecraft.util.ByIdMap;
 

@@ -43,8 +43,6 @@ public record RequestItemPropertyC2SPacket(String id, String stage, ItemStack st
             if (!Objects.equals(serverRestriction.getStage(), stage)) { throw EXCEPTION.apply(id); }
 
             PacketDistributor.sendToPlayer((ServerPlayer) context.player(), new ItemPropertySyncerS2CPacket(id, stage, stack,
-                serverRestriction.get(Attributes.RENDERING_NAME),
-                serverRestriction.get(Attributes.HIDING_TOOLTIP),
                 serverRestriction.get(Attributes.Item.HIDDEN_NAME).apply(stack),
                 serverRestriction.get(Attributes.Item.JADE_ITEM_MESSAGE).apply(stack),
                 serverRestriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack)

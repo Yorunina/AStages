@@ -2,6 +2,7 @@ package com.alessandro.astages.event.item;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.store.Attributes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -17,10 +18,11 @@ public class ClientEventHandler {
         if (event.getEntity() != null && !jeiGetter) {
             var stack = event.getItemStack();
             var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
+            var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(stack);
 
-            if (restriction != null && restriction.hideTooltip()) {
+            if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
                 event.getToolTip().clear();
-                event.getToolTip().add(restriction.tooltipMessage());
+                event.getToolTip().add(properties.hiddenName());
             }
         }
     }

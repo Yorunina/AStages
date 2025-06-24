@@ -10,13 +10,15 @@ import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
+import com.alessandro.astages.store.server.AMinimalManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public class ARecipeManager implements ClientSynchronizable {
+public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?, ?, ?>>, ClientSynchronizable {
     private final List<ABaseRecipeRestriction<?, ?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseRecipeRestriction<?, ?, ?>> IDS = new HashMap<>();
 
@@ -96,7 +98,7 @@ public class ARecipeManager implements ClientSynchronizable {
         }
     }
 
-    private boolean commonAddOperations(@NotNull ABaseRecipeRestriction<?, ?, ?> restriction) {
+    private boolean commonAddOperations(ABaseRecipeRestriction<?, ?, ?> restriction) {
         if (IDS.containsKey(restriction.getId())) {
             if (AStagesCommon.ENABLE_LOGS.get()) {
                 AStages.LOGGER.warn("Restriction with id {} already found!", restriction.getId());
@@ -112,9 +114,23 @@ public class ARecipeManager implements ClientSynchronizable {
         return true;
     }
 
+    public void removeRestriction(String id) {
+        restrictions.removeIf(restriction -> restriction.getId().equals(id));
+        recipes.removeIf(restriction -> restriction.getId().equals(id));
+        mods.removeIf(restriction -> restriction.getId().equals(id));
+        RECIPE_CACHE.removeValues(restriction -> restriction.getId().equals(id));
+        IDS.remove(id);
+
+        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+    }
+
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
         recipes.forEach(restriction -> ModNetworking.sendTo(player, new RecipeSyncerS2CPacket(restriction)));
         mods.forEach(restriction -> ModNetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
+    }
+
+    public ARestrictionType associatedType() {
+        return ARestrictionType.RECIPE;
     }
 }

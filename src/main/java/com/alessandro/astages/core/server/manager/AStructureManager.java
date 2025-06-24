@@ -3,6 +3,7 @@ package com.alessandro.astages.core.server.manager;
 import com.alessandro.astages.core.server.restriction.AStructureRestriction;
 import com.alessandro.astages.event.structure.ServerEventHandler;
 import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -32,5 +33,16 @@ public class AStructureManager extends AManager<AStructureRestriction, ResourceL
     @Override
     public AStructureRestriction getRestriction(Player player, ResourceLocation structure) {
         return getRestrictionFromCache(CACHE, structure, player);
+    }
+
+    @Override
+    public void removeRestriction(String id) {
+        super.removeRestriction(id);
+        CACHE.removeValues(restriction -> restriction.getId().equals(id));
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.STRUCTURE;
     }
 }

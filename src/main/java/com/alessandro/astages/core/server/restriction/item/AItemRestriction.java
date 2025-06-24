@@ -2,11 +2,12 @@ package com.alessandro.astages.core.server.restriction.item;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Item> {
     private final List<Item> items = new ArrayList<>();
 
@@ -22,7 +23,7 @@ public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Ite
     }
 
     @Override
-    public boolean isRestricted(@NotNull ItemStack stack) {
+    public boolean isRestricted(ItemStack stack) {
         if (stack.isEmpty()) { return false; }
 
         return items.contains(stack.getItem());

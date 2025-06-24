@@ -2,6 +2,7 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -30,5 +31,16 @@ public class ADimensionManager extends AManager<ADimensionRestriction, ResourceL
     @Override
     public ADimensionRestriction getRestriction(Player player, ResourceLocation dimension) {
         return getRestrictionFromCache(CACHE, dimension, player);
+    }
+
+    @Override
+    public void removeRestriction(String id) {
+        super.removeRestriction(id);
+        CACHE.removeValues(restriction -> restriction.getId().equals(id));
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.DIMENSION;
     }
 }

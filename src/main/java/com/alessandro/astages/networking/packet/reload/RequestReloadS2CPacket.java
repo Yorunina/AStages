@@ -6,7 +6,7 @@ import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.networking.AStagesPacket;
-import com.alessandro.astages.store.ReloadType;
+import com.alessandro.astages.util.ReloadType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

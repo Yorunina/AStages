@@ -2,7 +2,7 @@ package com.alessandro.astages.networking.packet.mob;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.AClientMobRestriction;
+import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
@@ -40,7 +40,13 @@ public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> ty
 
     @Override
     public void run(IPayloadContext context) {
-        var restriction = new AClientMobRestriction(id, stage, types, jadeMobMessage);
+        var restriction = new AClientMobRestriction(id, stage)
+                .set(Attributes.Mob.JADE_MOB_MESSAGE, () -> jadeMobMessage);
+
+        for (var type : types) {
+            restriction.restrict(type);
+        }
+
         AClientRestrictionManager.MOB_INSTANCE.addRestriction(stage, restriction);
     }
 

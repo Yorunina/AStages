@@ -96,7 +96,7 @@ public class AStagesKubeJSUtil {
     }
 
     public static <T> @Nullable T getRestrictionById(ARestrictionType type, String id) {
-        return ARestrictionManager.getRestrictionById(type, id);
+        return ARestrictionManager.getRestrictionById(id, type);
     }
 
     // STAGES

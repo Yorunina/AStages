@@ -2,8 +2,9 @@ package com.alessandro.astages.networking.packet.recipe;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.recipe.AClientRecipeRestriction;
+import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.util.develop.Info;
@@ -40,8 +41,14 @@ public record RecipeSyncerS2CPacket(String id, String stage, int priority, Recip
 
     @Override
     public void run(IPayloadContext context) {
-        var restriction = new AClientRecipeRestriction(id, stage, priority, recipeType, recipes);
-        AClientRestrictionManager.RECIPE_INSTANCE.addRestriction(stage, restriction);
+        var restriction = new AClientRecipeRestriction(id, stage)
+                .setPriority(priority);
+
+        for (ResourceLocation recipe : recipes) {
+            restriction.restrict(new RecipeWrapper(recipeType, recipe));
+        }
+
+        AClientRestrictionManager.RECIPE_INSTANCE.addRestriction(restriction);
     }
 
     @Override

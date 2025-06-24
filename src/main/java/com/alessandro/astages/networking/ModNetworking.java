@@ -5,11 +5,11 @@ import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.ore.OreStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,9 +33,9 @@ public class ModNetworking {
 
         // ITEMS
         registrar.playToClient(ItemSyncerS2CPacket.TYPE, ItemSyncerS2CPacket.STREAM_CODEC, ItemSyncerS2CPacket::handle);
-        registrar.playToClient(TagSyncerS2CPacket.TYPE, TagSyncerS2CPacket.STREAM_CODEC, TagSyncerS2CPacket::handle);
-        registrar.playToClient(ModSyncerS2CPacket.TYPE, ModSyncerS2CPacket.STREAM_CODEC, ModSyncerS2CPacket::handle);
-        registrar.playToClient(PredicateSyncerS2CPacket.TYPE, PredicateSyncerS2CPacket.STREAM_CODEC, PredicateSyncerS2CPacket::handle);
+        registrar.playToClient(ItemTagSyncerS2CPacket.TYPE, ItemTagSyncerS2CPacket.STREAM_CODEC, ItemTagSyncerS2CPacket::handle);
+        registrar.playToClient(ItemModSyncerS2CPacket.TYPE, ItemModSyncerS2CPacket.STREAM_CODEC, ItemModSyncerS2CPacket::handle);
+        registrar.playToClient(ItemPredicateSyncerS2CPacket.TYPE, ItemPredicateSyncerS2CPacket.STREAM_CODEC, ItemPredicateSyncerS2CPacket::handle);
         registrar.playToClient(ItemPropertySyncerS2CPacket.TYPE, ItemPropertySyncerS2CPacket.STREAM_CODEC, ItemPropertySyncerS2CPacket::handle);
         registrar.playToServer(RequestItemPropertyC2SPacket.TYPE, RequestItemPropertyC2SPacket.STREAM_CODEC, RequestItemPropertyC2SPacket::handle);
 
@@ -45,7 +45,6 @@ public class ModNetworking {
 
         // ORES
         registrar.playToClient(OreSyncerS2CPacket.TYPE, OreSyncerS2CPacket.STREAM_CODEC, OreSyncerS2CPacket::handle);
-        registrar.playToClient(OreStagesSyncerS2CPacket.TYPE, OreStagesSyncerS2CPacket.STREAM_CODEC, OreStagesSyncerS2CPacket::handle);
 
         // MOB
         registrar.playToClient(MobSyncerS2CPacket.TYPE, MobSyncerS2CPacket.STREAM_CODEC, MobSyncerS2CPacket::handle);
@@ -58,6 +57,7 @@ public class ModNetworking {
 
         // RELOADING
         registrar.playToClient(RequestReloadS2CPacket.TYPE, RequestReloadS2CPacket.STREAM_CODEC, RequestReloadS2CPacket::handle);
+        registrar.playToClient(RequestRestrictionDeleteS2CPacket.TYPE, RequestRestrictionDeleteS2CPacket.STREAM_CODEC, RequestRestrictionDeleteS2CPacket::handle);
     }
 
     public static void sendTo(@Nullable ServerPlayer player, CustomPacketPayload payload) {

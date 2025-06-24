@@ -5,11 +5,12 @@ import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestriction, ResourceLocation> {
     private ResourceLocation tag;
     private final List<Item> ignoredItems = new ArrayList<>();
@@ -27,15 +28,16 @@ public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestrictio
     @UnderDevelopment
     @Info("Probably a mismatch between anyMatch and noneMatch")
     @Override
-    public boolean isRestricted(@NotNull ItemStack stack) {
+    public boolean isRestricted(ItemStack stack) {
         if (stack.isEmpty()) { return false; }
 
         return !ignoredItems.contains(stack.getItem()) && stack.getTags().anyMatch(t -> t.location().equals(tag));
     }
 
     @SuppressWarnings("unused")
-    public void ignoreItems(Item... items) {
+    public AItemTagRestriction ignoreItems(Item... items) {
         ignoredItems.addAll(List.of(items));
+        return this;
     }
 
     public ResourceLocation getTag() {

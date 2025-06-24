@@ -4,11 +4,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class AItemModRestriction extends ABaseItemRestriction<AItemModRestriction, String> {
     private String modId;
     private final List<Item> ignoredItems = new ArrayList<>();
@@ -25,7 +26,7 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
     }
 
     @Override
-    public boolean isRestricted(@NotNull ItemStack stack) {
+    public boolean isRestricted(ItemStack stack) {
         if (stack.isEmpty()) { return false; }
 
         var registry = BuiltInRegistries.ITEM.getKey(stack.getItem());

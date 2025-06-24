@@ -2,8 +2,9 @@ package com.alessandro.astages.networking.packet.ore;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.AClientOreRestriction;
+import com.alessandro.astages.core.client.restriction.AClientOreRestriction;
 import com.alessandro.astages.core.server.restriction.AOreRestriction;
+import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -34,7 +35,9 @@ public record OreSyncerS2CPacket(String id, String stage, BlockState original, B
 
     @Override
     public void run(IPayloadContext context) {
-        var restriction = new AClientOreRestriction(id, stage, original, replacement);
+        var restriction = new AClientOreRestriction(id, stage)
+                .restrict(new OreWrapper(original, replacement));
+
         AClientRestrictionManager.ORE_INSTANCE.addRestriction(stage, restriction);
     }
 

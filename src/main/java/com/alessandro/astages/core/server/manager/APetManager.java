@@ -2,6 +2,7 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.core.server.restriction.APetRestriction;
 import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -30,5 +31,16 @@ public class APetManager extends AManager<APetRestriction, EntityType<?>, Entity
     @Override
     public APetRestriction getRestriction(Player player, EntityType<?> type) {
         return getRestrictionFromCache(CACHE, type, player);
+    }
+
+    @Override
+    public void removeRestriction(String id) {
+        super.removeRestriction(id);
+        CACHE.removeValues(restriction -> restriction.getId().equals(id));
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.PET;
     }
 }

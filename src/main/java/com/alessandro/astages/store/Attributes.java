@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-// Read attributes as: can be used in/can be showed...
+// Read attributes as: can be used in/can be shown...
 public class Attributes {
     public static final Attribute<Boolean> RENDERING_NAME = Attribute.create("rendering_name", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> HIDING_TOOLTIP = Attribute.create("hiding_tooltip", AttributeTypes.BOOLEAN, true);

@@ -2,7 +2,7 @@ package com.alessandro.astages.event.ore;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.core.client.AClientOreRestriction;
+import com.alessandro.astages.core.client.restriction.AClientOreRestriction;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.render.AOreBakedModel;
@@ -19,7 +19,6 @@ import net.neoforged.neoforge.common.NeoForge;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @EventBusSubscriber(modid = AStages.MODID, value = Dist.CLIENT)
@@ -49,10 +48,10 @@ public class ClientEventHandler {
             changes.clear();
         }
 
-        for (Map.Entry<String, List<AClientOreRestriction>> entry : AClientRestrictionManager.ORE_INSTANCE.restrictions.entrySet()) {
+        for (var entry : AClientRestrictionManager.ORE_INSTANCE.getRestrictionsByStage().entrySet()) {
             for (AClientOreRestriction restriction : entry.getValue()) {
-                changes.put(restriction.original(), Minecraft.getInstance().getBlockRenderer().getBlockModel(restriction.original()));
-                AStagesUtil.setBakedModelForState(restriction.original(), new AOreBakedModel(entry.getKey(), restriction.original(), restriction.replacement()));
+                changes.put(restriction.getOriginal(), Minecraft.getInstance().getBlockRenderer().getBlockModel(restriction.getOriginal()));
+                AStagesUtil.setBakedModelForState(restriction.getOriginal(), new AOreBakedModel(entry.getKey(), restriction.getOriginal(), restriction.getReplacement()));
             }
         }
 

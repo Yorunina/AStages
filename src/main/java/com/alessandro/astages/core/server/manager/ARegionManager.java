@@ -2,8 +2,9 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.restriction.ARegionRestriction;
-import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.store.ServerStageReadable;
+import com.alessandro.astages.store.server.AManager;
+import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
@@ -38,5 +39,10 @@ public class ARegionManager extends AManager<ARegionRestriction, Void, BlockPos>
         }
 
         return playerRestriction;
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.REGION;
     }
 }

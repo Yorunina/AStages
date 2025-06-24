@@ -1,28 +1,33 @@
-package com.alessandro.astages.core.client.item;
+package com.alessandro.astages.core.client.manager;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.client.restriction.item.*;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.integration.jei.CustomItemStackKey;
 import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacket;
-import com.alessandro.astages.store.client.AClientRestriction;
+import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.client.AClientMinimalManager;
+import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-public class AClientItemManager {
-    private final List<AClientRestriction<?, ?, ItemStack>> restrictions = new ArrayList<>();
-    private final HashMap<String, AClientRestriction<?, ?, ItemStack>> ids = new HashMap<>();
+@ParametersAreNonnullByDefault
+public class AClientItemManager implements AClientMinimalManager<AClientBaseItemRestriction<?, ?>> {
+    private final List<AClientBaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
+    private final HashMap<String, AClientBaseItemRestriction<?, ?>> IDS = new HashMap<>();
+
     private final List<AClientItemRestriction> items = new ArrayList<>();
-    private final List<AClientTagRestriction> tags = new ArrayList<>();
-    private final List<AClientModRestriction> mods = new ArrayList<>();
-    private final List<AClientPredicateRestriction> predicates = new ArrayList<>();
+    private final List<AClientItemTagRestriction> tags = new ArrayList<>();
+    private final List<AClientItemModRestriction> mods = new ArrayList<>();
+    private final List<AClientItemPredicateRestriction> predicates = new ArrayList<>();
 
     private final HashMap<CustomItemStackKey, AClientItemPropertyRestriction> properties = new HashMap<>();
 
@@ -38,19 +43,19 @@ public class AClientItemManager {
         return items;
     }
 
-    public List<AClientTagRestriction> getTagRestrictions() {
+    public List<AClientItemTagRestriction> getTagRestrictions() {
         return tags;
     }
 
-    public List<AClientModRestriction> getModRestrictions() {
+    public List<AClientItemModRestriction> getModRestrictions() {
         return mods;
     }
 
-    public List<AClientPredicateRestriction> getPredicates() {
+    public List<AClientItemPredicateRestriction> getPredicates() {
         return predicates;
     }
 
-    public List<AClientRestriction<?, ?, ItemStack>> getRestrictions() {
+    public List<AClientBaseItemRestriction<?, ?>> getRestrictions() {
         return restrictions;
     }
 
@@ -63,6 +68,7 @@ public class AClientItemManager {
         items.clear();
         tags.clear();
         mods.clear();
+        clearProperties();
     }
 
     public void addRestriction(AClientItemRestriction restriction) {
@@ -70,17 +76,17 @@ public class AClientItemManager {
         items.add(restriction);
     }
 
-    public void addRestriction(AClientTagRestriction restriction) {
+    public void addRestriction(AClientItemTagRestriction restriction) {
         commonAddOperations(restriction);
         tags.add(restriction);
     }
 
-    public void addRestriction(AClientModRestriction restriction) {
+    public void addRestriction(AClientItemModRestriction restriction) {
         commonAddOperations(restriction);
         mods.add(restriction);
     }
 
-    public void addRestriction(AClientPredicateRestriction restriction) {
+    public void addRestriction(AClientItemPredicateRestriction restriction) {
         commonAddOperations(restriction);
         predicates.add(restriction);
 
@@ -90,12 +96,21 @@ public class AClientItemManager {
         properties.put(CustomItemStackKey.build(restriction.stack()), restriction);
     }
 
-    private void commonAddOperations(AClientRestriction<?, ?, ItemStack> restriction) {
+    private void commonAddOperations(AClientBaseItemRestriction<?, ?> restriction) {
         restrictions.add(restriction);
-        ids.put(restriction.getId(), restriction);
+        IDS.put(restriction.getId(), restriction);
     }
 
-    public String getRestrictionIdForStack(@NotNull ItemStack stack) {
+    @Override
+    public AClientBaseItemRestriction<?, ?> getRestriction(String id) {
+        return IDS.getOrDefault(id, null);
+    }
+
+    public AClientBaseItemRestriction<?, ?> getRestriction(ItemStack stack) {
+        return restrictions.stream().filter(r -> r.isRestricted(stack) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
+    }
+
+    public String getRestrictionIdForStack(ItemStack stack) {
         for (var restriction : restrictions) {
             if (restriction.isRestricted(stack)) {
                 return restriction.getId();
@@ -105,7 +120,7 @@ public class AClientItemManager {
         return null;
     }
 
-    public AClientItemPropertyRestriction getRestriction(@NotNull ItemStack stack) {
+    public AClientItemPropertyRestriction getProperties(ItemStack stack) {
         if (properties.containsKey(CustomItemStackKey.build(stack))) {
             var restriction = properties.get(CustomItemStackKey.build(stack));
             if (restriction != null) {
@@ -118,7 +133,7 @@ public class AClientItemManager {
         var id = getRestrictionIdForStack(stack);
         if (id != null) {
 //            AStages.LOGGER.debug("Requested for stack: {}, id: {}", stack, id);
-            PacketDistributor.sendToServer(new RequestItemPropertyC2SPacket(id, ids.get(id).getStage(), stack));
+            PacketDistributor.sendToServer(new RequestItemPropertyC2SPacket(id, IDS.get(id).getStage(), stack));
         } else {
             properties.put(CustomItemStackKey.build(stack), null);
         }
@@ -126,11 +141,11 @@ public class AClientItemManager {
         return null;
     }
 
-    public Set<String> getStagesForStack(@NotNull ItemStack stack) {
+    public Set<String> getStagesForStack(ItemStack stack) {
         Set<String> toReturn = new HashSet<>();
 
         restrictions.forEach(restriction -> {
-            if (restriction.isRestricted(stack) && restriction.isHideInJei()) { toReturn.add(restriction.getStage()); }
+            if (restriction.isRestricted(stack) && restriction.isEnabled(Attributes.HIDING_JEI)) { toReturn.add(restriction.getStage()); }
         });
 
         return toReturn;
@@ -140,11 +155,27 @@ public class AClientItemManager {
         Set<String> toReturn = new HashSet<>();
 
         mods.forEach(restriction -> {
-            if (Objects.equals(restriction.getModId(), resourceLocation.getNamespace()) && restriction.isHideInJei()) {
+            if (Objects.equals(restriction.getModId(), resourceLocation.getNamespace()) && restriction.isEnabled(Attributes.HIDING_JEI)) {
                 toReturn.add(restriction.getStage());
             }
         });
 
         return toReturn;
+    }
+
+    @Override
+    public void removeRestriction(String id) {
+        restrictions.removeIf(restriction -> restriction.getId().equals(id));
+        items.removeIf(restriction -> restriction.getId().equals(id));
+        mods.removeIf(restriction -> restriction.getId().equals(id));
+        tags.removeIf(restriction -> restriction.getId().equals(id));
+        predicates.removeIf(restriction -> restriction.getId().equals(id));
+        IDS.remove(id);
+        clearProperties();
+    }
+
+    @Override
+    public ARestrictionType associatedType() {
+        return ARestrictionType.ITEM;
     }
 }

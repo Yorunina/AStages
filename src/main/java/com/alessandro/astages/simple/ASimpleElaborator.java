@@ -1,5 +1,6 @@
 package com.alessandro.astages.simple;
 
+import com.alessandro.astages.command.argument.AStagesSimpleRestrictionTypeArgument;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.*;
 import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
@@ -149,7 +150,7 @@ public class ASimpleElaborator {
     }
 
     public static int removeRestriction(CommandContext<CommandSourceStack> c) {
-        ASimpleRestrictionManager.removeRestriction("simple/" + StringArgumentType.getString(c, "id"));
+        ASimpleRestrictionManager.removeRestriction("simple/" + StringArgumentType.getString(c, "id"), AStagesSimpleRestrictionTypeArgument.getType(c, "type"));
 
         return 1;
     }
