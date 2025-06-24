@@ -6,8 +6,12 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -54,6 +58,30 @@ public class AChatUtils {
     }
 
     public static Component dashItem(Component value) {
-        return Component.literal("- ").append(value);
+        return dashItem(value, ChatFormatting.GRAY);
+    }
+
+    public static Component dashItem(Component value, ChatFormatting formatting) {
+        return Component.literal("- ").withStyle(formatting).append(value);
+    }
+
+    public static Component emptyRow() {
+        return Component.empty();
+    }
+
+    public static <T> void sendRestrictionsInfo(Player player, String title, String hover, Supplier<List<T>> supplier, Function<T, ?> function) {
+        var restrictions = supplier.get();
+
+        AChatUtils.resetListNumber();
+        if (restrictions.isEmpty()) {
+            player.sendSystemMessage(AChatUtils.dashItem(Component.literal(title + " (0)").withStyle(ChatFormatting.RED)));
+        } else {
+            player.sendSystemMessage(AChatUtils.dashItem(Component.literal(title + " (" + restrictions.size() + ")").withStyle(ChatFormatting.WHITE)));
+
+            for (var restriction : restrictions) {
+                player.sendSystemMessage(AChatUtils.indent(1, AChatUtils.listItem(AChatUtils.copy((String) function.apply(restriction), hover, ChatFormatting.GOLD))));
+            }
+        }
+        AChatUtils.resetListNumber();
     }
 }
