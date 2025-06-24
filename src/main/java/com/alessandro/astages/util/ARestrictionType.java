@@ -3,11 +3,13 @@ package com.alessandro.astages.util;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.util.ByIdMap;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.IntFunction;
 
+@ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public enum ARestrictionType {
     ITEM(0),
@@ -48,9 +50,13 @@ public enum ARestrictionType {
         var toReturn = new ArrayList<String>();
 
         for (var type : values()) {
-            toReturn.add(type.getLowerCased());
+            toReturn.add(type.name().toLowerCase(Locale.ROOT));
         }
 
         return toReturn;
+    }
+
+    public static ARestrictionType getType(String name) {
+        return ARestrictionType.valueOf(name.toUpperCase(Locale.ROOT));
     }
 }
