@@ -12,6 +12,7 @@ import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.event.CommandEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
@@ -102,6 +103,25 @@ public class ServerEventHandler {
                     if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_ENTITIES)) {
                         event.getAffectedEntities().clear();
                     }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCommandExecuted(CommandEvent event) {
+        var serverPlayer = event.getParseResults().getContext().getSource().getPlayer();
+        var stringCommand = event.getParseResults().getReader().getString();
+
+        if (canBeRunForPlayer(serverPlayer)) {
+            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(serverPlayer.getOnPos(), serverPlayer, serverPlayer.getServer());
+
+            if (restriction != null && restriction.isDisabled(Attributes.PERFORM_COMMANDS)) {
+                var foundedCommands = restriction.getDisabledCommands().stream().filter(stringCommand::contains).count();
+
+                if (foundedCommands != 0) {
+                    event.setCanceled(true);
+                    restriction.displayMessage(Attributes.Region.COMMAND_MESSAGE, stringCommand, serverPlayer);
                 }
             }
         }

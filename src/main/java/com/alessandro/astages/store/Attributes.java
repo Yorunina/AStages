@@ -41,6 +41,7 @@ public class Attributes {
     public static final Attribute<Boolean> MOB_SPAWNING = Attribute.create("mob_spawning", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> SPAWN_WITH_DIFFERENT_EQUIPMENT = Attribute.create("spawn_with_different_equipment", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> ALLOW_ACCESS = Attribute.create("allow_access", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> PERFORM_COMMANDS = Attribute.create("perform_commands", AttributeTypes.BOOLEAN, true);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
@@ -106,6 +107,7 @@ public class Attributes {
 
     // REGION
     public static class Region {
-        public static final Attribute<Supplier<Component>> INTERACT_MESSAGE = Attribute.create("interact_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.region").withStyle(ChatFormatting.RED));
+        public static final Attribute<Supplier<Component>> INTERACT_MESSAGE = Attribute.create("interact_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.region.interact").withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<String, Component>> COMMAND_MESSAGE = Attribute.create("command_message", AttributeTypes.STRING_TO_COMPONENT, performedCommand -> Component.translatable("message.astages.region.command", performedCommand).withStyle(ChatFormatting.RED));
     }
 }
