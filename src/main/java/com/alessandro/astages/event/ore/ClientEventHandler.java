@@ -52,6 +52,7 @@ public class ClientEventHandler {
             for (AClientOreRestriction restriction : entry.getValue()) {
                 changes.put(restriction.getOriginal(), Minecraft.getInstance().getBlockRenderer().getBlockModel(restriction.getOriginal()));
                 AStagesUtil.setBakedModelForState(restriction.getOriginal(), new AOreBakedModel(entry.getKey(), restriction.getOriginal(), restriction.getReplacement()));
+                AStages.LOGGER.debug("ORE RESTRICTIONS CHANGES: {}", changes);
             }
         }
 

@@ -47,7 +47,7 @@ public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> ty
             restriction.restrict(type);
         }
 
-        AClientRestrictionManager.MOB_INSTANCE.addRestriction(stage, restriction);
+        AClientRestrictionManager.MOB_INSTANCE.addRestriction(restriction);
     }
 
     @Override

@@ -19,8 +19,8 @@ public class AClientMobManager extends AClientManager<AClientMobRestriction, Ent
     }
 
     @Override
-    public void addRestriction(String stage, AClientMobRestriction restriction) {
-        super.addRestriction(stage, restriction);
+    public void addRestriction(AClientMobRestriction restriction) {
+        super.addRestriction(restriction);
 
         for (var type : restriction.getMobs()) {
             CACHE.put(type, restriction);

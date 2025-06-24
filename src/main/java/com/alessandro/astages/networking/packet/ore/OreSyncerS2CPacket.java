@@ -38,7 +38,7 @@ public record OreSyncerS2CPacket(String id, String stage, BlockState original, B
         var restriction = new AClientOreRestriction(id, stage)
                 .restrict(new OreWrapper(original, replacement));
 
-        AClientRestrictionManager.ORE_INSTANCE.addRestriction(stage, restriction);
+        AClientRestrictionManager.ORE_INSTANCE.addRestriction(restriction);
     }
 
     @Override
