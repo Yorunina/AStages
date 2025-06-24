@@ -2,6 +2,7 @@ package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.capability.AProvider;
 import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.*;
 import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
@@ -19,10 +20,10 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +33,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -95,6 +95,48 @@ public class AStagesKubeJSUtil {
         return player.getData(AProvider.PLAYER_STAGE);
     }
 
+    // Server Stages
+    public static void addStageToServer(String stage, MinecraftServer server) {
+        ServerStageData.getData(server).add(stage);
+    }
+
+    public static void removeStageFromServer(String stage, MinecraftServer server) {
+        ServerStageData.getData(server).remove(stage);
+    }
+
+    public static void removeAllStagesFromServer(MinecraftServer server) {
+        ServerStageData.getData(server).removeAll();
+    }
+
+    public static boolean serverHasStage(String stage, MinecraftServer server) {
+        return ServerStageData.getData(server).has(stage);
+    }
+
+    public static boolean serverHasAtLeastOneStage(List<String> stages, MinecraftServer server) {
+        for (var stage : stages) {
+            if (serverHasStage(stage, server)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean serverHasAllStages(List<String> stages, MinecraftServer server) {
+        for (var stage : stages) {
+            if (!serverHasStage(stage, server)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static ServerStageData getServerData(MinecraftServer server) {
+        return ServerStageData.getData(server);
+    }
+
+    // General
     public static <T> @Nullable T getRestrictionById(ARestrictionType type, String id) {
         return ARestrictionManager.getRestrictionById(id, type);
     }
@@ -119,7 +161,6 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-    @UnderDevelopment
     public static AItemPredicateRestriction addRestrictionForPredicate(String id, String stage, ResourceLocation modelId) {
         var restriction = new AItemPredicateRestriction(id, stage);
         restriction.restrict(modelId);
@@ -331,7 +372,7 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
-    public static ARegionRestriction addRestrictionForRegion(String id, String stage, ARegionRestriction.Type type, @NotNull BlockPos from, @NotNull BlockPos to) {
+    public static ARegionRestriction addRestrictionForRegion(String id, String stage, ARegionRestriction.Type type, BlockPos from, BlockPos to) {
         var restriction = new ARegionRestriction(id, stage);
         restriction.setArea(type, from, to);
 
