@@ -18,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 public interface ARandomizableContainer {
     @WrapOperation(method = "unpackLootTable", at = @At(value = "INVOKE",target = "Lnet/minecraft/world/level/storage/loot/LootTable;fill(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/storage/loot/LootParams;J)V"))
     default void astages$unpackLootTable(LootTable lootTable, Container container, LootParams params, long something, @NotNull Operation<Void> original, Player player) {
+        original.call(lootTable, container, params, something);
+
         if (this instanceof RandomizableContainerBlockEntity blockEntity) {
             var size = blockEntity.getContainerSize();
 
@@ -38,8 +40,6 @@ public interface ARandomizableContainer {
                     }
                 }
             }
-        } else {
-            original.call(lootTable, container, params, something);
         }
     }
 }
