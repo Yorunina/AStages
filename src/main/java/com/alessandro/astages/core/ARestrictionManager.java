@@ -42,6 +42,7 @@ public class ARestrictionManager {
     public static final ACropManager CROP_INSTANCE = new ACropManager();
     public static final AEffectManager EFFECT_INSTANCE = new AEffectManager();
     public static final ARegionManager REGION_INSTANCE = new ARegionManager();
+    public static final ALootManager LOOT_INSTANCE = new ALootManager();
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
@@ -60,6 +61,7 @@ public class ARestrictionManager {
         ASSOCIATION_MAP.put(CROP_INSTANCE.associatedType(), CROP_INSTANCE);
         ASSOCIATION_MAP.put(EFFECT_INSTANCE.associatedType(), EFFECT_INSTANCE);
         ASSOCIATION_MAP.put(REGION_INSTANCE.associatedType(), REGION_INSTANCE);
+        ASSOCIATION_MAP.put(LOOT_INSTANCE.associatedType(), LOOT_INSTANCE);
     }
 
     public static void reloadBeforeScripts() {
@@ -77,6 +79,7 @@ public class ARestrictionManager {
         CROP_INSTANCE.reloadBeforeScripts();
         EFFECT_INSTANCE.reloadBeforeScripts();
         REGION_INSTANCE.reloadBeforeScripts();
+        LOOT_INSTANCE.reloadBeforeScripts();
 
         ALL_STAGES.clear();
         ORE_STAGES.clear();

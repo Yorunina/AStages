@@ -11,6 +11,7 @@
     "enchant.AEnchantmentMenu",
     "food.ALivingEntity",
     "item.AJeiStarter",
+    "loot.ARandomizableContainer",
     "ore.ABlockStateExtension",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",

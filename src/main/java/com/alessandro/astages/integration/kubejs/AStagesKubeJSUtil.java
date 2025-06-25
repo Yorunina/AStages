@@ -380,4 +380,13 @@ public class AStagesKubeJSUtil {
 
         return restriction;
     }
+
+    // LOOT Restrictions
+    public static ALootRestriction addRestrictionForLoot(String id, String stage) {
+        var restriction = new ALootRestriction(id, stage);
+
+        ARestrictionManager.LOOT_INSTANCE.addRestriction(restriction);
+
+        return restriction;
+    }
 }

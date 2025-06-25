@@ -13,9 +13,9 @@ import java.util.function.Function;
 /**
  * Base class for all Restrictions related to AStages!
  *
- * @param <R>
- * @param <U>
- * @param <V>
+ * @param <R> The restriction itself
+ * @param <U> For restrict method object typeAdd commentMore actions
+ * @param <V> For isRestricted method object type
  */
 public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implements Comparable<R> {
     private final String id;

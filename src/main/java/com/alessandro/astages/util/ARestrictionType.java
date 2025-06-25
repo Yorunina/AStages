@@ -23,7 +23,8 @@ public enum ARestrictionType {
     ENCHANT(8),
     CROP(9),
     EFFECT(10),
-    REGION(11);
+    REGION(11),
+    LOOT(12);
 
     public String getLowerCased() {
         return toString().toLowerCase(Locale.ROOT);
