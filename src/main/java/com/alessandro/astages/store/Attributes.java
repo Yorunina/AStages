@@ -43,6 +43,7 @@ public class Attributes {
     public static final Attribute<Boolean> ALLOW_ACCESS = Attribute.create("allow_access", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> PERFORM_COMMANDS = Attribute.create("perform_commands", AttributeTypes.BOOLEAN, true);
     public static final Attribute<Boolean> HAS_REPLACER = Attribute.create("has_replacer", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> HAS_CHECKER = Attribute.create("has_checker", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);

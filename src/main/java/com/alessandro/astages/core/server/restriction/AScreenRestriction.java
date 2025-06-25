@@ -1,18 +1,27 @@
 package com.alessandro.astages.core.server.restriction;
 
-import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.server.ARestriction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.util.TriPredicate;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuType<?>, MenuType<?>> {
+@ParametersAreNonnullByDefault
+public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuType<?>, AbstractContainerMenu> {
     private final List<MenuType<?>> menus = new ArrayList<>();
+
+    private TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker;
 
     public List<MenuType<?>> getMenus() {
         return menus;
@@ -25,7 +34,8 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
     @Override
     public @NotNull AttributeStore allowedAttributes() {
         return AttributeStore.builder()
-            .addAttribute(Attributes.Screen.OPEN_MESSAGE);
+            .addAttribute(Attributes.Screen.OPEN_MESSAGE)
+            .addAttribute(Attributes.HAS_CHECKER);
     }
 
     @Override
@@ -35,10 +45,24 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
         return this;
     }
 
-    @Override
-    public boolean isRestricted(MenuType<?> menu) {
+    public boolean isRestricted(AbstractContainerMenu menu) {
+        var type = menu.getType();
+
         for (MenuType<?> men : menus) {
-            if (men.equals(menu)) {
+            if (men.equals(type)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isRestricted(AbstractContainerMenu menu, @Nullable BlockState state, @Nullable BlockEntity entity) {
+        if (isDisabled(Attributes.HAS_CHECKER)) { return isRestricted(menu); }
+
+        var type = menu.getType();
+        for (MenuType<?> men : menus) {
+            if (men.equals(type) && checker.test(state, entity, menu)) {
                 return true;
             }
         }
@@ -50,5 +74,15 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
     public AScreenRestriction setOpenMessage(Function<MenuType<?>, Component> message) {
         set(Attributes.Screen.OPEN_MESSAGE, message);
         return this;
+    }
+
+    public AScreenRestriction setChecker(TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker) {
+        this.checker = checker;
+        set(Attributes.HAS_CHECKER, true);
+        return this;
+    }
+
+    public TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> getChecker() {
+        return checker;
     }
 }
