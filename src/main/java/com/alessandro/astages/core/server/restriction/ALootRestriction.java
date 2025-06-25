@@ -55,13 +55,13 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return this;
     }
 
-    public ALootRestriction restrictTags(ResourceLocation... items) {
-        restrictedTags.addAll(List.of(items));
+    public ALootRestriction restrictTags(ResourceLocation... tags) {
+        restrictedTags.addAll(List.of(tags));
         return this;
     }
 
-    public ALootRestriction restrictMods(String... items) {
-        restrictedMods.addAll(List.of(items));
+    public ALootRestriction restrictMods(String... modIds) {
+        restrictedMods.addAll(List.of(modIds));
         return this;
     }
 
@@ -70,8 +70,8 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return this;
     }
 
-    public ALootRestriction ignoredTags(ResourceLocation... items) {
-        ignoredTags.addAll(List.of(items));
+    public ALootRestriction ignoredTags(ResourceLocation... tags) {
+        ignoredTags.addAll(List.of(tags));
         return this;
     }
 
