@@ -20,8 +20,6 @@ public class CuriosEventHandler {
             var curio = event.getStack();
             var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, curio);
 
-            AStages.LOGGER.debug(curio.toString());
-
             if (restriction != null && restriction.isDisabled(Attributes.CURIO_EQUIPPING)) {
                 event.setResult(Event.Result.DENY);
                 restriction.displayMessage(Attributes.Item.CURIOS_MESSAGE, curio, player);
