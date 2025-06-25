@@ -10,6 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * Base class for all Restrictions related to AStages!
+ *
+ * @param <R>
+ * @param <U>
+ * @param <V>
+ */
 public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implements Comparable<R> {
     private final String id;
     private final String stage;
