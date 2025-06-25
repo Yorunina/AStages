@@ -1,4 +1,4 @@
-package com.alessandro.astages.util;
+package com.alessandro.astages.store;
 
 public interface AChangeable {
     void setChanged();

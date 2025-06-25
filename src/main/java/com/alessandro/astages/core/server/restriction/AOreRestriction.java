@@ -6,7 +6,7 @@ import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.store.server.ARestriction;
-import com.alessandro.astages.util.AMarkable;
+import com.alessandro.astages.store.AMarkable;
 import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.level.block.state.BlockState;

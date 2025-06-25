@@ -4,7 +4,7 @@ import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.util.AMarkable;
+import com.alessandro.astages.store.AMarkable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.network.PacketDistributor;
