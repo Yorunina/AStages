@@ -53,7 +53,7 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateGui(ASimpleRestriction simple) {
-        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(BuiltInRegistries.MENU.get(ResourceLocation.parse(simple.object))));
+        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(BuiltInRegistries.MENU.get(ResourceLocation.parse(simple.object)))));
 
         commonOperations(simple);
     }
