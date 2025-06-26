@@ -12,6 +12,7 @@
     "food.ALivingEntity",
     "item.AJeiStarter",
     "loot.ARandomizableContainer",
+    "mob.AMob",
     "ore.ABlockStateExtension",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",

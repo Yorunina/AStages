@@ -5,13 +5,18 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.develop.ToBeTested;
+import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -92,5 +97,39 @@ public class ServerEventHandler {
         }
 
         event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
+    }
+
+    @ToBeTested
+    @UnderDevelopment
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
+        var player = event.getEntity();
+        var server = player.getServer();
+        var entityType = event.getTarget().getType();
+
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(entityType, player, server);
+
+        if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
+            event.setCanceled(true);
+            player.displayClientMessage(restriction.get(Attributes.Mob.INTERACTION_MESSAGE).get(), true);
+
+            //event.setCancellationResult(InteractionResult.PASS);
+        }
+    }
+
+    @ToBeTested
+    @UnderDevelopment
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onPlayerAttack(AttackEntityEvent event) {
+        var player = event.getEntity();
+        var server = player.getServer();
+        var entityType = event.getTarget().getType();
+
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(entityType, player, server);
+
+        if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
+            event.setCanceled(true);
+            player.displayClientMessage(restriction.get(Attributes.Mob.ATTACK_MESSAGE).get(), true);
+        }
     }
 }

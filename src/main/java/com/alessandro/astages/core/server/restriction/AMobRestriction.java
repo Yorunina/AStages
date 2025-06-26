@@ -34,13 +34,17 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
             .addAttribute(Attributes.SPAWNER)
             .addAttribute(Attributes.MOB_SPAWNING)
             .addAttribute(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT)
+            .addAttribute(Attributes.ATTACKING).setAttribute(Attributes.ATTACKING, true) // Left click interactionsAdd commentMore actions
+            .addAttribute(Attributes.RIGHT_CLICK_INTERACTIONS).setAttribute(Attributes.RIGHT_CLICK_INTERACTIONS, true)
 
             .addAttribute(Attributes.DIMENSION, true)
             .addAttribute(Attributes.REPLACE, true)
             .addAttribute(Attributes.MIN_LIGHT_LEVEL, true)
             .addAttribute(Attributes.MAX_LIGHT_LEVEL, true)
 
-            .addAttribute(Attributes.Mob.JADE_MOB_MESSAGE);
+            .addAttribute(Attributes.Mob.JADE_MOB_MESSAGE)
+            .addAttribute(Attributes.Mob.INTERACTION_MESSAGE)
+            .addAttribute(Attributes.Mob.ATTACK_MESSAGE);
     }
 
     @Override
@@ -140,6 +144,18 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
     @SuppressWarnings("unused")
     public AMobRestriction setEnableMobSpawning(boolean value) {
         set(Attributes.MOB_SPAWNING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AMobRestriction setCanBeAttacked(boolean value) {
+        set(Attributes.ATTACKING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AMobRestriction setCanBeRightClicked(boolean value) {
+        set(Attributes.RIGHT_CLICK_INTERACTIONS, value);
         return this;
     }
 
