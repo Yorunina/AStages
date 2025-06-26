@@ -115,7 +115,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
 
                     var blockPlacedByPlayer = StructureData.getData(player.getServer(), structure.toString()).isBlockPlacedByPlayer(event.getPos());
                     if (blockPlacedByPlayer) {
@@ -143,7 +143,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
 
                     if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
                         var clickedBlock = event.getLevel().getBlockState(event.getPos());
@@ -168,7 +168,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
 
                     if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
                         if (!restriction.isEntityTargetable(event.getTarget().getType())) {
@@ -191,7 +191,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
 
                     StructureData.getData(player.getServer(), structure.toString()).add(event.getPos());
 
@@ -217,7 +217,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
 
                     if (restriction != null) {
                         if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_BLOCKS)) {

@@ -42,7 +42,7 @@ public class AStructureUtils {
             manager.getAllStructuresAt(newPos).forEach((s, longs) -> {
                 var structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(s);
                 if (structure != null) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(player, structure);
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
 
 //                    if (restriction != null) {
                     var finalS = manager.getStructureWithPieceAt(newPos, s);
