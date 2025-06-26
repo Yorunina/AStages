@@ -28,13 +28,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class ServerEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (!CommonEventSettings.isInventoryChanged) { return; }
+        if (!CommonEventSettings.requireSlotCheck()) { return; }
 
         if (!event.getEntity().level().isClientSide && !(event.getEntity() instanceof FakePlayer)) {
             Player player = event.getEntity();
             Inventory inventory = player.getInventory();
 
-            if (CommonEventSettings.slotChanged == null) {
+            if (CommonEventSettings.getSlotChanged() == null) {
                 for (int i = 0; i < inventory.getContainerSize(); i++) {
                     ItemStack slotContent = inventory.getItem(i);
 
@@ -44,11 +44,11 @@ public class ServerEventHandler {
                     }
                 }
             } else {
-                ItemStack slotContent = inventory.getItem(CommonEventSettings.slotChanged);
+                ItemStack slotContent = inventory.getItem(CommonEventSettings.getSlotChanged());
 
                 if (!slotContent.isEnchanted() || slotContent.getItem() instanceof EnchantedBookItem) {
                     var stack = removeAllRestrictedEnchantmentFromStack(player, slotContent);
-                    inventory.setItem(CommonEventSettings.slotChanged, stack);
+                    inventory.setItem(CommonEventSettings.getSlotChanged(), stack);
                 }
             }
         }

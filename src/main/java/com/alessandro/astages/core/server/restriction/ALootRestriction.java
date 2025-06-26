@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+// /give Dev chest{BlockEntityTag:{LootTable:"chests/village/village_toolsmith"}}
+// /setblock ~ ~1 ~ minecraft:chest{LootTable:"minecraft:chests/simple_dungeon"}
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemStack> {
@@ -105,9 +108,6 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         lootTableFilter = filter;
         return this;
     }
-
-    // /give Dev chest{BlockEntityTag:{LootTable:"chests/village/village_toolsmith"}}
-    // /setblock ~ ~1 ~ minecraft:chest{LootTable:"minecraft:chests/simple_dungeon"}
 
     @Override
     public boolean isRestricted(ItemStack stack) {

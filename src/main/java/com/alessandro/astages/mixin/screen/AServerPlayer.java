@@ -6,7 +6,6 @@ import com.alessandro.astages.store.Attributes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,8 +24,6 @@ import java.util.function.Consumer;
 @Mixin(value = ServerPlayer.class)
 public abstract class AServerPlayer {
     @Shadow private int containerCounter;
-
-    @Shadow public ServerGamePacketListenerImpl connection;
 
     @Shadow public abstract ServerLevel serverLevel();
 

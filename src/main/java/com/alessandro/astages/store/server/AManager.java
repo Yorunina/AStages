@@ -46,7 +46,7 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
     }
 
     public R getRestriction(Player player, V object) {
-        return restrictions.stream().filter(r -> r.isRestricted(object) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+        return restrictions.stream().filter(r -> !AStagesUtil.hasStage(player, r.getStage()) && r.isRestricted(object)).findFirst().orElse(null);
     }
 
     public List<String> getIds() {

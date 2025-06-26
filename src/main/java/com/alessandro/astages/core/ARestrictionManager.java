@@ -124,6 +124,7 @@ public class ARestrictionManager {
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
         APluginManager.callMethod(ServerLifecycleHooks.getCurrentServer(), AStagesPlugin::reloadAfterScripts);
+        CommonEventSettings.allInventoryChanged();
     }
 
     public static void clearClientOnLogin(ServerPlayer player) {
@@ -149,4 +150,6 @@ public class ARestrictionManager {
     public static @Nullable AMinimalManager<?> getInstance(Object type) {
         return EXTERNAL_MANAGERS.getOrDefault(type, null);
     }
+
+    // TODO: solve recipe restriction for survival inventory
 }
