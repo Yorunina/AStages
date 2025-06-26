@@ -6,7 +6,6 @@ import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.develop.ToBeTested;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -136,7 +135,6 @@ public class ServerEventHandler {
         }
     }
 
-    @ToBeTested
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.RightClickBlock event) {
         if (canBeRunForPlayer(event.getEntity())) {

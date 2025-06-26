@@ -5,8 +5,6 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.develop.ToBeTested;
-import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -99,8 +97,6 @@ public class ServerEventHandler {
         event.setResult(MobSpawnEvent.PositionCheck.Result.FAIL);
     }
 
-    @ToBeTested
-    @UnderDevelopment
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
         var player = event.getEntity();
@@ -112,13 +108,9 @@ public class ServerEventHandler {
         if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
             event.setCanceled(true);
             player.displayClientMessage(restriction.get(Attributes.Mob.INTERACTION_MESSAGE).get(), true);
-
-            //event.setCancellationResult(InteractionResult.PASS);
         }
     }
 
-    @ToBeTested
-    @UnderDevelopment
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onPlayerAttack(AttackEntityEvent event) {
         var player = event.getEntity();

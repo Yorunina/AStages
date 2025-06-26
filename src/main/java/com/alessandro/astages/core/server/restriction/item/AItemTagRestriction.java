@@ -4,8 +4,6 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
-import com.alessandro.astages.util.develop.Info;
-import com.alessandro.astages.util.develop.UnderDevelopment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +27,6 @@ public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestrictio
         return this;
     }
 
-    @UnderDevelopment
-    @Info("Probably a mismatch between anyMatch and noneMatch")
     @Override
     public boolean isRestricted(ItemStack stack) {
         if (stack.isEmpty()) { return false; }

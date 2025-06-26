@@ -18,18 +18,19 @@ import org.jetbrains.annotations.NotNull;
 
 @MethodsReturnNonnullByDefault
 @Info("For now, required only by JEI.")
-public record RecipeModSyncerS2CPacket(String id, String stage, String modId) implements AStagesPacket {
+public record RecipeModSyncerS2CPacket(String id, String stage, int priority, String modId) implements AStagesPacket {
     public static final CustomPacketPayload.Type<RecipeModSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "recipe_mod_syncer_s2c_packet"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RecipeModSyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, RecipeModSyncerS2CPacket::id,
         ByteBufCodecs.STRING_UTF8, RecipeModSyncerS2CPacket::stage,
+        ByteBufCodecs.INT, RecipeModSyncerS2CPacket::priority,
         ByteBufCodecs.STRING_UTF8, RecipeModSyncerS2CPacket::modId,
         RecipeModSyncerS2CPacket::new
     );
 
     public RecipeModSyncerS2CPacket(@NotNull ARecipeModRestriction restriction) {
-        this(restriction.getId(), restriction.getStage(), restriction.getModId());
+        this(restriction.getId(), restriction.getStage(), restriction.getPriority(), restriction.getModId());
     }
 
     @Override

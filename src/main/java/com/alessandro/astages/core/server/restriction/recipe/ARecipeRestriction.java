@@ -53,10 +53,9 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
     @Override
     public void markAsDirty() {
         if (type != null && !recipes.isEmpty()) {
-            PacketDistributor.sendToAllPlayers(new RecipeSyncerS2CPacket(getId(), getStage(), getPriority(), type, recipes));
+            PacketDistributor.sendToAllPlayers(new RecipeSyncerS2CPacket(this));
         }
 
-        // PacketDistributor.sendToAllPlayers(new RequestRecipeReloadS2CPacket());
         PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.RECIPE));
     }
 }

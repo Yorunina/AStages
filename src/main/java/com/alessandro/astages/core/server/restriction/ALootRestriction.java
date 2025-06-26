@@ -58,52 +58,62 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return null;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction restrictItems(Item... items) {
         restrictedItems.addAll(List.of(items));
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction restrictTags(ResourceLocation... tags) {
         restrictedTags.addAll(List.of(tags));
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction restrictMods(String... modIds) {
         restrictedMods.addAll(List.of(modIds));
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction ignoredItems(Item... items) {
         ignoredItems.addAll(List.of(items));
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction ignoredTags(ResourceLocation... tags) {
         ignoredTags.addAll(List.of(tags));
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction restrictForEntities(EntityType<?>... entityTypes) {
         entities.addAll(List.of(entityTypes));
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ALootRestriction restrictForLootTables(ResourceLocation... lootTables) {
         this.lootTables.addAll(List.of(lootTables));
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ALootRestriction setReplacer(Function<ItemStack, ItemStack> replacer) {
         this.replacer = replacer;
         set(Attributes.HAS_REPLACER, true);
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public ALootRestriction setEntityFilter(AFilter filter) {
         entityFilter = filter;
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ALootRestriction setLootTableFilter(AFilter filter) {
         lootTableFilter = filter;
         return this;
