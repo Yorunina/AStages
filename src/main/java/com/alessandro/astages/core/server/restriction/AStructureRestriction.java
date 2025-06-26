@@ -1,8 +1,9 @@
 package com.alessandro.astages.core.server.restriction;
 
-import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.server.ARestriction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class AStructureRestriction extends ARestriction<AStructureRestriction, ResourceLocation, ResourceLocation> {
     private final List<ResourceLocation> structures = new ArrayList<>();
@@ -201,6 +203,36 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
     public AStructureRestriction addAllowedTargetableEntities(EntityType<?>... entities) {
         if (allowedTargetableEntities == null) { allowedTargetableEntities = new ArrayList<>(); }
         allowedTargetableEntities.addAll(List.of(entities));
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setAttackMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Structure.ATTACK_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setInteractMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Structure.INTERACT_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setEnterMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Structure.ENTER_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setPlaceMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Structure.PLACING_MESSAGE, message);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public AStructureRestriction setBreakMessage(Function<ResourceLocation, Component> message) {
+        set(Attributes.Structure.MINING_MESSAGE, message);
         return this;
     }
 }
