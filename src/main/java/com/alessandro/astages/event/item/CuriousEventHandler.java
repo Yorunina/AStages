@@ -9,17 +9,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 public class CuriousEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
-//        event.player.isColliding()
-//
-//
-//        event.player.knockback(1, );
-
-//        CuriosApi.getCuriosInventory(event.player).ifPresent(curios -> {
-//            curios.getCurios().forEach((slotId, stacksHandler) -> {
-//                // stacksHandler.getStacks().setPreviousStackInSlot();
-//                stacksHandler.getStacks().extractItem(stacksHandler.getStacks().getSlots(), 1, false);
-//                event.player.drop(stacksHandler.getStacks().getStackInSlot(stacksHandler.getSlots()), false);
-//            });
-//        });
+        // NOT INTEGRATED, TRY LATER WITH AN ADDON!
     }
 }
