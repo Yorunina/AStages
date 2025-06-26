@@ -64,6 +64,7 @@ public class AStagesUtil {
     public static void showTitles(ServerPlayer player, PlayerStage.Operation operation, String stage) {
         Component title = Component.empty();
         Component subtitle = Component.empty();
+        Component chatMessage = Component.empty();
         var fadeIn = 0;
         var fadeOut = 0;
         var stay = 0;
@@ -82,6 +83,10 @@ public class AStagesUtil {
                 if (aStage.getAddSubTitle() != null) {
                     subtitle = aStage.getAddSubTitle();
                 }
+
+                if (aStage.getAddChatMessage() != null) {
+                    chatMessage = aStage.getAddChatMessage();
+                }
             } else if (operation == PlayerStage.Operation.REMOVE) {
                 if (aStage.getRemoveTitle() != null) {
                     title = aStage.getRemoveTitle();
@@ -89,6 +94,10 @@ public class AStagesUtil {
 
                 if (aStage.getRemoveSubTitle() != null) {
                     subtitle = aStage.getRemoveSubTitle();
+                }
+
+                if (aStage.getRemoveChatMessage() != null) {
+                    chatMessage = aStage.getRemoveChatMessage();
                 }
             }
         } else {
@@ -106,6 +115,7 @@ public class AStagesUtil {
         player.connection.send(new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut));
         player.connection.send(new ClientboundSetTitleTextPacket(title));
         player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
+        player.sendSystemMessage(chatMessage);
     }
 
     @Contract("_ -> !null")
