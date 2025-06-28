@@ -15,7 +15,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -175,13 +174,36 @@ public class ServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerOpenContainer(PlayerContainerEvent.Open event) {
-        CommonEventSettings.playersHaveOtherInventoriesOpened.put(event.getEntity().getUUID(), true);
-    }
+    public static void onPlayerTickContainer(TickEvent.PlayerTickEvent event) {
+        if (!CommonEventSettings.requireContainerCheck()) { return; }
 
-    @SubscribeEvent
-    public static void onPlayerCloseContainer(PlayerContainerEvent.Close event) {
-        CommonEventSettings.playersHaveOtherInventoriesOpened.put(event.getEntity().getUUID(), false);
+        if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
+            boolean isAnotherInventoryOpened = CommonEventSettings.hasPlayerAnotherContainerOpened(event.player);
+
+            if (isAnotherInventoryOpened) {
+                var container = CommonEventSettings.getContainerOpenedByPlayer(event.player);
+
+                for (var slot : container.slots) {
+                    if (slot.container == event.player.getInventory()) {
+                        var restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slot.getItem());
+
+                        if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
+                            event.player.drop(slot.getItem(), false);
+                            container.setItem(slot.index, container.getStateId(), ItemStack.EMPTY);
+                        }
+                    } else {
+                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(event.player, slot.getItem());
+
+                        if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_CONTAINERS)) {
+                            event.player.drop(slot.getItem(), false);
+                            container.setItem(slot.index, container.getStateId(), ItemStack.EMPTY);
+                        }
+                    }
+                }
+            }
+
+            CommonEventSettings.resetContainerChanged();
+        }
     }
 
     @SubscribeEvent
@@ -190,12 +212,16 @@ public class ServerEventHandler {
 
         if (event.phase == TickEvent.Phase.START && event.player != null && !event.player.level().isClientSide && !(event.player instanceof FakePlayer)) {
             Player player = event.player;
+
+            boolean isAnotherInventoryOpened = CommonEventSettings.hasPlayerAnotherContainerOpened(event.player);
+            if (isAnotherInventoryOpened) { return; } // Delegate actions to method above!
+
             Inventory inventory = player.getInventory();
 
             final int armorStart = inventory.items.size();
             final int armorEnd = armorStart + inventory.armor.size();
 
-            if (CommonEventSettings.getSlotChanged() == null || CommonEventSettings.playersHaveOtherInventoriesOpened.getOrDefault(event.player.getUUID(), false)) {
+            if (CommonEventSettings.getSlotChanged() == null) { // Check whole inventory
                 for (int i = 0; i < inventory.getContainerSize(); i++) {
                     ItemStack slotContent = inventory.getItem(i);
 
@@ -216,7 +242,7 @@ public class ServerEventHandler {
                         }
                     }
                 }
-            } else {
+            } else { // Check single slot
                 ItemStack slotContent = inventory.getItem(CommonEventSettings.getSlotChanged());
 
                 if (!slotContent.isEmpty()) {
@@ -233,8 +259,6 @@ public class ServerEventHandler {
 
                         inventory.setItem(CommonEventSettings.getSlotChanged(), ItemStack.EMPTY);
                         player.drop(slotContent, false);
-
-                        AStages.LOGGER.debug(inventory.getItem(CommonEventSettings.getSlotChanged()).toString());
                     }
                 }
             }

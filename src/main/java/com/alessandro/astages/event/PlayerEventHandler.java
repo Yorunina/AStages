@@ -4,6 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.util.SyncOperation;
@@ -63,10 +64,21 @@ public class PlayerEventHandler {
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
     }
 
+    @Info("For container checking!")
+    @SubscribeEvent
+    public static void onContainerOpen(PlayerContainerEvent.Open event) {
+        event.getContainer().addSlotListener(new AContainerSlotListener(event.getEntity()));
+
+        CommonEventSettings.setPlayerAnotherContainerOpened(event.getEntity(), event.getContainer());
+        CommonEventSettings.containerChanged();
+    }
+
     @Info("For inventory checking!")
     @SubscribeEvent
-    public static void onContainerOpen(PlayerContainerEvent event) {
-        event.getContainer().addSlotListener(new AInventorySlotListener(event.getEntity()));
+    public static void onContainerClose(PlayerContainerEvent.Close event) {
+        CommonEventSettings.setPlayerAnotherContainerOpened(event.getEntity(), null);
+
+        CommonEventSettings.allInventoryChanged();
     }
 
     @Info("For inventory checking!")
@@ -79,5 +91,11 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onStageSynced(StageSyncedPlayerEvent event) {
         CommonEventSettings.allInventoryChanged();
+    }
+
+    @Info("For container checking!")
+    @SubscribeEvent
+    public static void onPlayerContainerChanged(ContainerChangedEvent event) {
+        CommonEventSettings.containerChanged();
     }
 }

@@ -43,6 +43,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
 
     private final List<ABaseItemRestriction<?, ?>> INVENTORY_CACHE = new ArrayList<>();
     private final List<ABaseItemRestriction<?, ?>> EQUIPMENT_CACHE = new ArrayList<>();
+    private final List<ABaseItemRestriction<?, ?>> CONTAINERS_CACHE = new ArrayList<>();
 
     public List<AItemRestriction> getItemRestrictions() {
         return items;
@@ -79,6 +80,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
 
         INVENTORY_CACHE.clear();
         EQUIPMENT_CACHE.clear();
+        CONTAINERS_CACHE.clear();
     }
 
     public void reloadAfterScripts() {
@@ -89,6 +91,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
 
             if (restriction.isDisabled(Attributes.EQUIPPING)) {
                 EQUIPMENT_CACHE.add(restriction);
+            }
+
+            if (restriction.isDisabled(Attributes.STORING_IN_CONTAINERS)) {
+                CONTAINERS_CACHE.add(restriction);
             }
         });
     }
@@ -122,6 +128,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
 
     public ABaseItemRestriction<?, ?> getEquipmentRestriction(Player player, ItemStack stack) {
         return EQUIPMENT_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+    }
+
+    public ABaseItemRestriction<?, ?> getContainersRestriction(Player player, ItemStack stack) {
+        return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
 
     public void addRestriction(AItemRestriction restriction) {
@@ -167,6 +177,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
     public void recalculateInventoryAndEquipment(ABaseItemRestriction<?, ?> restriction) {
         INVENTORY_CACHE.removeIf(r -> r.getId().equals(restriction.getId()));
         EQUIPMENT_CACHE.removeIf(r -> r.getId().equals(restriction.getId()));
+        CONTAINERS_CACHE.removeIf(r -> r.getId().equals(restriction.getId()));
 
         if (restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
             INVENTORY_CACHE.add(restriction);
@@ -174,6 +185,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
 
         if (restriction.isDisabled(Attributes.EQUIPPING)) {
             EQUIPMENT_CACHE.add(restriction);
+        }
+
+        if (restriction.isDisabled(Attributes.STORING_IN_CONTAINERS)) {
+            CONTAINERS_CACHE.add(restriction);
         }
     }
 
@@ -185,6 +200,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         predicates.removeIf(restriction -> restriction.getId().equals(id));
         INVENTORY_CACHE.removeIf(restriction -> restriction.getId().equals(id));
         EQUIPMENT_CACHE.removeIf(restriction -> restriction.getId().equals(id));
+        CONTAINERS_CACHE.removeIf(restriction -> restriction.getId().equals(id));
         IDS.remove(id);
 
         ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));

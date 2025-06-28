@@ -40,6 +40,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.BLOCK_INTERACTIONS)
             // .addAttribute(Attributes.IGNORE_BLOCKS_AROUND)
             .addAttribute(Attributes.CURIO_EQUIPPING)
+            .addAttribute(Attributes.STORING_IN_CONTAINERS)
 
             .addAttribute(Attributes.PICK_UP_DELAY)
 
@@ -183,6 +184,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setCanBeEquippedInCurioSlots(boolean value) {
         set(Attributes.CURIO_EQUIPPING, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ABaseItemRestriction<R, U> setCanBeStoredInContainers(boolean value) {
+        set(Attributes.STORING_IN_CONTAINERS, value);
         return this;
     }
 
