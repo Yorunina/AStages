@@ -1,6 +1,6 @@
 package com.alessandro.astages.event;
 
-import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
+import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
@@ -10,14 +10,16 @@ import net.neoforged.neoforge.common.NeoForge;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public record AInventorySlotListener(Player player) implements ContainerListener {
+public record AContainerSlotListener(Player player) implements ContainerListener {
     @Override
     public void slotChanged(AbstractContainerMenu container, int index, ItemStack stack) {
-        if (!stack.isEmpty() && container.getSlot(index).container == player.getInventory()) {
-            NeoForge.EVENT_BUS.post(new PlayerInventoryChangedEvent(player, stack, index));
+        if (!stack.isEmpty()/* && container.getSlot(index).container != player.getInventory()*/) {
+            NeoForge.EVENT_BUS.post(new ContainerChangedEvent(player, container, index));
         }
     }
 
     @Override
-    public void dataChanged(AbstractContainerMenu container, int index, int item) { }
+    public void dataChanged(AbstractContainerMenu container, int index, int item) {
+
+    }
 }

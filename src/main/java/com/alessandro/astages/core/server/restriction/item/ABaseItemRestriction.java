@@ -36,6 +36,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.BLOCK_BREAKING)
             .addAttribute(Attributes.BLOCK_INTERACTIONS)
             // .addAttribute(Attributes.IGNORE_BLOCKS_AROUND)
+            .addAttribute(Attributes.STORING_IN_CONTAINERS)
 
             .addAttribute(Attributes.PICK_UP_DELAY)
 
@@ -81,8 +82,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     public void markAsDirty() {
         setChanged();
         ModNetworking.sendTo(null, new RequestReloadS2CPacket(ReloadType.ITEM));
-        CommonEventSettings.isInventoryChanged = true;
-        CommonEventSettings.slotChanged = null;
+        CommonEventSettings.allInventoryChanged();
     }
 
     public ABaseItemRestriction<?, ?> associateLootRestriction(String id) {
@@ -176,6 +176,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
 //        set(Attributes.IGNORE_BLOCKS_AROUND, value);
 //        return this;
 //    }
+
+    @SuppressWarnings("unused")
+    public ABaseItemRestriction<R, U> setCanBeStoredInContainers(boolean value) {
+        set(Attributes.STORING_IN_CONTAINERS, value);
+        return this;
+    }
 
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setHiddenName(Function<ItemStack, Component> message) {
