@@ -3,6 +3,7 @@ package com.alessandro.astages.networking.packet.reload;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
+import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,7 +35,7 @@ public class RequestReloadS2CPacket {
                 case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
                 case RELOAD_BEFORE -> AClientRestrictionManager.reloadStarted();
                 case ITEM -> MinecraftForge.EVENT_BUS.post(new ClientItemUpdateEvent());
-                case RECIPE -> MinecraftForge.EVENT_BUS.post(new ClientOreUpdateEvent());
+                case RECIPE -> MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
                 case ORE -> MinecraftForge.EVENT_BUS.post(new ClientOreUpdateEvent());
             }
         });

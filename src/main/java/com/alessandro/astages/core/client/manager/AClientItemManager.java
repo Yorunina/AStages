@@ -111,6 +111,8 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     }
 
     public String getRestrictionIdForStack(ItemStack stack) {
+        if (stack.isEmpty()) { return null; }
+
         for (var restriction : restrictions) {
             if (restriction.isRestricted(stack)) {
                 return restriction.getId();
@@ -121,6 +123,8 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     }
 
     public AClientItemPropertyRestriction getProperties(ItemStack stack) {
+        if (stack.isEmpty()) { return null; }
+
         if (properties.containsKey(CustomItemStackKey.build(stack))) {
             var restriction = properties.get(CustomItemStackKey.build(stack));
             if (restriction != null) {
