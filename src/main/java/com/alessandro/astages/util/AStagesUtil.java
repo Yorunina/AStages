@@ -64,7 +64,7 @@ public class AStagesUtil {
     public static void showTitles(ServerPlayer player, PlayerStage.Operation operation, String stage) {
         Component title = Component.empty();
         Component subtitle = Component.empty();
-        Component chatMessage = Component.empty();
+        Component chatMessage = null;
         var fadeIn = 0;
         var fadeOut = 0;
         var stay = 0;
@@ -115,7 +115,7 @@ public class AStagesUtil {
         player.connection.send(new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut));
         player.connection.send(new ClientboundSetTitleTextPacket(title));
         player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
-        player.sendSystemMessage(chatMessage);
+        if (chatMessage != null) { player.sendSystemMessage(chatMessage); }
     }
 
     @Contract("_ -> !null")
