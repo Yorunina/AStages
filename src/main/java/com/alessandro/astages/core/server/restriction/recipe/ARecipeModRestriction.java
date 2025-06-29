@@ -4,14 +4,11 @@ import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
-import com.alessandro.astages.store.AMarkable;
-import com.alessandro.astages.util.ReloadType;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRestriction, RecipeModWrapper, RecipeWrapper> implements AMarkable {
+public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRestriction, RecipeModWrapper, RecipeWrapper> {
     private String modId = null;
 
     public ARecipeModRestriction(String id, String stage) {
@@ -39,6 +36,6 @@ public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRest
             ModNetworking.sendToClients(new RecipeModSyncerS2CPacket(this));
         }
 
-        ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.RECIPE));
+        super.markAsDirty();
     }
 }

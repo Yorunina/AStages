@@ -40,7 +40,6 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
-                    AClientRestrictionManager.setWaitingForRecipeUpdate(true);
                     updateRecipeGui();
                 }
             });
@@ -55,12 +54,10 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         runtime = jeiRuntime;
-//        var recipe = runtime.getRecipeManager().createRecipeLookup(RecipeTypes.CRAFTING).includeHidden().get().filter(r -> r.getId().equals(new ResourceLocation("minecraft", "birch_wood"))).findFirst().get();
-//        runtime.getRecipeManager().hideRecipes(RecipeTypes.CRAFTING, List.of(recipe));
     }
 
     public void updateRecipeGui() {
-        if (runtime != null && AClientRestrictionManager.waitingForRecipeUpdate && !AClientRestrictionManager.jeiIsReloading) {
+        if (runtime != null && AClientRestrictionManager.ableToUpdateJeiUI()) {
             AStages.LOGGER.info("AStages client recipe update started!");
             var time = System.currentTimeMillis();
 
@@ -75,7 +72,6 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
             updateRecipesForType(RecipeType.STONECUTTING, RecipeTypes.STONECUTTING);
 
             AStages.LOGGER.info("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
-            AClientRestrictionManager.setWaitingForRecipeUpdate(false);
         }
     }
 
