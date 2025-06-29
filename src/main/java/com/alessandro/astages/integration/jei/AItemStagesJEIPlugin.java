@@ -43,7 +43,6 @@ public class AItemStagesJEIPlugin implements IModPlugin {
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
             NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
-                    AClientRestrictionManager.setWaitingForItemUpdate(true);
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
             });
@@ -64,7 +63,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
 
     @SuppressWarnings("unchecked")
     public <T> void updateGui(@Nullable PlayerStage.Operation operation, @Nullable List<String> stages) {
-        if (runtime != null && AClientRestrictionManager.waitingForItemUpdate && !AClientRestrictionManager.jeiIsReloading) {
+        if (runtime != null && AClientRestrictionManager.ableToUpdateJeiUI()) {
             // TODO: HYBRID
             var manager = runtime.getIngredientManager();
             if (stages == null || operation == null) { // Build Cache
@@ -129,7 +128,6 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                     }
                 }
 
-                AClientRestrictionManager.setWaitingForItemUpdate(false);
                 return;
             }
 
@@ -199,7 +197,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                 }
             }
 
-            AClientRestrictionManager.waitingForItemUpdate = false;
+//            AClientRestrictionManager.waitingForItemUpdate = false;
 
 //            if (operation == PlayerStage.Operation.REMOVE) {
 //                for (var stage : stages) {

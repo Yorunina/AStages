@@ -10,7 +10,6 @@
     "APlayerEventJS",
     "enchant.AEnchantmentMenu",
     "food.ALivingEntity",
-    "item.AJeiStarter",
     "loot.ARandomizableContainer",
     "mob.AMob",
     "ore.ABlockStateExtension",
@@ -22,6 +21,8 @@
     "recipe.minecraft.ACraftingMenu",
     "recipe.minecraft.ASmithingMenu",
     "recipe.minecraft.AStonecutterMenu",
+    "reload.AJeiStarter",
+    "reload.AReloadCommand",
     "screen.AServerPlayer",
     "structure.AEntity"
   ],

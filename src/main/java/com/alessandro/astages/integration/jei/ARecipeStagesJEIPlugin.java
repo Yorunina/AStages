@@ -41,7 +41,6 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
             NeoForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
-                    AClientRestrictionManager.setWaitingForRecipeUpdate(true);
                     updateRecipeGui();
                 }
             });
@@ -59,7 +58,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
     }
 
     public void updateRecipeGui() {
-        if (runtime != null && AClientRestrictionManager.waitingForRecipeUpdate && !AClientRestrictionManager.jeiIsReloading) {
+        if (runtime != null && AClientRestrictionManager.ableToUpdateJeiUI()) {
             AStages.LOGGER.info("AStages client recipe update started!");
             var time = System.currentTimeMillis();
 
@@ -74,7 +73,6 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
             updateRecipesForType(RecipeType.STONECUTTING, RecipeTypes.STONECUTTING);
 
             AStages.LOGGER.info("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
-            AClientRestrictionManager.setWaitingForRecipeUpdate(false);
         }
     }
 

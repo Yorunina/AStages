@@ -30,14 +30,10 @@ public record RequestReloadS2CPacket(ReloadType reloadType) implements AStagesPa
     public void run(IPayloadContext context) {
         switch (reloadType) {
             case CLIENT_BEFORE -> AClientRestrictionManager.reloadBeforeScripts();
-            case ITEM -> {
-                AClientRestrictionManager.setWaitingForItemUpdate(true);
-                NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
-            }
-            case RECIPE -> {
-                AClientRestrictionManager.setWaitingForRecipeUpdate(true);
-                NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
-            }
+            case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
+            case RELOAD_BEFORE -> AClientRestrictionManager.reloadStarted();
+            case ITEM -> NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
+            case RECIPE -> NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
             case ORE -> NeoForge.EVENT_BUS.post(new ClientOreUpdateEvent());
         }
     }

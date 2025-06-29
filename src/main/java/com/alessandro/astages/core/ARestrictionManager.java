@@ -99,8 +99,7 @@ public class ARestrictionManager {
         ARestrictionManager.MOB_INSTANCE.synchronizeWithClient(player);
         ARestrictionManager.ORE_INSTANCE.synchronizeWithClient(player);
 
-        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.ITEM));
-        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.RECIPE));
+        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.CLIENT_SYNC));
         ModNetworking.sendTo(player, new DimensionIdsSyncerS2CPacket(ARestrictionManager.DIMENSION_INSTANCE.getIds()));
 
         AStages.TIMER.stop();

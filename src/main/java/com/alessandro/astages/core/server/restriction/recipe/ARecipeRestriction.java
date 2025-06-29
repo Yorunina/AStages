@@ -2,9 +2,6 @@ package com.alessandro.astages.core.server.restriction.recipe;
 
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
-import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.store.AMarkable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -14,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestriction, RecipeWrapper, RecipeWrapper> implements AMarkable {
+public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestriction, RecipeWrapper, RecipeWrapper> {
     private RecipeType<?> type = null;
     private final List<ResourceLocation> recipes = new ArrayList<>();
 
@@ -56,6 +53,6 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
             PacketDistributor.sendToAllPlayers(new RecipeSyncerS2CPacket(this));
         }
 
-        PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.RECIPE));
+        super.markAsDirty();
     }
 }

@@ -1,13 +1,15 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.client.manager.AClientItemManager;
 import com.alessandro.astages.core.client.manager.AClientMobManager;
 import com.alessandro.astages.core.client.manager.AClientOreManager;
 import com.alessandro.astages.core.client.manager.AClientRecipeManager;
+import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
+import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.develop.Info;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.*;
 
@@ -27,10 +29,9 @@ public class AClientRestrictionManager {
     @Info("For automatic command completion")
     public static final Set<String> SIMPLE_IDS = new HashSet<>();
 
-    public static boolean waitingForItemUpdate = false;
-    public static boolean waitingForRecipeUpdate = false;
-
-    public static boolean jeiIsReloading = false;
+    private static boolean areScriptsAvailable = false;
+    private static boolean didJeiFinishReloading = false;
+    private static boolean isReloading = false;
 
     static {
         ASSOCIATION_MAP.put(ITEM_INSTANCE.associatedType(), ITEM_INSTANCE);
@@ -40,7 +41,7 @@ public class AClientRestrictionManager {
     }
 
     public static void reloadBeforeScripts() {
-        setJeiIsReloading(false);
+        AClientRestrictionManager.areScriptsAvailable(false);
 
         ITEM_INSTANCE.reloadBeforeScripts();
         RECIPE_INSTANCE.reloadBeforeScripts();
@@ -51,6 +52,10 @@ public class AClientRestrictionManager {
         SERVER_STAGES.clear();
         DIMENSION_IDS.clear();
         SIMPLE_IDS.clear();
+    }
+
+    public static void reloadAfterScripts() {
+        AClientRestrictionManager.areScriptsAvailable(true);
     }
 
     public static boolean isOreStage(String stage) {
@@ -67,18 +72,54 @@ public class AClientRestrictionManager {
         return false;
     }
 
-    public static void setJeiIsReloading(boolean jeiIsReloading) {
-        AClientRestrictionManager.jeiIsReloading = jeiIsReloading;
-        AStages.LOGGER.debug("Jei Is Reloading: {}", jeiIsReloading);
+    public static void areScriptsAvailable(boolean areScriptsAvailable) {
+        AClientRestrictionManager.areScriptsAvailable = areScriptsAvailable;
+
+        if (AClientRestrictionManager.areScriptsAvailable) {
+            if (AClientRestrictionManager.didJeiFinishReloading) {
+                isReloading = false;
+            }
+
+            NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
+            NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
+        }
     }
 
-    public static void setWaitingForItemUpdate(boolean waitingForItemUpdate) {
-        AClientRestrictionManager.waitingForItemUpdate = waitingForItemUpdate;
+    public static void jeiStartedReload() {
+        AClientRestrictionManager.didJeiFinishReloading = false;
     }
 
-    public static void setWaitingForRecipeUpdate(boolean waitingForRecipeUpdate) {
-        AClientRestrictionManager.waitingForRecipeUpdate = waitingForRecipeUpdate;
-        AStages.LOGGER.debug("Waiting For Recipe Update: {}", waitingForRecipeUpdate);
+    public static void jeiFinishedReload() {
+        AClientRestrictionManager.didJeiFinishReloading = true;
+
+        if (AClientRestrictionManager.areScriptsAvailable) {
+            isReloading = false;
+        }
+
+        NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
+        NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
+    }
+
+    public static void reloadStarted() {
+        AClientRestrictionManager.isReloading = true;
+        AClientRestrictionManager.areScriptsAvailable = false;
+        AClientRestrictionManager.didJeiFinishReloading = false;
+    }
+
+    public static boolean isReloadFinished() {
+        return !AClientRestrictionManager.isReloading;
+    }
+
+    public static boolean areScriptsAvailable() {
+        return areScriptsAvailable;
+    }
+
+    public static boolean didJeiFinishReloading() {
+        return didJeiFinishReloading;
+    }
+
+    public static boolean ableToUpdateJeiUI() {
+        return AClientRestrictionManager.areScriptsAvailable() && AClientRestrictionManager.didJeiFinishReloading() && AClientRestrictionManager.isReloadFinished();
     }
 
     public static void removeRestriction(String id, ARestrictionType type) {

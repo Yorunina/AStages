@@ -6,9 +6,11 @@ import java.util.function.IntFunction;
 
 public enum ReloadType {
     CLIENT_BEFORE(0),
-    RECIPE(1),
-    ORE(2),
-    ITEM(3);
+    CLIENT_SYNC(1),
+    RELOAD_BEFORE(2),
+    RECIPE(3),
+    ORE(4),
+    ITEM(5);
 
     public static final IntFunction<ReloadType> BY_ID =
         ByIdMap.continuous(

@@ -3,15 +3,12 @@ package com.alessandro.astages.core.server.restriction.recipe;
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
-import com.alessandro.astages.store.AMarkable;
-import com.alessandro.astages.util.ReloadType;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRestriction, RecipeModWrapper, RecipeWrapper> implements AMarkable {
+public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRestriction, RecipeModWrapper, RecipeWrapper> {
     private String modId = null;
 
     public ARecipeModRestriction(String id, String stage) {
@@ -39,6 +36,6 @@ public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRest
             PacketDistributor.sendToAllPlayers(new RecipeModSyncerS2CPacket(this));
         }
 
-        PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.RECIPE));
+        super.markAsDirty();
     }
 }
