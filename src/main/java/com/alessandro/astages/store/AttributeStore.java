@@ -47,4 +47,20 @@ public class AttributeStore extends HashMap<Attribute<?>, Object> {
 
         return this;
     }
+
+    public AttributeStore combineWith(AttributeStore store) {
+        putAll(store);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        var builder = new StringBuilder();
+
+        for (var attribute : keySet()) {
+            builder.append(attribute.getId()).append(" ");
+        }
+
+        return builder.toString();
+    }
 }

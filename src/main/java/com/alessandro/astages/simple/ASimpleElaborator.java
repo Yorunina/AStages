@@ -31,18 +31,18 @@ import java.util.Objects;
 @SuppressWarnings("removal")
 @ParametersAreNonnullByDefault
 public class ASimpleElaborator {
-    public static void elaborateItem(ASimpleRestriction simple) {
+    public static void elaborateItem(ASimpleRestriction simple, boolean markAsDirty) {
         var restriction = new AItemRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
-        restriction.markAsDirty();
+        if (markAsDirty ) { restriction.markAsDirty(); }
 
         commonOperations(simple);
     }
 
-    public static void elaborateMod(ASimpleRestriction simple) {
+    public static void elaborateMod(ASimpleRestriction simple, boolean markAsDirty) {
         var restriction = new AItemModRestriction(simple.id, simple.stage).restrict(simple.object);
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
-        restriction.markAsDirty();
+        if (markAsDirty ) { restriction.markAsDirty(); }
 
         commonOperations(simple);
     }

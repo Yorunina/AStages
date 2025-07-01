@@ -1,6 +1,8 @@
 package com.alessandro.astages.mixin.reload;
 
-import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
+import com.alessandro.astages.util.ReloadType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.ReloadCommand;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +16,6 @@ import java.util.Collection;
 public class AReloadCommand {
     @Inject(method = "reloadPacks", at = @At("HEAD"))
     private static void astages$reloadPacks(Collection<String> ids, CommandSourceStack source, CallbackInfo ci) {
-        AClientRestrictionManager.reloadStarted();
+        ModNetworking.sendTo(null, new RequestReloadS2CPacket(ReloadType.RELOAD_BEFORE));
     }
 }

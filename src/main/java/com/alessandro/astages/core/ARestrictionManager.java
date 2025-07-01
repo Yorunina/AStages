@@ -12,6 +12,8 @@ import com.alessandro.astages.networking.packet.simple.SimpleStagesSyncerS2CPack
 import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.ForPlugins;
+import com.alessandro.astages.simple.ASimpleRestrictionManager;
+import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
@@ -28,6 +30,7 @@ import java.util.*;
 public class ARestrictionManager {
     public static final Map<ARestrictionType, AMinimalManager<?>> ASSOCIATION_MAP = new HashMap<>();
     @ForPlugins public static final Map<Object, AMinimalManager<?>> EXTERNAL_MANAGERS = new HashMap<>();
+    @ForPlugins public static final Map<Class<?>, AttributeStore> ATTACHED_ATTRIBUTES = new HashMap<>();
 
     // ADD SLOT RESTRICTION
     public static final AItemManager ITEM_INSTANCE = new AItemManager();
@@ -88,6 +91,8 @@ public class ARestrictionManager {
         ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
 
         APluginManager.callMethod(AStagesPlugin::reloadBeforeScripts);
+
+        ASimpleRestrictionManager.reloadBeforeScripts();
     }
 
     public static void clientSynchronization(@Nullable ServerPlayer player) {
@@ -122,6 +127,7 @@ public class ARestrictionManager {
 
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
+        reflectSimpleIdsChangesToClients(null, ARestrictionManager.SIMPLE_IDS, SyncOperation.ADD);
         APluginManager.callMethod(ServerLifecycleHooks.getCurrentServer(), AStagesPlugin::reloadAfterScripts);
         CommonEventSettings.allInventoryChanged();
     }

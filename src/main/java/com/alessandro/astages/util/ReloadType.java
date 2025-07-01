@@ -4,7 +4,13 @@ public enum ReloadType {
     CLIENT_BEFORE,
     CLIENT_SYNC,
     RELOAD_BEFORE,
-    RECIPE,
     ORE,
-    ITEM
+
+    // For JEI!
+    JEI_ITEM,
+    JEI_RECIPE,
+
+    // For MarkAsDirty methods!
+    ITEM,
+    RECIPE
 }

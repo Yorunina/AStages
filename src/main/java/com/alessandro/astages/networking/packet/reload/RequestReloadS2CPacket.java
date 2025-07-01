@@ -1,5 +1,6 @@
 package com.alessandro.astages.networking.packet.reload;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
@@ -34,9 +35,11 @@ public class RequestReloadS2CPacket {
                 case CLIENT_BEFORE -> AClientRestrictionManager.reloadBeforeScripts();
                 case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
                 case RELOAD_BEFORE -> AClientRestrictionManager.reloadStarted();
-                case ITEM -> MinecraftForge.EVENT_BUS.post(new ClientItemUpdateEvent());
-                case RECIPE -> MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
+                case JEI_ITEM -> MinecraftForge.EVENT_BUS.post(new ClientItemUpdateEvent());
+                case JEI_RECIPE -> MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
                 case ORE -> MinecraftForge.EVENT_BUS.post(new ClientOreUpdateEvent());
+                case ITEM -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
+                case RECIPE -> AStages.LOGGER.debug("No other operations required for MarkAsDirty method for recipe restrictions!");
             }
         });
 

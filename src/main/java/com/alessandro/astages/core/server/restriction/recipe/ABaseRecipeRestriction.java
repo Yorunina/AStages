@@ -30,6 +30,6 @@ public class ABaseRecipeRestriction<R extends ARestriction<R, U, V>, U, V> exten
 
     @Override
     public void markAsDirty() {
-        ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.RECIPE));
+        ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.JEI_RECIPE));
     }
 }
