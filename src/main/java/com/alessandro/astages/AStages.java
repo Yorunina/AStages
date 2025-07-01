@@ -6,10 +6,8 @@ import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.item.ModItems;
-import com.alessandro.astages.plugin.APluginFinder;
-import com.alessandro.astages.plugin.APluginManager;
-import com.alessandro.astages.plugin.AStagesPlugin;
-import com.alessandro.astages.plugin.ManagerContainer;
+import com.alessandro.astages.plugin.*;
+import com.alessandro.astages.store.AttributeStore;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -39,6 +37,11 @@ public class AStages {
         APluginManager.callMethod(managerContainer, AStagesPlugin::registerManagers);
         ARestrictionManager.EXTERNAL_MANAGERS.putAll(managerContainer.get());
 
-
+        var attributeContainer = AttributeContainer.initialize();
+        APluginManager.callMethod(attributeContainer, AStagesPlugin::attachAttributes);
+        var result = attributeContainer.get();
+        for (var clazz : result.keySet()) {
+            ARestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
+        }
     }
 }

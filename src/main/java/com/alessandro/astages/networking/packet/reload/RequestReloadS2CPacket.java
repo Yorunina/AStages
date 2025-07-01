@@ -32,9 +32,11 @@ public record RequestReloadS2CPacket(ReloadType reloadType) implements AStagesPa
             case CLIENT_BEFORE -> AClientRestrictionManager.reloadBeforeScripts();
             case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
             case RELOAD_BEFORE -> AClientRestrictionManager.reloadStarted();
-            case ITEM -> NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
-            case RECIPE -> NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
+            case JEI_ITEM -> NeoForge.EVENT_BUS.post(new ClientItemUpdateEvent());
+            case JEI_RECIPE -> NeoForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
             case ORE -> NeoForge.EVENT_BUS.post(new ClientOreUpdateEvent());
+            case ITEM -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
+            case RECIPE -> AStages.LOGGER.debug("No other operations required for MarkAsDirty method for recipe restrictions!");
         }
     }
 

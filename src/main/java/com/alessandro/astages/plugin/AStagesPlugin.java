@@ -17,6 +17,7 @@ public interface AStagesPlugin {
     default void reloadAfterScripts(MinecraftServer server) { }
     default void clearClientOnLogin() { }
     default void registerManagers(ManagerContainer container) { }
+    default void attachAttributes(AttributeContainer container) { }
 
     ResourceLocation id();
 }

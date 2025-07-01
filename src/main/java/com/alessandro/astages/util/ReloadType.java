@@ -8,9 +8,14 @@ public enum ReloadType {
     CLIENT_BEFORE(0),
     CLIENT_SYNC(1),
     RELOAD_BEFORE(2),
-    RECIPE(3),
-    ORE(4),
-    ITEM(5);
+    ORE(3),
+    // For JEI!Add commentMore actions
+    JEI_ITEM(4),
+    JEI_RECIPE(5),
+
+    // For MarkAsDirty methods!
+    ITEM(6),
+    RECIPE(7);
 
     public static final IntFunction<ReloadType> BY_ID =
         ByIdMap.continuous(

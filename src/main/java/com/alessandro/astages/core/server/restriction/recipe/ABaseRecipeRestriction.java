@@ -30,6 +30,6 @@ public class ABaseRecipeRestriction<R extends ARestriction<R, U, V>, U, V> exten
 
     @Override
     public void markAsDirty() {
-        PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.RECIPE));
+        PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.JEI_RECIPE));
     }
 }

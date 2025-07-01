@@ -47,9 +47,16 @@ public class ASimpleRestrictionManager {
     }
 
     public static void synchronizeWithServer(ASimpleRestrictionType type, ASimpleRestriction restriction) {
+        synchronizeWithServer(type, restriction, true);
+    }
+    public static void synchronizeWithServerNoUpdate(ASimpleRestrictionType type, ASimpleRestriction restriction) {
+        synchronizeWithServer(type, restriction, false);
+    }
+
+    private static void synchronizeWithServer(ASimpleRestrictionType type, ASimpleRestriction restriction, boolean markAsDirty) {
         switch (type) {
-            case ITEM -> ASimpleElaborator.elaborateItem(restriction);
-            case MOD -> ASimpleElaborator.elaborateMod(restriction);
+            case ITEM -> ASimpleElaborator.elaborateItem(restriction, markAsDirty);
+            case MOD -> ASimpleElaborator.elaborateMod(restriction, markAsDirty);
             case DIMENSION -> ASimpleElaborator.elaborateDimension(restriction);
             case GUI -> ASimpleElaborator.elaborateGui(restriction);
             case ORE -> ASimpleElaborator.elaborateOre(restriction);
@@ -123,6 +130,14 @@ public class ASimpleRestrictionManager {
 
         if (RESTRICTIONS.get(type).isEmpty()) {
             RESTRICTIONS.remove(type);
+        }
+    }
+
+    public static void reloadBeforeScripts() { // BETTER BEFORE!
+        for (var type : RESTRICTIONS.keySet()) {
+            for (var restriction : RESTRICTIONS.get(type)) {
+                synchronizeWithServerNoUpdate(type, restriction);
+            }
         }
     }
 }
