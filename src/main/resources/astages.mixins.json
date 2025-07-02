@@ -10,6 +10,7 @@
     "APlayerEventJS",
     "enchant.AEnchantmentMenu",
     "food.ALivingEntity",
+    "loot.ABlock",
     "loot.ARandomizableContainer",
     "mob.AMob",
     "ore.ABlockStateExtension",
