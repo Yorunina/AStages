@@ -2,6 +2,9 @@ package com.alessandro.astages.simple;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
+import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.SyncOperation;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -59,7 +62,7 @@ public class ASimpleRestrictionManager {
             case MOD -> ASimpleElaborator.elaborateMod(restriction, markAsDirty);
             case DIMENSION -> ASimpleElaborator.elaborateDimension(restriction);
             case GUI -> ASimpleElaborator.elaborateGui(restriction);
-            case ORE -> ASimpleElaborator.elaborateOre(restriction);
+            case ORE -> ASimpleElaborator.elaborateOre(restriction, markAsDirty);
             case STRUCTURE -> ASimpleElaborator.elaborateStructure(restriction);
             case BIOME -> AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
             case TAME -> ASimpleElaborator.elaborateTame(restriction);
@@ -130,6 +133,10 @@ public class ASimpleRestrictionManager {
 
         if (RESTRICTIONS.get(type).isEmpty()) {
             RESTRICTIONS.remove(type);
+        }
+
+        if (type == ASimpleRestrictionType.ORE) {
+            ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.ORE));
         }
     }
 

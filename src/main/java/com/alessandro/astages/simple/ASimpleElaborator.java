@@ -14,16 +14,20 @@ import com.alessandro.astages.util.SyncOperation;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
@@ -59,11 +63,14 @@ public class ASimpleElaborator {
         commonOperations(simple);
     }
 
-    public static void elaborateOre(ASimpleRestriction simple) {
+    public static void elaborateOre(ASimpleRestriction simple, boolean markAsDirty) {
         String[] splice = simple.object.split("//");
         BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[0]))).defaultBlockState();
         var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[1]))).defaultBlockState();
-        ARestrictionManager.ORE_INSTANCE.addRestriction(new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement)));
+
+        var restriction = new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement));
+        ARestrictionManager.ORE_INSTANCE.addRestriction(restriction);
+        if (markAsDirty) { restriction.markAsDirty(); }
 
         commonOperations(simple);
     }
@@ -117,31 +124,31 @@ public class ASimpleElaborator {
     }
 
     public static int commandItem(CommandContext<CommandSourceStack> c) {
-        return addRestrictionForType(ASimpleRestrictionType.ITEM, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ITEM, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
     }
 
     public static int commandMod(CommandContext<CommandSourceStack> c) {
-        return addRestrictionForType(ASimpleRestrictionType.MOD, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "mod"));
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.MOD, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "mod"));
     }
 
     public static int commandDimension(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(ASimpleRestrictionType.DIMENSION, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), DimensionArgument.getDimension(c, "dimension").dimension().location().toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.DIMENSION, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), DimensionArgument.getDimension(c, "dimension").dimension().location().toString());
     }
 
     public static int commandGui(CommandContext<CommandSourceStack> c) {
-        return addRestrictionForType(ASimpleRestrictionType.GUI, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "gui"));
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.GUI, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "gui"));
     }
 
     public static int commandOre(CommandContext<CommandSourceStack> c) {
-        return addRestrictionForType(ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
-            Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "ore").getState().getBlock())) +
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
+            Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
                 "//" +
                 Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock()))
         );
     }
 
     public static int commandStructure(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), ResourceArgument.getStructure(c, "structure").getType().toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), ResourceArgument.getStructure(c, "structure").getType().toString());
     }
 
     public static int commandBiome(CommandContext<CommandSourceStack> ignoredC) {
@@ -149,15 +156,15 @@ public class ASimpleElaborator {
     }
 
     public static int commandTame(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(ASimpleRestrictionType.TAME, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(ResourceArgument.getSummonableEntityType(c, "tame").value())).toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.TAME, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(ResourceArgument.getSummonableEntityType(c, "tame").value())).toString());
     }
 
     public static int commandMount(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(ASimpleRestrictionType.MOUNT, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(ResourceArgument.getSummonableEntityType(c, "mount").value())).toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.MOUNT, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(ResourceArgument.getSummonableEntityType(c, "mount").value())).toString());
     }
 
     public static int commandRecipe(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(ASimpleRestrictionType.RECIPE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.RECIPE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
             Objects.requireNonNull(Objects.requireNonNull(ForgeRegistries.RECIPE_TYPES.getKey(ResourceLocationArgument.getRecipe(c, "recipe").getType())).toString()) +
                 "//" +
                 Objects.requireNonNull(ResourceLocationArgument.getRecipe(c, "recipe").getId().toString())
@@ -165,12 +172,16 @@ public class ASimpleElaborator {
     }
 
     public static int commandArmor(CommandContext<CommandSourceStack> c) {
-        return addRestrictionForType(ASimpleRestrictionType.ARMOR, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ARMOR, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(ItemArgument.getItem(c, "item").getItem())).toString());
     }
 
-    private static int addRestrictionForType(ASimpleRestrictionType type, String id, String stage, String object) {
+    private static int addRestrictionForType(@Nullable ServerPlayer player, ASimpleRestrictionType type, String id, String stage, String object) {
         ASimpleRestrictionManager.addRestriction(type, "simple/" + id, stage, object);
         commonCommandOperations(id);
+
+        if (player != null) {
+            player.sendSystemMessage(Component.literal("Successfully added restriction with id " + id + " and type " + type + "!").withStyle(ChatFormatting.GREEN));
+        }
 
         return 1;
     }

@@ -27,7 +27,7 @@ public class AStagesSimpleRestrictionsCommands {
                 .then(Commands.literal("mod").then(Commands.argument("mod", StringArgumentType.string()).executes(ASimpleElaborator::commandMod)))
                 .then(Commands.literal("dimension").then(Commands.argument("dimension", DimensionArgument.dimension()).executes(ASimpleElaborator::commandDimension)))
                 .then(Commands.literal("gui").then(Commands.argument("gui", StringArgumentType.string()).executes(ASimpleElaborator::commandGui)))
-                .then(Commands.literal("ore").then(Commands.argument("ore", BlockStateArgument.block(context)).then(Commands.argument("replacement", BlockStateArgument.block(context))).executes(ASimpleElaborator::commandOre)))
+                .then(Commands.literal("ore").then(Commands.argument("original", BlockStateArgument.block(context)).then(Commands.argument("replacement", BlockStateArgument.block(context)).executes(ASimpleElaborator::commandOre))))
                 .then(Commands.literal("structure").then(Commands.argument("structure", ResourceKeyArgument.key(Registries.STRUCTURE)).executes(ASimpleElaborator::commandStructure)))
                 .then(Commands.literal("biome").then(Commands.argument("biome", StringArgumentType.string()).executes(ASimpleElaborator::commandBiome)))
                 .then(Commands.literal("tame").then(Commands.argument("tame", ResourceArgument.resource(context, ForgeRegistries.ENTITY_TYPES.getRegistryKey())).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ASimpleElaborator::commandTame)))
