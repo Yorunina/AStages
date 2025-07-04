@@ -35,7 +35,6 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.BLOCK_BREAKING)
             .addAttribute(Attributes.BLOCK_INTERACTIONS)
             // .addAttribute(Attributes.IGNORE_BLOCKS_AROUND)
-            .addAttribute(Attributes.CURIO_EQUIPPING)
             .addAttribute(Attributes.STORING_IN_CONTAINERS)
 
             .addAttribute(Attributes.PICK_UP_DELAY)
@@ -48,8 +47,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.Item.MINING_MESSAGE)
             .addAttribute(Attributes.Item.PLACING_MESSAGE)
             .addAttribute(Attributes.Item.JADE_ITEM_MESSAGE)
-            .addAttribute(Attributes.Item.JADE_BLOCK_MESSAGE)
-            .addAttribute(Attributes.Item.CURIOS_MESSAGE);
+            .addAttribute(Attributes.Item.JADE_BLOCK_MESSAGE);
 
         var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(ABaseItemRestriction.class, null);
 
@@ -187,12 +185,6 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
 //    }
 
     @SuppressWarnings("unused")
-    public ABaseItemRestriction<R, U> setCanBeEquippedInCurioSlots(boolean value) {
-        set(Attributes.CURIO_EQUIPPING, value);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setCanBeStoredInContainers(boolean value) {
         set(Attributes.STORING_IN_CONTAINERS, value);
         return this;
@@ -249,12 +241,6 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setJadeBlockMessage(Function<ItemStack, Component> message) {
         set(Attributes.Item.JADE_BLOCK_MESSAGE, message);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public ABaseItemRestriction<R, U> setCurioMessage(Function<ItemStack, Component> message) {
-        set(Attributes.Item.CURIOS_MESSAGE, message);
         return this;
     }
 
