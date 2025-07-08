@@ -31,6 +31,7 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
+jarJar.enable()
 
 minecraft {
     mappings channel: 'parchment', version: '2023.09.03-1.20.1'
@@ -157,7 +158,7 @@ dependencies {
 
     // Mekanism
     // compileOnly fg.deobf("curse.maven:mekanism-268560:5662583")
-    compileOnly fg.deobf("curse.maven:mekanism-268560:5662583")
+    implementation(fg.deobf("curse.maven:mekanism-268560:5662583"))
 
     // Thermal
     // implementation fg.deobf("curse.maven:thermal-expansion-69163:5372749")
@@ -180,8 +181,11 @@ dependencies {
     // implementation fg.deobf("curse.maven:create-328085:5838779")
 
     // Multiblocked 2
-    compileOnly fg.deobf("curse.maven:multiblocked2-1104057:6643101")
-    compileOnly fg.deobf("curse.maven:ldlib-626676:6497741")
+    // compileOnly fg.deobf("curse.maven:multiblocked2-1104057:6643101")
+    // compileOnly fg.deobf("curse.maven:ldlib-626676:6497741")
+
+    // Potions master
+    implementation fg.deobf("curse.maven:potionsmaster-356801:4722415")
 
     // Fast Workbench
     compileOnly fg.deobf("curse.maven:fastworkbench-288885:5101229")

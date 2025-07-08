@@ -40,6 +40,12 @@ public class AClientOreManager extends AClientManager<AClientOreRestriction, Ore
         return getRestrictionFromCache(CACHE, state);
     }
 
+    public BlockState getReplacement(BlockState original) {
+        var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(original);
+
+        return restriction != null ? restriction.getReplacement() : original;
+    }
+
     @Override
     public void removeRestriction(String id) {
         super.removeRestriction(id);

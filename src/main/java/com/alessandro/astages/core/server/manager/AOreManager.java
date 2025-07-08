@@ -4,9 +4,9 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AOreRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
@@ -40,6 +40,12 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     @Override
     public AOreRestriction getRestriction(Player player, BlockState state) {
         return getRestrictionFromCache(CACHE, state, player);
+    }
+
+    public BlockState getReplacement(Player player, BlockState original) {
+        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player, original);
+
+        return restriction != null ? restriction.getReplacement() : original;
     }
 
     @Override
