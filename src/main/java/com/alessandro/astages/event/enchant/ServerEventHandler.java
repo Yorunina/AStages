@@ -14,10 +14,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -25,7 +25,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class ServerEventHandler {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (!CommonEventSettings.requireSlotCheck()) { return; }
 
@@ -37,17 +37,27 @@ public class ServerEventHandler {
                 for (int i = 0; i < inventory.getContainerSize(); i++) {
                     ItemStack slotContent = inventory.getItem(i);
 
-                    if (!slotContent.isEnchanted() || slotContent.getItem() instanceof EnchantedBookItem) {
-                        var stack = removeAllRestrictedEnchantmentFromStack(player, slotContent);
-                        inventory.setItem(i, stack);
+                    if (slotContent.getItem() instanceof EnchantedBookItem) {
+                        var parsedBook = removeAllRestrictedEnchantmentFromEnchantedBook(player, slotContent);
+
+                        if (!parsedBook.isEmpty()) {
+                            inventory.setItem(CommonEventSettings.getSlotChanged(), parsedBook);
+                        }
+                    } else if (slotContent.isEnchanted()) {
+                        removeAllRestrictedEnchantmentFromStack(player, slotContent);
                     }
                 }
             } else {
                 ItemStack slotContent = inventory.getItem(CommonEventSettings.getSlotChanged());
 
-                if (!slotContent.isEnchanted() || slotContent.getItem() instanceof EnchantedBookItem) {
-                    var stack = removeAllRestrictedEnchantmentFromStack(player, slotContent);
-                    inventory.setItem(CommonEventSettings.getSlotChanged(), stack);
+                if (slotContent.getItem() instanceof EnchantedBookItem) {
+                    var parsedBook = removeAllRestrictedEnchantmentFromEnchantedBook(player, slotContent);
+
+                    if (!parsedBook.isEmpty()) {
+                        inventory.setItem(CommonEventSettings.getSlotChanged(), parsedBook);
+                    }
+                } else if (slotContent.isEnchanted()) {
+                    removeAllRestrictedEnchantmentFromStack(player, slotContent);
                 }
             }
         }
@@ -108,19 +118,54 @@ public class ServerEventHandler {
         return false;
     }
 
-    public static @NotNull ItemStack removeAllRestrictedEnchantmentFromStack(Player player, ItemStack itemStack) {
-        ItemStack newStack = itemStack.copy();
-        newStack.removeTagKey("Enchantments"); // Items
-        newStack.removeTagKey("StoredEnchantments"); // Books
+    public static ItemStack removeAllRestrictedEnchantmentFromEnchantedBook(Player player, ItemStack enchantedBook) {
+        if (enchantedBook.isEmpty()) { return ItemStack.EMPTY; }
 
-        EnchantmentHelper.getEnchantments(itemStack).forEach(((enchantment, level) -> {
-            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(enchantment, level));
+        var enchantments = EnchantmentHelper.getEnchantments(enchantedBook);
 
-            if (restriction == null || restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
-                newStack.enchant(enchantment, level);
+        var atLeastOneRemoved = false;
+        var iterator = enchantments.entrySet().iterator();
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(entry.getKey(), entry.getValue()));
+
+            if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
+                iterator.remove();
+                atLeastOneRemoved = true;
             }
-        }));
+        }
 
-        return newStack;
+        if (atLeastOneRemoved) {
+            var newStack = enchantedBook.copy();
+
+            newStack.removeTagKey("StoredEnchantments");
+            enchantments.forEach(newStack::enchant);
+
+            return newStack;
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    public static void removeAllRestrictedEnchantmentFromStack(Player player, ItemStack itemStack) {
+        if (itemStack.isEmpty()) { return; }
+
+        var enchantments = EnchantmentHelper.getEnchantments(itemStack);
+
+        var atLeastOneRemoved = false;
+        var iterator = enchantments.entrySet().iterator();
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(entry.getKey(), entry.getValue()));
+
+            if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
+                iterator.remove();
+                atLeastOneRemoved = true;
+            }
+        }
+
+        if (atLeastOneRemoved) {
+            EnchantmentHelper.setEnchantments(enchantments, itemStack);
+        }
     }
 }
