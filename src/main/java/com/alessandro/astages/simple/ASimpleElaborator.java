@@ -11,6 +11,7 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.SyncOperation;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -68,9 +69,22 @@ public class ASimpleElaborator {
         BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[0]))).defaultBlockState();
         var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[1]))).defaultBlockState();
 
-        var restriction = new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement));
-        ARestrictionManager.ORE_INSTANCE.addRestriction(restriction);
-        if (markAsDirty) { restriction.markAsDirty(); }
+        if (Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue() != null) { // Only for suppressing unboxing error
+            // For backward compatibility
+            boolean affectsPlayerActions;
+            if (splice.length == 2) {
+                affectsPlayerActions = Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue();
+            } else {
+                affectsPlayerActions = Boolean.parseBoolean(splice[2]);
+            }
+
+            var restriction = new AOreRestriction(simple.id, simple.stage).restrict(new OreWrapper(original, replacement));
+            ARestrictionManager.ORE_INSTANCE.addRestriction(restriction);
+            if (affectsPlayerActions != Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue()) { restriction.set(Attributes.AFFECTS_PLAYER_ACTIONS, affectsPlayerActions); }
+            if (markAsDirty) {
+                restriction.markAsDirty();
+            }
+        }
 
         commonOperations(simple);
     }
@@ -139,11 +153,23 @@ public class ASimpleElaborator {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.GUI, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), StringArgumentType.getString(c, "gui"));
     }
 
+    public static int commandOreWithDefaultValue(CommandContext<CommandSourceStack> c) {
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
+            Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
+                "//" +
+                Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
+                "//" +
+                Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue()
+        );
+    }
+
     public static int commandOre(CommandContext<CommandSourceStack> c) {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
             Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
                 "//" +
-                Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock()))
+                Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
+                "//" +
+                BoolArgumentType.getBool(c, "affects_player_actions")
         );
     }
 

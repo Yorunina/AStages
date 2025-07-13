@@ -47,6 +47,7 @@ public class Attributes {
     // public static final Attribute<Boolean> HURT = Attribute.create("hurt", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> APPLY_EVERYWHERE = Attribute.create("apply_everywhere", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> STORING_IN_CONTAINERS = Attribute.create("storing_in_containers", AttributeTypes.BOOLEAN, false);
+    public static final Attribute<Boolean> AFFECTS_PLAYER_ACTIONS = Attribute.create("affects_player_actions", AttributeTypes.BOOLEAN, false);
 
     public static final Attribute<Integer> PICK_UP_DELAY = Attribute.create("pick_up_delay", AttributeTypes.INTEGER, 60);
     public static final Attribute<Integer> AGE = Attribute.create("age", AttributeTypes.INTEGER, null);
