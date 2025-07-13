@@ -1,7 +1,9 @@
 package com.alessandro.astages.mixin.ore;
 
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +15,10 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public class ABlockBehaviour {
     @ModifyArg(method = "getDestroyProgress", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getDestroyProgress(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F"))
     public BlockState astages$getDestroyProgress(BlockState original, @Local(argsOnly = true) Player player) {
-        return ARestrictionManager.ORE_INSTANCE.getReplacement(player, original);
+        if (player instanceof ServerPlayer serverPlayer) {
+            return ARestrictionManager.ORE_INSTANCE.getReplacement(serverPlayer, original);
+        } else {
+            return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
+        }
     }
 }
