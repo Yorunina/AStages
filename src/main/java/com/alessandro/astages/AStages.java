@@ -2,6 +2,7 @@ package com.alessandro.astages;
 
 import com.alessandro.astages.block.ModBlocks;
 import com.alessandro.astages.command.argument.ModArguments;
+import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.item.ModItems;
@@ -32,6 +33,7 @@ public class AStages {
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AStagesClient.SPEC, "astages-client.toml");
         ModNetworking.register();
 
         APluginFinder.getAllPlugins();
