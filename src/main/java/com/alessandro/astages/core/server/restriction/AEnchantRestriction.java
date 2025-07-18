@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
@@ -16,13 +18,21 @@ public class AEnchantRestriction extends ARestriction<AEnchantRestriction, Encha
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.ANVIL)
             .addAttribute(Attributes.ENCHANTING_TABLE)
             .addAttribute(Attributes.STORING_IN_INVENTORY)
 
             .addAttribute(Attributes.COMPARE_CONDITION, true)
             .addAttribute(Attributes.LEVEL, true);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AEnchantRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

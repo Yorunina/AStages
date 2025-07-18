@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
@@ -36,7 +37,7 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.GENERIC_INTERACTIONS)
             .addAttribute(Attributes.EXPLOSIONS_AFFECT_BLOCKS)
             .addAttribute(Attributes.EXPLOSIONS_AFFECT_ENTITIES)
@@ -47,6 +48,14 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
 
             .addAttribute(Attributes.Region.INTERACT_MESSAGE)
             .addAttribute(Attributes.Region.COMMAND_MESSAGE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(ARegionRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
@@ -47,9 +49,17 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.HAS_REPLACER)
             .addAttribute(Attributes.APPLY_EVERYWHERE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(ALootRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

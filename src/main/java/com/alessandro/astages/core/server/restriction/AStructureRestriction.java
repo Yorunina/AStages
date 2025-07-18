@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
@@ -30,7 +31,7 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.ATTACKING)
             .addAttribute(Attributes.GENERIC_INTERACTIONS)
             .addAttribute(Attributes.ENTERING)
@@ -44,6 +45,14 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
             .addAttribute(Attributes.Structure.ENTER_MESSAGE)
             .addAttribute(Attributes.Structure.PLACING_MESSAGE)
             .addAttribute(Attributes.Structure.MINING_MESSAGE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AStructureRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

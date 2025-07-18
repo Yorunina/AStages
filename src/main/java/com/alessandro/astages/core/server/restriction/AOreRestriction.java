@@ -1,6 +1,7 @@
 package com.alessandro.astages.core.server.restriction;
 
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
@@ -26,8 +27,16 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.AFFECTS_PLAYER_ACTIONS);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AOreRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

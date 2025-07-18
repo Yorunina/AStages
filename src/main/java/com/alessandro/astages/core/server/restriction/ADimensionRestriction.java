@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
@@ -27,7 +29,7 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.ALLOW_ACCESS)
             .addAttribute(Attributes.BIDIRECTIONAL)
 
@@ -38,6 +40,14 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
             .addAttribute(Attributes.Dimension.ENTER_MESSAGE)
             .addAttribute(Attributes.Dimension.LEAVE_MESSAGE)
             .addAttribute(Attributes.Dimension.EXPIRED_MESSAGE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(ADimensionRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

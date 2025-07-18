@@ -1,5 +1,7 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import net.minecraft.world.effect.MobEffect;
@@ -17,7 +19,15 @@ public class AEffectRestriction extends ARestriction<AEffectRestriction, MobEffe
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder();
+        var defaultAttributes = AttributeStore.builder();
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AEffectRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override
