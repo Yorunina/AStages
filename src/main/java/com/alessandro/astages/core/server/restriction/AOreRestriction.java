@@ -1,7 +1,6 @@
 package com.alessandro.astages.core.server.restriction;
 
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
@@ -82,6 +81,7 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
         ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.ORE));
     }
 
+    @SuppressWarnings("unused")
     public AOreRestriction setAffectsPlayerActions(boolean value) {
         set(Attributes.AFFECTS_PLAYER_ACTIONS, value);
         return this;

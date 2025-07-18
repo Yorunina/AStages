@@ -1,7 +1,6 @@
 package com.alessandro.astages.core.server.restriction;
 
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
