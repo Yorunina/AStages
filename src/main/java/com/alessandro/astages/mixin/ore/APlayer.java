@@ -10,18 +10,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Player.class)
+@Mixin(value = Player.class)
 public abstract class APlayer {
     @Shadow public abstract boolean hasCorrectToolForDrops(BlockState pState);
 
     @Unique
-    private Player player$self() {
+    private Player self$player() {
         return (Player) (Object) this;
     }
 
-    @Inject(method = "hasCorrectToolForDrops", at = @At("HEAD"), cancellable = true)
-    public void hasCorrectToolForDrop(BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player$self(), state);
+    @Inject(method = "hasCorrectToolForDrops", at = @At("RETURN"), cancellable = true)
+    public void astages$hasCorrectToolForDrops(BlockState original, CallbackInfoReturnable<Boolean> cir) {
+        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(self$player(), original);
 
         if (restriction != null) {
             cir.setReturnValue(hasCorrectToolForDrops(restriction.getReplacement()));

@@ -31,7 +31,8 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
-jarJar.enable()
+// jarJar.enable()
+// jarJar.fromRuntimeConfiguration()
 
 minecraft {
     mappings channel: 'parchment', version: '2023.09.03-1.20.1'
@@ -147,6 +148,8 @@ repositories {
     }
 }
 
+jarJar.enable()
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
@@ -215,8 +218,6 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
 
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.14")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.2-build.18")
@@ -253,7 +254,7 @@ dependencies {
     // implementation fg.deobf("curse.maven:puffish-skills-835091:6359305")
 
     // Mixin Extra
-    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
         jarJar.ranged(it, "[0.4.1,)")
     }
@@ -271,6 +272,8 @@ dependencies {
     // compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
     // Just Enough Resources
     // implementation fg.deobf("curse.maven:just-enough-resources-jer-240630:5057220")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.named('processResources', ProcessResources).configure {
@@ -287,6 +290,10 @@ tasks.named('processResources', ProcessResources).configure {
     }
 }
 
+tasks.jarJar.configure {
+    finalizedBy 'reobfJarJar'
+}
+
 tasks.named('jar', Jar).configure {
     manifest {
         attributes(["Specification-Title"     : mod_id,
@@ -295,8 +302,11 @@ tasks.named('jar', Jar).configure {
                     "Implementation-Title"    : project.name,
                     "Implementation-Version"  : project.jar.archiveVersion,
                     "Implementation-Vendor"   : mod_authors,
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs"            : "${mod_id}.mixins.json"])
     }
+
+    dependsOn tasks.jarJar
 
     finalizedBy 'reobfJar'
 }
