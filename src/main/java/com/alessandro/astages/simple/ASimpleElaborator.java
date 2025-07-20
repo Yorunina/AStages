@@ -19,9 +19,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -173,8 +175,9 @@ public class ASimpleElaborator {
         );
     }
 
+    @SuppressWarnings("all")
     public static int commandStructure(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), ResourceArgument.getStructure(c, "structure").getType().toString());
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), BuiltInRegistries.STRUCTURE_TYPE.getKey(ResourceKeyArgument.getStructure(c, "structure").get().type()).toString());
     }
 
     public static int commandBiome(CommandContext<CommandSourceStack> ignoredC) {
