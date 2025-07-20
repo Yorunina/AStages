@@ -53,6 +53,10 @@ public class AttributeStore extends HashMap<Attribute<?>, Object> {
         return this;
     }
 
+//    public AttributeStore overwrite(AttributeStore other) {
+//        this.putAll(other);
+//    }
+
     @Override
     public String toString() {
         var builder = new StringBuilder();

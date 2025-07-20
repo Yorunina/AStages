@@ -99,6 +99,10 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implem
 
     public abstract boolean isRestricted(V object);
 
+//    public void copyAttributesFrom(@NotNull R other) {
+//        attributes.combineWith(other.allowedAttributes());
+//    }
+
     public String getId() {
         return id;
     }
