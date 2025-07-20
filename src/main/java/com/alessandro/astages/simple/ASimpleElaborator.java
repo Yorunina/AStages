@@ -126,15 +126,7 @@ public class ASimpleElaborator {
     public static void elaborateArmor(ASimpleRestriction simple, boolean markAsDirty) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
         restriction.restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
-        restriction.set(Attributes.HIDING_TOOLTIP, false)
-            .set(Attributes.STORING_IN_INVENTORY, true)
-            .set(Attributes.EQUIPPING, false)
-            .set(Attributes.ATTACKING, true)
-            .set(Attributes.HIDING_JEI, false)
-            .set(Attributes.BLOCK_PLACING, true)
-            .set(Attributes.LEFT_CLICK_INTERACTIONS, true)
-            .set(Attributes.RIGHT_CLICK_INTERACTIONS, true)
-            .set(Attributes.BLOCK_BREAKING, true);
+        restriction.setArmorAttributes();
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         if (markAsDirty) { restriction.markAsDirty(); }

@@ -56,13 +56,14 @@ public class AStagesJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
                 var stack = AStagesUtil.blockToStack(original);
-                var restriction = AClientRestrictionManager.ITEM_INSTANCE.getProperties(stack);
+                var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
+                var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(stack);
 
-                if (restriction != null) {
+                if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
                     tooltip.clear();
 
-                    if (restriction.jadeBlockMessage() != null) {
-                        tooltip.add(restriction.jadeBlockMessage());
+                    if (properties.jadeBlockMessage() != null) {
+                        tooltip.add(properties.jadeBlockMessage());
                     }
                 }
             }
@@ -71,13 +72,14 @@ public class AStagesJadePlugin implements IWailaPlugin {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getProperties(itemEntity.getItem());
+                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(itemEntity.getItem());
+                    var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(itemEntity.getItem());
 
-                    if (restriction != null) {
+                    if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
                         tooltip.clear();
 
-                        if (restriction.jadeItemMessage() != null) {
-                            tooltip.add(restriction.jadeItemMessage());
+                        if (properties.jadeItemMessage() != null) {
+                            tooltip.add(properties.jadeItemMessage());
                         }
                     }
                 }
