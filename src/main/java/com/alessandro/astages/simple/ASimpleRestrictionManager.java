@@ -68,7 +68,7 @@ public class ASimpleRestrictionManager {
             case TAME -> ASimpleElaborator.elaborateTame(restriction);
             case MOUNT -> ASimpleElaborator.elaborateMount(restriction);
             case RECIPE -> ASimpleElaborator.elaborateRecipe(restriction);
-            case ARMOR -> ASimpleElaborator.elaborateArmor(restriction);
+            case ARMOR -> ASimpleElaborator.elaborateArmor(restriction, markAsDirty);
         }
     }
 
