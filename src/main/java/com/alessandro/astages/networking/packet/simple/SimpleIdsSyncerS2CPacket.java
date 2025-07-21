@@ -10,16 +10,16 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
-public class SimpleStagesSyncerS2CPacket {
+public class SimpleIdsSyncerS2CPacket {
     private final Collection<String> ids;
     private final SyncOperation operation;
 
-    public SimpleStagesSyncerS2CPacket(Collection<String> ids, SyncOperation operation) {
+    public SimpleIdsSyncerS2CPacket(Collection<String> ids, SyncOperation operation) {
         this.ids = ids;
         this.operation = operation;
     }
 
-    public SimpleStagesSyncerS2CPacket(FriendlyByteBuf buf) {
+    public SimpleIdsSyncerS2CPacket(FriendlyByteBuf buf) {
         ids = buf.readList(FriendlyByteBuf::readUtf);
         operation = buf.readEnum(SyncOperation.class);
     }

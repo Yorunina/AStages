@@ -8,7 +8,7 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.simple.SimpleStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
 import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.ForPlugins;
@@ -118,7 +118,7 @@ public class ARestrictionManager {
     }
 
     public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, SyncOperation operation) {
-        ModNetworking.sendTo(player, new SimpleStagesSyncerS2CPacket(ids, operation));
+        ModNetworking.sendTo(player, new SimpleIdsSyncerS2CPacket(ids, operation));
     }
 
     public static void reloadAfterScripts() {
