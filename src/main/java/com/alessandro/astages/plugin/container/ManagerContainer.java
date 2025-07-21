@@ -1,4 +1,4 @@
-package com.alessandro.astages.plugin;
+package com.alessandro.astages.plugin.container;
 
 import com.alessandro.astages.store.server.AMinimalManager;
 import net.minecraft.MethodsReturnNonnullByDefault;

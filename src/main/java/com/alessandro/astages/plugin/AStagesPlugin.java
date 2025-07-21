@@ -1,5 +1,7 @@
 package com.alessandro.astages.plugin;
 
+import com.alessandro.astages.plugin.container.AttributeContainer;
+import com.alessandro.astages.plugin.container.ManagerContainer;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;

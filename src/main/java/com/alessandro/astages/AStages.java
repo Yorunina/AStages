@@ -8,6 +8,8 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.item.ModItems;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.plugin.*;
+import com.alessandro.astages.plugin.container.AttributeContainer;
+import com.alessandro.astages.plugin.container.ManagerContainer;
 import com.alessandro.astages.store.AttributeStore;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;

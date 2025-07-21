@@ -24,6 +24,8 @@ public enum ARestrictionType {
     REGION,
     LOOT;
 
+    // TODO: Add ENCHANTMENTS!
+
     public String getId() {
         return toString().toLowerCase(Locale.ROOT);
     }
