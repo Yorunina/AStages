@@ -1,6 +1,7 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
@@ -44,6 +45,12 @@ public class ModNetworking {
                 .encoder(StageDataSyncS2CPacket::toBytes)
                 .consumerMainThread(StageDataSyncS2CPacket::handle)
                 .add();
+
+        net.messageBuilder(StageSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(StageSyncerS2CPacket::new)
+            .encoder(StageSyncerS2CPacket::toBytes)
+            .consumerMainThread(StageSyncerS2CPacket::handle)
+            .add();
 
         // ITEMS
         net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)

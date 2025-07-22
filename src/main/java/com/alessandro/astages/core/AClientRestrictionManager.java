@@ -25,6 +25,8 @@ public class AClientRestrictionManager {
     public static final Set<String> SERVER_STAGES = new HashSet<>();
 
     @Info("For automatic command completion")
+    public static final Set<String> ALL_STAGES = new HashSet<>();
+    @Info("For automatic command completion")
     public static final Set<String> DIMENSION_IDS = new HashSet<>();
     @Info("For automatic command completion")
     public static final Set<String> SIMPLE_IDS = new HashSet<>();
