@@ -1,5 +1,6 @@
 package com.alessandro.astages.util;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.config.AStagesCommon;
@@ -32,6 +33,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AStagesUtil {
+    @SuppressWarnings("removal")
+    public static ResourceLocation fromNamespaceAndPath(String path) {
+        return new ResourceLocation(AStages.MODID, path);
+    }
+
+    @SuppressWarnings("removal")
+    public static ResourceLocation parse(String location) {
+        return new ResourceLocation(location);
+    }
+
     public static void updateSelectedSlot(Player player) {
         updateSelectedSlot((ServerPlayer) player);
     }

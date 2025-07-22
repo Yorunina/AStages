@@ -7,6 +7,7 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.integration.Mods;
+import com.alessandro.astages.util.AStagesUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 @JeiPlugin
 public class ARecipeStagesJEIPlugin implements IModPlugin {
     private IJeiRuntime runtime;
-    private static final ResourceLocation PLUGIN_ID = new ResourceLocation(AStages.MODID, "recipe_jei");
+    private static final ResourceLocation PLUGIN_ID = AStagesUtil.fromNamespaceAndPath("recipe_jei");
 
     public ARecipeStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;

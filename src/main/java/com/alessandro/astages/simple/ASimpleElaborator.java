@@ -10,6 +10,7 @@ import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.SyncOperation;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -25,7 +26,6 @@ import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -35,11 +35,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("removal")
 @ParametersAreNonnullByDefault
 public class ASimpleElaborator {
     public static void elaborateItem(ASimpleRestriction simple, boolean markAsDirty) {
-        var restriction = new AItemRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
+        var restriction = new AItemRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(AStagesUtil.parse(simple.object))));
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
         if (markAsDirty ) { restriction.markAsDirty(); }
 
@@ -55,21 +54,21 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateDimension(ASimpleRestriction simple) {
-        ARestrictionManager.DIMENSION_INSTANCE.addRestriction(new ADimensionRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
+        ARestrictionManager.DIMENSION_INSTANCE.addRestriction(new ADimensionRestriction(simple.id, simple.stage).restrict(AStagesUtil.parse(simple.object)));
 
         commonOperations(simple);
     }
 
     public static void elaborateGui(ASimpleRestriction simple) {
-        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.MENU_TYPES.getValue(new ResourceLocation(simple.object)))));
+        ARestrictionManager.SCREEN_INSTANCE.addRestriction(new AScreenRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.MENU_TYPES.getValue(AStagesUtil.parse(simple.object)))));
 
         commonOperations(simple);
     }
 
     public static void elaborateOre(ASimpleRestriction simple, boolean markAsDirty) {
         String[] splice = simple.object.split("//");
-        BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[0]))).defaultBlockState();
-        var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splice[1]))).defaultBlockState();
+        BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(AStagesUtil.parse(splice[0]))).defaultBlockState();
+        var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(AStagesUtil.parse(splice[1]))).defaultBlockState();
 
         if (Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue() != null) { // Only for suppressing unboxing error
             // For backward compatibility
@@ -92,7 +91,7 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateStructure(ASimpleRestriction simple) {
-        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(new ResourceLocation(simple.object)));
+        ARestrictionManager.STRUCTURE_INSTANCE.addRestriction(new AStructureRestriction(simple.id, simple.stage).restrict(AStagesUtil.parse(simple.object)));
 
         commonOperations(simple);
     }
@@ -103,21 +102,21 @@ public class ASimpleElaborator {
     }
 
     public static void elaborateTame(ASimpleRestriction simple) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AStagesUtil.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
 
         commonOperations(simple);
     }
 
     public static void elaborateMount(ASimpleRestriction simple) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AStagesUtil.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
 
         commonOperations(simple);
     }
 
     public static void elaborateRecipe(ASimpleRestriction simple) {
         String[] splice = simple.object.split("//");
-        var type = ForgeRegistries.RECIPE_TYPES.getValue(new ResourceLocation(splice[0]));
-        var id = new ResourceLocation(splice[1]);
+        var type = ForgeRegistries.RECIPE_TYPES.getValue(AStagesUtil.parse(splice[0]));
+        var id = AStagesUtil.parse(splice[1]);
         ARestrictionManager.RECIPE_INSTANCE.addRestriction(new ARecipeRestriction(simple.id, simple.stage).restrict(new RecipeWrapper(type, id)));
 
         commonOperations(simple);
@@ -125,7 +124,7 @@ public class ASimpleElaborator {
 
     public static void elaborateArmor(ASimpleRestriction simple, boolean markAsDirty) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
-        restriction.restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(new ResourceLocation(simple.object))));
+        restriction.restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(AStagesUtil.parse(simple.object))));
         restriction.setArmorAttributes();
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);

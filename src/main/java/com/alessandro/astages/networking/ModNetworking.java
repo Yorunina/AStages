@@ -1,9 +1,7 @@
 package com.alessandro.astages.networking;
 
-import com.alessandro.astages.AStages;
-import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
@@ -11,9 +9,10 @@ import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
-import net.minecraft.resources.ResourceLocation;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -31,7 +30,7 @@ public class ModNetworking {
 
     public static void register() {
         SimpleChannel net = NetworkRegistry.ChannelBuilder
-                .named(new ResourceLocation(AStages.MODID, "messages"))
+                .named(AStagesUtil.fromNamespaceAndPath("messages"))
                 .networkProtocolVersion(() -> "1.0")
                 .clientAcceptedVersions(s -> true)
                 .serverAcceptedVersions(s -> true)

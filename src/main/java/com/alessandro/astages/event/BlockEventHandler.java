@@ -2,8 +2,8 @@ package com.alessandro.astages.event;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.BlockStageProvider;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -20,7 +20,7 @@ import java.util.Objects;
 public class BlockEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onAttachedCapabilities(AttachCapabilitiesEvent<BlockEntity> event) {
-        event.addCapability(new ResourceLocation(AStages.MODID, "owners"), new BlockStageProvider());
+        event.addCapability(AStagesUtil.fromNamespaceAndPath("owners"), new BlockStageProvider());
     }
 
 //    @SubscribeEvent(priority = EventPriority.LOWEST)

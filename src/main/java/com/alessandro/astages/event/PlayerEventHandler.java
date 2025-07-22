@@ -7,9 +7,9 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
+import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.SyncOperation;
 import com.alessandro.astages.util.develop.Info;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -45,7 +45,7 @@ public class PlayerEventHandler {
     public static void onAttachedCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             if (!event.getObject().getCapability(PlayerStageProvider.PLAYER_STAGE).isPresent()) {
-                event.addCapability(new ResourceLocation(AStages.MODID, "properties"), new PlayerStageProvider());
+                event.addCapability(AStagesUtil.fromNamespaceAndPath("properties"), new PlayerStageProvider());
             }
         }
     }
