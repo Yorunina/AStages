@@ -17,7 +17,7 @@ public class ALevelChunk {
 
     @ModifyReturnValue(method = "getBlockState", at = @At("RETURN"))
     public BlockState astages$getBlockState(BlockState original) {
-        if (level.isClientSide && AStagesClient.ENABLE_CLIENT_EXPERIMENTAL_SETTINGS.get()) {
+        if (level.isClientSide && AStagesClient.LEVEL_CHUNK_EXPERIMENTAL_SETTINGS.get()) {
             return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
         }
 

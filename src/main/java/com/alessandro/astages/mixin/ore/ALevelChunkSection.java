@@ -5,6 +5,7 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ALevelChunkSection {
     @ModifyReturnValue(method = "getBlockState", at = @At("RETURN"))
     public BlockState astages$getBlockState(BlockState original) {
-        if (AStagesClient.ENABLE_CLIENT_EXPERIMENTAL_SETTINGS.get()) {
+        if (AStagesClient.LEVEL_CHUNK_SECTION_EXPERIMENTAL_SETTINGS.get() && Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT) {
             return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
         }
 
