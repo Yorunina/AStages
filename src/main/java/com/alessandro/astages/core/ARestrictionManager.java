@@ -49,6 +49,7 @@ public class ARestrictionManager {
     public static final ALootManager LOOT_INSTANCE = new ALootManager();
 
     public static Set<String> ALL_STAGES = new HashSet<>();
+    public static Set<String> ALL_IDS = new HashSet<>();
     public static Set<String> ORE_STAGES = new HashSet<>();
     public static Set<String> SIMPLE_IDS = new HashSet<>();
 

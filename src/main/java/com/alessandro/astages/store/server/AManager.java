@@ -64,6 +64,7 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
 
         IDS.put(restriction.getId(), restriction);
         restrictions.add(restriction);
+        ARestrictionManager.ALL_IDS.add(restriction.getId());
         if (considerGlobalStages()) { ARestrictionManager.ALL_STAGES.add(restriction.getStage()); }
     }
 

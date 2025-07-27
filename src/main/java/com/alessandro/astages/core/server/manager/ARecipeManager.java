@@ -115,6 +115,7 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         IDS.put(restriction.getId(), restriction);
         restrictions.add(restriction);
 
+        ARestrictionManager.ALL_IDS.add(restriction.getId());
         ARestrictionManager.ALL_STAGES.add(restriction.getStage());
         return true;
     }
