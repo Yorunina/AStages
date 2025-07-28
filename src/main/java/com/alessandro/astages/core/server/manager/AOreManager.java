@@ -15,6 +15,7 @@ import com.alessandro.astages.util.OrderedMultiMap;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -23,12 +24,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockState> implements ClientSynchronizable {
     private final OrderedMultiMap<BlockState, AOreRestriction> CACHE = OrderedMultiMap.create();
+    private final OrderedMultiMap<Block, AOreRestriction> BLOCK_CACHE = OrderedMultiMap.create();
     public final OrderedMultiMap<BlockState, AOreRestriction> AFFECTS_PLAYER_CACHE = OrderedMultiMap.create();
 
     @Override
     public void reloadBeforeScripts() {
         super.reloadBeforeScripts();
         CACHE.clear();
+        BLOCK_CACHE.clear();
         AFFECTS_PLAYER_CACHE.clear();
     }
 
@@ -38,11 +41,18 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
 
         ARestrictionManager.ORE_STAGES.add(restriction.getStage());
         CACHE.put(restriction.getOriginal(), restriction);
+
+        if (restriction.isEnabled(Attributes.STAGE_ALL_BLOCK_STATES)) {
+            BLOCK_CACHE.put(restriction.getOriginal().getBlock(), restriction);
+        }
     }
 
     @Override
     public AOreRestriction getRestriction(Player player, BlockState state) {
-        return getRestrictionFromCache(CACHE, state, player);
+        var cacheRestriction = getRestrictionFromCache(CACHE, state, player);
+        if (cacheRestriction != null) { return cacheRestriction; }
+
+        return getRestrictionFromCache(BLOCK_CACHE, state.getBlock(), player);
     }
 
     public BlockState getReplacement(Player player, BlockState original) {
@@ -58,7 +68,12 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     }
 
     public void recalculatePlayerActions(AOreRestriction restriction) {
+        BLOCK_CACHE.removeValues(r -> r.getId().equals(restriction.getId()));
         AFFECTS_PLAYER_CACHE.removeValues(r -> r.getId().equals(restriction.getId()));
+
+        if (restriction.isEnabled(Attributes.STAGE_ALL_BLOCK_STATES)) {
+            BLOCK_CACHE.put(restriction.getOriginal().getBlock(), restriction);
+        }
 
         if (restriction.isEnabled(Attributes.AFFECTS_PLAYER_ACTIONS)) {
             AFFECTS_PLAYER_CACHE.put(restriction.getOriginal(), restriction);
@@ -69,6 +84,7 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     public void removeRestriction(String id) {
         super.removeRestriction(id);
         CACHE.removeValues(restriction -> restriction.getId().equals(id));
+        BLOCK_CACHE.removeValues(restriction -> restriction.getId().equals(id));
         AFFECTS_PLAYER_CACHE.removeValues(restriction -> restriction.getId().equals(id));
 
         ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));

@@ -33,6 +33,8 @@ public class AStageManager {
             }
         });
 
+//        ARestrictionManager.reflectAllStagesChangesToClients(null, ARestrictionManager.ALL_STAGES, SyncOperation.ADD);
+
         AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
     }
 
