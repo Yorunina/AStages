@@ -144,7 +144,7 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
 
     @SuppressWarnings("unused")
     public ARegionRestriction setEnableMobSpawning(boolean value) {
-        set(Attributes.GENERIC_INTERACTIONS, value);
+        set(Attributes.MOB_SPAWNING, value);
         return this;
     }
 
