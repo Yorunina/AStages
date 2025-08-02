@@ -12,11 +12,7 @@ public class ABlockModelShaper {
     @ModifyArg(method = "getBlockModel", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"), index = 0)
     public Object astages$getBlockModel(Object key) {
         if (key instanceof BlockState original) {
-            var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(original);
-
-            if (restriction != null) {
-                return restriction.getReplacement();
-            }
+            return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
         }
 
         return key;

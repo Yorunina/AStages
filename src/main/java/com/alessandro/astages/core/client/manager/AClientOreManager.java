@@ -7,6 +7,8 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -48,22 +50,26 @@ public class AClientOreManager extends AClientManager<AClientOreRestriction, Ore
         var cacheRestriction = getRestrictionFromCache(CACHE, state);
         if (cacheRestriction != null) { return cacheRestriction; }
 
-//        if (state.is(Blocks.MANGROVE_LEAVES)) {
-//            AStages.LOGGER.debug(CACHE.toString());
-//            AStages.LOGGER.debug(BLOCK_CACHE.toString());
-//        }
-
         return getRestrictionFromCache(BLOCK_CACHE, state.getBlock());
     }
 
-//    public AClientOreRestriction getRestriction(BlockItem item) {
-//
-//    }
+    public AClientOreRestriction getRestriction(BlockItem item) {
+        var cacheRestriction = getRestrictionFromCache(CACHE, item.getBlock().defaultBlockState());
+        if (cacheRestriction != null) { return cacheRestriction; }
+
+        return getRestrictionFromCache(BLOCK_CACHE, item.getBlock());
+    }
 
     public BlockState getReplacement(BlockState original) {
         var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(original);
 
         return restriction != null ? restriction.getReplacement() : original;
+    }
+
+    public Item getReplacement(BlockItem item) {
+        var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(item);
+
+        return restriction != null ? restriction.getReplacement().getBlock().asItem() : item;
     }
 
     @Override
