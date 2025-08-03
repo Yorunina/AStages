@@ -10,6 +10,8 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ATime;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
+import dev.latvian.mods.kubejs.script.ScriptType;
+import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -19,6 +21,11 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
         }
+    }
+
+    @Override
+    public void registerTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
+        typeWrappers.registerSimple(ATime.class, ATime::of);
     }
 
     @Override
