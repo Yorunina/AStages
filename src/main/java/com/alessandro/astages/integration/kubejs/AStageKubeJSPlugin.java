@@ -25,7 +25,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
     public void registerBindings(BindingsEvent event) {
         if (!Mods.KUBEJS.isLoaded()) return;
 
-        if (event.getType().isServer()) {
+        if (event.getType().isServer() || event.getType().isStartup()) {
             event.add("AStages", AStagesKubeJSUtil.class);
             event.add("Attributes", Attributes.class);
             event.add("ItemAttributes", Attributes.Item.class);
@@ -40,9 +40,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
             event.add("AStagesClient", AStagesClientJSUtil.class);
         }
 
-        if (event.getType().isClient() || event.getType().isServer()) {
-            event.add("AModels", AStagesModelJSUtil.class);
-        }
+        event.add("AModels", AStagesModelJSUtil.class);
     }
 
     @Override
