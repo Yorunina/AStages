@@ -1,6 +1,7 @@
 package com.alessandro.astages.store;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraftforge.registries.DeferredRegister;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -8,6 +9,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class Attribute<T> {
+    private static DeferredRegister<Attribute<?>> deferredRegister;
+
     private final String id;
     private final Class<T> type;
     private final T defaultValue;
@@ -22,8 +25,15 @@ public class Attribute<T> {
         this(id, attributeType.getType(), defaultValue);
     }
 
+    public static DeferredRegister<Attribute<?>> setCurrentDeferredRegister(DeferredRegister<Attribute<?>> deferredRegister) {
+        Attribute.deferredRegister = deferredRegister;
+        return deferredRegister;
+    }
+
     public static <T> Attribute<T> create(String id, AttributeType<T> attributeType, @Nullable T defaultValue) {
-        return new Attribute<>(id, attributeType, defaultValue);
+        var attribute = new Attribute<>(id, attributeType, defaultValue);
+        deferredRegister.register(id, () -> attribute);
+        return attribute;
     }
 
     public String getId() {

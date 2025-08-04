@@ -12,7 +12,9 @@ import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
+import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
+import com.alessandro.astages.store.Attributes;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,7 +22,11 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
 import org.slf4j.Logger;
+
+import java.util.function.Supplier;
 
 @Mod(AStages.MODID)
 @SuppressWarnings("removal")
@@ -29,12 +35,23 @@ public class AStages {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final Stopwatch TIMER = Stopwatch.createUnstarted();
 
+    public static Supplier<IForgeRegistry<Attribute<?>>> ATTRIBUTES_REGISTRY = Attributes.ATTRIBUTES.makeRegistry(RegistryBuilder::new);
+
     public AStages() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
+
+        Attributes.ATTRIBUTES.register(modEventBus);
+        Attributes.Item.ATTRIBUTES.register(modEventBus);
+        Attributes.Pet.ATTRIBUTES.register(modEventBus);
+        Attributes.Structure.ATTRIBUTES.register(modEventBus);
+        Attributes.Screen.ATTRIBUTES.register(modEventBus);
+        Attributes.Dimension.ATTRIBUTES.register(modEventBus);
+        Attributes.Mob.ATTRIBUTES.register(modEventBus);
+        Attributes.Region.ATTRIBUTES.register(modEventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AStagesClient.SPEC, "astages-client.toml");
