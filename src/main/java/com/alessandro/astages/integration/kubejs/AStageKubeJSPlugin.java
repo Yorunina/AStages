@@ -34,13 +34,6 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
 
         if (event.getType().isServer() || event.getType().isStartup()) {
             event.add("AStages", AStagesKubeJSUtil.class);
-            event.add("Attributes", Attributes.class);
-            event.add("ItemAttributes", Attributes.Item.class);
-            event.add("ScreenAttributes", Attributes.Screen.class);
-            event.add("PetAttributes", Attributes.Pet.class);
-            event.add("DimensionAttributes", Attributes.Dimension.class);
-            event.add("StructureAttributes", Attributes.Structure.class);
-            event.add("ATime", ATime.class);
         }
 
         if (event.getType().isClient()) {
@@ -48,6 +41,13 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         }
 
         event.add("AModels", AStagesModelJSUtil.class);
+        event.add("Attributes", Attributes.class);
+        event.add("ItemAttributes", Attributes.Item.class);
+        event.add("ScreenAttributes", Attributes.Screen.class);
+        event.add("PetAttributes", Attributes.Pet.class);
+        event.add("DimensionAttributes", Attributes.Dimension.class);
+        event.add("StructureAttributes", Attributes.Structure.class);
+        event.add("ATime", ATime.class);
     }
 
     @Override
