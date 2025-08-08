@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,8 +45,13 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static ALootRestriction newBuilder() {
+        return new ALootRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.HAS_REPLACER)
             .addAttribute(Attributes.APPLY_EVERYWHERE);

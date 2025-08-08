@@ -5,9 +5,13 @@ import com.alessandro.astages.core.wrapper.CropWrapper;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ACropRestriction extends ARestriction<ACropRestriction, Block, CropWrapper> {
     private Block crop;
 
@@ -15,8 +19,13 @@ public class ACropRestriction extends ARestriction<ACropRestriction, Block, Crop
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static ACropRestriction newBuilder() {
+        return new ACropRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.COMPARE_CONDITION, true)
             .addAttribute(Attributes.AGE, true);

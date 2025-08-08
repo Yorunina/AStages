@@ -4,6 +4,7 @@ import com.alessandro.astages.core.AModelManager;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacket;
 import com.alessandro.astages.store.AModel;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,11 +12,17 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AItemPredicateRestriction extends ABaseItemRestriction<AItemPredicateRestriction, ResourceLocation> {
     private ResourceLocation modelId;
 
     public AItemPredicateRestriction(String id, String stage) {
         super(id, stage);
+    }
+
+    @SuppressWarnings("unused")
+    public static AItemPredicateRestriction newBuilder() {
+        return new AItemPredicateRestriction("null", "null");
     }
 
     @Override

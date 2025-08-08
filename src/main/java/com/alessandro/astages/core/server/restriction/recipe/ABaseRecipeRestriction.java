@@ -14,6 +14,16 @@ public class ABaseRecipeRestriction<R extends ARestriction<R, U, V>, U, V> exten
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static @NotNull ABaseRecipeRestriction<?, ?, ?> newBuilder() {
+        return new ABaseRecipeRestriction<>("null", "null");
+    }
+
+    @Override
+    public boolean isCorrectClassForConfigs(@NotNull ARestriction<?, ?, ?> config) {
+        return config instanceof ABaseRecipeRestriction<?, ?, ?>;
+    }
+
     @Override
     public @NotNull AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder();

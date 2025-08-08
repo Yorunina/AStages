@@ -4,6 +4,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,12 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AItemTagRestriction extends ABaseItemRestriction<AItemTagRestriction, ResourceLocation> {
     private ResourceLocation tag;
     private final List<Item> ignoredItems = new ArrayList<>();
 
     public AItemTagRestriction(String id, String stage) {
         super(id, stage);
+    }
+
+    @SuppressWarnings("unused")
+    public static AItemTagRestriction newBuilder() {
+        return new AItemTagRestriction("null", "null");
     }
 
     @Override

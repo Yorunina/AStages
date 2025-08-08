@@ -10,7 +10,6 @@ import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -24,8 +23,13 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static AOreRestriction newBuilder() {
+        return new AOreRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.AFFECTS_PLAYER_ACTIONS)
             .addAttribute(Attributes.STAGE_ALL_BLOCK_STATES);

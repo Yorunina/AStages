@@ -1,20 +1,24 @@
 package com.alessandro.astages.core.server.restriction;
 
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ATime;
 import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ADimensionRestriction extends ARestriction<ADimensionRestriction, ResourceLocation, ResourceLocation> {
     private final List<ResourceLocation> dimensions = new ArrayList<>();
 
@@ -26,8 +30,13 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static ADimensionRestriction newBuilder() {
+        return new ADimensionRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.ALLOW_ACCESS)
             .addAttribute(Attributes.BIDIRECTIONAL)
@@ -72,12 +81,12 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
     }
 
     @Contract(pure = true)
-    public static @NotNull String getNbtIdForRestrictionId(String restrictionId) {
+    public static String getNbtIdForRestrictionId(String restrictionId) {
         return nbtId + restrictionId;
     }
 
     @Contract(pure = true)
-    public static @NotNull String getNbtAccessForRestrictionId(String restrictionId) {
+    public static String getNbtAccessForRestrictionId(String restrictionId) {
         return nbtAccess + restrictionId;
     }
 
@@ -93,7 +102,7 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
         return this;
     }
 
-    public Integer getMaxStayTimer() {
+    public @Nullable Integer getMaxStayTimer() {
         if (maxStayTimer == null) {
             return null;
         }

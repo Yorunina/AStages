@@ -19,6 +19,16 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static @NotNull ABaseItemRestriction<?, ?> newBuilder() {
+        return new ABaseItemRestriction<>("null", "null");
+    }
+
+    @Override
+    public boolean isCorrectClassForConfigs(@NotNull ARestriction<?, ?, ?> config) {
+        return config instanceof ABaseItemRestriction<?, ?>;
+    }
+
     @Override
     public @NotNull AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()

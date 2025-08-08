@@ -4,13 +4,13 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.TriPredicate;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuType<?>, AbstractContainerMenu> {
     private final List<MenuType<?>> menus = new ArrayList<>();
 
@@ -32,8 +33,13 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static AScreenRestriction newBuilder() {
+        return new AScreenRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.Screen.OPEN_MESSAGE)
             .addAttribute(Attributes.HAS_CHECKER);

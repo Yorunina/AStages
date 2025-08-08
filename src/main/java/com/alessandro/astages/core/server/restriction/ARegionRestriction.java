@@ -10,7 +10,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -35,8 +34,13 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static ARegionRestriction newBuilder() {
+        return new ARegionRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.GENERIC_INTERACTIONS)
             .addAttribute(Attributes.EXPLOSIONS_AFFECT_BLOCKS)

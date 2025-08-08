@@ -14,13 +14,11 @@ public class Attribute<T> {
     private final String id;
     private final Class<T> type;
     private final T defaultValue;
-    private T newDefaultValue;
 
     private Attribute(String id, Class<T> type, @Nullable T defaultValue) {
         this.id = id;
         this.type = type;
         this.defaultValue = defaultValue;
-        newDefaultValue = null;
     }
 
     private Attribute(String id, AttributeType<T> attributeType, @Nullable T defaultValue) {
@@ -38,15 +36,6 @@ public class Attribute<T> {
         return attribute;
     }
 
-    @SuppressWarnings("unused")
-    public void setNewDefaultValue(T newDefaultValue) {
-        this.newDefaultValue = newDefaultValue;
-    }
-
-    public void resetDefaultValue() {
-        this.newDefaultValue = null;
-    }
-
     public String getId() {
         return id;
     }
@@ -56,7 +45,6 @@ public class Attribute<T> {
     }
 
     public @Nullable T getDefaultValue() {
-        if (newDefaultValue != null) { return newDefaultValue; }
         return defaultValue;
     }
 
