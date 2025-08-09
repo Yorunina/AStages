@@ -24,7 +24,8 @@ public class AModRuleCompatibilityLayer {
      * @reason AStages integration
      */
     @Overwrite
-    public boolean hasGameStage(@NotNull Player player, String stage) {
+    public boolean hasGameStage(Player player, String stage) {
+        if (player == null) { return false; }
         var cap = player.getCapability(PlayerStageProvider.PLAYER_STAGE);
 
         if (cap.isPresent()) {
@@ -43,7 +44,8 @@ public class AModRuleCompatibilityLayer {
      * @reason AStages integration
      */
     @Overwrite
-    public void addGameStage(@NotNull Player player, String stage) {
+    public void addGameStage(Player player, String stage) {
+        if (player == null) { return; }
         var cap = player.getCapability(PlayerStageProvider.PLAYER_STAGE);
 
         if (cap.isPresent()) {
@@ -61,7 +63,8 @@ public class AModRuleCompatibilityLayer {
      * @reason AStages integration
      */
     @Overwrite
-    public void removeGameStage(@NotNull Player player, String stage) {
+    public void removeGameStage(Player player, String stage) {
+        if (player == null) { return; }
         var cap = player.getCapability(PlayerStageProvider.PLAYER_STAGE);
 
         if (cap.isPresent()) {
