@@ -42,6 +42,12 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
         return getRestrictionFromCache(CACHE, state, player);
     }
 
+    public BlockState getReplacement(Player player, BlockState original) {
+        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player, original);
+
+        return restriction != null ? restriction.getReplacement() : original;
+    }
+
     @Override
     public void removeRestriction(String id) {
         super.removeRestriction(id);

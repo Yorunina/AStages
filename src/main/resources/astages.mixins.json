@@ -13,6 +13,7 @@
     "loot.ABlock",
     "loot.ARandomizableContainer",
     "mob.AMob",
+    "ore.ABlockBehaviour",
     "ore.ABlockStateExtension",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
@@ -29,6 +30,11 @@
   ],
   "client": [
     "item.AGui",
+    "ore.ABlockColors",
+    "ore.ABlockModelShaper",
+    "ore.AItemColors",
+    "ore.AItemModelShaper",
+    "ore.ASectionCompiler",
     "recipe.minecraft.AStonecutterScreen"
   ],
   "injectors": {
