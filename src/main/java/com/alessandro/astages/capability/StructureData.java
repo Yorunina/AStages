@@ -63,10 +63,10 @@ public class StructureData extends SavedData {
     }
 
     public static StructureData getData(ServerLevel level, String structureId) {
-        return level.getDataStorage().computeIfAbsent(new Factory<>(StructureData::create, StructureData::load), STRUCTURE_ID + structureId);
+        return level.getDataStorage().computeIfAbsent(new Factory<>(StructureData::create, StructureData::load), STRUCTURE_ID + structureId.replace(':', '_'));
     }
 
     public static StructureData getData(MinecraftServer server, String structureId) {
-        return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(StructureData::create, StructureData::load), STRUCTURE_ID + structureId);
+        return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(StructureData::create, StructureData::load), STRUCTURE_ID + structureId.replace(':', '_'));
     }
 }
