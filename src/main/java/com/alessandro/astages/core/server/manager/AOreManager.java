@@ -7,6 +7,7 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
@@ -22,11 +23,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockState> implements ClientSynchronizable {
     private final OrderedMultiMap<BlockState, AOreRestriction> CACHE = OrderedMultiMap.create();
+    public final OrderedMultiMap<BlockState, AOreRestriction> AFFECTS_PLAYER_CACHE = OrderedMultiMap.create();
 
     @Override
     public void reloadBeforeScripts() {
         super.reloadBeforeScripts();
         CACHE.clear();
+        AFFECTS_PLAYER_CACHE.clear();
     }
 
     @Override
@@ -48,10 +51,25 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
         return restriction != null ? restriction.getReplacement() : original;
     }
 
+    public BlockState getReplacementForPlayerActions(Player player, BlockState original) {
+        var restriction = getRestrictionFromCache(AFFECTS_PLAYER_CACHE, original, player);
+
+        return restriction != null ? restriction.getReplacement() : original;
+    }
+
+    public void recalculatePlayerActions(AOreRestriction restriction) {
+        AFFECTS_PLAYER_CACHE.removeValues(r -> r.getId().equals(restriction.getId()));
+
+        if (restriction.isEnabled(Attributes.AFFECTS_PLAYER_ACTIONS)) {
+            AFFECTS_PLAYER_CACHE.put(restriction.getOriginal(), restriction);
+        }
+    }
+
     @Override
     public void removeRestriction(String id) {
         super.removeRestriction(id);
         CACHE.removeValues(restriction -> restriction.getId().equals(id));
+        AFFECTS_PLAYER_CACHE.removeValues(restriction -> restriction.getId().equals(id));
 
         ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
     }

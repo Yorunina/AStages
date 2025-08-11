@@ -17,6 +17,7 @@
     "ore.ABlockStateExtension",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",
+    "ore.event.ABreakEvent",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
     "recipe.minecraft.ACampfireBlock",
     "recipe.minecraft.ACrafterMenu",
