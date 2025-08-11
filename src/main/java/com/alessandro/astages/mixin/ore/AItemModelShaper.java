@@ -13,12 +13,7 @@ public class AItemModelShaper {
     @ModifyArg(method = "getItemModel(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/client/resources/model/BakedModel;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemModelShaper;getItemModel(Lnet/minecraft/world/item/Item;)Lnet/minecraft/client/resources/model/BakedModel;"))
     public Item astages$getItemModel(Item item) {
         if (item instanceof BlockItem blockItem) {
-            var associatedBlockState = blockItem.getBlock().defaultBlockState(); // Try checking all states!
-            var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(associatedBlockState);
-
-            if (restriction != null) {
-                return restriction.getReplacement().getBlock().asItem();
-            }
+            return AClientRestrictionManager.ORE_INSTANCE.getReplacement(blockItem);
         }
 
         return item;
