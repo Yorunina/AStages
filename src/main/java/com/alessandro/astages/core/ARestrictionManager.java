@@ -29,7 +29,7 @@ import java.util.*;
 
 @ParametersAreNonnullByDefault
 public class ARestrictionManager {
-    public static final Map<ARestrictionType, AMinimalManager<?>> ASSOCIATION_MAP = new HashMap<>();
+    private static final Map<ARestrictionType, AMinimalManager<?>> ASSOCIATION_MAP = new HashMap<>();
     @ForPlugins public static final Map<Object, AMinimalManager<?>> EXTERNAL_MANAGERS = new HashMap<>();
     @ForPlugins public static final Map<Class<?>, AttributeStore> ATTACHED_ATTRIBUTES = new HashMap<>();
 
@@ -145,6 +145,10 @@ public class ARestrictionManager {
     @SuppressWarnings("unchecked")
     public static <T> @Nullable T getRestrictionById(String id, ARestrictionType type) {
         return (T) ASSOCIATION_MAP.get(type).getRestriction(id);
+    }
+
+    public static AMinimalManager<?> getManagerFromType(ARestrictionType type) {
+        return ASSOCIATION_MAP.get(type);
     }
 
     @ForPlugins
