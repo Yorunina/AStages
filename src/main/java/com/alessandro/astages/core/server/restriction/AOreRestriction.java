@@ -80,6 +80,7 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
         PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.ORE));
     }
 
+    @SuppressWarnings("unused")
     public AOreRestriction setAffectsPlayerActions(boolean value) {
         set(Attributes.AFFECTS_PLAYER_ACTIONS, value);
         return this;

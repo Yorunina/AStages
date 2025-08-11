@@ -85,6 +85,7 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
         return this;
     }
 
+    @SuppressWarnings("unused")
     public AScreenRestriction setChecker(TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker) {
         this.checker = checker;
         set(Attributes.HAS_CHECKER, true);
