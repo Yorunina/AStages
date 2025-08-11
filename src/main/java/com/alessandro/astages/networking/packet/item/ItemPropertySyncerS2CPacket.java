@@ -1,10 +1,9 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemPropertyRestriction;
-import com.alessandro.astages.networking.ACodes;
 import com.alessandro.astages.networking.AStagesPacket;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -12,13 +11,12 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 @MethodsReturnNonnullByDefault
 public record ItemPropertySyncerS2CPacket(String id, String stage, ItemStack stack, Component hiddenName, Component jadeItemMessage, Component jadeBlockMessage) implements AStagesPacket {
-    public static final CustomPacketPayload.Type<ItemPropertySyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "item_property_syncer_s2c_packet"));
+    public static final CustomPacketPayload.Type<ItemPropertySyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(AStagesUtil.fromNamespaceAndPath("item_property_syncer_s2c_packet"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemPropertySyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, ItemPropertySyncerS2CPacket::id,

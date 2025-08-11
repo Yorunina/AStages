@@ -7,6 +7,7 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.integration.Mods;
+import com.alessandro.astages.util.AStagesUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -35,7 +36,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
 
 
     private IJeiRuntime runtime;
-    private static final ResourceLocation PLUGIN_ID = ResourceLocation.fromNamespaceAndPath(AStages.MODID, "item_jei");
+    private static final ResourceLocation PLUGIN_ID = AStagesUtil.fromNamespaceAndPath("item_jei");
 
     public AItemStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;

@@ -1,16 +1,15 @@
 package com.alessandro.astages.networking.packet;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.networking.AStagesPacket;
+import com.alessandro.astages.util.AStagesUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -21,7 +20,7 @@ import java.util.Set;
 
 @MethodsReturnNonnullByDefault
 public record StageDataSyncS2CPacket(List<String> stages, PlayerStage.Operation operation) implements AStagesPacket {
-    public static final CustomPacketPayload.Type<StageDataSyncS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "stage_data_sync_s2c_packet"));
+    public static final CustomPacketPayload.Type<StageDataSyncS2CPacket> TYPE = new CustomPacketPayload.Type<>(AStagesUtil.fromNamespaceAndPath("stage_data_sync_s2c_packet"));
 
     public static final StreamCodec<ByteBuf, StageDataSyncS2CPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), StageDataSyncS2CPacket::stages,

@@ -1,5 +1,6 @@
 package com.alessandro.astages.util;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.AProvider;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.config.AStagesCommon;
@@ -31,6 +32,14 @@ import java.util.UUID;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AStagesUtil {
+    public static ResourceLocation fromNamespaceAndPath(String path) {
+        return ResourceLocation.fromNamespaceAndPath(AStages.MODID, path);
+    }
+
+    public static ResourceLocation parse(String location) {
+        return ResourceLocation.parse(location);
+    }
+
     public static void updateSelectedSlot(Player player) {
         updateSelectedSlot((ServerPlayer) player);
     }

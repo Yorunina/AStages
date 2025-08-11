@@ -1,15 +1,14 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -24,7 +23,7 @@ public record RequestItemPropertyC2SPacket(String id, String stage, ItemStack st
     private static final Function<String, RuntimeException> EXCEPTION = id -> new RuntimeException("Illegal identifier synchronization: " + id + " de-synchronized between server and client!");
     private static final Function<String, RuntimeException> NULL_EXCEPTION = id -> new NullPointerException("Illegal null synchronization: " + id + " not found on server!");
 
-    public static final CustomPacketPayload.Type<RequestItemPropertyC2SPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "request_item_property_c2s_packet"));
+    public static final CustomPacketPayload.Type<RequestItemPropertyC2SPacket> TYPE = new CustomPacketPayload.Type<>(AStagesUtil.fromNamespaceAndPath("request_item_property_c2s_packet"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RequestItemPropertyC2SPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, RequestItemPropertyC2SPacket::id,

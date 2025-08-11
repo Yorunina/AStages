@@ -1,18 +1,17 @@
 package com.alessandro.astages.networking.packet.item;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -22,7 +21,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public record ItemSyncerS2CPacket(String id, String stage, List<Item> items, boolean renderItemName, boolean hideTooltip, boolean hideInJei) implements AStagesPacket {
-    public static final CustomPacketPayload.Type<ItemSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "item_syncer_s2c_packet"));
+    public static final CustomPacketPayload.Type<ItemSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(AStagesUtil.fromNamespaceAndPath("item_syncer_s2c_packet"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemSyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, ItemSyncerS2CPacket::id,

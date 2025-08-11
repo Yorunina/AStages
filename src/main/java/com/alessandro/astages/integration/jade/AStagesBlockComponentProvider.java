@@ -35,7 +35,7 @@ public enum AStagesBlockComponentProvider implements IBlockComponentProvider, IS
     @Contract(pure = true)
     @Override
     public ResourceLocation getUid() {
-        return ResourceLocation.fromNamespaceAndPath("astages", "block_component_provider");
+        return AStagesUtil.fromNamespaceAndPath("block_component_provider");
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.alessandro.astages.networking.packet.mob;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,7 +14,6 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -24,7 +23,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public record MobSyncerS2CPacket(String id, String stage, List<EntityType<?>> types, Component jadeMobMessage) implements AStagesPacket {
-    public static final CustomPacketPayload.Type<MobSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "mob_syncer_s2c_packet"));
+    public static final CustomPacketPayload.Type<MobSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(AStagesUtil.fromNamespaceAndPath("mob_syncer_s2c_packet"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MobSyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, MobSyncerS2CPacket::id,
