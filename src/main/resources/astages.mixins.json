@@ -16,6 +16,8 @@
     "ore.ABlock",
     "ore.ABlockBehaviour",
     "ore.ABlockStateExtension",
+    "ore.ALevelChunk",
+    "ore.ALevelChunkSection",
     "ore.ALightEngine",
     "ore.APlayer",
     "ore.AServerPlayerGameMode",

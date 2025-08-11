@@ -1,0 +1,21 @@
+package com.alessandro.astages.mixin.ore;
+
+import com.alessandro.astages.config.AStagesClient;
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+@Mixin(LevelChunkSection.class)
+public class ALevelChunkSection {
+    @ModifyReturnValue(method = "getBlockState", at = @At("RETURN"))
+    public BlockState astages$getBlockState(BlockState original) {
+        if (AStagesClient.ENABLE_CLIENT_EXPERIMENTAL_SETTINGS.get()) {
+            return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
+        }
+
+        return original;
+    }
+}
