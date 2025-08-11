@@ -4,6 +4,8 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
+import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.develop.Info;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -22,6 +24,26 @@ public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Ite
     @Override
     public AItemRestriction restrict(Item item) {
         items.add(item);
+
+        return this;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    @Info("Utility method used to maintain consistency across multiple implementations.")
+    public AItemRestriction setArmorAttributes() {
+        set(Attributes.HIDING_TOOLTIP, false);
+        set(Attributes.STORING_IN_INVENTORY, true);
+        set(Attributes.STORING_IN_CONTAINERS, true);
+        set(Attributes.EQUIPPING, false);
+        set(Attributes.ATTACKING, true);
+        set(Attributes.HIDING_JEI, false);
+        set(Attributes.BLOCK_PLACING, true);
+        set(Attributes.LEFT_CLICK_INTERACTIONS, true);
+        set(Attributes.RIGHT_CLICK_INTERACTIONS, true);
+        set(Attributes.BLOCK_BREAKING, true);
+        set(Attributes.PICKING_UP, true);
+        set(Attributes.RENDERING_NAME, true);
+//        set(Attributes.);
 
         return this;
     }
