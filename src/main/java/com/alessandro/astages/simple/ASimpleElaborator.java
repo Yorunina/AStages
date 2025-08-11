@@ -25,11 +25,10 @@ import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.StructureType;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -172,7 +171,15 @@ public class ASimpleElaborator {
 
     @SuppressWarnings("all")
     public static int commandStructure(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), BuiltInRegistries.STRUCTURE_TYPE.getKey((StructureType<?>) ResourceKeyArgument.getStructure(c, "structure")).toString());
+        var player = c.getSource().getPlayer();
+        if (player == null) { return 0; }
+        var server = c.getSource().getPlayer().getServer();
+        if (server == null) { return 0; }
+        var level = server.getLevel(c.getSource().getPlayer().level().dimension());
+        if (level == null) { return 0; }
+
+        var structureId = level.registryAccess().registry(Registries.STRUCTURE).get().getHolderOrThrow(ResourceKeyArgument.getStructure(c, "structure").getKey()).getKey().registry();
+        return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), structureId.toString());
     }
 
     public static int commandBiome(CommandContext<CommandSourceStack> ignoredC) {
