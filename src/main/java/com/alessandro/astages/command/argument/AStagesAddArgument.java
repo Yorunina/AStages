@@ -1,6 +1,7 @@
 package com.alessandro.astages.command.argument;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -42,7 +43,7 @@ public class AStagesAddArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, SuggestionsBuilder builder) {
-        var toReturn = new HashSet<>(ARestrictionManager.ALL_STAGES);
+        var toReturn = new HashSet<>(AClientRestrictionManager.ALL_STAGES);
         ClientPlayerStage.getPlayerStages().forEach(toReturn::remove);
 
         return SharedSuggestionProvider.suggest(toReturn.stream().sorted(), builder);

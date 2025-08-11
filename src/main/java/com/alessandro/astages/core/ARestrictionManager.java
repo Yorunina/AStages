@@ -5,6 +5,7 @@ import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
@@ -122,6 +123,10 @@ public class ARestrictionManager {
         ModNetworking.sendTo(player, new SimpleIdsSyncerS2CPacket(ids, operation));
     }
 
+    public static void reflectAllStagesChangesToClients(@Nullable ServerPlayer player, List<String> stages, SyncOperation operation) {
+        ModNetworking.sendTo(player, new StageSyncerS2CPacket(stages, operation));
+    }
+
     public static void reloadAfterScripts() {
         ARestrictionManager.ITEM_INSTANCE.reloadAfterScripts();
         APluginManager.callMethod(AStagesPlugin::reloadAfterScripts);
@@ -129,6 +134,7 @@ public class ARestrictionManager {
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
         reflectSimpleIdsChangesToClients(null, new ArrayList<>(ARestrictionManager.SIMPLE_IDS), SyncOperation.ADD);
+        reflectAllStagesChangesToClients(null, new ArrayList<>(ARestrictionManager.ALL_STAGES), SyncOperation.ADD);
         APluginManager.callMethod(ServerLifecycleHooks.getCurrentServer(), AStagesPlugin::reloadAfterScripts);
         CommonEventSettings.allInventoryChanged();
     }

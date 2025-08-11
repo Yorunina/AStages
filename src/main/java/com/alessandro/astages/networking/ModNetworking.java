@@ -2,6 +2,7 @@ package com.alessandro.astages.networking;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
@@ -31,6 +32,7 @@ public class ModNetworking {
 
         // STAGES
         registrar.playToClient(StageDataSyncS2CPacket.TYPE, StageDataSyncS2CPacket.STREAM_CODEC, StageDataSyncS2CPacket::handle);
+        registrar.playToClient(StageSyncerS2CPacket.TYPE, StageSyncerS2CPacket.STREAM_CODEC, StageSyncerS2CPacket::handle);
 
         // ITEMS
         registrar.playToClient(ItemSyncerS2CPacket.TYPE, ItemSyncerS2CPacket.STREAM_CODEC, ItemSyncerS2CPacket::handle);

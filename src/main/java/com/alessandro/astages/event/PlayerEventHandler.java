@@ -34,6 +34,7 @@ public class PlayerEventHandler {
             ARestrictionManager.clearClientOnLogin(player);
             ARestrictionManager.reflectServerStagesChangesToClients(player, player.server);
             ARestrictionManager.reflectSimpleIdsChangesToClients(player, new ArrayList<>(ARestrictionManager.SIMPLE_IDS), SyncOperation.ADD);
+            ARestrictionManager.reflectAllStagesChangesToClients(player, new ArrayList<>(ARestrictionManager.ALL_STAGES), SyncOperation.ADD);
             ARestrictionManager.clientSynchronization(player);
         }
     }
