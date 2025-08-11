@@ -11,7 +11,7 @@ import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.simple.SimpleStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -57,7 +57,7 @@ public class ModNetworking {
         registrar.playToClient(ServerStagesSyncerS2CPacket.TYPE, ServerStagesSyncerS2CPacket.STREAM_CODEC, ServerStagesSyncerS2CPacket::handle);
 
         // SIMPLE
-        registrar.playToClient(SimpleStagesSyncerS2CPacket.TYPE, SimpleStagesSyncerS2CPacket.STREAM_CODEC, SimpleStagesSyncerS2CPacket::handle);
+        registrar.playToClient(SimpleIdsSyncerS2CPacket.TYPE, SimpleIdsSyncerS2CPacket.STREAM_CODEC, SimpleIdsSyncerS2CPacket::handle);
 
         // RELOADING
         registrar.playToClient(RequestReloadS2CPacket.TYPE, RequestReloadS2CPacket.STREAM_CODEC, RequestReloadS2CPacket::handle);

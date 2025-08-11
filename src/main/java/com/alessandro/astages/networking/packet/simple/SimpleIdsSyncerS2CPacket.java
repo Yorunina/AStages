@@ -15,13 +15,13 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public record SimpleStagesSyncerS2CPacket(List<String> ids, SyncOperation operation) implements AStagesPacket {
-    public static final CustomPacketPayload.Type<SimpleStagesSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "simple_stages_syncer_s2c_packet"));
+public record SimpleIdsSyncerS2CPacket(List<String> ids, SyncOperation operation) implements AStagesPacket {
+    public static final CustomPacketPayload.Type<SimpleIdsSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AStages.MODID, "simple_stages_syncer_s2c_packet"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, SimpleStagesSyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), SimpleStagesSyncerS2CPacket::ids,
-            ByteBufCodecs.idMapper(SyncOperation.BY_ID, SyncOperation::getId), SimpleStagesSyncerS2CPacket::operation,
-            SimpleStagesSyncerS2CPacket::new
+    public static final StreamCodec<RegistryFriendlyByteBuf, SimpleIdsSyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), SimpleIdsSyncerS2CPacket::ids,
+            ByteBufCodecs.idMapper(SyncOperation.BY_ID, SyncOperation::getId), SimpleIdsSyncerS2CPacket::operation,
+            SimpleIdsSyncerS2CPacket::new
     );
 
     @Override
