@@ -12,6 +12,7 @@ import dev.latvian.mods.kubejs.event.EventGroupRegistry;
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
 import dev.latvian.mods.kubejs.script.ScriptManager;
+import dev.latvian.mods.kubejs.script.TypeWrapperRegistry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -21,6 +22,11 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
         }
+    }
+
+    @Override
+    public void registerTypeWrappers(TypeWrapperRegistry registry) {
+        registry.register(ATime.class, (TypeWrapperRegistry.ContextFromFunction<ATime>) (context, object) -> ATime.of(object));
     }
 
     @Override
