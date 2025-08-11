@@ -2,7 +2,6 @@ package com.alessandro.astages.core.stage;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -14,27 +13,15 @@ public class AStageManager {
     private static final Map<String, AStage> STAGES = new HashMap<>();
 
     public static void reloadBeforeScripts() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            return;
-        }
-
         STAGES.clear();
     }
 
     public static void reloadAfterScripts() {
-        if (ServerLifecycleHooks.getCurrentServer() == null) {
-            return;
-        }
-
         STAGES.values().forEach(stage -> {
             if (!stage.isServerOnly()) {
                 ARestrictionManager.ALL_STAGES.add(stage.getStage());
             }
         });
-
-//        ARestrictionManager.reflectAllStagesChangesToClients(null, ARestrictionManager.ALL_STAGES, SyncOperation.ADD);
-
-        AStages.LOGGER.debug("NOT YET IMPLEMENTED!");
     }
 
     public static boolean isServerOnly(String stage) {

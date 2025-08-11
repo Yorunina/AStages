@@ -63,27 +63,13 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
 
     @Override
     public void beforeScriptsLoaded(ScriptManager manager) {
-        ARestrictionManager.reloadBeforeScripts();
         AStageManager.reloadBeforeScripts();
+        ARestrictionManager.reloadBeforeScripts();
     }
 
     @Override
     public void afterScriptsLoaded(ScriptManager manager) {
-        ARestrictionManager.reloadAfterScripts();
         AStageManager.reloadAfterScripts();
+        ARestrictionManager.reloadAfterScripts();
     }
-
-//    @Override
-//    public void onServerReload() {
-//        // AFTER SERVER SCRIPT RELOADING!
-//        ARestrictionManager.reloadAfterScripts();
-//        AStageManager.reloadAfterScripts();
-//    }
-//
-//    @Override
-//    public void clearCaches() {
-//        // BEFORE SERVER SCRIPT RELOADING!
-//        ARestrictionManager.reloadBeforeScripts();
-//        AStageManager.reloadBeforeScripts();
-//    }
 }
