@@ -102,4 +102,13 @@ public abstract class AClientRestriction<R extends AClientRestriction<R, U, V>, 
 
         return (R) this;
     }
+
+    @Override
+    public String toString() {
+        return "AClientRestriction{" +
+            "id='" + id + '\'' +
+            ", stage='" + stage + '\'' +
+            ", priority=" + priority +
+            '}';
+    }
 }

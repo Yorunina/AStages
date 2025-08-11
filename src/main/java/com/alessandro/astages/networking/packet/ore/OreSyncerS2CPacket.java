@@ -5,6 +5,7 @@ import com.alessandro.astages.core.client.restriction.AClientOreRestriction;
 import com.alessandro.astages.core.server.restriction.AOreRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.networking.AStagesPacket;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public record OreSyncerS2CPacket(String id, String stage, BlockState original, BlockState replacement) implements AStagesPacket {
+public record OreSyncerS2CPacket(String id, String stage, BlockState original, BlockState replacement, boolean stageAllBlockStates) implements AStagesPacket {
     public static final CustomPacketPayload.Type<OreSyncerS2CPacket> TYPE = new CustomPacketPayload.Type<>(AStagesUtil.fromNamespaceAndPath("ore_syncer_s2c_packet"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, OreSyncerS2CPacket> STREAM_CODEC = StreamCodec.composite(
@@ -25,17 +26,19 @@ public record OreSyncerS2CPacket(String id, String stage, BlockState original, B
         ByteBufCodecs.STRING_UTF8, OreSyncerS2CPacket::stage,
         ByteBufCodecs.fromCodec(BlockState.CODEC), OreSyncerS2CPacket::original,
         ByteBufCodecs.fromCodec(BlockState.CODEC), OreSyncerS2CPacket::replacement,
+        ByteBufCodecs.BOOL, OreSyncerS2CPacket::stageAllBlockStates,
         OreSyncerS2CPacket::new
     );
 
     public OreSyncerS2CPacket(AOreRestriction restriction) {
-        this(restriction.getId(), restriction.getStage(), restriction.getOriginal(), restriction.getReplacement());
+        this(restriction.getId(), restriction.getStage(), restriction.getOriginal(), restriction.getReplacement(), restriction.get(Attributes.STAGE_ALL_BLOCK_STATES));
     }
 
     @Override
     public void run(IPayloadContext context) {
         var restriction = new AClientOreRestriction(id, stage)
-                .restrict(new OreWrapper(original, replacement));
+                .restrict(new OreWrapper(original, replacement))
+                .set(Attributes.STAGE_ALL_BLOCK_STATES, stageAllBlockStates);
 
         AClientRestrictionManager.ORE_INSTANCE.addRestriction(restriction);
     }

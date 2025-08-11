@@ -2,6 +2,7 @@ package com.alessandro.astages.core.client.restriction;
 
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.store.AttributeStore;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientRestriction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,8 @@ public class AClientOreRestriction extends AClientRestriction<AClientOreRestrict
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder();
+        return AttributeStore.builder()
+            .addAttribute(Attributes.STAGE_ALL_BLOCK_STATES);
     }
 
     @Override
@@ -31,6 +33,10 @@ public class AClientOreRestriction extends AClientRestriction<AClientOreRestrict
     }
 
     public boolean isRestricted(BlockState original) {
+        if (isEnabled(Attributes.STAGE_ALL_BLOCK_STATES)) {
+            return this.original.is(original.getBlock());
+        }
+
         return this.original.equals(original);
     }
 

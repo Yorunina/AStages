@@ -26,7 +26,8 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     @Override
     public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
-            .addAttribute(Attributes.AFFECTS_PLAYER_ACTIONS);
+            .addAttribute(Attributes.AFFECTS_PLAYER_ACTIONS)
+            .addAttribute(Attributes.STAGE_ALL_BLOCK_STATES);
 
         var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AOreRestriction.class, null);
 
@@ -47,6 +48,10 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
 
     @Override
     public boolean isRestricted(BlockState original) {
+        if (isEnabled(Attributes.STAGE_ALL_BLOCK_STATES)) {
+            return this.original.is(original.getBlock());
+        }
+
         return this.original.equals(original);
     }
 
@@ -62,7 +67,7 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     public <T> AOreRestriction set(Attribute<T> attribute, T value) {
         var toReturn = super.set(attribute, value);
 
-        if (attribute == Attributes.AFFECTS_PLAYER_ACTIONS) {
+        if (attribute == Attributes.AFFECTS_PLAYER_ACTIONS || attribute == Attributes.STAGE_ALL_BLOCK_STATES) {
             setChanged();
         }
 
@@ -76,8 +81,14 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
 
     @Override
     public void markAsDirty() {
-        PacketDistributor.sendToAllPlayers(new OreSyncerS2CPacket(getId(), getStage(), original, replacement));
+        PacketDistributor.sendToAllPlayers(new OreSyncerS2CPacket(this));
         PacketDistributor.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.ORE));
+    }
+
+    @SuppressWarnings("unused")
+    public AOreRestriction setStageAllBlockStates(boolean value) {
+        set(Attributes.STAGE_ALL_BLOCK_STATES, value);
+        return this;
     }
 
     @SuppressWarnings("unused")
