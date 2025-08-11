@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.restriction;
 
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
@@ -12,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,10 +46,18 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     }
 
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+    public AttributeStore allowedAttributes() {
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.HAS_REPLACER)
             .addAttribute(Attributes.APPLY_EVERYWHERE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(ALootRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

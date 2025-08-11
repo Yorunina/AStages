@@ -1,8 +1,9 @@
 package com.alessandro.astages.core.server.restriction;
 
-import com.alessandro.astages.store.server.ARestriction;
+import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.server.ARestriction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,7 +26,7 @@ public class APetRestriction extends ARestriction<APetRestriction, EntityType<?>
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.TAMABLE)
             .addAttribute(Attributes.BREEDABLE)
             .addAttribute(Attributes.MOUNTABLE)
@@ -33,6 +34,14 @@ public class APetRestriction extends ARestriction<APetRestriction, EntityType<?>
             .addAttribute(Attributes.Pet.TAME_MESSAGE)
             .addAttribute(Attributes.Pet.BREED_MESSAGE)
             .addAttribute(Attributes.Pet.MOUNT_MESSAGE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(APetRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override

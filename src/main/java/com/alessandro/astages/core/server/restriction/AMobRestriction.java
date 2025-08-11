@@ -31,7 +31,7 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.SPAWNER)
             .addAttribute(Attributes.MOB_SPAWNING)
             .addAttribute(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT)
@@ -46,6 +46,14 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
             .addAttribute(Attributes.Mob.JADE_MOB_MESSAGE)
             .addAttribute(Attributes.Mob.INTERACTION_MESSAGE)
             .addAttribute(Attributes.Mob.ATTACK_MESSAGE);
+
+        var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AMobRestriction.class, null);
+
+        if (pluginAttributes != null) {
+            return defaultAttributes.combineWith(pluginAttributes);
+        } else {
+            return defaultAttributes;
+        }
     }
 
     @Override
