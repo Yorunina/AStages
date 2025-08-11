@@ -27,7 +27,7 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
     public void registerBindings(BindingRegistry bindings) {
         if (!Mods.KUBEJS.isLoaded()) return;
 
-        if (bindings.type().isServer()) {
+        if (bindings.type().isServer() || bindings.type().isStartup()) {
             bindings.add("AStages", AStagesKubeJSUtil.class);
             bindings.add("Attributes", Attributes.class);
             bindings.add("ItemAttributes", Attributes.Item.class);
@@ -42,9 +42,7 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
             bindings.add("AStagesClient", AStagesClientJSUtil.class);
         }
 
-        if (bindings.type().isClient() || bindings.type().isServer()) {
-            bindings.add("AModels", AStagesModelJSUtil.class);
-        }
+        bindings.add("AModels", AStagesModelJSUtil.class);
     }
 
     @Override
