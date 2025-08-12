@@ -7,10 +7,13 @@ import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.item.ModItems;
-import com.alessandro.astages.plugin.*;
+import com.alessandro.astages.plugin.APluginFinder;
+import com.alessandro.astages.plugin.APluginManager;
+import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
 import com.alessandro.astages.store.AttributeStore;
+import com.alessandro.astages.store.Attributes;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -31,6 +34,15 @@ public class AStages {
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModArguments.ARGUMENT_TYPES.register(modEventBus);
+
+        Attributes.ATTRIBUTES.register(modEventBus);
+        Attributes.Item.ATTRIBUTES.register(modEventBus);
+        Attributes.Pet.ATTRIBUTES.register(modEventBus);
+        Attributes.Structure.ATTRIBUTES.register(modEventBus);
+        Attributes.Screen.ATTRIBUTES.register(modEventBus);
+        Attributes.Dimension.ATTRIBUTES.register(modEventBus);
+        Attributes.Mob.ATTRIBUTES.register(modEventBus);
+        Attributes.Region.ATTRIBUTES.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, AStagesClient.SPEC, "astages-client.toml");
