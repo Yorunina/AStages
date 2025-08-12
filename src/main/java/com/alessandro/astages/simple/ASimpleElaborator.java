@@ -152,16 +152,16 @@ public class ASimpleElaborator {
     public static int commandOreWithDefaultValue(CommandContext<CommandSourceStack> c) {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
                 Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
-                        "//" +
-                        Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
-                        "//" +
-                        Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue()
+                    "//" +
+                    Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
+                    "//" +
+                    Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue()
         );
     }
 
     public static int commandOre(CommandContext<CommandSourceStack> c) {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionType.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
-            Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "ore").getState().getBlock())) +
+            Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
                 "//" +
                 Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
                 "//" +
