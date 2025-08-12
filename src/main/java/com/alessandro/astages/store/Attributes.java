@@ -69,65 +69,70 @@ public class Attributes {
 
     public static final Attribute<ChatFormatting> CHAT_FORMATTING = Attribute.create("chat_formatting", AttributeTypes.CHAT_FORMATTING, ChatFormatting.GOLD);
 
+    @SuppressWarnings("unused")
+    public static void resetAllDefaultValues() {
+        AStagesRegistries.ATTRIBUTES.stream().forEach(Attribute::resetDefaultValue);
+    }
+
     // If the creation of subclasses is HORRIBLE, change the default value to null and request, when you add an attribute to the attribute store, to check if a new default value is set
     // ITEM
     public static class Item {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<ItemStack, Component>> HIDDEN_NAME = Attribute.create("hidden_name", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.hidden_name", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> DROP_MESSAGE = Attribute.create("drop_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.drop", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> ATTACK_MESSAGE = Attribute.create("attack_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.attach", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> PICKING_UP_MESSAGE = Attribute.create("picking_up_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.pickup", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> USING_MESSAGE = Attribute.create("using_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.use", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> MINING_MESSAGE = Attribute.create("mining_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.mine", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> PLACING_MESSAGE = Attribute.create("placing_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.place", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> JADE_ITEM_MESSAGE = Attribute.create("jade_item_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.jade_integration.item", stack.getHoverName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ItemStack, Component>> JADE_BLOCK_MESSAGE = Attribute.create("jade_block_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.jade_integration.block", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Function<ItemStack, Component>> HIDDEN_NAME = Attribute.create("item_hidden_name", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.hidden_name", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> DROP_MESSAGE = Attribute.create("item_drop_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.drop", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> ATTACK_MESSAGE = Attribute.create("item_attack_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.attach", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> PICKING_UP_MESSAGE = Attribute.create("item_picking_up_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.pickup", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> USING_MESSAGE = Attribute.create("item_using_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.use", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> MINING_MESSAGE = Attribute.create("item_mining_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.mine", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> PLACING_MESSAGE = Attribute.create("item_placing_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("message.astages.item.place", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> JADE_ITEM_MESSAGE = Attribute.create("item_jade_item_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.jade_integration.item", stack.getHoverName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ItemStack, Component>> JADE_BLOCK_MESSAGE = Attribute.create("item_jade_block_message", AttributeTypes.STACK_TO_COMPONENT, stack -> Component.translatable("tooltip.astages.item.jade_integration.block", stack.getHoverName()).withStyle(ChatFormatting.RED));
     }
 
     // PET
     public static class Pet {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<Entity, Component>> TAME_MESSAGE = Attribute.create("tame_message", AttributeTypes.ENTITY_TO_COMPONENT, entity -> Component.translatable("message.astages.pet.tame", entity.getName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<Entity, Component>> BREED_MESSAGE = Attribute.create("breed_message", AttributeTypes.ENTITY_TO_COMPONENT, entity -> Component.translatable("message.astages.pet.breed", entity.getName()).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<Entity, Component>> MOUNT_MESSAGE = Attribute.create("mount_message", AttributeTypes.ENTITY_TO_COMPONENT, entity -> Component.translatable("message.astages.pet.mount", entity.getName()).withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Function<Entity, Component>> TAME_MESSAGE = Attribute.create("pet_tame_message", AttributeTypes.ENTITY_TO_COMPONENT, entity -> Component.translatable("message.astages.pet.tame", entity.getName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<Entity, Component>> BREED_MESSAGE = Attribute.create("pet_breed_message", AttributeTypes.ENTITY_TO_COMPONENT, entity -> Component.translatable("message.astages.pet.breed", entity.getName()).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<Entity, Component>> MOUNT_MESSAGE = Attribute.create("pet_mount_message", AttributeTypes.ENTITY_TO_COMPONENT, entity -> Component.translatable("message.astages.pet.mount", entity.getName()).withStyle(ChatFormatting.RED));
     }
 
     // STRUCTURE
     public static class Structure {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<ResourceLocation, Component>> ATTACK_MESSAGE = Attribute.create("attack_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.attack", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> INTERACT_MESSAGE = Attribute.create("interact_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.interact", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.enter", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> PLACING_MESSAGE = Attribute.create("placing_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.place", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> MINING_MESSAGE = Attribute.create("mining_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.break", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Function<ResourceLocation, Component>> ATTACK_MESSAGE = Attribute.create("structure_attack_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.attack", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> INTERACT_MESSAGE = Attribute.create("structure_interact_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.interact", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("structure_enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.enter", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> PLACING_MESSAGE = Attribute.create("structure_placing_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.place", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> MINING_MESSAGE = Attribute.create("structure_mining_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.break", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
     }
 
     // SCREEN
     public static class Screen {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<MenuType<?>, Component>> OPEN_MESSAGE = Attribute.create("open_message", AttributeTypes.MENU_TO_COMPONENT, menu -> Component.translatable("message.astages.screen", menu.toString()).withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Function<MenuType<?>, Component>> OPEN_MESSAGE = Attribute.create("screen_open_message", AttributeTypes.MENU_TO_COMPONENT, menu -> Component.translatable("message.astages.screen", menu.toString()).withStyle(ChatFormatting.RED));
     }
 
     // DIMENSION
     public static class Dimension {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("dimension_enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("dimension_leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("dimension_expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
     }
 
     // MOB
     public static class Mob {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Supplier<Component>> JADE_MOB_MESSAGE = Attribute.create("jade_mob_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.jade_integration").withStyle(ChatFormatting.RED));
-        public static final Attribute<Supplier<Component>> INTERACTION_MESSAGE = Attribute.create("interaction_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.interaction").withStyle(ChatFormatting.RED));
-        public static final Attribute<Supplier<Component>> ATTACK_MESSAGE = Attribute.create("attack_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.attack").withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Supplier<Component>> JADE_MOB_MESSAGE = Attribute.create("mob_jade_mob_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.jade_integration").withStyle(ChatFormatting.RED));
+        public static final Attribute<Supplier<Component>> INTERACTION_MESSAGE = Attribute.create("mob_interaction_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.interaction").withStyle(ChatFormatting.RED));
+        public static final Attribute<Supplier<Component>> ATTACK_MESSAGE = Attribute.create("mob_attack_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.mob.attack").withStyle(ChatFormatting.RED));
     }
 
     // REGION
     public static class Region {
-        public static DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Supplier<Component>> INTERACT_MESSAGE = Attribute.create("interact_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.region.interact").withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<String, Component>> COMMAND_MESSAGE = Attribute.create("command_message", AttributeTypes.STRING_TO_COMPONENT, performedCommand -> Component.translatable("message.astages.region.command", performedCommand).withStyle(ChatFormatting.RED));
+        public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.ATTRIBUTES, AStages.MODID));
+        public static final Attribute<Supplier<Component>> INTERACT_MESSAGE = Attribute.create("region_interact_message", AttributeTypes.VOID_TO_COMPONENT, () -> Component.translatable("message.astages.region.interact").withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<String, Component>> COMMAND_MESSAGE = Attribute.create("region_command_message", AttributeTypes.STRING_TO_COMPONENT, performedCommand -> Component.translatable("message.astages.region.command", performedCommand).withStyle(ChatFormatting.RED));
     }
 }
