@@ -34,6 +34,11 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static ARegionRestriction newBuilder() {
+        return new ARegionRestriction("null", "null");
+    }
+
     @Override
     public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()

@@ -5,9 +5,13 @@ import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.enchantment.Enchantment;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AEnchantRestriction extends ARestriction<AEnchantRestriction, Enchantment, EnchantWrapper> {
     private Enchantment enchantment;
 
@@ -15,8 +19,13 @@ public class AEnchantRestriction extends ARestriction<AEnchantRestriction, Encha
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static AEnchantRestriction newBuilder() {
+        return new AEnchantRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.ANVIL)
             .addAttribute(Attributes.ENCHANTING_TABLE)

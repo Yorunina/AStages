@@ -6,18 +6,21 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.AFilter;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>, EntityType<?>> {
     private final List<EntityType<?>> mobs = new ArrayList<>();
 
@@ -29,8 +32,13 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static AMobRestriction newBuilder() {
+        return new AMobRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.SPAWNER)
             .addAttribute(Attributes.MOB_SPAWNING)

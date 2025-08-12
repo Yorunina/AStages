@@ -3,12 +3,15 @@ package com.alessandro.astages.core.server.restriction;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.ARestriction;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.effect.MobEffect;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AEffectRestriction extends ARestriction<AEffectRestriction, MobEffect, MobEffect> {
     private final List<MobEffect> effects = new ArrayList<>();
 
@@ -16,8 +19,13 @@ public class AEffectRestriction extends ARestriction<AEffectRestriction, MobEffe
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static AEffectRestriction newBuilder() {
+        return new AEffectRestriction("null", "null");
+    }
+
     @Override
-    public @NotNull AttributeStore allowedAttributes() {
+    public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder();
 
         var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(AEffectRestriction.class, null);

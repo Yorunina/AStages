@@ -45,6 +45,11 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static ALootRestriction newBuilder() {
+        return new ALootRestriction("null", "null");
+    }
+
     @Override
     public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()

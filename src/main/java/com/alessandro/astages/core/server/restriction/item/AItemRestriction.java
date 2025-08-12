@@ -6,6 +6,7 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.develop.Info;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,11 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AItemRestriction extends ABaseItemRestriction<AItemRestriction, Item> {
     private final List<Item> items = new ArrayList<>();
 
     public AItemRestriction(String id, String stage) {
         super(id, stage);
+    }
+
+    @SuppressWarnings("unused")
+    public static AItemRestriction newBuilder() {
+        return new AItemRestriction("null", "null");
     }
 
     @Override

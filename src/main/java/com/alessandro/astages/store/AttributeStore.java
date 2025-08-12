@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
+import java.util.Set;
 
 @ParametersAreNonnullByDefault
 public class AttributeStore extends HashMap<Attribute<?>, Object> {
@@ -53,9 +54,25 @@ public class AttributeStore extends HashMap<Attribute<?>, Object> {
         return this;
     }
 
-//    public AttributeStore overwrite(AttributeStore other) {
-//        this.putAll(other);
-//    }
+    public AttributeStore overwrite(AttributeStore other) {
+        Set<Attribute<?>> attributesToOverwrite;
+
+        if (other instanceof ConfigurableAttributeStore config) {
+            attributesToOverwrite = config.getModifiedAttributes();
+        } else {
+            attributesToOverwrite = other.allAttributes();
+        }
+
+        for (var attribute : attributesToOverwrite) {
+            this.put(attribute, other.getAttribute(attribute));
+        }
+
+        return this;
+    }
+
+    public Set<Attribute<?>> allAttributes() {
+        return keySet();
+    }
 
     @Override
     public String toString() {

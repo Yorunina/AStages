@@ -23,6 +23,11 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
         super(id, stage);
     }
 
+    @SuppressWarnings("unused")
+    public static AOreRestriction newBuilder() {
+        return new AOreRestriction("null", "null");
+    }
+
     @Override
     public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()

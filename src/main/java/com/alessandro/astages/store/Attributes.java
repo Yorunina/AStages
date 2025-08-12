@@ -69,11 +69,6 @@ public class Attributes {
 
     public static final Attribute<ChatFormatting> CHAT_FORMATTING = Attribute.create("chat_formatting", AttributeTypes.CHAT_FORMATTING, ChatFormatting.GOLD);
 
-    @SuppressWarnings("unused")
-    public static void resetAllDefaultValues() {
-        AStagesRegistries.ATTRIBUTES.stream().forEach(Attribute::resetDefaultValue);
-    }
-
     // If the creation of subclasses is HORRIBLE, change the default value to null and request, when you add an attribute to the attribute store, to check if a new default value is set
     // ITEM
     public static class Item {
