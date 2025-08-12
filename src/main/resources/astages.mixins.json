@@ -24,6 +24,7 @@
     "ore.event.ABreakEvent",
     "recipe.minecraft.AAbstractFurnaceBlockEntity",
     "recipe.minecraft.ACampfireBlock",
+    "recipe.minecraft.ACrafterBlock",
     "recipe.minecraft.ACrafterMenu",
     "recipe.minecraft.ACraftingMenu",
     "recipe.minecraft.ASmithingMenu",
