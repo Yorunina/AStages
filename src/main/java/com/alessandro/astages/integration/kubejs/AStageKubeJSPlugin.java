@@ -35,13 +35,6 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
 
         if (bindings.type().isServer() || bindings.type().isStartup()) {
             bindings.add("AStages", AStagesKubeJSUtil.class);
-            bindings.add("Attributes", Attributes.class);
-            bindings.add("ItemAttributes", Attributes.Item.class);
-            bindings.add("ScreenAttributes", Attributes.Screen.class);
-            bindings.add("PetAttributes", Attributes.Pet.class);
-            bindings.add("DimensionAttributes", Attributes.Dimension.class);
-            bindings.add("StructureAttributes", Attributes.Structure.class);
-            bindings.add("ATime", ATime.class);
         }
 
         if (bindings.type().isClient()) {
@@ -49,6 +42,13 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
         }
 
         bindings.add("AModels", AStagesModelJSUtil.class);
+        bindings.add("Attributes", Attributes.class);
+        bindings.add("ItemAttributes", Attributes.Item.class);
+        bindings.add("ScreenAttributes", Attributes.Screen.class);
+        bindings.add("PetAttributes", Attributes.Pet.class);
+        bindings.add("DimensionAttributes", Attributes.Dimension.class);
+        bindings.add("StructureAttributes", Attributes.Structure.class);
+        bindings.add("ATime", ATime.class);
     }
 
     @Override
