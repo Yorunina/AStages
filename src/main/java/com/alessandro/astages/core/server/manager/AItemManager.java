@@ -29,7 +29,7 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>, ClientSynchronizable {
-    public static final Map<Class<?>, List<Integer>> containersWhitelist = new HashMap<>();
+    private static final Map<Class<?>, List<Integer>> containersWhitelist = new HashMap<>();
 
     private final List<ABaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseItemRestriction<?, ?>> IDS = new HashMap<>();
