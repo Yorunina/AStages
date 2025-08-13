@@ -192,7 +192,7 @@ public class ServerEventHandler {
                             container.setItem(slot.index, container.getStateId(), ItemStack.EMPTY);
                         }
                     } else {
-                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(event.player, slot.getItem());
+                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(event.player, slot.getItem(), slot);
 
                         if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_CONTAINERS)) {
                             event.player.drop(slot.getItem(), false);
