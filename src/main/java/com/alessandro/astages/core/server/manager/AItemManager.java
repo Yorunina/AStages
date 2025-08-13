@@ -17,6 +17,7 @@ import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +29,8 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>, ClientSynchronizable {
+    public static final Map<Class<?>, List<Integer>> containersWhitelist = new HashMap<>();
+
     private final List<ABaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseItemRestriction<?, ?>> IDS = new HashMap<>();
 
@@ -110,8 +113,25 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         return EQUIPMENT_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
     }
 
-    public ABaseItemRestriction<?, ?> getContainersRestriction(Player player, ItemStack stack) {
-        return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+    public ABaseItemRestriction<?, ?> getContainersRestriction(Player player, ItemStack stack, Slot slot) {
+        var container = slot.container;
+        var index = slot.index;
+
+        var isPresent = containersWhitelist.containsKey(container.getClass());
+        if (isPresent) {
+            var whitelistedIndexes = containersWhitelist.get(container.getClass());
+            if (whitelistedIndexes == null) {
+                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+            } else if (whitelistedIndexes.contains(index)) {
+                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+            }
+        }
+
+        return null;
+    }
+
+    public static void whiteListContainer(Class<?> containerClass, @Nullable List<Integer> slots) {
+        containersWhitelist.put(containerClass, slots);
     }
 
     public void addRestriction(AItemRestriction restriction) {

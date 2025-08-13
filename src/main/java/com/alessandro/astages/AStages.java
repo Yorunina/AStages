@@ -6,6 +6,7 @@ import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.manager.AItemManager;
 import com.alessandro.astages.item.ModItems;
 import com.alessandro.astages.plugin.APluginFinder;
 import com.alessandro.astages.plugin.APluginManager;
@@ -16,6 +17,8 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -59,5 +62,10 @@ public class AStages {
         for (var clazz : result.keySet()) {
             ARestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
         }
+    }
+
+    static {
+        AItemManager.whiteListContainer(ChestBlockEntity.class, null);
+        AItemManager.whiteListContainer(BarrelBlockEntity.class, null);
     }
 }

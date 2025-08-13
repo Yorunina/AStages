@@ -17,7 +17,6 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -197,7 +196,7 @@ public class ServerEventHandler {
                             container.setItem(slot.index, container.getStateId(), ItemStack.EMPTY);
                         }
                     } else {
-                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(player, slot.getItem());
+                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(player, slot.getItem(), slot);
 
                         if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_CONTAINERS)) {
                             player.drop(slot.getItem(), false);
