@@ -81,6 +81,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @Override
     public <T> R set(Attribute<T> attribute, T value) {
         var toReturn = super.set(attribute, value);
+        if (toReturn.isConfig()) { return toReturn; }
 
         if (attribute == Attributes.STORING_IN_INVENTORY || attribute == Attributes.EQUIPPING) {
             setChanged();

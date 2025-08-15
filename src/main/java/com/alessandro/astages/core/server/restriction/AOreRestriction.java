@@ -71,6 +71,7 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     @Override
     public <T> AOreRestriction set(Attribute<T> attribute, T value) {
         var toReturn = super.set(attribute, value);
+        if (toReturn.isConfig()) { return toReturn; }
 
         if (attribute == Attributes.AFFECTS_PLAYER_ACTIONS || attribute == Attributes.STAGE_ALL_BLOCK_STATES) {
             setChanged();
