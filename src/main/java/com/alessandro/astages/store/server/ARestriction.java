@@ -150,6 +150,10 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implem
         return config.getClass().equals(expectedClass);
     }
 
+    public boolean isConfig() {
+        return markForConfig && attributes instanceof ConfigurableAttributeStore;
+    }
+
     public String getId() {
         return id;
     }
