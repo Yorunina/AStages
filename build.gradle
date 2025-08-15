@@ -181,6 +181,12 @@ dependencies {
     implementation "curse.maven:fastworkbench-288885:5670423"
     implementation "curse.maven:placebo-283644:6105436"
 
+    implementation "curse.maven:toxony-1236984:6811991"
+    implementation "curse.maven:pagans-blessing-952071:5817130"
+
+    // Sodium
+    implementation "curse.maven:sodium-394468:6382651"
+
     // these two are unfortunately needed since fg.deobf doesn't respect transitive dependencies yet
     // implementation "dev.latvian.mods:rhino-neoforge:2101.2.5-build.54"
     // implementation "dev.architectury:architectury-neoforge:15.0.1"

@@ -2,6 +2,9 @@ package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.*;
+import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
+import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
@@ -42,13 +45,36 @@ public class AStageKubeJSPlugin implements KubeJSPlugin {
         }
 
         bindings.add("AModels", AStagesModelJSUtil.class);
+        bindings.add("ATime", ATime.class);
+
         bindings.add("Attributes", Attributes.class);
         bindings.add("ItemAttributes", Attributes.Item.class);
-        bindings.add("ScreenAttributes", Attributes.Screen.class);
-        bindings.add("PetAttributes", Attributes.Pet.class);
+        // RecipeAttributes
+        // CropAttributes
         bindings.add("DimensionAttributes", Attributes.Dimension.class);
+        // EffectAttributes
+        // EnchantAttributes
+        // LootAttributes
+        bindings.add("MobAttributes", Attributes.Mob.class);
+        // OreAttributes
+        bindings.add("PetAttributes", Attributes.Pet.class);
+        bindings.add("RegionAttributes", Attributes.Region.class);
+        bindings.add("ScreenAttributes", Attributes.Screen.class);
         bindings.add("StructureAttributes", Attributes.Structure.class);
-        bindings.add("ATime", ATime.class);
+
+        bindings.add("AItemRestriction", AItemRestriction.class);
+        bindings.add("ARecipeRestriction", ARecipeRestriction.class);
+        bindings.add("ACropRestriction", ACropRestriction.class);
+        bindings.add("ADimensionRestriction", ADimensionRestriction.class);
+        bindings.add("AEffectRestriction", AEffectRestriction.class);
+        bindings.add("AEnchantRestriction", AEnchantRestriction.class);
+        bindings.add("ALootRestriction", ALootRestriction.class);
+        bindings.add("AMobRestriction", AMobRestriction.class);
+        bindings.add("AOreRestriction", AOreRestriction.class);
+        bindings.add("APetRestriction", APetRestriction.class);
+        bindings.add("ARegionRestriction", ARegionRestriction.class);
+        bindings.add("AScreenRestriction", AScreenRestriction.class);
+        bindings.add("AStructureRestriction", AStructureRestriction.class);
     }
 
     @Override
