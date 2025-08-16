@@ -198,6 +198,10 @@ public class AStagesKubeJSUtil {
         return restriction;
     }
 
+    public static void whiteListContainer(Class<?> containerClass, @Nullable List<Integer> slots) {
+        ARestrictionManager.ITEM_INSTANCE.whiteListContainer(containerClass, slots);
+    }
+
     // DIMENSION Restrictions
     public static ADimensionRestriction addRestrictionForDimension(String id, String stage, ResourceLocation dimension) {
         var restriction = new ADimensionRestriction(id, stage);

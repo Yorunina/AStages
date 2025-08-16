@@ -65,7 +65,7 @@ public class AStages {
     }
 
     static {
-        AItemManager.whiteListContainer(ChestBlockEntity.class, null);
-        AItemManager.whiteListContainer(BarrelBlockEntity.class, null);
+        ARestrictionManager.ITEM_INSTANCE.whiteListContainer(ChestBlockEntity.class, null);
+        ARestrictionManager.ITEM_INSTANCE.whiteListContainer(BarrelBlockEntity.class, null);
     }
 }
