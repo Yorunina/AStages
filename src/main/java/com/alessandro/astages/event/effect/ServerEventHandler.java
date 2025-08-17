@@ -17,7 +17,7 @@ public class ServerEventHandler {
     public static void effectAdded(MobEffectEvent.Applicable event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             var effect = event.getEffectInstance().getEffect();
-            var restriction = ARestrictionManager.EFFECT_INSTANCE.getRestriction(player, effect);
+            var restriction = ARestrictionManager.EFFECT_INSTANCE.getRestriction(effect, player, player.getServer());
 
             if (restriction != null) {
                 event.setResult(Event.Result.DENY);

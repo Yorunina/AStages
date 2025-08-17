@@ -4,9 +4,9 @@ import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.util.AStagesUtil;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
@@ -18,15 +18,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mixin(value = AbstractFurnaceBlockEntity.class)
 public class AAbstractFurnaceBlockEntity {
-    @Inject(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;getMaxStackSize()I"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    private static void astages$serverTick(@NotNull Level level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci, boolean flag, boolean flag1, ItemStack itemstack, boolean flag2, boolean flag3, Recipe<?> recipe) {
+    @Inject(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;getMaxStackSize()I"), cancellable = true)
+    private static void astages$serverTick(@NotNull Level level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci, @Local Recipe<?> recipe) {
         if (level.getServer() == null) { return; }
 
         AtomicReference<UUID> atomicOwner = new AtomicReference<>();
@@ -36,7 +35,7 @@ public class AAbstractFurnaceBlockEntity {
         Player player = AStagesUtil.getPlayerFromUUID(level.getServer(), blockOwner);
         if (player == null || recipe == null) { return; }
 
-        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(player, new RecipeWrapper(recipe.getType(), recipe.getId()));
+        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), player, level.getServer());
 
         if (restriction != null) {
             ci.cancel();

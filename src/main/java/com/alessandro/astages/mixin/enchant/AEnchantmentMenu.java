@@ -27,11 +27,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class AEnchantmentMenu {
     @Shadow @Final private ContainerLevelAccess access;
 
-    @Shadow @Final public int[] costs;
-
-    @Shadow protected abstract List<EnchantmentInstance> getEnchantmentList(ItemStack pStack, int pEnchantSlot, int pLevel);
-
-
     @Inject(method = "getEnchantmentList", at = @At("RETURN"))
     private void astages$enchant(ItemStack pStack, int enchantSlot, int level, @NotNull CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         var value = cir.getReturnValue();
@@ -49,7 +44,7 @@ public abstract class AEnchantmentMenu {
             List<Integer> toRemove = new ArrayList<>();
 
             for (int i = 0; i < value.size(); i++) {
-                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(player, new EnchantWrapper(value.get(i).enchantment, value.get(i).level));
+                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(new EnchantWrapper(value.get(i).enchantment, value.get(i).level), player, player.getServer());
 
                 if (restriction != null && restriction.isDisabled(Attributes.ENCHANTING_TABLE)) {
                     toRemove.add(i);

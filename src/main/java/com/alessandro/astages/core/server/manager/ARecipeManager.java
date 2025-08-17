@@ -1,6 +1,7 @@
 package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.recipe.ABaseRecipeRestriction;
@@ -8,15 +9,16 @@ import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestricti
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
@@ -73,12 +75,48 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         return getRestrictionFromCache(RECIPE_CACHE, wrapper.recipe(), player);
     }
 
+    public ABaseRecipeRestriction<?, ?, ?> getRestriction(MinecraftServer server, RecipeWrapper wrapper) {
+        var data = ServerStageData.getData(server);
+        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && !data.has(r.getStage())).findFirst().orElse(null);
+        if (modRestriction != null) { return modRestriction; }
+
+        return getRestrictionFromCache(RECIPE_CACHE, wrapper.recipe(), server);
+    }
+
+    public ABaseRecipeRestriction<?, ?, ?> getRestriction(RecipeWrapper wrapper, @Nullable Player player, @Nullable MinecraftServer server) {
+        ABaseRecipeRestriction<?, ?, ?> serverRestriction = null;
+        ABaseRecipeRestriction<?, ?, ?> playerRestriction = null;
+
+        if (server != null) { serverRestriction = getRestriction(server, wrapper); }
+        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
+            return null;
+        }
+
+        if (player != null) { playerRestriction = getRestriction(player, wrapper); }
+        return playerRestriction;
+    }
+
     public ARecipeRestriction getRestrictionFromCache(OrderedMultiMap<ResourceLocation, ARecipeRestriction> cache, ResourceLocation value, Player player) {
         var restrictions = cache.get(value);
 
         if (!restrictions.isEmpty()) {
             for (var restriction : restrictions) {
                 if (!AStagesUtil.hasStage(player, restriction.getStage())) {
+                    return restriction;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public ARecipeRestriction getRestrictionFromCache(OrderedMultiMap<ResourceLocation, ARecipeRestriction> cache, ResourceLocation value, MinecraftServer server) {
+        var restrictions = cache.get(value);
+        var data = ServerStageData.getData(server);
+
+        if (!restrictions.isEmpty()) {
+            for (var restriction : restrictions) {
+                if (!data.has(restriction.getStage())) {
                     return restriction;
                 }
             }

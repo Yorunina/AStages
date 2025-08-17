@@ -46,20 +46,20 @@ public class AMobManager extends AManager<AMobRestriction, EntityType<?>, Entity
         return getRestrictionFromCache(CACHE, type, server);
     }
 
-    @Override
-    public AMobRestriction getRestriction(EntityType<?> type, @Nullable Player player, @Nullable MinecraftServer server) {
-        AMobRestriction serverRestriction = null;
-        AMobRestriction playerRestriction = null;
-
-        if (server != null) { serverRestriction = getRestriction(server, type); }
-        if (player != null) { playerRestriction = getRestriction(player, type); }
-
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
-        }
-
-        return playerRestriction;
-    }
+//    @Override
+//    public AMobRestriction getRestriction(EntityType<?> type, @Nullable Player player, @Nullable MinecraftServer server) {
+//        AMobRestriction serverRestriction = null;
+//        AMobRestriction playerRestriction = null;
+//
+//        if (server != null) { serverRestriction = getRestriction(server, type); }
+//        if (player != null) { playerRestriction = getRestriction(player, type); }
+//
+//        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
+//            return null;
+//        }
+//
+//        return playerRestriction;
+//    }
 
     @Override
     public void removeRestriction(String id) {

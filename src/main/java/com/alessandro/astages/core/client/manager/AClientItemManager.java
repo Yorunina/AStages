@@ -4,6 +4,7 @@ import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.*;
+import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.integration.jei.CustomItemStackKey;
 import com.alessandro.astages.networking.ModNetworking;
@@ -36,6 +37,10 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
             if (e.getOperation() != PlayerStage.Operation.GET) {
                 AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
             }
+        });
+
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class, e -> {
+            AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
         });
     }
 

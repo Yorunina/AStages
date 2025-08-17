@@ -4,11 +4,13 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.Map;
  * @param <V> For isRestricted method object type
  */
 @ParametersAreNonnullByDefault
-public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements AMinimalManager<R> {
+public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements AMinimalManager<R>, ServerStageReadable<R, V> {
     private final List<R> restrictions = new ArrayList<>();
     private final Map<String, R> IDS = new HashMap<>();
 
@@ -66,6 +68,26 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
         restrictions.add(restriction);
         ARestrictionManager.ALL_IDS.add(restriction.getId());
         if (considerGlobalStages()) { ARestrictionManager.ALL_STAGES.add(restriction.getStage()); }
+    }
+
+    @Override
+    public R getRestriction(MinecraftServer server, V object) {
+        var data = ServerStageData.getData(server);
+        return restrictions.stream().filter(r -> !data.has(r.getStage()) && r.isRestricted(object)).findFirst().orElse(null);
+    }
+
+    @Override
+    public R getRestriction(V object, @Nullable Player player, @Nullable MinecraftServer server) {
+        R serverRestriction = null;
+        R playerRestriction = null;
+
+        if (server != null) { serverRestriction = getRestriction(server, object); }
+        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
+            return null;
+        }
+
+        if (player != null) { playerRestriction = getRestriction(player, object); }
+        return playerRestriction;
     }
 
     public <W> R getRestrictionFromCache(OrderedMultiMap<W, R> cache, W value, Player player) {

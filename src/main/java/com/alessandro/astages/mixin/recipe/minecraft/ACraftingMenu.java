@@ -24,10 +24,10 @@ import java.util.Optional;
 public class ACraftingMenu {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Inject(method = "slotChangedCraftingGrid", at = @At(value = "INVOKE", target = "Ljava/util/Optional;get()Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    private static void astages$slotChanged(AbstractContainerMenu pMenu, Level pLevel, Player pPlayer, CraftingContainer container, ResultContainer resultSlots, CallbackInfo ci, ServerPlayer serverPlayer, ItemStack $$6, @NotNull Optional<CraftingRecipe> optional) {
+    private static void astages$slotChanged(AbstractContainerMenu pMenu, Level level, Player pPlayer, CraftingContainer container, ResultContainer resultSlots, CallbackInfo ci, ServerPlayer serverPlayer, ItemStack $$6, @NotNull Optional<CraftingRecipe> optional) {
         if (optional.isPresent()) {
             var recipe = optional.get();
-            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(serverPlayer, new RecipeWrapper(recipe.getType(), recipe.getId()));
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), serverPlayer, level.getServer());
 
             if (restriction != null) {
                 resultSlots.clearContent();

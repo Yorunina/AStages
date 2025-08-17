@@ -21,6 +21,7 @@ public class ServerEventHandler {
         var iterator = event.getDrops().iterator();
         var source = event.getSource().getEntity();
         var entity = event.getEntity();
+        var server = entity.getServer();
         var toBeAdded = new ArrayList<ItemEntity>();
         Player player;
 
@@ -30,13 +31,11 @@ public class ServerEventHandler {
             player = AStagesUtil.getNearestPlayer(entity.level(), entity.blockPosition());
         }
 
-        if (player == null) { return; }
-
         while (iterator.hasNext()) {
             var drop = iterator.next();
             var stack = drop.getItem();
 
-            var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(player, stack, entity.getType(), null);
+            var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(stack, entity.getType(), null, player, server);
 
             if (restriction != null) {
                 iterator.remove();

@@ -34,19 +34,19 @@ public class ARestrictionManager {
     @ForPlugins public static final Map<Class<?>, AttributeStore> ATTACHED_ATTRIBUTES = new HashMap<>();
 
     // ADD SLOT RESTRICTION
-    public static final AItemManager ITEM_INSTANCE = new AItemManager();
-    public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager();
-    public static final AMobManager MOB_INSTANCE = new AMobManager();
-    public static final AStructureManager STRUCTURE_INSTANCE = new AStructureManager();
-    public static final ARecipeManager RECIPE_INSTANCE = new ARecipeManager();
-    public static final AScreenManager SCREEN_INSTANCE = new AScreenManager();
-    public static final AOreManager ORE_INSTANCE = new AOreManager();
-    public static final APetManager PET_INSTANCE = new APetManager();
-    public static final AEnchantManager ENCHANT_INSTANCE = new AEnchantManager();
-    public static final ACropManager CROP_INSTANCE = new ACropManager();
-    public static final AEffectManager EFFECT_INSTANCE = new AEffectManager();
-    public static final ARegionManager REGION_INSTANCE = new ARegionManager();
-    public static final ALootManager LOOT_INSTANCE = new ALootManager();
+    public static final AItemManager ITEM_INSTANCE = new AItemManager(); // Done!
+    public static final ADimensionManager DIMENSION_INSTANCE = new ADimensionManager(); // Done!
+    public static final AMobManager MOB_INSTANCE = new AMobManager(); // Done!
+    public static final AStructureManager STRUCTURE_INSTANCE = new AStructureManager(); // Done!
+    public static final ARecipeManager RECIPE_INSTANCE = new ARecipeManager(); // Done!
+    public static final AScreenManager SCREEN_INSTANCE = new AScreenManager(); // Done!
+    public static final AOreManager ORE_INSTANCE = new AOreManager(); // Implement Server Stages
+    public static final APetManager PET_INSTANCE = new APetManager(); // Done!
+    public static final AEnchantManager ENCHANT_INSTANCE = new AEnchantManager(); // Done!
+    public static final ACropManager CROP_INSTANCE = new ACropManager();  // Done!
+    public static final AEffectManager EFFECT_INSTANCE = new AEffectManager(); // Done!
+    public static final ARegionManager REGION_INSTANCE = new ARegionManager(); // Done!
+    public static final ALootManager LOOT_INSTANCE = new ALootManager(); // Done!
 
     public static Set<String> ALL_STAGES = new HashSet<>();
     public static Set<String> ALL_IDS = new HashSet<>();

@@ -13,6 +13,7 @@ import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
 import com.alessandro.astages.util.ReloadType;
+import com.alessandro.astages.util.develop.NotYetImplemented;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+@NotYetImplemented("ServerStageReadable")
 @ParametersAreNonnullByDefault
 public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockState> implements ClientSynchronizable {
     private final OrderedMultiMap<BlockState, AOreRestriction> CACHE = OrderedMultiMap.create();

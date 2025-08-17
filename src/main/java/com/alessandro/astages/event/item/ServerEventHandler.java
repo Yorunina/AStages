@@ -30,7 +30,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemPickup(EntityItemPickupEvent event) {
         if (canBeRunForPlayer(event.getEntity())) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getEntity(), event.getItem().getItem());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItem().getItem(), event.getEntity(), event.getItem().getServer());
 
             if (restriction != null && restriction.isDisabled(Attributes.PICKING_UP)) {
                 event.setCanceled(true);
@@ -47,7 +47,7 @@ public class ServerEventHandler {
         boolean isClientSide = event.getPlayer().level().isClientSide;
         if (isClientSide) { return; }
 
-        var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getPlayer(), AStagesUtil.stateToStack(event.getState()));
+        var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(AStagesUtil.stateToStack(event.getState()), event.getPlayer(), event.getLevel().getServer());
         if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);
@@ -59,7 +59,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.RightClickItem event) {
         if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack(), serverPlayer, event.getLevel().getServer());
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
@@ -71,7 +71,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.RightClickBlock event) {
         if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack(), serverPlayer, event.getLevel().getServer());
 
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
@@ -85,7 +85,7 @@ public class ServerEventHandler {
 //            }
             else if (restriction == null) {
                 var block = AStagesUtil.stateToStack(event.getLevel().getBlockState(event.getPos()));
-                restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, block);
+                restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(block, serverPlayer, event.getLevel().getServer());
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {
                     event.setCanceled(true);
@@ -101,7 +101,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.LeftClickBlock event) {
         if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack(), serverPlayer, event.getLevel().getServer());
 
             if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
@@ -109,7 +109,7 @@ public class ServerEventHandler {
             }
 //            else if (restriction == null) {
 //                var block = AStagesUtil.stateToStack(event.getLevel().getBlockState(event.getPos()));
-//                restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(serverPlayer, block);
+//                restriction = ARestrictionManager.NEW_ITEM_INSTANCE.getRestriction(block);
 //
 //                if (restriction != null && restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS)) {
 //                    event.setCanceled(true);
@@ -123,7 +123,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.EntityInteract event) {
         if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack(), serverPlayer, event.getLevel().getServer());
 
             if (restriction != null && (restriction.isDisabled(Attributes.LEFT_CLICK_INTERACTIONS) || restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS))) {
                 event.setCanceled(true);
@@ -135,7 +135,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemUsed(PlayerInteractEvent.EntityInteractSpecific event) {
         if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(serverPlayer, event.getItemStack());
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(event.getItemStack(), serverPlayer, event.getLevel().getServer());
 
             if (restriction != null && (restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS) || restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS))) {
                 event.setCanceled(true);
@@ -148,7 +148,7 @@ public class ServerEventHandler {
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof ServerPlayer player && !event.getLevel().isClientSide()) {
             var stack = new ItemStack(event.getPlacedBlock().getBlock());
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(stack, player, event.getLevel().getServer());
 
             if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
                 event.setCanceled(true);
@@ -163,7 +163,7 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(event.getEntity())) {
             var player = event.getEntity();
             ItemStack stack = player.getMainHandItem();
-            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(player, stack);
+            var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(stack, player, player.getServer());
 
             if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
                 event.setCanceled(true);
@@ -185,14 +185,14 @@ public class ServerEventHandler {
 
                 for (var slot : container.slots) {
                     if (slot.container == event.player.getInventory()) {
-                        var restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slot.getItem());
+                        var restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(slot.getItem(), event.player, event.player.getServer());
 
                         if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
                             event.player.drop(slot.getItem(), false);
                             container.setItem(slot.index, container.getStateId(), ItemStack.EMPTY);
                         }
                     } else {
-                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(event.player, slot.getItem(), slot);
+                        var restriction = ARestrictionManager.ITEM_INSTANCE.getContainersRestriction(slot.getItem(), slot, event.player, event.player.getServer());
 
                         if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_CONTAINERS)) {
                             event.player.drop(slot.getItem(), false);
@@ -229,9 +229,9 @@ public class ServerEventHandler {
                         ABaseItemRestriction<?, ?> restriction;
 
                         if (i >= armorStart && i <= armorEnd) {
-                            restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
+                            restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(slotContent, player, player.getServer());
                         } else {
-                            restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
+                            restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(slotContent, player, player.getServer());
                         }
 
                         if (restriction != null) {
@@ -249,9 +249,9 @@ public class ServerEventHandler {
                     ABaseItemRestriction<?, ?> restriction;
 
                     if (CommonEventSettings.getSlotChanged() >= armorStart && CommonEventSettings.getSlotChanged() <= armorEnd) {
-                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(event.player, slotContent);
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getEquipmentRestriction(slotContent, player, player.getServer());
                     } else {
-                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(event.player, slotContent);
+                        restriction = ARestrictionManager.ITEM_INSTANCE.getInventoryRestriction(slotContent, player, player.getServer());
                     }
 
                     if (restriction != null) {

@@ -27,7 +27,7 @@ public class ABlock {
 
             while (iterator.hasNext()) {
                 var stackToCheck = iterator.next();
-                var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(player, stackToCheck, null, lootTable);
+                var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(stackToCheck, null, lootTable, player, player.getServer());
 
                 if (restriction != null) {
                     iterator.remove();

@@ -27,9 +27,9 @@ public class ServerEventHandler {
 
             ACropRestriction restriction;
             if (event.getOriginalState().getBlock() instanceof CropBlock crop) {
-                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(nearestPlayer, new CropWrapper(event.getOriginalState(), crop.getAge(event.getOriginalState())));
+                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(new CropWrapper(event.getOriginalState(), crop.getAge(event.getOriginalState())), nearestPlayer, level.getServer());
             } else {
-                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(nearestPlayer, new CropWrapper(event.getOriginalState(), null));
+                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(new CropWrapper(event.getOriginalState(), null), nearestPlayer, level.getServer());
             }
 
             if (restriction != null) {

@@ -48,7 +48,7 @@ public class AStonecutterMenu {
             var iterator = recipes.listIterator();
             while (iterator.hasNext()) {
                 var recipe = iterator.next();
-                var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(player.get(), new RecipeWrapper(recipe.getType(), recipe.getId()));
+                var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), player.get(), level.getServer());
 
                 if (restriction != null) {
                     iterator.remove();

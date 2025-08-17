@@ -2,10 +2,10 @@ package com.alessandro.astages.mixin.loot;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -31,14 +30,14 @@ public abstract class ARandomizableContainerBlockEntity {
         return (RandomizableContainerBlockEntity) (Object) this;
     }
 
-    @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootTable;fill(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/storage/loot/LootParams;J)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void astages$unpackLootTable(Player player, CallbackInfo ci, LootTable lootTable, LootParams.Builder builder) {
+    @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootTable;fill(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/storage/loot/LootParams;J)V", shift = At.Shift.AFTER))
+    public void astages$unpackLootTable(Player player, CallbackInfo ci, @Local LootTable lootTable) {
         var size = randomizableContainerBlockEntity$self().getContainerSize();
 
         for (int slot = 0; slot < size; slot++) {
             var stack = getItem(slot);
             var copiedStack = stack.copy();
-            var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(player, stack, null, lootTable.getLootTableId());
+            var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(stack, null, lootTable.getLootTableId(), player, player.getServer());
 
             if (restriction != null) {
                 removeItem(slot, stack.getCount());

@@ -28,6 +28,8 @@ public class ServerStagesSyncerS2CPacket {
             // HERE WE ARE ON CLIENT!
             AClientRestrictionManager.SERVER_STAGES.clear();
             AClientRestrictionManager.SERVER_STAGES.addAll(stages);
+
+
         });
 
         ctx.get().setPacketHandled(true);

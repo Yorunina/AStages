@@ -2,6 +2,7 @@ package com.alessandro.astages.mixin.recipe.minecraft;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -17,9 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.List;
 
 @Mixin(SmithingMenu.class)
 public class ASmithingMenu {
@@ -41,9 +39,9 @@ public class ASmithingMenu {
         astages$player = playerInventory.player;
     }
 
-    @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/SmithingRecipe;assemble(Lnet/minecraft/world/Container;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    public void astages$createResult(CallbackInfo ci, List<SmithingRecipe> recipes, @NotNull SmithingRecipe recipe) {
-        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(astages$player, new RecipeWrapper(recipe.getType(), recipe.getId()));
+    @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/SmithingRecipe;assemble(Lnet/minecraft/world/Container;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;"), cancellable = true)
+    public void astages$createResult(CallbackInfo ci, @Local @NotNull SmithingRecipe recipe) {
+        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), astages$player, astages$player.getServer());
 
         if (restriction != null) {
             smithingMenu$self().resultSlots.setItem(0, ItemStack.EMPTY);

@@ -31,7 +31,7 @@ public class AFastBenchUtil {
             var oldRecipe = cir.getReturnValue();
             if (oldRecipe == null) { return; }
 
-            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(astages$player, new RecipeWrapper(oldRecipe.getType(), oldRecipe.getId()));
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(oldRecipe.getType(), oldRecipe.getId()), astages$player, world.getServer());
 
             if (restriction != null) {
                 cir.setReturnValue(null);

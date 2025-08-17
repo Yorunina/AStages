@@ -8,7 +8,6 @@ import com.alessandro.astages.util.OrderedMultiMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -41,20 +40,20 @@ public class ADimensionManager extends AManager<ADimensionRestriction, ResourceL
         return getRestrictionFromCache(CACHE, dimension, server);
     }
 
-    @Override
-    public ADimensionRestriction getRestriction(ResourceLocation dimension, @Nullable Player player, @Nullable MinecraftServer server) {
-        ADimensionRestriction serverRestriction = null;
-        ADimensionRestriction playerRestriction = null;
-
-        if (server != null) { serverRestriction = getRestriction(server, dimension); }
-        if (player != null) { playerRestriction = getRestriction(player, dimension); }
-
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
-        }
-
-        return playerRestriction;
-    }
+//    @Override
+//    public ADimensionRestriction getRestriction(ResourceLocation dimension, @Nullable Player player, @Nullable MinecraftServer server) {
+//        ADimensionRestriction serverRestriction = null;
+//        ADimensionRestriction playerRestriction = null;
+//
+//        if (server != null) { serverRestriction = getRestriction(server, dimension); }
+//        if (player != null) { playerRestriction = getRestriction(player, dimension); }
+//
+//        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
+//            return null;
+//        }
+//
+//        return playerRestriction;
+//    }
 
     @Override
     public void removeRestriction(String id) {

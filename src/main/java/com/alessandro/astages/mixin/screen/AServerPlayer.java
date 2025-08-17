@@ -33,9 +33,9 @@ public abstract class AServerPlayer {
     public void astages$openMenu(MenuProvider menu, CallbackInfoReturnable<OptionalInt> cir, @Local AbstractContainerMenu abstractcontainermenu) {
         AScreenRestriction restriction;
         if (menu instanceof BlockEntity entity) {
-            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(serverPlayer$self(), abstractcontainermenu, serverLevel().getBlockState(entity.getBlockPos()), entity);
+            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(abstractcontainermenu, serverLevel().getBlockState(entity.getBlockPos()), entity, serverPlayer$self(), serverPlayer$self().getServer());
         } else {
-            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(serverPlayer$self(), abstractcontainermenu, null, null);
+            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(abstractcontainermenu, null, null, serverPlayer$self(), serverPlayer$self().getServer());
         }
 
         if (restriction != null) {

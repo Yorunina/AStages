@@ -29,8 +29,8 @@ public class ServerEventHandler {
             ResourceLocation dimension = event.getDimension().location();
 
             ResourceLocation currentDimension = player.level().dimension().location();
-            ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(player, currentDimension);
-            ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(player, dimension);
+            ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(currentDimension, player, player.getServer());
+            ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(dimension, player, player.getServer());
 
             if (fromDim != null && fromDim.isEnabled(Attributes.BIDIRECTIONAL)) {
                 event.setCanceled(true);
