@@ -28,29 +28,29 @@ public class ServerStageData extends SavedData {
 
         serverStages.addAll(list);
         setDirty();
-        synchronizeChanges();
+        synchronizeChanges(PlayerStage.Operation.ADD);
     }
 
-    public void set(List<String> stages) {
-        serverStages = stages;
-        setDirty();
-        synchronizeChanges();
-    }
+//    public void set(List<String> stages) {
+//        serverStages = stages;
+//        setDirty();
+//        synchronizeChanges(PlayerStage.Operation.ADD);
+//    }
 
     public void remove(String... stages) {
         serverStages.removeAll(List.of(stages));
         setDirty();
-        synchronizeChanges();
+        synchronizeChanges(PlayerStage.Operation.REMOVE);
     }
 
     public void removeAll() {
         serverStages.clear();
         setDirty();
-        synchronizeChanges();
+        synchronizeChanges(PlayerStage.Operation.REMOVE_ALL);
     }
 
-    private void synchronizeChanges() {
-        ModNetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages));
+    private void synchronizeChanges(PlayerStage.Operation operation) {
+        ModNetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages, operation));
     }
 
     public static void checkStage(String stage) {

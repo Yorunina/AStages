@@ -1,6 +1,7 @@
 package com.alessandro.astages.core.client.manager;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.recipe.AClientBaseRecipeRestriction;
 import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeModRestriction;
 import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestriction;
@@ -55,10 +56,18 @@ public class AClientRecipeManager implements AClientMinimalManager<AClientBaseRe
     }
 
     public AClientBaseRecipeRestriction<?, ?, ?> getRestriction(RecipeWrapper wrapper) {
+        var serverModRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !AClientRestrictionManager.SERVER_STAGES.contains(r.getStage())).findFirst().orElse(null);
+        if (serverModRestriction == null) { return null; }
         var modRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
         if (modRestriction != null) { return modRestriction; }
 
         var restrictions = RECIPE_TYPE_CACHE.get(wrapper.type());
+        for (var restriction : restrictions) {
+            if (restriction.getRecipes().contains(wrapper.recipe()) && AClientRestrictionManager.SERVER_STAGES.contains(restriction.getStage())) {
+                return null;
+            }
+        }
+
         for (var restriction : restrictions) {
             if (restriction.getRecipes().contains(wrapper.recipe()) && !ClientPlayerStage.hasStage(restriction.getStage())) {
                 return restriction;

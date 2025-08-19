@@ -112,6 +112,9 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     }
 
     public AClientBaseItemRestriction<?, ?> getRestriction(ItemStack stack) {
+        var serverRestriction = restrictions.stream().filter(r -> r.isRestricted(stack) && !AClientRestrictionManager.SERVER_STAGES.contains(r.getStage())).findFirst().orElse(null);
+        if (serverRestriction == null) { return null; }
+
         return restrictions.stream().filter(r -> r.isRestricted(stack) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
     }
 
@@ -133,7 +136,7 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
         if (properties.containsKey(CustomItemStackKey.build(stack))) {
             var restriction = properties.get(CustomItemStackKey.build(stack));
             if (restriction != null) {
-                return ClientPlayerStage.hasStage(restriction.stage()) ? null : restriction;
+                return ClientPlayerStage.hasStage(restriction.stage()) || AClientRestrictionManager.SERVER_STAGES.contains(restriction.stage()) ? null : restriction;
             } else {
                 return null;
             }

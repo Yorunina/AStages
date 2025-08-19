@@ -1,6 +1,7 @@
 package com.alessandro.astages.store.client;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
 
@@ -44,6 +45,20 @@ public abstract class AClientManager<R extends AClientRestriction<R, U, V>, U, V
         if (!restrictions.isEmpty()) {
             for (var restriction : restrictions) {
                 if (!ClientPlayerStage.hasStage(restriction.getStage())) {
+                    return restriction;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public <W> R getServerRestrictionFromCache(OrderedMultiMap<W, R> cache, W value) {
+        var restrictions = cache.get(value);
+
+        if (!restrictions.isEmpty()) {
+            for (var restriction : restrictions) {
+                if (!AClientRestrictionManager.SERVER_STAGES.contains(restriction.getStage())) {
                     return restriction;
                 }
             }

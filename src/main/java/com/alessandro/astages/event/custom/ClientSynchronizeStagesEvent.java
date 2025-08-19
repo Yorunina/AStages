@@ -1,26 +1,14 @@
 package com.alessandro.astages.event.custom;
 
 import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.event.custom.types.ClientStageEvent;
 import com.alessandro.astages.util.develop.Info;
-import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
 @Info("Sync event for client!")
-public class ClientSynchronizeStagesEvent extends Event {
-    private final List<String> stagesSynced;
-    private final PlayerStage.Operation operation;
-
+public class ClientSynchronizeStagesEvent extends ClientStageEvent {
     public ClientSynchronizeStagesEvent(List<String> stagesSynced, PlayerStage.Operation operation) {
-        this.stagesSynced = stagesSynced;
-        this.operation = operation;
-    }
-
-    public List<String> getStagesSynced() {
-        return stagesSynced;
-    }
-
-    public PlayerStage.Operation getOperation() {
-        return operation;
+        super(stagesSynced, operation);
     }
 }

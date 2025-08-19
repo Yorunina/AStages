@@ -1,6 +1,7 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.event.CommonEventSettings;
@@ -116,7 +117,7 @@ public class ARestrictionManager {
 
     public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
         var data = ServerStageData.getData(server);
-        ModNetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get()));
+        ModNetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), PlayerStage.Operation.LOGIN));
     }
 
     public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, SyncOperation operation) {

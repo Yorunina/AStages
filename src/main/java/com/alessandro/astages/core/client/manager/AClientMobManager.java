@@ -29,6 +29,9 @@ public class AClientMobManager extends AClientManager<AClientMobRestriction, Ent
 
     @Override
     public AClientMobRestriction getRestriction(EntityType<?> type) {
+        var serverRestriction = getServerRestrictionFromCache(CACHE, type);
+        if (serverRestriction == null) { return null; }
+
         return getRestrictionFromCache(CACHE, type);
     }
 
