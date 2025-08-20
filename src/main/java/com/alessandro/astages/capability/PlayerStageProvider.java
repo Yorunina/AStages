@@ -1,5 +1,7 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -8,9 +10,8 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+@NotNullParamsAndMethodsReturn
 public class PlayerStageProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
     public static Capability<PlayerStage> PLAYER_STAGE = CapabilityManager.get(new CapabilityToken<>() { });
 
@@ -26,7 +27,7 @@ public class PlayerStageProvider implements ICapabilityProvider, INBTSerializabl
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
         if (cap == PLAYER_STAGE) {
             return optional.cast();
         }

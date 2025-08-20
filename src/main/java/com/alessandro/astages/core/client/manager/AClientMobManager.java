@@ -4,11 +4,10 @@ import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.store.client.AClientManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.world.entity.EntityType;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AClientMobManager extends AClientManager<AClientMobRestriction, EntityType<?>, EntityType<?>> {
     private final OrderedMultiMap<EntityType<?>, AClientMobRestriction> CACHE = OrderedMultiMap.create();
 

@@ -2,14 +2,14 @@ package com.alessandro.astages.networking.packet.simple;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class SimpleIdsSyncerS2CPacket {
     private final Collection<String> ids;
     private final SyncOperation operation;

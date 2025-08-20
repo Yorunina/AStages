@@ -1,11 +1,8 @@
 package com.alessandro.astages.store;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public class NonnullAttribute<T> /*extends Attribute<T>*/ {
 //    private NonnullAttribute(String id, Class<T> type, T defaultValue) {
 //        super(id, type, defaultValue);

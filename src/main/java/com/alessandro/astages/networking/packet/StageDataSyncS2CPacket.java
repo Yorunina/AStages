@@ -3,10 +3,10 @@ package com.alessandro.astages.networking.packet;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
+@NotNullParams
 public class StageDataSyncS2CPacket {
     private final List<String> stages;
     private final PlayerStage.Operation operation;
@@ -23,7 +24,7 @@ public class StageDataSyncS2CPacket {
         this.operation = operation;
     }
 
-    public StageDataSyncS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public StageDataSyncS2CPacket(FriendlyByteBuf buf) {
         var readList = buf.readList(FriendlyByteBuf::readByteArray);
         var newStageList = new ArrayList<String>();
 
@@ -35,7 +36,7 @@ public class StageDataSyncS2CPacket {
         this.operation = buf.readEnum(PlayerStage.Operation.class);
     }
 
-    public void toBytes(@NotNull FriendlyByteBuf buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         var stagesAsByte = new ArrayList<byte[]>();
 
         stages.forEach(stage -> {
@@ -46,7 +47,7 @@ public class StageDataSyncS2CPacket {
         buf.writeEnum(operation);
     }
 
-    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
             List<String> differencesBetweenClientAndServer = new ArrayList<>(ClientPlayerStage.getPlayerStages());

@@ -1,14 +1,12 @@
 package com.alessandro.astages.util;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public enum ARestrictionType {
     ITEM,
     MOB,

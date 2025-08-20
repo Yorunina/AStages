@@ -1,12 +1,12 @@
 package com.alessandro.astages.networking.packet;
 
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public abstract class RestrictionSyncerPacket {
     private final String id;
     private final String stage;

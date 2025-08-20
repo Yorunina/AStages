@@ -4,14 +4,14 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ItemSyncerS2CPacket extends ABaseItemSyncerPacket {
     private final List<Item> items;
 

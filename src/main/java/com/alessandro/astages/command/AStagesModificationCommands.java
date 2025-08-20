@@ -5,6 +5,7 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.command.argument.AStagesAddArgument;
 import com.alessandro.astages.command.argument.AStagesRemoveArgument;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.minecraft.ChatFormatting;
@@ -14,14 +15,12 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AStagesModificationCommands {
-    public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2))
             .then(Commands.literal("add").then(Commands.argument("player", EntityArgument.player()).then(Commands.argument("stage", AStagesAddArgument.stages())
                 .executes(context -> addStageCommand(EntityArgument.getPlayer(context, "player"), AStagesAddArgument.getStage(context, "stage"), true, false))

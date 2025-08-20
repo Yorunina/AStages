@@ -6,6 +6,8 @@ import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -22,13 +24,11 @@ import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
-@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     public static final Map<UUID, List<ResourceLocation>> playerIsInStructure = new HashMap<>();
     public static int tick = 0;

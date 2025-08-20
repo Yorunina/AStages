@@ -2,16 +2,13 @@ package com.alessandro.astages.plugin;
 
 import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public interface AStagesPlugin {
     default void reloadBeforeScripts() { }
     default void clientSynchronization(@Nullable ServerPlayer player) { }

@@ -1,13 +1,10 @@
 package com.alessandro.astages.store;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraftforge.registries.DeferredRegister;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public class Attribute<T> {
     private static DeferredRegister<Attribute<?>> deferredRegister;
 

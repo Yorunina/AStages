@@ -6,13 +6,12 @@ import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AStructureManager extends AManager<AStructureRestriction, ResourceLocation, ResourceLocation> implements ServerStageReadable<AStructureRestriction, ResourceLocation> {
     public final OrderedMultiMap<ResourceLocation, AStructureRestriction> CACHE = OrderedMultiMap.create();
 

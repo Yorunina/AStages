@@ -2,14 +2,14 @@ package com.alessandro.astages.core.stage;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AStageManager {
     private static final Map<String, AStage> STAGES = new HashMap<>();
 

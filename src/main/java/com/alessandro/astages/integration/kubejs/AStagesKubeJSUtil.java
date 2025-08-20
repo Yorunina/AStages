@@ -20,7 +20,8 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -34,15 +35,12 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@NotNullParamsAndMethodsReturn
 @SuppressWarnings("unused")
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class AStagesKubeJSUtil {
     // Player Stages
     public static void addStageToPlayer(String stage, Player player) {

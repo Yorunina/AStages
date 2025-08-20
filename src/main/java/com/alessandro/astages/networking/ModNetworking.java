@@ -13,12 +13,12 @@ import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
-import org.jetbrains.annotations.Nullable;
 
 public class ModNetworking {
     private static SimpleChannel INSTANCE;

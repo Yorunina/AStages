@@ -2,6 +2,7 @@ package com.alessandro.astages.mixin.loot;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,9 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 @Mixin(RandomizableContainerBlockEntity.class)
 public abstract class ARandomizableContainerBlockEntity {
     @Shadow public abstract ItemStack getItem(int pIndex);

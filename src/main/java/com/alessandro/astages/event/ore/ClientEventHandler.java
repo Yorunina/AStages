@@ -4,6 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -12,10 +13,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID, value = Dist.CLIENT)
-@ParametersAreNonnullByDefault
 public class ClientEventHandler {
     static {
         if (EffectiveSide.get().isClient()) {

@@ -1,6 +1,7 @@
 package com.alessandro.astages.mixin.ore;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.BlockItem;
@@ -10,9 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 @Mixin(ItemColors.class)
 public class AItemColors {
     @ModifyExpressionValue(method = "getColor", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"))

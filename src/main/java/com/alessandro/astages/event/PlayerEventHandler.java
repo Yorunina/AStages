@@ -9,6 +9,7 @@ import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -19,9 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class PlayerEventHandler {
     @SubscribeEvent

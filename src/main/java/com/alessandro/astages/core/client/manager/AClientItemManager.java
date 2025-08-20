@@ -12,15 +12,15 @@ import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacke
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AClientItemManager implements AClientMinimalManager<AClientBaseItemRestriction<?, ?>> {
     private final List<AClientBaseItemRestriction<?, ?>> restrictions = new ArrayList<>();
     private final HashMap<String, AClientBaseItemRestriction<?, ?>> IDS = new HashMap<>();

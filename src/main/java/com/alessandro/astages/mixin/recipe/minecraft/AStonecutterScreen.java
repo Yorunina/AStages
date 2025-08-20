@@ -2,20 +2,21 @@ package com.alessandro.astages.mixin.recipe.minecraft;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
 import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
+@NotNullParams
 @Mixin(StonecutterScreen.class)
 public class AStonecutterScreen {
     @Redirect(method = "renderRecipes", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/StonecutterMenu;getRecipes()Ljava/util/List;"))
-    public List<StonecutterRecipe> astages$renderRecipes(@NotNull StonecutterMenu instance) {
+    public List<StonecutterRecipe> astages$renderRecipes(StonecutterMenu instance) {
         var defaultRecipes = instance.getRecipes();
         var iterator = defaultRecipes.listIterator();
 

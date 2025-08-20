@@ -1,15 +1,15 @@
 package com.alessandro.astages.util;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AChatBundle {
     private final ArrayList<AComponent> components = new ArrayList<>();
     private boolean finalized = false;

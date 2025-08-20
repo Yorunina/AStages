@@ -2,15 +2,15 @@ package com.alessandro.astages.networking.packet.item;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemPropertyRestriction;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ItemPropertySyncerS2CPacket {
     private final String id;
     private final String stage;

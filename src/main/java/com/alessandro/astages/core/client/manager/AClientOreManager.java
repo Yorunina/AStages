@@ -7,14 +7,13 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AClientOreManager extends AClientManager<AClientOreRestriction, OreWrapper, BlockState> {
     private final OrderedMultiMap<BlockState, AClientOreRestriction> CACHE = OrderedMultiMap.create();
     private final OrderedMultiMap<Block, AClientOreRestriction> BLOCK_CACHE = OrderedMultiMap.create();

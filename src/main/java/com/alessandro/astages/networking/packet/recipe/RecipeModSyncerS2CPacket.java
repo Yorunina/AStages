@@ -5,19 +5,17 @@ import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeModRes
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 @Info("For now, required only by JEI.")
 public class RecipeModSyncerS2CPacket extends RestrictionSyncerPacket {
     private final int priority;
     private final String modId;
 
-    public RecipeModSyncerS2CPacket(@NotNull ARecipeModRestriction restriction) {
+    public RecipeModSyncerS2CPacket(ARecipeModRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getPriority(), restriction.getModId());
     }
 
@@ -27,13 +25,13 @@ public class RecipeModSyncerS2CPacket extends RestrictionSyncerPacket {
         this.modId = modId;
     }
 
-    public RecipeModSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public RecipeModSyncerS2CPacket(FriendlyByteBuf buf) {
         super(buf);
         this.priority = buf.readInt();
         this.modId = buf.readUtf();
     }
 
-    public void toBytes(@NotNull FriendlyByteBuf buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         super.toBytes(buf);
         buf.writeInt(priority);
         buf.writeUtf(modId);

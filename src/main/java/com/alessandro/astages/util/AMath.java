@@ -1,9 +1,10 @@
 package com.alessandro.astages.util;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParams;
+
 import java.util.Collection;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AMath {
     @SuppressWarnings("All")
     private static int gcd(int x, int y) {

@@ -5,6 +5,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ACropRestriction;
 import com.alessandro.astages.core.wrapper.CropWrapper;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
@@ -13,10 +14,8 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
-@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
     public static void onCropGrowth(BlockEvent.CropGrowEvent.Post event) {

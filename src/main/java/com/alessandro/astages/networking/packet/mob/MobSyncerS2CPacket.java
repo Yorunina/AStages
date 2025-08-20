@@ -5,15 +5,15 @@ import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class MobSyncerS2CPacket extends RestrictionSyncerPacket {
     private final List<EntityType<?>> types;
     private final Component jadeMobMessage;

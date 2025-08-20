@@ -2,22 +2,21 @@ package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.ModNetworking;
-import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AMobManager extends AManager<AMobRestriction, EntityType<?>, EntityType<?>> implements ServerStageReadable<AMobRestriction, EntityType<?>>, ClientSynchronizable {
     private final OrderedMultiMap<EntityType<?>, AMobRestriction> CACHE = OrderedMultiMap.create();
 

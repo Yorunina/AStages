@@ -3,7 +3,7 @@ package com.alessandro.astages.capability;
 import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -12,12 +12,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public class ServerStageData extends SavedData {
     private static final String STAGE_ID = "astages_server_stages";
     private List<String> serverStages = new ArrayList<>();

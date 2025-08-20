@@ -5,9 +5,11 @@ import com.alessandro.astages.core.server.restriction.ARegionRestriction;
 import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 
+@NotNullParams
 public class ARegionManager extends AManager<ARegionRestriction, Void, BlockPos> implements ServerStageReadable<ARegionRestriction, BlockPos> {
     @Override
     public ARegionRestriction getRestriction(MinecraftServer server, BlockPos object) {

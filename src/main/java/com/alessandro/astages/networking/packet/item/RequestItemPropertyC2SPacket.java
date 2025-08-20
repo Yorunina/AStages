@@ -3,15 +3,16 @@ package com.alessandro.astages.networking.packet.item;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@NotNullParams
 public class RequestItemPropertyC2SPacket {
     private static final Function<String, RuntimeException> EXCEPTION = id -> new RuntimeException("Illegal identifier synchronization: " + id + " de-synchronized between server and client!");
     private static final Function<String, RuntimeException> NULL_EXCEPTION = id -> new NullPointerException("Illegal null synchronization: " + id + " not found on server!");
@@ -26,19 +27,19 @@ public class RequestItemPropertyC2SPacket {
         this.stack = stack;
     }
 
-    public RequestItemPropertyC2SPacket(@NotNull FriendlyByteBuf buf) {
+    public RequestItemPropertyC2SPacket(FriendlyByteBuf buf) {
         this.id = buf.readUtf();
         this.stage = buf.readUtf();
         this.stack = buf.readItem();
     }
 
-    public void toBytes(@NotNull FriendlyByteBuf buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeUtf(id);
         buf.writeUtf(stage);
         buf.writeItem(stack);
     }
 
-    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON SERVER!
             var serverRestriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(id);

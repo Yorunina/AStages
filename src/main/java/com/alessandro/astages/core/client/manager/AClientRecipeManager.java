@@ -9,14 +9,14 @@ import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AClientRecipeManager implements AClientMinimalManager<AClientBaseRecipeRestriction<?, ?, ?>> {
     public final List<AClientBaseRecipeRestriction<?, ?, ?>> restrictions = new ArrayList<>();
     private final Map<String, AClientBaseRecipeRestriction<?, ?, ?>> IDS = new HashMap<>();

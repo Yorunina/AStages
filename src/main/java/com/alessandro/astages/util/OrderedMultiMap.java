@@ -1,11 +1,12 @@
 package com.alessandro.astages.util;
 
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Predicate;
 
+@NotNullParamsAndMethodsReturn
 public class OrderedMultiMap<K, V extends Comparable<V>> {
     private final Map<K, SortedSet<V>> map;
 
@@ -14,7 +15,7 @@ public class OrderedMultiMap<K, V extends Comparable<V>> {
     }
 
     @Contract(value = " -> new", pure = true)
-    public static <K, V extends Comparable<V>> @NotNull OrderedMultiMap<K, V> create() {
+    public static <K, V extends Comparable<V>> OrderedMultiMap<K, V> create() {
         return new OrderedMultiMap<>();
     }
 

@@ -20,15 +20,15 @@ import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ARestrictionManager {
     private static final Map<ARestrictionType, AMinimalManager<?>> ASSOCIATION_MAP = new HashMap<>();
     @ForPlugins public static final Map<Object, AMinimalManager<?>> EXTERNAL_MANAGERS = new HashMap<>();

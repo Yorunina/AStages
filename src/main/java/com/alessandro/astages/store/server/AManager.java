@@ -8,11 +8,11 @@ import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @param <U> For restrict method object type
  * @param <V> For isRestricted method object type
  */
-@ParametersAreNonnullByDefault
+@NotNullParams
 public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements AMinimalManager<R>, ServerStageReadable<R, V> {
     private final List<R> restrictions = new ArrayList<>();
     private final Map<String, R> IDS = new HashMap<>();

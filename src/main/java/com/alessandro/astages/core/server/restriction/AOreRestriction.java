@@ -8,13 +8,10 @@ import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.*;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ReloadType;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, BlockState> implements AChangeable, AMarkable {
     private BlockState original;
     private BlockState replacement;

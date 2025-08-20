@@ -1,14 +1,13 @@
 package com.alessandro.astages.datageneration;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GatherDataEventHandler {
     @SubscribeEvent

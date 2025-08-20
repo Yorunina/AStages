@@ -4,14 +4,13 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import snownee.jade.api.*;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 @WailaPlugin
 public class AStagesJadePlugin implements IWailaPlugin {
     @Override

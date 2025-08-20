@@ -2,16 +2,15 @@ package com.alessandro.astages.event.effect;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
-@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
     public static void effectAdded(MobEffectEvent.Applicable event) {

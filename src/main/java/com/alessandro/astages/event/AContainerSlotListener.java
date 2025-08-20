@@ -1,15 +1,14 @@
 package com.alessandro.astages.event;
 
 import com.alessandro.astages.event.custom.ContainerChangedEvent;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public record AContainerSlotListener(Player player) implements ContainerListener {
     @Override
     public void slotChanged(AbstractContainerMenu container, int index, ItemStack stack) {

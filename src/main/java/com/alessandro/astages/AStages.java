@@ -5,7 +5,6 @@ import com.alessandro.astages.command.argument.ModArguments;
 import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.server.manager.AItemManager;
 import com.alessandro.astages.item.ModItems;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.plugin.APluginFinder;
@@ -31,8 +30,8 @@ import org.slf4j.Logger;
 
 import java.util.function.Supplier;
 
-@Mod(AStages.MODID)
 @SuppressWarnings("removal")
+@Mod(AStages.MODID)
 public class AStages {
     public static final String MODID = "astages";
     public static final Logger LOGGER = LogUtils.getLogger();

@@ -5,16 +5,16 @@ import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestri
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 @Info("For now, required only by JEI.")
 public class RecipeSyncerS2CPacket extends RestrictionSyncerPacket {
     private final int priority;

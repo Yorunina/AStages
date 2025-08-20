@@ -4,13 +4,12 @@ import com.alessandro.astages.core.server.restriction.APetRestriction;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class APetManager extends AManager<APetRestriction, EntityType<?>, EntityType<?>> {
     public final OrderedMultiMap<EntityType<?>, APetRestriction> CACHE = OrderedMultiMap.create();
 

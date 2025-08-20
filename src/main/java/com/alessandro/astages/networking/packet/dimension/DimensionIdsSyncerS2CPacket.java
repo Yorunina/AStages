@@ -1,13 +1,14 @@
 package com.alessandro.astages.networking.packet.dimension;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
 
+@NotNullParams
 public class DimensionIdsSyncerS2CPacket {
     private final List<String> ids;
 
@@ -15,15 +16,15 @@ public class DimensionIdsSyncerS2CPacket {
         this.ids = ids;
     }
 
-    public DimensionIdsSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public DimensionIdsSyncerS2CPacket(FriendlyByteBuf buf) {
         ids = buf.readList(FriendlyByteBuf::readUtf);
     }
 
-    public void toBytes(@NotNull FriendlyByteBuf buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeCollection(ids, FriendlyByteBuf::writeUtf);
     }
 
-    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
             AClientRestrictionManager.DIMENSION_IDS.clear();

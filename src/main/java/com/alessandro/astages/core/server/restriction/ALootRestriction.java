@@ -5,17 +5,16 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.AFilter;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.util.annotations.Nullable;
 import com.alessandro.astages.util.develop.Info;
 import com.google.errorprone.annotations.DoNotCall;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -23,8 +22,7 @@ import java.util.function.Function;
 // /give Dev chest{BlockEntityTag:{LootTable:"chests/village/village_toolsmith"}}
 // /setblock ~ ~1 ~ minecraft:chest{LootTable:"minecraft:chests/simple_dungeon"}
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemStack> {
     public static String IDENTIFIER = "/loot";
 

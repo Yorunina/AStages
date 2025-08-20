@@ -2,6 +2,7 @@ package com.alessandro.astages.block;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -10,11 +11,10 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ServerEventHandler {
     public static int[][] delta = new int[][] {
         { 0, 1, 1 },

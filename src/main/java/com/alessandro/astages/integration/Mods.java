@@ -1,11 +1,11 @@
 package com.alessandro.astages.integration;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.alessandro.astages.util.annotations.NotNullMethodsReturn;
 import net.minecraftforge.fml.ModList;
 
 import java.util.Locale;
 
-@MethodsReturnNonnullByDefault
+@NotNullMethodsReturn
 public enum Mods {
     JEI,
     KUBEJS,

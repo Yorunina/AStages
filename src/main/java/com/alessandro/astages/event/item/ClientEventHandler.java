@@ -3,16 +3,17 @@ package com.alessandro.astages.event.item;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID, value = Dist.CLIENT)
 public class ClientEventHandler {
     @SubscribeEvent
-    public static void onItemTooltip(@NotNull ItemTooltipEvent event) {
+    public static void onItemTooltip(ItemTooltipEvent event) {
         if (event.getEntity() != null && AClientRestrictionManager.didJeiFinishReloading()) {
             var stack = event.getItemStack();
             var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);

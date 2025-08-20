@@ -1,11 +1,10 @@
 package com.alessandro.astages.networking.packet.item;
 
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public abstract class ABaseItemSyncerPacket extends RestrictionSyncerPacket {
     private final boolean renderItemName;
     private final boolean hideTooltip;

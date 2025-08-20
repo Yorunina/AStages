@@ -12,6 +12,8 @@ import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -30,12 +32,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ASimpleElaborator {
     public static void elaborateItem(ASimpleRestriction simple, boolean markAsDirty) {
         var restriction = new AItemRestriction(simple.id, simple.stage).restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(AStagesUtil.parse(simple.object))));

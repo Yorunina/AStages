@@ -3,10 +3,10 @@ package com.alessandro.astages.networking.packet.server;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
+@NotNullParams
 public class ServerStagesSyncerS2CPacket {
     private final List<String> stages;
     private final PlayerStage.Operation operation;
@@ -23,17 +24,17 @@ public class ServerStagesSyncerS2CPacket {
         this.operation = operation;
     }
 
-    public ServerStagesSyncerS2CPacket(@NotNull FriendlyByteBuf buf) {
+    public ServerStagesSyncerS2CPacket(FriendlyByteBuf buf) {
         stages = buf.readList(FriendlyByteBuf::readUtf);
         operation = buf.readEnum(PlayerStage.Operation.class);
     }
 
-    public void toBytes(@NotNull FriendlyByteBuf buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeCollection(stages, FriendlyByteBuf::writeUtf);
         buf.writeEnum(operation);
     }
 
-    public void handle(@NotNull Supplier<NetworkEvent.Context> ctx) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
             List<String> differencesBetweenClientAndServer = new ArrayList<>(AClientRestrictionManager.SERVER_STAGES);

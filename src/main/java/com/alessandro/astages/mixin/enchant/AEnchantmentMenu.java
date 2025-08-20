@@ -5,13 +5,13 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,12 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+@NotNullParams
 @Mixin(EnchantmentMenu.class)
 public abstract class AEnchantmentMenu {
     @Shadow @Final private ContainerLevelAccess access;
 
     @Inject(method = "getEnchantmentList", at = @At("RETURN"))
-    private void astages$enchant(ItemStack pStack, int enchantSlot, int level, @NotNull CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+    private void astages$enchant(ItemStack pStack, int enchantSlot, int level, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         var value = cir.getReturnValue();
         AtomicReference<Player> owner = new AtomicReference<>();
 

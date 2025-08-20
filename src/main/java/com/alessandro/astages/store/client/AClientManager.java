@@ -4,14 +4,14 @@ import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public abstract class AClientManager<R extends AClientRestriction<R, U, V>, U, V> implements AClientMinimalManager<R> {
     private final List<R> restrictions = new ArrayList<>();
     private final Map<String, R> IDS = new HashMap<>();

@@ -4,12 +4,11 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemPredicateRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemPredicateRestriction;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ItemPredicateSyncerS2CPacket extends ABaseItemSyncerPacket {
     private final ResourceLocation modelId;
 

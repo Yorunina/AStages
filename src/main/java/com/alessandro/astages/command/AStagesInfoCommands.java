@@ -4,6 +4,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.AChatBundle;
 import com.alessandro.astages.util.AChatUtils;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -15,9 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class AStagesInfoCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("astages_utils").requires(c -> c.hasPermission(2))

@@ -1,13 +1,14 @@
 package com.alessandro.astages.networking.packet.reload;
+
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class RequestRestrictionDeleteS2CPacket {
     private final String id;
     private final ARestrictionType type;

@@ -3,6 +3,7 @@ package com.alessandro.astages.command;
 import com.alessandro.astages.command.argument.AStagesSimpleRestrictionTypeArgument;
 import com.alessandro.astages.command.argument.AStagesSimpleRestrictionsIdsArgument;
 import com.alessandro.astages.simple.ASimpleElaborator;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -15,10 +16,10 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.synchronization.SuggestionProviders;
 import net.minecraft.core.registries.Registries;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
+@NotNullParams
 public class AStagesSimpleRestrictionsCommands {
-    public static void register(@NotNull CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2))
             .then(Commands.literal("restrict").then(Commands.argument("id", StringArgumentType.string()).then(Commands.argument("stage", StringArgumentType.string())
                 .then(Commands.literal("item").then(Commands.argument("item", ItemArgument.item(context)).executes(ASimpleElaborator::commandItem)))

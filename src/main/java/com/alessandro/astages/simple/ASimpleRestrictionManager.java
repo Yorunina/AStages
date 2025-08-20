@@ -6,13 +6,12 @@ import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,8 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NotNullParamsAndMethodsReturn
 public class ASimpleRestrictionManager {
     public static Map<ASimpleRestrictionType, List<ASimpleRestriction>> RESTRICTIONS = null;
     private static int canBeReloadable = 0;

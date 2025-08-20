@@ -17,19 +17,19 @@ import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?, ?, ?>>, ClientSynchronizable {
     private final List<ABaseRecipeRestriction<?, ?, ?>> restrictions = new ArrayList<>();
     private final Map<String, ABaseRecipeRestriction<?, ?, ?>> IDS = new HashMap<>();

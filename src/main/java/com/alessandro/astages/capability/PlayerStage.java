@@ -10,19 +10,20 @@ import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
 import com.alessandro.astages.networking.ModNetworking;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.annotations.Nullable;
 import com.alessandro.astages.util.develop.Info;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@NotNullParams
 @AutoRegisterCapability
 public class PlayerStage {
     public enum Status {
@@ -35,18 +36,20 @@ public class PlayerStage {
 
     private List<String> stages = new ArrayList<>();
 
-    public static void checkStage(String stage) {
+    public static void checkStage(@Nullable String stage) {
+        if (stage == null) { return; }
+
         if (AStageManager.isServerOnly(stage)) {
             throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in server only!");
         }
     }
 
     @Info("Not required, for commands only!")
-    public void setChangedFor(Player player, @NotNull Operation operation, String stage) {
+    public void setChangedFor(Player player, Operation operation, @Nullable String stage) {
         setChangedFor(player, operation, stage, false);
     }
 
-    public void setChangedFor(Player player, @NotNull Operation operation, @Nullable String stage, boolean silentTitle) {
+    public void setChangedFor(Player player, Operation operation, @Nullable String stage, boolean silentTitle) {
         checkStage(stage);
 
         StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stage);
@@ -100,11 +103,11 @@ public class PlayerStage {
         return stages.remove(stage) ? Status.SUCCESS : Status.NOT_PRESENT;
     }
 
-    public void copyFrom(@NotNull PlayerStage source) {
+    public void copyFrom(PlayerStage source) {
         stages = source.stages;
     }
 
-    public void saveNBTData(@NotNull CompoundTag nbt) {
+    public void saveNBTData(CompoundTag nbt) {
         if (stages == null) { return; }
         if (stages.isEmpty()) { return; }
 
@@ -115,7 +118,7 @@ public class PlayerStage {
         }
     }
 
-    public void loadNBTData(@NotNull CompoundTag nbt) {
+    public void loadNBTData(CompoundTag nbt) {
         var size = nbt.getInt("stage_size");
 
         if (size > 0) {

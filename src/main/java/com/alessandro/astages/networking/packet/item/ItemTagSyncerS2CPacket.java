@@ -4,15 +4,15 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemTagRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
 public class ItemTagSyncerS2CPacket extends ABaseItemSyncerPacket {
     private final ResourceLocation tag;
     private final List<Item> ignoredItems;

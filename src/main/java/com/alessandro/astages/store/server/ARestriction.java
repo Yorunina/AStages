@@ -5,11 +5,11 @@ import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.ConfigurableAttributeStore;
 import com.alessandro.astages.store.SetAttributeNotSupported;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -123,7 +123,7 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implem
 
     public abstract boolean isRestricted(V object);
 
-    @ParametersAreNonnullByDefault
+    @NotNullParams
     @SuppressWarnings({"unchecked", "unused"})
     public R withAttributes(ARestriction<?, ?, ?>... configs) {
         for (var config : configs) {

@@ -3,13 +3,15 @@ package com.alessandro.astages.helper;
 import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.util.develop.NotYetImplemented;
 import net.minecraft.world.item.Item;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-@ParametersAreNonnullByDefault
+@NotNullParams
+@NotYetImplemented
 public class StageHelper {
     private final String id;
     private final String stage;

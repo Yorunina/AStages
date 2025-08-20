@@ -1,14 +1,13 @@
 package com.alessandro.astages.event;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.util.annotations.NotNullParams;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
+@NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
-@ParametersAreNonnullByDefault
 public class ServerEventHandler {
     @SubscribeEvent
     public static void onServerStarting(ServerStartedEvent event) {
