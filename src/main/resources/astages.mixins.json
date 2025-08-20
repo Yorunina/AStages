@@ -28,6 +28,7 @@
     "recipe.minecraft.AStonecutterMenu",
     "reload.AJeiStarter",
     "reload.AReloadCommand",
+    "reload.AScriptManager",
     "screen.AServerPlayer",
     "structure.AEntity"
   ],

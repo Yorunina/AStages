@@ -6,6 +6,7 @@ import com.alessandro.astages.core.server.restriction.*;
 import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.stage.AStageManager;
+import com.alessandro.astages.event.custom.ReloadScriptEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
@@ -16,12 +17,28 @@ import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 
 @NotNullParams
 public class AStageKubeJSPlugin extends KubeJSPlugin {
     static {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
+
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.BeforeScriptsLoaded.class, e -> {
+                if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
+                    AStageManager.reloadBeforeScripts();
+                    ARestrictionManager.reloadBeforeScripts();
+                }
+            });
+
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.AfterScriptsLoaded.class, e -> {
+                if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
+                    AStageManager.reloadAfterScripts();
+                    ARestrictionManager.reloadAfterScripts();
+                }
+            });
         }
     }
 
@@ -87,19 +104,5 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         if (!Mods.KUBEJS.isLoaded()) return;
 
         AStages.LOGGER.debug("ASTAGES-KUBEJS: INITIALIZED PLUGIN!");
-    }
-
-    @Override
-    public void onServerReload() {
-        // AFTER SERVER SCRIPT RELOADING!
-        AStageManager.reloadAfterScripts();
-        ARestrictionManager.reloadAfterScripts();
-    }
-
-    @Override
-    public void clearCaches() {
-        // BEFORE SERVER SCRIPT RELOADING!
-        AStageManager.reloadBeforeScripts();
-        ARestrictionManager.reloadBeforeScripts();
     }
 }

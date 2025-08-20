@@ -25,6 +25,8 @@ public abstract class AClientManager<R extends AClientRestriction<R, U, V>, U, V
         IDS.clear();
     }
 
+    public void reloadAfterScripts() { }
+
     @Override
     public R getRestriction(String id) {
         return IDS.getOrDefault(id, null);
