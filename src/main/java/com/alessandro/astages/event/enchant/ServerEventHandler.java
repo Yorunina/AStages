@@ -5,7 +5,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnchantedBookItem;

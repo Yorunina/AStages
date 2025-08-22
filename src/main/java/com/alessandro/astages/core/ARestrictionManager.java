@@ -5,7 +5,7 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.event.CommonEventSettings;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
@@ -20,8 +20,8 @@ import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.SyncOperation;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -91,7 +91,7 @@ public class ARestrictionManager {
         ORE_STAGES.clear();
         SIMPLE_IDS.clear();
 
-        ModNetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
+        ANetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
 
         APluginManager.callMethod(AStagesPlugin::reloadBeforeScripts);
 
@@ -106,8 +106,8 @@ public class ARestrictionManager {
         ARestrictionManager.MOB_INSTANCE.synchronizeWithClient(player);
         ARestrictionManager.ORE_INSTANCE.synchronizeWithClient(player);
 
-        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.CLIENT_SYNC));
-        ModNetworking.sendTo(player, new DimensionIdsSyncerS2CPacket(ARestrictionManager.DIMENSION_INSTANCE.getIds()));
+        ANetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.CLIENT_SYNC));
+        ANetworking.sendTo(player, new DimensionIdsSyncerS2CPacket(ARestrictionManager.DIMENSION_INSTANCE.getIds()));
 
         AStages.TIMER.stop();
         AStages.LOGGER.info("AStages synchronization took {}!", AStages.TIMER);
@@ -117,15 +117,15 @@ public class ARestrictionManager {
 
     public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
         var data = ServerStageData.getData(server);
-        ModNetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), PlayerStage.Operation.LOGIN));
+        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), PlayerStage.Operation.LOGIN));
     }
 
     public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, SyncOperation operation) {
-        ModNetworking.sendTo(player, new SimpleIdsSyncerS2CPacket(ids, operation));
+        ANetworking.sendTo(player, new SimpleIdsSyncerS2CPacket(ids, operation));
     }
 
     public static void reflectAllStagesChangesToClients(@Nullable ServerPlayer player, Collection<String> stages, SyncOperation operation) {
-        ModNetworking.sendTo(player, new StageSyncerS2CPacket(stages, operation));
+        ANetworking.sendTo(player, new StageSyncerS2CPacket(stages, operation));
     }
 
     public static void reloadAfterScripts() {
@@ -141,7 +141,7 @@ public class ARestrictionManager {
     }
 
     public static void clearClientOnLogin(ServerPlayer player) {
-        ModNetworking.sendToPlayer(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE), player);
+        ANetworking.sendToPlayer(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE), player);
         APluginManager.callMethod(AStagesPlugin::clearClientOnLogin);
     }
 

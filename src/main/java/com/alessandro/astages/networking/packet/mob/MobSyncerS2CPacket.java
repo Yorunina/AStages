@@ -5,7 +5,7 @@ import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;

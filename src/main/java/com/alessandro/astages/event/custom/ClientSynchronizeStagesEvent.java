@@ -2,7 +2,7 @@ package com.alessandro.astages.event.custom;
 
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.types.ClientStageEvent;
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.develop.Info;
 
 import java.util.List;
 

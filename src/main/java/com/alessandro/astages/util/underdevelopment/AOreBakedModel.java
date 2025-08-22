@@ -1,9 +1,9 @@
-package com.alessandro.astages.render;
+package com.alessandro.astages.util.underdevelopment;
 
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -17,6 +17,7 @@ import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 @NotNullParamsAndMethodsReturn
 public class AOreBakedModel implements IDynamicBakedModel {
     public final String stage;

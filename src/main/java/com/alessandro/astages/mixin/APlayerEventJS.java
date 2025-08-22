@@ -2,7 +2,7 @@ package com.alessandro.astages.mixin;
 
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import dev.latvian.mods.kubejs.player.PlayerEventJS;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.world.entity.player.Player;

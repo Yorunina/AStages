@@ -1,6 +1,6 @@
 package com.alessandro.astages.util;
 
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;

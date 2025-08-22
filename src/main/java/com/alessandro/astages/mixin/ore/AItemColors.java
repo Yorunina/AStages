@@ -1,7 +1,7 @@
 package com.alessandro.astages.mixin.ore;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.BlockItem;

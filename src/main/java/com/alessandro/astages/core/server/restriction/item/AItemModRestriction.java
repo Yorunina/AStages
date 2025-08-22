@@ -2,9 +2,9 @@ package com.alessandro.astages.core.server.restriction.item;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +74,7 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
 
     @Override
     public void markAsDirty() {
-        ModNetworking.sendTo(null, new ItemModSyncerS2CPacket(this));
+        ANetworking.sendTo(null, new ItemModSyncerS2CPacket(this));
         super.markAsDirty();
     }
 

@@ -1,6 +1,6 @@
 package com.alessandro.astages.mixin.structure;
 
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.develop.Info;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 

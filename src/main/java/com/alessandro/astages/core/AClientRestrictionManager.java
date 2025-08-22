@@ -8,7 +8,7 @@ import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.develop.Info;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;

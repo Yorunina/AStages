@@ -8,7 +8,7 @@ import com.alessandro.astages.core.server.restriction.recipe.ABaseRecipeRestrict
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
@@ -16,9 +16,9 @@ import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.OrderedMultiMap;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.util.OrderedMultiMap;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -166,13 +166,13 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         RECIPE_CACHE.removeValues(restriction -> restriction.getId().equals(id));
         IDS.remove(id);
 
-        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+        ANetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
     }
 
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
-        recipes.forEach(restriction -> ModNetworking.sendTo(player, new RecipeSyncerS2CPacket(restriction)));
-        mods.forEach(restriction -> ModNetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
+        recipes.forEach(restriction -> ANetworking.sendTo(player, new RecipeSyncerS2CPacket(restriction)));
+        mods.forEach(restriction -> ANetworking.sendTo(player, new RecipeModSyncerS2CPacket(restriction)));
     }
 
     @Override

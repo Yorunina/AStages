@@ -5,7 +5,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

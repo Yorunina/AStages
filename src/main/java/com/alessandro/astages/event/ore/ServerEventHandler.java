@@ -2,9 +2,9 @@ package com.alessandro.astages.event.ore;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.annotation.develop.Info;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantments;

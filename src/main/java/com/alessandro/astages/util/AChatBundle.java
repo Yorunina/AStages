@@ -1,7 +1,7 @@
 package com.alessandro.astages.util;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

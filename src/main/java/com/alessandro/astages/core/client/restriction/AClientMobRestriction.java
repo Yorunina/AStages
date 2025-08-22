@@ -3,7 +3,7 @@ package com.alessandro.astages.core.client.restriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientRestriction;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.ArrayList;

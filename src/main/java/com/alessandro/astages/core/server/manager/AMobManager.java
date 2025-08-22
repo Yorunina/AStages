@@ -1,16 +1,16 @@
 package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.OrderedMultiMap;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.util.OrderedMultiMap;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -65,12 +65,12 @@ public class AMobManager extends AManager<AMobRestriction, EntityType<?>, Entity
         super.removeRestriction(id);
         CACHE.removeValues(restriction -> restriction.getId().equals(id));
 
-        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+        ANetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
     }
 
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
-        getRestrictions().forEach(restriction -> ModNetworking.sendTo(player, new MobSyncerS2CPacket(restriction)));
+        getRestrictions().forEach(restriction -> ANetworking.sendTo(player, new MobSyncerS2CPacket(restriction)));
     }
 
     @Override

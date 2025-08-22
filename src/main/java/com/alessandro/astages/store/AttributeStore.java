@@ -1,7 +1,7 @@
 package com.alessandro.astages.store;
 
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.develop.Info;
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;

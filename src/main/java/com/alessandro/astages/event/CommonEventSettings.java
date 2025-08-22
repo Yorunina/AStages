@@ -1,7 +1,7 @@
 package com.alessandro.astages.event;
 
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 

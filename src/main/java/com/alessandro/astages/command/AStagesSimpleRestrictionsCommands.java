@@ -3,7 +3,7 @@ package com.alessandro.astages.command;
 import com.alessandro.astages.command.argument.AStagesSimpleRestrictionTypeArgument;
 import com.alessandro.astages.command.argument.AStagesSimpleRestrictionsIdsArgument;
 import com.alessandro.astages.simple.ASimpleElaborator;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;

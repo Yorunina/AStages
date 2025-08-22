@@ -1,4 +1,4 @@
-package com.alessandro.astages.util.develop;
+package com.alessandro.astages.api.annotation.develop;
 
 import java.lang.annotation.*;
 

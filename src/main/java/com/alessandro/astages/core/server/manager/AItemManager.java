@@ -5,7 +5,7 @@ import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.*;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
@@ -16,8 +16,8 @@ import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -311,15 +311,15 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         CONTAINERS_CACHE.removeIf(restriction -> restriction.getId().equals(id));
         IDS.remove(id);
 
-        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+        ANetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
     }
 
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
-        items.forEach(restriction -> ModNetworking.sendTo(player, new ItemSyncerS2CPacket(restriction)));
-        tags.forEach(restriction -> ModNetworking.sendTo(player, new ItemTagSyncerS2CPacket(restriction)));
-        mods.forEach(restriction -> ModNetworking.sendTo(player, new ItemModSyncerS2CPacket(restriction)));
-        predicates.forEach(restriction -> ModNetworking.sendTo(player, new ItemPredicateSyncerS2CPacket(restriction)));
+        items.forEach(restriction -> ANetworking.sendTo(player, new ItemSyncerS2CPacket(restriction)));
+        tags.forEach(restriction -> ANetworking.sendTo(player, new ItemTagSyncerS2CPacket(restriction)));
+        mods.forEach(restriction -> ANetworking.sendTo(player, new ItemModSyncerS2CPacket(restriction)));
+        predicates.forEach(restriction -> ANetworking.sendTo(player, new ItemPredicateSyncerS2CPacket(restriction)));
     }
 
     public ARestrictionType associatedType() {

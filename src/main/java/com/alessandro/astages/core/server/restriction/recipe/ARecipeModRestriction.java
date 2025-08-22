@@ -2,9 +2,9 @@ package com.alessandro.astages.core.server.restriction.recipe;
 
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 
 @NotNullParamsAndMethodsReturn
 public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRestriction, RecipeModWrapper, RecipeWrapper> {
@@ -37,7 +37,7 @@ public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRest
     @Override
     public void markAsDirty() {
         if (modId != null) {
-            ModNetworking.sendToClients(new RecipeModSyncerS2CPacket(this));
+            ANetworking.sendToClients(new RecipeModSyncerS2CPacket(this));
         }
 
         super.markAsDirty();

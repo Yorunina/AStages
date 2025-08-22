@@ -1,6 +1,6 @@
 package com.alessandro.astages.store;
 
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 
 import java.util.HashSet;
 import java.util.Set;

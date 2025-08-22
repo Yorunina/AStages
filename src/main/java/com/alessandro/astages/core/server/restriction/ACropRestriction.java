@@ -5,7 +5,7 @@ import com.alessandro.astages.core.wrapper.CropWrapper;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.level.block.Block;
 
 @NotNullParamsAndMethodsReturn

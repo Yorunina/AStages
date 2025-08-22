@@ -2,7 +2,7 @@ package com.alessandro.astages.integration.jade;
 
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

@@ -1,7 +1,7 @@
 package com.alessandro.astages.mixin.reload;
 
 import com.alessandro.astages.event.custom.ReloadScriptEvent;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import dev.latvian.mods.kubejs.script.ScriptManager;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import net.minecraft.server.packs.resources.ResourceManager;

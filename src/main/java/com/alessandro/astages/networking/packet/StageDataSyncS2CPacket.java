@@ -3,7 +3,7 @@ package com.alessandro.astages.networking.packet;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;

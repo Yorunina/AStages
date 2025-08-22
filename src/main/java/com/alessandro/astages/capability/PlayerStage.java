@@ -7,12 +7,12 @@ import com.alessandro.astages.event.custom.actions.AllStageRemovedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageAddedPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageGetPlayerEvent;
 import com.alessandro.astages.event.custom.actions.StageRemovedPlayerEvent;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.annotation.develop.Info;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -56,7 +56,7 @@ public class PlayerStage {
         MinecraftForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
-            ModNetworking.sendToPlayer(new StageDataSyncS2CPacket(stages, operation), (ServerPlayer) player);
+            ANetworking.sendToPlayer(new StageDataSyncS2CPacket(stages, operation), (ServerPlayer) player);
 
             if (!silentTitle && stage != null) {
                 if (player instanceof ServerPlayer serverPlayer) {

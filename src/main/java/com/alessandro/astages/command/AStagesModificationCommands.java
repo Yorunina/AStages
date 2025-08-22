@@ -5,7 +5,7 @@ import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.command.argument.AStagesAddArgument;
 import com.alessandro.astages.command.argument.AStagesRemoveArgument;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.minecraft.ChatFormatting;

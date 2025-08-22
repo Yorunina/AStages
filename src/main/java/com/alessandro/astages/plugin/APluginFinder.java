@@ -1,7 +1,7 @@
 package com.alessandro.astages.plugin;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.util.annotations.NotNullMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullMethodsReturn;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;

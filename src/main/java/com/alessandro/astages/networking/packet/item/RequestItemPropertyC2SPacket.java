@@ -1,9 +1,9 @@
 package com.alessandro.astages.networking.packet.item;
 
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -48,7 +48,7 @@ public class RequestItemPropertyC2SPacket {
                 if (!Objects.equals(serverRestriction.getId(), id)) { throw EXCEPTION.apply(id); }
                 if (!Objects.equals(serverRestriction.getStage(), stage)) { throw EXCEPTION.apply(id); }
 
-                ModNetworking.sendToPlayer(new ItemPropertySyncerS2CPacket(id, stage, stack,
+                ANetworking.sendToPlayer(new ItemPropertySyncerS2CPacket(id, stage, stack,
                     serverRestriction.get(Attributes.Item.HIDDEN_NAME).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_ITEM_MESSAGE).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack)

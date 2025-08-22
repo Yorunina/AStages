@@ -1,9 +1,9 @@
 package com.alessandro.astages.core.server.restriction.recipe;
 
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -55,7 +55,7 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
     @Override
     public void markAsDirty() {
         if (type != null && !recipes.isEmpty()) {
-            ModNetworking.sendToClients(new RecipeSyncerS2CPacket(this));
+            ANetworking.sendToClients(new RecipeSyncerS2CPacket(this));
         }
 
         super.markAsDirty();

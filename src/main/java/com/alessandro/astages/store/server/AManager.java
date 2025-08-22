@@ -7,9 +7,9 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.OrderedMultiMap;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.util.OrderedMultiMap;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 

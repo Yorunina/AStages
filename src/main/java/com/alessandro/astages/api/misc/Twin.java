@@ -1,4 +1,4 @@
-package com.alessandro.astages.util.base;
+package com.alessandro.astages.api.misc;
 
 public record Twin<A, B>(A a, B b) {
     public Twin() {

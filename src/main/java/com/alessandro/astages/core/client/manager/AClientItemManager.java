@@ -7,12 +7,12 @@ import com.alessandro.astages.core.client.restriction.item.*;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.integration.jei.CustomItemStackKey;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacket;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -145,7 +145,7 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
         var id = getRestrictionIdForStack(stack);
         if (id != null) {
 //            AStages.LOGGER.debug("Requested for stack: {}, id: {}", stack, id);
-            ModNetworking.sendToServer(new RequestItemPropertyC2SPacket(id, IDS.get(id).getStage(), stack));
+            ANetworking.sendToServer(new RequestItemPropertyC2SPacket(id, IDS.get(id).getStage(), stack));
         } else {
             properties.put(CustomItemStackKey.build(stack), null);
         }

@@ -1,9 +1,9 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.core.stage.AStageManager;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -48,7 +48,7 @@ public class ServerStageData extends SavedData {
     }
 
     private void synchronizeChanges(PlayerStage.Operation operation) {
-        ModNetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages, operation));
+        ANetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages, operation));
     }
 
     public static void checkStage(String stage) {

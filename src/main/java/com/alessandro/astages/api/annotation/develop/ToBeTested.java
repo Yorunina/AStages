@@ -1,8 +1,8 @@
-package com.alessandro.astages.util.develop;
+package com.alessandro.astages.api.annotation.develop;
 
 import java.lang.annotation.*;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.RECORD_COMPONENT})
-public @interface UnderDevelopment { }
+public @interface ToBeTested { }

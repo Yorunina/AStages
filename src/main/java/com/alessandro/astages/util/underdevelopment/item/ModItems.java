@@ -1,4 +1,4 @@
-package com.alessandro.astages.item;
+package com.alessandro.astages.util.underdevelopment.item;
 
 import com.alessandro.astages.AStages;
 import net.minecraft.world.item.Item;

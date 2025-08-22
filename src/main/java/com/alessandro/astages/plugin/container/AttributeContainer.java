@@ -2,7 +2,7 @@ package com.alessandro.astages.plugin.container;
 
 import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 
 import java.util.HashMap;
 

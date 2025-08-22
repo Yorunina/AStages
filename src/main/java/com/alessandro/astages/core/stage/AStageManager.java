@@ -2,8 +2,8 @@ package com.alessandro.astages.core.stage;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashMap;

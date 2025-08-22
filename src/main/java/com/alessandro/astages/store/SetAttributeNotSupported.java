@@ -1,6 +1,6 @@
 package com.alessandro.astages.store;
 
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 
 @NotNullParams
 public class SetAttributeNotSupported extends RuntimeException {

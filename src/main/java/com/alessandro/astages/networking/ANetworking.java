@@ -13,14 +13,14 @@ import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-public class ModNetworking {
+public class ANetworking {
     private static SimpleChannel INSTANCE;
 
     private static int packetId = 0;
@@ -164,9 +164,9 @@ public class ModNetworking {
 
     public static <MSG> void sendTo(@Nullable ServerPlayer player, MSG message) {
         if (player == null) { // If Null -> Whole Server!
-            ModNetworking.sendToClients(message);
+            ANetworking.sendToClients(message);
         } else {
-            ModNetworking.sendToPlayer(message, player);
+            ANetworking.sendToPlayer(message, player);
         }
     }
 }

@@ -4,7 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

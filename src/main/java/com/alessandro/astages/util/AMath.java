@@ -1,6 +1,6 @@
 package com.alessandro.astages.util;
 
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 
 import java.util.Collection;
 

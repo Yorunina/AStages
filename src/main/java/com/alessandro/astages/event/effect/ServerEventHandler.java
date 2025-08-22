@@ -2,7 +2,7 @@ package com.alessandro.astages.event.effect;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;

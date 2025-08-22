@@ -3,8 +3,8 @@ package com.alessandro.astages.core.client.manager;
 import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.store.client.AClientManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.OrderedMultiMap;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.util.OrderedMultiMap;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.world.entity.EntityType;
 
 @NotNullParams

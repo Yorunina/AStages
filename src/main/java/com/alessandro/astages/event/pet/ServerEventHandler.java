@@ -3,7 +3,7 @@ package com.alessandro.astages.event.pet;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;

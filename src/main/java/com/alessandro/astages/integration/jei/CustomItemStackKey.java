@@ -1,6 +1,6 @@
 package com.alessandro.astages.integration.jei;
 
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Contract;
 

@@ -5,8 +5,8 @@ import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeModRes
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.develop.Info;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.develop.Info;
 import net.minecraft.network.FriendlyByteBuf;
 
 @NotNullParams

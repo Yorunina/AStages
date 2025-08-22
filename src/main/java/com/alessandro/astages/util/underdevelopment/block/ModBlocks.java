@@ -1,7 +1,7 @@
-package com.alessandro.astages.block;
+package com.alessandro.astages.util.underdevelopment.block;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.item.ModItems;
+import com.alessandro.astages.util.underdevelopment.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;

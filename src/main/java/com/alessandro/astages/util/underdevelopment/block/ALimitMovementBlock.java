@@ -1,4 +1,4 @@
-package com.alessandro.astages.block;
+package com.alessandro.astages.util.underdevelopment.block;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;

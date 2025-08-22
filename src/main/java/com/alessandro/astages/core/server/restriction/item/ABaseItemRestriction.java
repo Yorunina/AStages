@@ -3,7 +3,7 @@ package com.alessandro.astages.core.server.restriction.item;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.event.CommonEventSettings;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.*;
 import com.alessandro.astages.store.server.ARestriction;
@@ -98,8 +98,8 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @Override
     public void markAsDirty() {
         setChanged();
-        ModNetworking.sendTo(null, new RequestReloadS2CPacket(ReloadType.JEI_ITEM)); // For JEI cache reloading
-        ModNetworking.sendTo(null,  new RequestReloadS2CPacket(ReloadType.ITEM)); // For Client properties clearing!
+        ANetworking.sendTo(null, new RequestReloadS2CPacket(ReloadType.JEI_ITEM)); // For JEI cache reloading
+        ANetworking.sendTo(null,  new RequestReloadS2CPacket(ReloadType.ITEM)); // For Client properties clearing!
         CommonEventSettings.allInventoryChanged();
     }
 

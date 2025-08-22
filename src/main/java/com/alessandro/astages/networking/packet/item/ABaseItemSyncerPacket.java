@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking.packet.item;
 
 import com.alessandro.astages.networking.packet.RestrictionSyncerPacket;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 
 @NotNullParams

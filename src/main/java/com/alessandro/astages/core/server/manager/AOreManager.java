@@ -3,7 +3,7 @@ package com.alessandro.astages.core.server.manager;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AOreRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
-import com.alessandro.astages.networking.ModNetworking;
+import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
@@ -11,11 +11,11 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.OrderedMultiMap;
+import com.alessandro.astages.api.util.OrderedMultiMap;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.util.annotations.NotNullParams;
-import com.alessandro.astages.util.annotations.Nullable;
-import com.alessandro.astages.util.develop.NotYetImplemented;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.annotation.develop.NotYetImplemented;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -88,13 +88,13 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
         BLOCK_CACHE.removeValues(restriction -> restriction.getId().equals(id));
         AFFECTS_PLAYER_CACHE.removeValues(restriction -> restriction.getId().equals(id));
 
-        ModNetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
+        ANetworking.sendTo(null, new RequestRestrictionDeleteS2CPacket(id, associatedType()));
     }
 
     @Override
     public void synchronizeWithClient(@Nullable ServerPlayer player) {
-        getRestrictions().forEach(restriction -> ModNetworking.sendTo(player, new OreSyncerS2CPacket(restriction)));
-        ModNetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.ORE));
+        getRestrictions().forEach(restriction -> ANetworking.sendTo(player, new OreSyncerS2CPacket(restriction)));
+        ANetworking.sendTo(player, new RequestReloadS2CPacket(ReloadType.ORE));
     }
 
     @Override

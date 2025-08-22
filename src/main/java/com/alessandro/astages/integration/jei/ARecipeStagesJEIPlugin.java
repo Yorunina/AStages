@@ -8,7 +8,7 @@ import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;

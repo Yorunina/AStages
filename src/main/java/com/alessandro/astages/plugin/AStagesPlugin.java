@@ -2,8 +2,8 @@ package com.alessandro.astages.plugin;
 
 import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
-import com.alessandro.astages.util.annotations.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.util.annotations.Nullable;
+import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

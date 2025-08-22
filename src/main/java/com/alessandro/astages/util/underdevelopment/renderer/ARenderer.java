@@ -1,5 +1,6 @@
-package com.alessandro.astages.renderer;
+package com.alessandro.astages.util.underdevelopment.renderer;
 
+import com.alessandro.astages.api.annotation.develop.UnderDevelopment;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@UnderDevelopment
 public class ARenderer {
         private static VertexBuffer vertexBuffer;
         public static boolean requestRefresh = true;

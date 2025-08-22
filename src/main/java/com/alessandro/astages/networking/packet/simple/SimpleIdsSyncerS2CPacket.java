@@ -2,7 +2,7 @@ package com.alessandro.astages.networking.packet.simple;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.SyncOperation;
-import com.alessandro.astages.util.annotations.NotNullParams;
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
