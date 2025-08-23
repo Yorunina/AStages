@@ -1,9 +1,10 @@
 package com.alessandro.astages.networking.packet;
 
+import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.google.common.collect.Sets;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
@@ -25,25 +26,12 @@ public class StageDataSyncS2CPacket {
     }
 
     public StageDataSyncS2CPacket(FriendlyByteBuf buf) {
-        var readList = buf.readList(FriendlyByteBuf::readByteArray);
-        var newStageList = new ArrayList<String>();
-
-        for (var byteList : readList) {
-            newStageList.add(new String(byteList));
-        }
-
-        this.stages = newStageList;
+        this.stages = buf.readList(FriendlyByteBuf::readUtf);
         this.operation = buf.readEnum(PlayerStage.Operation.class);
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        var stagesAsByte = new ArrayList<byte[]>();
-
-        stages.forEach(stage -> {
-            stagesAsByte.add(stage.getBytes());
-        });
-
-        buf.writeCollection(stagesAsByte, FriendlyByteBuf::writeByteArray);
+        buf.writeCollection(stages, FriendlyByteBuf::writeUtf);
         buf.writeEnum(operation);
     }
 
@@ -60,6 +48,7 @@ public class StageDataSyncS2CPacket {
             differences.addAll(differencesBetweenClientAndServer);
             differences.addAll(differencesBetweenServerAndClient);
 
+            var synchronizedStages = Sets.symmetricDifference(new HashSet<>(ClientPlayerStage.getPlayerStages()), new HashSet<>(stages));
 
             ClientPlayerStage.set(stages);
             MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent(new ArrayList<>(differences), operation));

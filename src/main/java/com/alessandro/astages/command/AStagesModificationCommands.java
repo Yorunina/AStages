@@ -92,7 +92,7 @@ public class AStagesModificationCommands {
                 player.sendSystemMessage(Component.translatable("chat.astages.remove_all").withStyle(ChatFormatting.GREEN));
             }
 
-            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, null, silentTitle);
+            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, playerStage.getStages(), silentTitle);
         });
 
         return 1;

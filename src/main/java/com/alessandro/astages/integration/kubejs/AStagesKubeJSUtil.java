@@ -66,7 +66,7 @@ public class AStagesKubeJSUtil {
     public static void removeAllStagesFromPlayer(Player player) {
         getPlayerCapability(player).ifPresent(playerStage -> {
             playerStage.removeAllStages();
-            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, null);
+            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, playerStage.getStages());
         });
     }
 
