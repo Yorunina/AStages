@@ -12,7 +12,7 @@ import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ATime;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;

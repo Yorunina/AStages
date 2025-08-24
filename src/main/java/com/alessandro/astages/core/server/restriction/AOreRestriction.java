@@ -8,7 +8,7 @@ import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.store.*;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.level.block.state.BlockState;
 
 @NotNullParamsAndMethodsReturn

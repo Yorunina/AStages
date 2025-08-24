@@ -8,9 +8,9 @@ import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestri
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.util.OrderedMultiMap;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
-import com.alessandro.astages.api.annotation.develop.Info;
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.develop.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 

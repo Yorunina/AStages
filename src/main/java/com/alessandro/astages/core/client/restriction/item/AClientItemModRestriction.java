@@ -1,6 +1,6 @@
 package com.alessandro.astages.core.client.restriction.item;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

@@ -3,7 +3,7 @@ package com.alessandro.astages.core.server.restriction;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.ARestriction;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.world.effect.MobEffect;
 
 import java.util.ArrayList;

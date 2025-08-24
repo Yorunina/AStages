@@ -6,7 +6,7 @@ import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;

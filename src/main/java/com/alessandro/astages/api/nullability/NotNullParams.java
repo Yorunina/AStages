@@ -1,4 +1,4 @@
-package com.alessandro.astages.api.annotation.nullability;
+package com.alessandro.astages.api.nullability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierDefault;

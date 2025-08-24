@@ -1,7 +1,9 @@
 package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.event.CommonEventSettings;
@@ -20,8 +22,6 @@ import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.util.SyncOperation;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -117,7 +117,7 @@ public class ARestrictionManager {
 
     public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
         var data = ServerStageData.getData(server);
-        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), PlayerStage.Operation.LOGIN));
+        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), AOperation.LOGIN));
     }
 
     public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, SyncOperation operation) {

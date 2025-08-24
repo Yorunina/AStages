@@ -1,10 +1,9 @@
 package com.alessandro.astages.mixin;
 
-import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import mcjty.incontrol.compat.ModRuleCompatibilityLayer;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -53,7 +52,7 @@ public class AModRuleCompatibilityLayer {
 
             if (playerStage.isPresent()) {
                 playerStage.get().addStage(stage);
-                playerStage.get().setChangedFor(player, PlayerStage.Operation.ADD, stage);
+                playerStage.get().setChangedFor(player, AOperation.ADD, stage);
             }
         }
     }
@@ -72,7 +71,7 @@ public class AModRuleCompatibilityLayer {
 
             if (playerStage.isPresent()) {
                 playerStage.get().removeStage(stage);
-                playerStage.get().setChangedFor(player, PlayerStage.Operation.REMOVE, stage);
+                playerStage.get().setChangedFor(player, AOperation.REMOVE, stage);
             }
         }
     }

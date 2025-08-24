@@ -2,7 +2,7 @@ package com.alessandro.astages.util.underdevelopment.block;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;

@@ -1,6 +1,6 @@
 package com.alessandro.astages.util.underdevelopment.renderer;
 
-import com.alessandro.astages.api.annotation.develop.UnderDevelopment;
+import com.alessandro.astages.api.develop.UnderDevelopment;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;

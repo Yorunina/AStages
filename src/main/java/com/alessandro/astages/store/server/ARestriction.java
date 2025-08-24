@@ -5,7 +5,7 @@ import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.ConfigurableAttributeStore;
 import com.alessandro.astages.store.SetAttributeNotSupported;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
@@ -41,12 +41,6 @@ public abstract class ARestriction<R extends ARestriction<R, U, V>, U, V> implem
             this.markForConfig = false;
         }
     }
-
-//    public ARestriction(String id, String stage, boolean markForConfig) {
-//        this.id = id;
-//        this.stage = stage;
-//        this.attributes = markForConfig ? new ConfigurableAttributeStore() : allowedAttributes();
-//    }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isValueNull(Attribute<?> attribute) {

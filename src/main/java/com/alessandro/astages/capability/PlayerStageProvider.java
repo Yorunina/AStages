@@ -1,7 +1,7 @@
 package com.alessandro.astages.capability;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;

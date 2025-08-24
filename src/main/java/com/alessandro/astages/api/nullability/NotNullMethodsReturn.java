@@ -1,4 +1,4 @@
-package com.alessandro.astages.api.annotation.nullability;
+package com.alessandro.astages.api.nullability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierDefault;
@@ -7,6 +7,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Nonnull
-@TypeQualifierDefault({ElementType.PARAMETER, ElementType.METHOD})
+@TypeQualifierDefault(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotNullParamsAndMethodsReturn { }
+public @interface NotNullMethodsReturn { }

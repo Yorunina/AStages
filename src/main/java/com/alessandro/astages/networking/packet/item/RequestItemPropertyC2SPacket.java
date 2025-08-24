@@ -3,7 +3,7 @@ package com.alessandro.astages.networking.packet.item;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;

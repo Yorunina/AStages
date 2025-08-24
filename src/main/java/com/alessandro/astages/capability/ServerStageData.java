@@ -1,9 +1,10 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -26,7 +27,7 @@ public class ServerStageData extends SavedData {
 
         serverStages.addAll(list);
         setDirty();
-        synchronizeChanges(PlayerStage.Operation.ADD);
+        synchronizeChanges(AOperation.ADD);
     }
 
 //    public void set(List<String> stages) {
@@ -38,16 +39,16 @@ public class ServerStageData extends SavedData {
     public void remove(String... stages) {
         serverStages.removeAll(List.of(stages));
         setDirty();
-        synchronizeChanges(PlayerStage.Operation.REMOVE);
+        synchronizeChanges(AOperation.REMOVE);
     }
 
     public void removeAll() {
         serverStages.clear();
         setDirty();
-        synchronizeChanges(PlayerStage.Operation.REMOVE_ALL);
+        synchronizeChanges(AOperation.REMOVE_ALL);
     }
 
-    private void synchronizeChanges(PlayerStage.Operation operation) {
+    private void synchronizeChanges(AOperation operation) {
         ANetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages, operation));
     }
 

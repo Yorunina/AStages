@@ -1,6 +1,6 @@
 package com.alessandro.astages.util;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.alessandro.astages.command;
 
 import com.alessandro.astages.command.argument.AStagesDimensionArgument;
 import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.ChatFormatting;

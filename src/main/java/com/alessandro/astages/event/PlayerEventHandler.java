@@ -1,7 +1,9 @@
 package com.alessandro.astages.event;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.ContainerChangedEvent;
@@ -9,8 +11,6 @@ import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.util.SyncOperation;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
-import com.alessandro.astages.api.annotation.develop.Info;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +26,7 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().level().isClientSide) {
-            event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> playerStage.setChangedFor(event.getEntity(), PlayerStage.Operation.LOGIN, playerStage.getStages()));
+            event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> playerStage.setChangedFor(event.getEntity(), AOperation.LOGIN, playerStage.getStages()));
         }
 
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));

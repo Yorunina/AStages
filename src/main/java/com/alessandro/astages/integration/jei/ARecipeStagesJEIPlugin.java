@@ -1,14 +1,14 @@
 package com.alessandro.astages.integration.jei;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -38,7 +38,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientRecipeUpdateEvent.class, e -> updateRecipeGui());
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
-                if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
+                if (e.getOperation() != AOperation.LOGIN && e.getOperation() != AOperation.GET) {
                     updateRecipeGui();
                 }
             });

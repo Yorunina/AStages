@@ -5,7 +5,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ACropRestriction;
 import com.alessandro.astages.core.wrapper.CropWrapper;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;

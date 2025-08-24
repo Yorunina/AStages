@@ -4,7 +4,7 @@ import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.AClientItemModRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

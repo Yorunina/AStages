@@ -2,7 +2,7 @@ package com.alessandro.astages.mixin.recipe.minecraft;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

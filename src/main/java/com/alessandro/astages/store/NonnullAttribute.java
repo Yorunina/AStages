@@ -1,6 +1,6 @@
 package com.alessandro.astages.store;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 
 @NotNullParamsAndMethodsReturn
 public class NonnullAttribute<T> /*extends Attribute<T>*/ {

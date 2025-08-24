@@ -3,8 +3,8 @@ package com.alessandro.astages.store.client;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.util.OrderedMultiMap;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.nullability.NotNullParams;
 
 import java.util.ArrayList;
 import java.util.HashMap;

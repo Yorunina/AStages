@@ -1,7 +1,7 @@
 package com.alessandro.astages.command.argument;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;

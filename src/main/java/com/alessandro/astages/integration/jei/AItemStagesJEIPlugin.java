@@ -1,15 +1,15 @@
 package com.alessandro.astages.integration.jei;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -41,7 +41,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
 
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
-                if (e.getOperation() != PlayerStage.Operation.LOGIN && e.getOperation() != PlayerStage.Operation.GET) {
+                if (e.getOperation() != AOperation.LOGIN && e.getOperation() != AOperation.GET) {
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
             });
@@ -61,7 +61,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> void updateGui(@Nullable PlayerStage.Operation operation, @Nullable List<String> stages) {
+    public <T> void updateGui(@Nullable AOperation operation, @Nullable List<String> stages) {
         if (runtime != null && AClientRestrictionManager.ableToUpdateJeiUI()) {
             // TODO: HYBRID
             var manager = runtime.getIngredientManager();

@@ -1,12 +1,12 @@
 package com.alessandro.astages.util;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.stage.AStageManager;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -71,7 +71,7 @@ public class AStagesUtil {
         return toReturn;
     }
 
-    public static void showTitles(ServerPlayer player, PlayerStage.Operation operation, String stage) {
+    public static void showTitles(ServerPlayer player, AOperation operation, String stage) {
         Component title = Component.empty();
         Component subtitle = Component.empty();
         Component chatMessage = null;
@@ -85,7 +85,7 @@ public class AStagesUtil {
             stay = aStage.getStay();
             fadeOut = aStage.getFadeOut();
 
-            if (operation == PlayerStage.Operation.ADD) {
+            if (operation == AOperation.ADD) {
                 if (aStage.getAddTitle() != null) {
                     title = aStage.getAddTitle();
                 }
@@ -97,7 +97,7 @@ public class AStagesUtil {
                 if (aStage.getAddChatMessage() != null) {
                     chatMessage = aStage.getAddChatMessage();
                 }
-            } else if (operation == PlayerStage.Operation.REMOVE) {
+            } else if (operation == AOperation.REMOVE) {
                 if (aStage.getRemoveTitle() != null) {
                     title = aStage.getRemoveTitle();
                 }
@@ -116,7 +116,7 @@ public class AStagesUtil {
                 stay = 60;
                 fadeOut = 20;
 
-                if (operation == PlayerStage.Operation.ADD) {
+                if (operation == AOperation.ADD) {
                     title = Component.translatable("title.astages.add", stageToDescription(stage)).withStyle(AStagesCommon.TITLE_COLOR.get());
                 }
             }

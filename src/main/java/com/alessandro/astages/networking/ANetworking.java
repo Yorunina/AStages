@@ -13,7 +13,7 @@ import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;

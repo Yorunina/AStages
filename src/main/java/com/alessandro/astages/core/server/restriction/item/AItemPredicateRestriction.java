@@ -4,7 +4,7 @@ import com.alessandro.astages.core.AModelManager;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacket;
 import com.alessandro.astages.store.AModel;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 

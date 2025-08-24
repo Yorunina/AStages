@@ -1,7 +1,7 @@
 package com.alessandro.astages.registry;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.core.Registry;

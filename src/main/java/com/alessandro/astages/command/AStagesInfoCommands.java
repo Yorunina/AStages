@@ -4,7 +4,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.AChatBundle;
 import com.alessandro.astages.util.AChatUtils;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;

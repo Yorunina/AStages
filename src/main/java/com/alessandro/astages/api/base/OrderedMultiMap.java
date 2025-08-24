@@ -1,6 +1,6 @@
-package com.alessandro.astages.api.util;
+package com.alessandro.astages.api.base;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;

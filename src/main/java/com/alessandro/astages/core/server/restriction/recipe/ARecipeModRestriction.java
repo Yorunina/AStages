@@ -4,7 +4,7 @@ import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 
 @NotNullParamsAndMethodsReturn
 public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRestriction, RecipeModWrapper, RecipeWrapper> {

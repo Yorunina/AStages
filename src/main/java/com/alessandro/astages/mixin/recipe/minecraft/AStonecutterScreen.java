@@ -2,7 +2,7 @@ package com.alessandro.astages.mixin.recipe.minecraft;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
 import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.item.crafting.StonecutterRecipe;

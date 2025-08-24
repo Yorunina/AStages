@@ -1,6 +1,6 @@
 package com.alessandro.astages.integration;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullMethodsReturn;
+import com.alessandro.astages.api.nullability.NotNullMethodsReturn;
 import net.minecraftforge.fml.ModList;
 
 import java.util.Locale;

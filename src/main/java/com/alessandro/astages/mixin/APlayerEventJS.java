@@ -1,8 +1,8 @@
 package com.alessandro.astages.mixin;
 
-import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.PlayerStageProvider;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
 import dev.latvian.mods.kubejs.player.PlayerEventJS;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +38,7 @@ public abstract class APlayerEventJS {
     public void addGameStage(String stage) {
         Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             playerStage.addStage(stage);
-            playerStage.setChangedFor(getPlayer(), PlayerStage.Operation.ADD, stage);
+            playerStage.setChangedFor(getPlayer(), AOperation.ADD, stage);
         });
     }
 
@@ -51,7 +51,7 @@ public abstract class APlayerEventJS {
     public void removeGameStage(String stage) {
         Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
             playerStage.removeStage(stage);
-            playerStage.setChangedFor(getPlayer(), PlayerStage.Operation.REMOVE, stage);
+            playerStage.setChangedFor(getPlayer(), AOperation.REMOVE, stage);
         });
     }
 }

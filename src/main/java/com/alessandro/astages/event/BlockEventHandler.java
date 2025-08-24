@@ -3,7 +3,7 @@ package com.alessandro.astages.event;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;

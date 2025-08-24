@@ -1,6 +1,7 @@
 package com.alessandro.astages.networking.packet;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
@@ -18,16 +19,16 @@ import java.util.function.Supplier;
 @NotNullParams
 public class StageDataSyncS2CPacket {
     private final List<String> stages;
-    private final PlayerStage.Operation operation;
+    private final AOperation operation;
 
-    public StageDataSyncS2CPacket(List<String> stages, PlayerStage.Operation operation) {
+    public StageDataSyncS2CPacket(List<String> stages, AOperation operation) {
         this.stages = stages;
         this.operation = operation;
     }
 
     public StageDataSyncS2CPacket(FriendlyByteBuf buf) {
         this.stages = buf.readList(FriendlyByteBuf::readUtf);
-        this.operation = buf.readEnum(PlayerStage.Operation.class);
+        this.operation = buf.readEnum(AOperation.class);
     }
 
     public void toBytes(FriendlyByteBuf buf) {

@@ -2,7 +2,7 @@ package com.alessandro.astages.networking.packet.reload;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

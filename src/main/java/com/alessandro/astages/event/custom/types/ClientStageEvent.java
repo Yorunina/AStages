@@ -1,15 +1,15 @@
 package com.alessandro.astages.event.custom.types;
 
-import com.alessandro.astages.capability.PlayerStage;
+import com.alessandro.astages.api.constant.AOperation;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
 public class ClientStageEvent extends Event {
     private final List<String> stagesSynced;
-    private final PlayerStage.Operation operation;
+    private final AOperation operation;
 
-    public ClientStageEvent(List<String> stagesSynced, PlayerStage.Operation operation) {
+    public ClientStageEvent(List<String> stagesSynced, AOperation operation) {
         this.stagesSynced = stagesSynced;
         this.operation = operation;
     }
@@ -18,7 +18,7 @@ public class ClientStageEvent extends Event {
         return stagesSynced;
     }
 
-    public PlayerStage.Operation getOperation() {
+    public AOperation getOperation() {
         return operation;
     }
 }

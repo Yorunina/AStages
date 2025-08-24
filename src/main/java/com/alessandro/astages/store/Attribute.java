@@ -1,7 +1,7 @@
 package com.alessandro.astages.store;
 
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraftforge.registries.DeferredRegister;
 
 @NotNullParamsAndMethodsReturn

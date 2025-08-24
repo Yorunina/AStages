@@ -1,5 +1,8 @@
 package com.alessandro.astages.integration.kubejs;
 
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.capability.ServerStageData;
@@ -20,8 +23,6 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.annotation.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.annotation.nullability.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -44,16 +45,17 @@ import java.util.List;
 public class AStagesKubeJSUtil {
     // Player Stages
     public static void addStageToPlayer(String stage, Player player) {
+
         getPlayerCapability(player).ifPresent(playerStage -> {
             playerStage.addStage(stage);
-            playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stage);
+            playerStage.setChangedFor(player, AOperation.ADD, stage);
         });
     }
 
     public static void removeStageFromPlayer(String stage, Player player) {
         getPlayerCapability(player).ifPresent(playerStage -> {
             playerStage.removeStage(stage);
-            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stage);
+            playerStage.setChangedFor(player, AOperation.REMOVE, stage);
         });
     }
 
@@ -66,7 +68,7 @@ public class AStagesKubeJSUtil {
     public static void removeAllStagesFromPlayer(Player player) {
         getPlayerCapability(player).ifPresent(playerStage -> {
             playerStage.removeAllStages();
-            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, playerStage.getStages());
+            playerStage.setChangedFor(player, AOperation.REMOVE_ALL, playerStage.getStages());
         });
     }
 

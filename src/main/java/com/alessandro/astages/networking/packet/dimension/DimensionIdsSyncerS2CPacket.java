@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking.packet.dimension;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

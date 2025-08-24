@@ -2,7 +2,7 @@ package com.alessandro.astages.core.client.restriction.recipe;
 
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 
 @NotNullParams
 public class AClientRecipeModRestriction extends AClientBaseRecipeRestriction<AClientRecipeModRestriction, RecipeModWrapper, RecipeWrapper> {

@@ -1,7 +1,8 @@
 package com.alessandro.astages.core.client.manager;
 
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.*;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
@@ -12,7 +13,6 @@ import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacke
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,7 +34,7 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
 
     static {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
-            if (e.getOperation() != PlayerStage.Operation.GET) {
+            if (e.getOperation() != AOperation.GET) {
                 AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
             }
         });

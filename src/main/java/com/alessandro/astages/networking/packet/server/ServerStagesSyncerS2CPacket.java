@@ -1,9 +1,10 @@
 package com.alessandro.astages.networking.packet.server;
 
+import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
@@ -17,16 +18,16 @@ import java.util.function.Supplier;
 @NotNullParams
 public class ServerStagesSyncerS2CPacket {
     private final List<String> stages;
-    private final PlayerStage.Operation operation;
+    private final AOperation operation;
 
-    public ServerStagesSyncerS2CPacket(List<String> stages, PlayerStage.Operation operation) {
+    public ServerStagesSyncerS2CPacket(List<String> stages, AOperation operation) {
         this.stages = stages;
         this.operation = operation;
     }
 
     public ServerStagesSyncerS2CPacket(FriendlyByteBuf buf) {
         stages = buf.readList(FriendlyByteBuf::readUtf);
-        operation = buf.readEnum(PlayerStage.Operation.class);
+        operation = buf.readEnum(AOperation.class);
     }
 
     public void toBytes(FriendlyByteBuf buf) {

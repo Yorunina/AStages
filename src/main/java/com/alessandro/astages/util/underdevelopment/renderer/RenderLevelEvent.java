@@ -2,7 +2,7 @@ package com.alessandro.astages.util.underdevelopment.renderer;
 
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.api.annotation.develop.UnderDevelopment;
+import com.alessandro.astages.api.develop.UnderDevelopment;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.fml.common.Mod;

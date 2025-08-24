@@ -1,11 +1,12 @@
 package com.alessandro.astages.command;
 
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.AStatus;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.command.argument.AStagesAddArgument;
 import com.alessandro.astages.command.argument.AStagesRemoveArgument;
-import com.alessandro.astages.api.annotation.nullability.NotNullParams;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.minecraft.ChatFormatting;
@@ -60,7 +61,7 @@ public class AStagesModificationCommands {
                 player.sendSystemMessage(Component.translatable("chat.astages.add", stageToAdd).withStyle(ChatFormatting.GREEN));
             }
 
-            playerStage.setChangedFor(player, PlayerStage.Operation.ADD, stageToAdd, silentTitle);
+            playerStage.setChangedFor(player, AOperation.ADD, stageToAdd, silentTitle);
         });
 
         return 1;
@@ -68,12 +69,12 @@ public class AStagesModificationCommands {
 
     private static int removeStageCommand(Player player, String stageToRemove, boolean silentChat, boolean silentTitle) {
         player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
-            if (playerStage.removeStage(stageToRemove) == PlayerStage.Status.SUCCESS) {
+            if (playerStage.removeStage(stageToRemove) == AStatus.SUCCESS) {
                 if (!silentChat) {
                     player.sendSystemMessage(Component.translatable("chat.astages.remove", stageToRemove).withStyle(ChatFormatting.GREEN));
                 }
 
-                playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE, stageToRemove, silentTitle);
+                playerStage.setChangedFor(player, AOperation.REMOVE, stageToRemove, silentTitle);
             } else {
                 if (!silentChat) {
                     player.sendSystemMessage(Component.translatable("chat.astages.not_present", stageToRemove).withStyle(ChatFormatting.RED));
@@ -92,7 +93,7 @@ public class AStagesModificationCommands {
                 player.sendSystemMessage(Component.translatable("chat.astages.remove_all").withStyle(ChatFormatting.GREEN));
             }
 
-            playerStage.setChangedFor(player, PlayerStage.Operation.REMOVE_ALL, playerStage.getStages(), silentTitle);
+            playerStage.setChangedFor(player, AOperation.REMOVE_ALL, playerStage.getStages(), silentTitle);
         });
 
         return 1;
