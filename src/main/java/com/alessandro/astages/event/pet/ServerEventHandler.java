@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.pet;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -20,7 +21,7 @@ public class ServerEventHandler {
             var player = event.getTamer();
             var pet = event.getEntity();
 
-            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(pet.getType(), player, player.getServer());
+            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), pet.getType());
 
             if (restriction != null && restriction.isDisabled(Attributes.TAMABLE)) {
                 event.setCanceled(true);
@@ -37,7 +38,7 @@ public class ServerEventHandler {
             var pet = event.getEntityBeingMounted();
 
             if (entity instanceof Player player) {
-                var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(pet.getType(), player, player.getServer());
+                var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), pet.getType());
 
                 if (restriction != null && restriction.isDisabled(Attributes.MOUNTABLE)) {
                     event.setCanceled(true);
@@ -55,7 +56,7 @@ public class ServerEventHandler {
             var pet = event.getTarget();
             var item = event.getEntity().getItemInHand(event.getHand());
 
-            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(pet.getType(), player, player.getServer());
+            var restriction = ARestrictionManager.PET_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), pet.getType());
 
             if (restriction != null && restriction.isDisabled(Attributes.BREEDABLE) && !item.isEmpty()) {
                 event.setCanceled(true);

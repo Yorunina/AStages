@@ -24,54 +24,7 @@ import java.util.List;
 @NotNullParams
 @AutoRegisterCapability
 public class PlayerStage {
-//    public enum Status {
-//        SUCCESS, NOT_PRESENT
-//    }
-//
-//    public enum Operation {
-//        ADD(true, true),
-//        ADD_ALL(true, false),
-//        REMOVE(false, true),
-//        REMOVE_ALL(false, false),
-//        GET(false, false),
-//        LOGIN(false, false);
-//
-//        private final boolean needToBeChecked;
-//        private final boolean supportOnlyOneStage;
-//
-//        Operation(boolean needToBeChecked, boolean supportOnlyOneStage) {
-//            this.needToBeChecked = needToBeChecked;
-//            this.supportOnlyOneStage = supportOnlyOneStage;
-//        }
-//
-//        public boolean needToBeChecked() {
-//            return needToBeChecked;
-//        }
-//
-//        public boolean supportOnlyOneStage() {
-//            return supportOnlyOneStage;
-//        }
-//    }
-
     private List<String> stages = new ArrayList<>();
-
-//    public static void checkStage(String stage, AOperation operation) {
-//        checkStages(Collections.singletonList(stage), operation);
-//    }
-//
-//    public static void checkStages(List<String> stages, AOperation operation) {
-//        if (operation.supportOnlyOneStage() && stages.size() != 1) {
-//            throw new IllegalArgumentException("Trying to perform an action that supports single stage using multiple ones!");
-//        }
-//
-//        if (!operation.needToBeChecked()) { return; }
-//
-//        for (var stage : stages) {
-//            if (AStageManager.isServerOnly(stage)) {
-//                throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in server only!");
-//            }
-//        }
-//    }
 
     @Info("Not required, for commands only!")
     public void setChangedFor(Player player, AOperation operation, String stage) {
@@ -130,7 +83,7 @@ public class PlayerStage {
 
     public void addStage(String stage) {
         if (stages.contains(stage)) { return; }
-        AStagesUtils.checkStage(null, AOperation.ADD, stage);
+        AStagesUtils.checkStages(null, AOperation.ADD, Collections.singletonList(stage));
 
         stages.add(stage);
     }

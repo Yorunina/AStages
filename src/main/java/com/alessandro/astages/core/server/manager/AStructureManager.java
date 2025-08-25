@@ -1,18 +1,17 @@
 package com.alessandro.astages.core.server.manager;
 
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.server.restriction.AStructureRestriction;
 import com.alessandro.astages.event.structure.ServerEventHandler;
-import com.alessandro.astages.store.ServerStageReadable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.base.OrderedMultiMap;
-import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.player.Player;
 
 @NotNullParams
-public class AStructureManager extends AManager<AStructureRestriction, ResourceLocation, ResourceLocation> implements ServerStageReadable<AStructureRestriction, ResourceLocation> {
+public class AStructureManager extends AManager<AStructureRestriction, ResourceLocation, ResourceLocation> {
     public final OrderedMultiMap<ResourceLocation, AStructureRestriction> CACHE = OrderedMultiMap.create();
 
     @Override
@@ -32,29 +31,18 @@ public class AStructureManager extends AManager<AStructureRestriction, ResourceL
     }
 
     @Override
-    public AStructureRestriction getRestriction(Player player, ResourceLocation structure) {
-        return getRestrictionFromCache(CACHE, structure, player);
-    }
+    public AStructureRestriction getRestriction(AHolder holder, ResourceLocation structure) {
+        if (holder.isServerActive()) {
+            var serverRestriction = getRestrictionFromCache(holder, AStageType.SERVER, CACHE, structure);
+            if (serverRestriction == null) { return null; }
+        }
 
-    @Override
-    public AStructureRestriction getRestriction(MinecraftServer server, ResourceLocation structure) {
-        return getRestrictionFromCache(CACHE, structure, server);
-    }
+        if (holder.isPlayerActive()) {
+            return getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, structure);
+        }
 
-//    @Override
-//    public AStructureRestriction getRestriction(ResourceLocation structure, @Nullable Player player, @Nullable MinecraftServer server) {
-//        AStructureRestriction serverRestriction = null;
-//        AStructureRestriction playerRestriction = null;
-//
-//        if (server != null) { serverRestriction = getRestriction(server, structure); }
-//        if (player != null) { playerRestriction = getRestriction(player, structure); }
-//
-//        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-//            return null;
-//        }
-//
-//        return playerRestriction;
-//    }
+        return null;
+    }
 
     @Override
     public void removeRestriction(String id) {

@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.enchant;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.EnchantWrapper;
@@ -45,7 +46,7 @@ public abstract class AEnchantmentMenu {
             List<Integer> toRemove = new ArrayList<>();
 
             for (int i = 0; i < value.size(); i++) {
-                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(new EnchantWrapper(value.get(i).enchantment, value.get(i).level), player, player.getServer());
+                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new EnchantWrapper(value.get(i).enchantment, value.get(i).level));
 
                 if (restriction != null && restriction.isDisabled(Attributes.ENCHANTING_TABLE)) {
                     toRemove.add(i);

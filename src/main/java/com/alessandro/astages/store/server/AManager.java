@@ -70,7 +70,7 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
                 r.isRestricted(object)
             ).findFirst().orElse(null);
 
-            if (serverRestriction == null) { return null; }
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
         if (holder.isPlayerActive()) {
@@ -78,6 +78,19 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
                 AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
                 r.isRestricted(object)
             ).findFirst().orElse(null);
+        }
+
+        return null;
+    }
+
+    public <W> R getRestrictionFromCache(AHolder holder, OrderedMultiMap<W, R> cache, W value) {
+        if (holder.isServerActive()) {
+            var serverRestriction = getRestrictionFromCache(holder, AStageType.SERVER, cache, value);
+            if (serverRestriction == null) { return null; }
+        }
+
+        if (holder.isPlayerActive()) {
+            return getRestrictionFromCache(holder, AStageType.PLAYER, cache, value);
         }
 
         return null;

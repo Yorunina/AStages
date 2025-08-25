@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.ore;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
@@ -20,7 +21,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onBlockBroken(BlockEvent.BreakEvent event) {
         if (canBeRunForPlayer(event.getPlayer())) {
-            var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(event.getPlayer(), event.getState());
+            var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(AHolder.serverAndPlayer(event.getPlayer()), event.getState());
 
             if (restriction != null) {
                 var stack = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);

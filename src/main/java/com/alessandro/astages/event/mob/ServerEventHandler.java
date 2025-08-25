@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.mob;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.store.Attributes;
@@ -27,7 +28,7 @@ public class ServerEventHandler {
         Player nearestPlayer = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
         var server = event.getEntity().getServer();
         var level = event.getEntity().level();
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(event.getEntity().getType(), nearestPlayer, server);
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), event.getEntity().getType());
 
         if (restriction != null) {
 //            var flag = restriction.isValueNull(Attributes.DIMENSION) && restriction.getDisabledSpawnTypes().isEmpty() &&
@@ -108,7 +109,7 @@ public class ServerEventHandler {
         var server = player.getServer();
         var entityType = event.getTarget().getType();
 
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(entityType, player, server);
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), entityType);
 
         if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
             event.setCanceled(true);
@@ -122,7 +123,7 @@ public class ServerEventHandler {
         var server = player.getServer();
         var entityType = event.getTarget().getType();
 
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(entityType, player, server);
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), entityType);
 
         if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
             event.setCanceled(true);

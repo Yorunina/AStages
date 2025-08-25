@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.dimension;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.alessandro.astages.store.Attributes;
@@ -29,8 +30,8 @@ public class ServerEventHandler {
             ResourceLocation dimension = event.getDimension().location();
 
             ResourceLocation currentDimension = player.level().dimension().location();
-            ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(currentDimension, player, player.getServer());
-            ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(dimension, player, player.getServer());
+            ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
+            ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), dimension);
 
             if (fromDim != null && fromDim.isEnabled(Attributes.BIDIRECTIONAL)) {
                 event.setCanceled(true);
@@ -59,7 +60,7 @@ public class ServerEventHandler {
             var persistentData = player.getPersistentData();
             ResourceLocation currentDimension = player.level().dimension().location();
 
-            var restriction = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(player, currentDimension);
+            var restriction = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
 
             if (restriction != null && restriction.getMaxStayTimer() != null) {
                 var nbtId = restriction.getNbtId();

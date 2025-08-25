@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.structure;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.capability.StructureData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
@@ -117,7 +118,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), structure);
 
                     var blockPlacedByPlayer = StructureData.getData(player.getServer(), structure.toString()).isBlockPlacedByPlayer(event.getPos());
                     if (blockPlacedByPlayer) {
@@ -145,7 +146,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), structure);
 
                     if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
                         var clickedBlock = event.getLevel().getBlockState(event.getPos());
@@ -169,7 +170,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), structure);
 
                     if (restriction != null && restriction.isDisabled(Attributes.ATTACKING)) {
                         if (!restriction.isEntityTargetable(event.getTarget().getType())) {
@@ -192,7 +193,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), structure);
 
                     StructureData.getData(player.getServer(), structure.toString()).add(event.getPos());
 
@@ -217,7 +218,7 @@ public class ServerEventHandler {
 
             if (playerIsInStructure.containsKey(playerUUID)) {
                 for (var structure : playerIsInStructure.get(playerUUID)) {
-                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(structure, player, player.getServer());
+                    var restriction = ARestrictionManager.STRUCTURE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), structure);
 
                     if (restriction != null) {
                         if (restriction.isDisabled(Attributes.EXPLOSIONS_AFFECT_BLOCKS)) {

@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.enchant;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.event.CommonEventSettings;
@@ -90,7 +91,7 @@ public class ServerEventHandler {
                 var level = EnchantmentHelper.getEnchantmentLevel(compound);
 
                 if (enchantment != null) {
-                    var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(new EnchantWrapper(enchantment, level), player, player.getServer());
+                    var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new EnchantWrapper(enchantment, level));
 
                     if (restriction != null && restriction.isDisabled(Attributes.ANVIL)) {
                         return true;
@@ -104,7 +105,7 @@ public class ServerEventHandler {
 
             for (var enchantment : allEnchantments.keySet()) {
                 var level = allEnchantments.get(enchantment);
-                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(new EnchantWrapper(enchantment, level), player, player.getServer());
+                var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new EnchantWrapper(enchantment, level));
 
                 if (restriction != null && restriction.isDisabled(Attributes.ANVIL)) {
                     return true;
@@ -124,7 +125,7 @@ public class ServerEventHandler {
         var iterator = enchantments.entrySet().iterator();
         while (iterator.hasNext()) {
             var entry = iterator.next();
-            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(new EnchantWrapper(entry.getKey(), entry.getValue()), player, player.getServer());
+            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new EnchantWrapper(entry.getKey(), entry.getValue()));
 
             if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
                 iterator.remove();
@@ -153,7 +154,7 @@ public class ServerEventHandler {
         var iterator = enchantments.entrySet().iterator();
         while (iterator.hasNext()) {
             var entry = iterator.next();
-            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(new EnchantWrapper(entry.getKey(), entry.getValue()), player, player.getServer());
+            var restriction = ARestrictionManager.ENCHANT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new EnchantWrapper(entry.getKey(), entry.getValue()));
 
             if (restriction != null && restriction.isDisabled(Attributes.STORING_IN_INVENTORY)) {
                 iterator.remove();

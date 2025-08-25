@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.effect;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +17,7 @@ public class ServerEventHandler {
     public static void effectAdded(MobEffectEvent.Applicable event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             var effect = event.getEffectInstance().getEffect();
-            var restriction = ARestrictionManager.EFFECT_INSTANCE.getRestriction(effect, player, player.getServer());
+            var restriction = ARestrictionManager.EFFECT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), effect);
 
             if (restriction != null) {
                 event.setResult(Event.Result.DENY);

@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.region;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
@@ -29,7 +30,7 @@ public class ServerEventHandler {
         var player = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), vec);
 
         if (canBeRunForPlayer(player)) {
-            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(pos, player, event.getLevel().getServer());
+            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), pos);
 
             if (restriction != null && restriction.isDisabled(Attributes.MOB_SPAWNING)) {
                 var restrictedDimension = restriction.get(Attributes.DIMENSION);
@@ -44,7 +45,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onGenericInteraction(PlayerInteractEvent event) {
         if (event.isCancelable() && !event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(event.getPos(), serverPlayer, serverPlayer.getServer());
+            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer), event.getPos());
 
             if (restriction != null && restriction.isDisabled(Attributes.GENERIC_INTERACTIONS)) {
                 var restrictedDimension = restriction.get(Attributes.DIMENSION);
@@ -64,7 +65,7 @@ public class ServerEventHandler {
         if (canBeRunForPlayer(player)) {
             var rawPos = event.getExplosion().getPosition();
             var pos = new BlockPos((int) rawPos.x, (int) rawPos.y, (int) rawPos.z);
-            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(pos, player, player.getServer());
+            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), pos);
 
             if (restriction != null) {
                 var restrictedDimension = restriction.get(Attributes.DIMENSION);
@@ -88,7 +89,7 @@ public class ServerEventHandler {
         var stringCommand = event.getParseResults().getReader().getString();
 
         if (canBeRunForPlayer(serverPlayer)) {
-            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(serverPlayer.getOnPos(), serverPlayer, serverPlayer.getServer());
+            var restriction = ARestrictionManager.REGION_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer), serverPlayer.getOnPos());
 
             if (restriction != null && restriction.isDisabled(Attributes.PERFORM_COMMANDS)) {
                 var foundedCommands = restriction.getDisabledCommands().stream().filter(stringCommand::contains).count();

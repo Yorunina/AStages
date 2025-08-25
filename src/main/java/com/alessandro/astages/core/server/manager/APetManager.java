@@ -1,13 +1,13 @@
 package com.alessandro.astages.core.server.manager;
 
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.server.restriction.APetRestriction;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.base.OrderedMultiMap;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
 
 @NotNullParams
 public class APetManager extends AManager<APetRestriction, EntityType<?>, EntityType<?>> {
@@ -29,13 +29,17 @@ public class APetManager extends AManager<APetRestriction, EntityType<?>, Entity
     }
 
     @Override
-    public APetRestriction getRestriction(Player player, EntityType<?> type) {
-        return getRestrictionFromCache(CACHE, type, player);
-    }
+    public APetRestriction getRestriction(AHolder holder, EntityType<?> type) {
+        if (holder.isServerActive()) {
+            var serverRestriction = getRestrictionFromCache(holder, AStageType.SERVER, CACHE, type);
+            if (serverRestriction == null) { return null; }
+        }
 
-    @Override
-    public APetRestriction getRestriction(MinecraftServer server, EntityType<?> type) {
-        return getRestrictionFromCache(CACHE, type, server);
+        if (holder.isPlayerActive()) {
+            return getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, type);
+        }
+
+        return null;
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.alessandro.astages.core.server.manager;
 
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AOreRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
@@ -11,17 +15,11 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.nullability.Nullable;
-import com.alessandro.astages.api.develop.NotYetImplemented;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-@NotYetImplemented("ServerStageReadable")
 @NotNullParams
 public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockState> implements ClientSynchronizable {
     private final OrderedMultiMap<BlockState, AOreRestriction> CACHE = OrderedMultiMap.create();
@@ -49,21 +47,21 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     }
 
     @Override
-    public AOreRestriction getRestriction(Player player, BlockState state) {
-        var cacheRestriction = getRestrictionFromCache(CACHE, state, player);
+    public AOreRestriction getRestriction(AHolder holder, BlockState state) {
+        var cacheRestriction = getRestrictionFromCache(holder, CACHE, state);
         if (cacheRestriction != null) { return cacheRestriction; }
 
-        return getRestrictionFromCache(BLOCK_CACHE, state.getBlock(), player);
+        return getRestrictionFromCache(holder, BLOCK_CACHE, state.getBlock());
     }
 
-    public BlockState getReplacement(Player player, BlockState original) {
-        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(player, original);
+    public BlockState getReplacement(AHolder holder, BlockState original) {
+        var restriction = ARestrictionManager.ORE_INSTANCE.getRestriction(holder, original);
 
         return restriction != null ? restriction.getReplacement() : original;
     }
 
-    public BlockState getReplacementForPlayerActions(Player player, BlockState original) {
-        var restriction = getRestrictionFromCache(AFFECTS_PLAYER_CACHE, original, player);
+    public BlockState getReplacementForPlayerActions(AHolder holder, BlockState original) {
+        var restriction = getRestrictionFromCache(holder, AFFECTS_PLAYER_CACHE, original);
 
         return restriction != null ? restriction.getReplacement() : original;
     }
