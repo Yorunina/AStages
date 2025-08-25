@@ -1,6 +1,9 @@
 package com.alessandro.astages.api;
 
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.holder.AStageHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.OfflinePlayerStage;
@@ -18,6 +21,14 @@ import java.util.List;
 public class AStagesUtils {
     public static List<String> getStages(Player player) {
         return OfflinePlayerStage.getPlayerStagesFromFile(player);
+    }
+
+    public static boolean hasStage(AHolder holder, AStageType type, String stage) {
+        return holder.stages().getForType(type).contains(stage);
+    }
+
+    public static boolean hasStage(AStageHolder holder, AStageType type, String stage) {
+        return holder.getForType(type).contains(stage);
     }
 
     public static boolean hasStage(Player player, String stage) {

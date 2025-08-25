@@ -1,6 +1,7 @@
-package com.alessandro.astages.api;
+package com.alessandro.astages.api.holder;
 
-import com.alessandro.astages.api.develop.NotYetImplemented;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.capability.ServerStageData;
 import net.minecraft.world.entity.player.Player;
@@ -40,26 +41,43 @@ public class AHolder {
         return new AHolder(true, false, false);
     }
 
+    public static AHolder serverAndPlayer(Player player) {
+        return new AHolder(true, true, false);
+    }
+
     private void addPlayer(Player player) {
         players.add(player);
     }
 
-    @NotYetImplemented("Replace with StageHolder!")
-    public List<String> stages() {
+    public boolean isServerActive() {
+        return isServer;
+    }
+
+    public boolean isPlayerActive() {
+        return isPlayer;
+    }
+
+    public AStageHolder stages() {
         if (isPlayer && !isMultiple) {
-            return AStagesUtils.getStages(players.get(0));
+            return AStageHolder.initAndHold(AStageType.PLAYER, AStagesUtils.getStages(players.get(0)));
+        }
+
+        if (isServer && isPlayer) { // Server stages is prioritized!
+            return AStageHolder.init()
+                .hold(AStageType.PLAYER, AStagesUtils.getStages(players.get(0)))
+                .hold(AStageType.SERVER, ServerStageData.getData(ServerLifecycleHooks.getCurrentServer()).get());
         }
 
         if (isServer) {
-            return ServerStageData.getData(ServerLifecycleHooks.getCurrentServer()).get();
+            return AStageHolder.initAndHold(AStageType.SERVER, ServerStageData.getData(ServerLifecycleHooks.getCurrentServer()).get());
         }
 
         if (isPlayer) {
             var stageSet = new HashSet<String>();
             players.forEach(player -> stageSet.addAll(AStagesUtils.getStages(player)));
-            return new ArrayList<>(stageSet);
+            return AStageHolder.initAndHold(AStageType.PLAYER, stageSet);
         }
 
-        return new ArrayList<>();
+        return AStageHolder.init();
     }
 }
