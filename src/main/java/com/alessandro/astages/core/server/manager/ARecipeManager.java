@@ -1,7 +1,13 @@
 package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.api.ARestrictionUtils;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.recipe.ABaseRecipeRestriction;
@@ -15,14 +21,8 @@ import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.base.OrderedMultiMap;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,61 +68,25 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         return IDS.getOrDefault(id, null);
     }
 
-    public ABaseRecipeRestriction<?, ?, ?> getRestriction(Player player, RecipeWrapper wrapper) {
-        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
-        if (modRestriction != null) { return modRestriction; }
+    public ABaseRecipeRestriction<?, ?, ?> getRestriction(AHolder holder, RecipeWrapper wrapper) {
+        if (holder.isServerActive()) {
+            var serverRestriction = getRestriction(holder, AStageType.SERVER, wrapper);
 
-        return getRestrictionFromCache(RECIPE_CACHE, wrapper.recipe(), player);
-    }
-
-    public ABaseRecipeRestriction<?, ?, ?> getRestriction(MinecraftServer server, RecipeWrapper wrapper) {
-        var data = ServerStageData.getData(server);
-        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && !data.has(r.getStage())).findFirst().orElse(null);
-        if (modRestriction != null) { return modRestriction; }
-
-        return getRestrictionFromCache(RECIPE_CACHE, wrapper.recipe(), server);
-    }
-
-    public ABaseRecipeRestriction<?, ?, ?> getRestriction(RecipeWrapper wrapper, @Nullable Player player, @Nullable MinecraftServer server) {
-        ABaseRecipeRestriction<?, ?, ?> serverRestriction = null;
-        ABaseRecipeRestriction<?, ?, ?> playerRestriction = null;
-
-        if (server != null) { serverRestriction = getRestriction(server, wrapper); }
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
-        if (player != null) { playerRestriction = getRestriction(player, wrapper); }
-        return playerRestriction;
-    }
-
-    public ARecipeRestriction getRestrictionFromCache(OrderedMultiMap<ResourceLocation, ARecipeRestriction> cache, ResourceLocation value, Player player) {
-        var restrictions = cache.get(value);
-
-        if (!restrictions.isEmpty()) {
-            for (var restriction : restrictions) {
-                if (!AStagesUtil.hasStage(player, restriction.getStage())) {
-                    return restriction;
-                }
-            }
+        if (holder.isPlayerActive()) {
+            return getRestriction(holder, AStageType.PLAYER, wrapper);
         }
 
         return null;
     }
 
-    public ARecipeRestriction getRestrictionFromCache(OrderedMultiMap<ResourceLocation, ARecipeRestriction> cache, ResourceLocation value, MinecraftServer server) {
-        var restrictions = cache.get(value);
-        var data = ServerStageData.getData(server);
+    public ABaseRecipeRestriction<?, ?, ?> getRestriction(AHolder holder, AStageType type, RecipeWrapper wrapper) {
+        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && !AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
+        if (modRestriction != null) { return modRestriction; }
 
-        if (!restrictions.isEmpty()) {
-            for (var restriction : restrictions) {
-                if (!data.has(restriction.getStage())) {
-                    return restriction;
-                }
-            }
-        }
-
-        return null;
+        return ARestrictionUtils.<ResourceLocation, ARecipeRestriction>getRestrictionFromCache(holder, RECIPE_CACHE, wrapper.recipe());
     }
 
     public void addRestriction(ARecipeRestriction restriction) {

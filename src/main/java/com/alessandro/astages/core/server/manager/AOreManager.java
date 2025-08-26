@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.manager;
 
+import com.alessandro.astages.api.ARestrictionUtils;
 import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -48,10 +49,10 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
 
     @Override
     public AOreRestriction getRestriction(AHolder holder, BlockState state) {
-        var cacheRestriction = getRestrictionFromCache(holder, CACHE, state);
+        var cacheRestriction = ARestrictionUtils.getRestrictionFromCache(holder, CACHE, state);
         if (cacheRestriction != null) { return cacheRestriction; }
 
-        return getRestrictionFromCache(holder, BLOCK_CACHE, state.getBlock());
+        return ARestrictionUtils.getRestrictionFromCache(holder, BLOCK_CACHE, state.getBlock());
     }
 
     public BlockState getReplacement(AHolder holder, BlockState original) {
@@ -61,7 +62,7 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
     }
 
     public BlockState getReplacementForPlayerActions(AHolder holder, BlockState original) {
-        var restriction = getRestrictionFromCache(holder, AFFECTS_PLAYER_CACHE, original);
+        var restriction = ARestrictionUtils.getRestrictionFromCache(holder, AFFECTS_PLAYER_CACHE, original);
 
         return restriction != null ? restriction.getReplacement() : original;
     }

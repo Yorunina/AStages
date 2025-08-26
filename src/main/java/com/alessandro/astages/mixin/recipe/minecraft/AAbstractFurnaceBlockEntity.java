@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
@@ -37,7 +38,7 @@ public class AAbstractFurnaceBlockEntity {
         Player player = AStagesUtil.getPlayerFromUUID(level.getServer(), blockOwner);
         if (player == null || recipe == null) { return; }
 
-        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), player, level.getServer());
+        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
         if (restriction != null) {
             ci.cancel();

@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.manager;
 
+import com.alessandro.astages.api.ARestrictionUtils;
 import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
@@ -31,12 +32,12 @@ public class ADimensionManager extends AManager<ADimensionRestriction, ResourceL
     @Override
     public ADimensionRestriction getRestriction(AHolder holder, ResourceLocation dimension) {
         if (holder.isServerActive()) {
-            var serverRestriction = getRestrictionFromCache(holder, AStageType.SERVER, CACHE, dimension);
+            var serverRestriction = ARestrictionUtils.getRestrictionFromCache(holder, AStageType.SERVER, CACHE, dimension);
             if (serverRestriction == null) { return null; }
         }
 
         if (holder.isPlayerActive()) {
-            return getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, dimension);
+            return ARestrictionUtils.getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, dimension);
         }
 
         return null;

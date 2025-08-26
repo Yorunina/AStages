@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.screen;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AScreenRestriction;
 import com.alessandro.astages.store.Attributes;
@@ -33,9 +34,9 @@ public abstract class AServerPlayer {
     public void astages$openMenu(MenuProvider menu, CallbackInfoReturnable<OptionalInt> cir, @Local AbstractContainerMenu abstractcontainermenu) {
         AScreenRestriction restriction;
         if (menu instanceof BlockEntity entity) {
-            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(abstractcontainermenu, serverLevel().getBlockState(entity.getBlockPos()), entity, serverPlayer$self(), serverPlayer$self().getServer());
+            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer$self()), abstractcontainermenu, serverLevel().getBlockState(entity.getBlockPos()), entity);
         } else {
-            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(abstractcontainermenu, null, null, serverPlayer$self(), serverPlayer$self().getServer());
+            restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer$self()), abstractcontainermenu, null, null);
         }
 
         if (restriction != null) {

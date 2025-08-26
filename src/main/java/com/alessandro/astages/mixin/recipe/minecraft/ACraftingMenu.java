@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -28,7 +29,7 @@ public class ACraftingMenu {
     private static void astages$slotChanged(AbstractContainerMenu pMenu, Level level, Player pPlayer, CraftingContainer container, ResultContainer resultSlots, CallbackInfo ci, ServerPlayer serverPlayer, ItemStack $$6, Optional<CraftingRecipe> optional) {
         if (optional.isPresent()) {
             var recipe = optional.get();
-            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), serverPlayer, level.getServer());
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
             if (restriction != null) {
                 resultSlots.clearContent();

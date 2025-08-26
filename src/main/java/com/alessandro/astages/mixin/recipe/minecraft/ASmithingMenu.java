@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -38,7 +39,7 @@ public class ASmithingMenu {
 
     @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/SmithingRecipe;assemble(Lnet/minecraft/world/Container;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;"), cancellable = true)
     public void astages$createResult(CallbackInfo ci, @Local SmithingRecipe recipe) {
-        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), astages$player, astages$player.getServer());
+        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(astages$player), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
         if (restriction != null) {
             smithingMenu$self().resultSlots.setItem(0, ItemStack.EMPTY);

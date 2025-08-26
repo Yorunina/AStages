@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.loot;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
@@ -35,7 +36,7 @@ public class ServerEventHandler {
             var drop = iterator.next();
             var stack = drop.getItem();
 
-            var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(stack, entity.getType(), null, player, server);
+            var restriction = ARestrictionManager.LOOT_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), stack, entity.getType(), null);
 
             if (restriction != null) {
                 iterator.remove();

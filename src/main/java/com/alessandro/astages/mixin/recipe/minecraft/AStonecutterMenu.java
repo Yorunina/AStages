@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.util.AStagesUtil;
@@ -49,7 +50,7 @@ public class AStonecutterMenu {
             var iterator = recipes.listIterator();
             while (iterator.hasNext()) {
                 var recipe = iterator.next();
-                var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), player.get(), level.getServer());
+                var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player.get()), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
                 if (restriction != null) {
                     iterator.remove();

@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.server.manager;
 
+import com.alessandro.astages.api.ARestrictionUtils;
 import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
@@ -31,12 +32,12 @@ public class APetManager extends AManager<APetRestriction, EntityType<?>, Entity
     @Override
     public APetRestriction getRestriction(AHolder holder, EntityType<?> type) {
         if (holder.isServerActive()) {
-            var serverRestriction = getRestrictionFromCache(holder, AStageType.SERVER, CACHE, type);
+            var serverRestriction = ARestrictionUtils.getRestrictionFromCache(holder, AStageType.SERVER, CACHE, type);
             if (serverRestriction == null) { return null; }
         }
 
         if (holder.isPlayerActive()) {
-            return getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, type);
+            return ARestrictionUtils.getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, type);
         }
 
         return null;

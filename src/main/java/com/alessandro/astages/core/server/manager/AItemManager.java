@@ -1,7 +1,11 @@
 package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.*;
@@ -15,12 +19,7 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.nullability.Nullable;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -108,88 +107,85 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         return IDS.getOrDefault(id, null);
     }
 
-    public ABaseItemRestriction<?, ?> getRestriction(Player player, ItemStack stack) {
-        return restrictions.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
-    }
+    public ABaseItemRestriction<?, ?> getRestriction(AHolder holder, ItemStack stack) {
+        if (holder.isServerActive()) {
+            var serverRestriction = restrictions.stream().filter(r ->
+                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
+                    r.isRestricted(stack)
+            ).findFirst().orElse(null);
 
-    public ABaseItemRestriction<?, ?> getRestriction(MinecraftServer server, ItemStack stack) {
-        var data = ServerStageData.getData(server);
-        return restrictions.stream().filter(r -> r.isRestricted(stack) && !data.has(r.getStage())).findFirst().orElse(null);
-    }
-
-    public ABaseItemRestriction<?, ?> getRestriction(ItemStack stack, @Nullable Player player, @Nullable MinecraftServer server) {
-        ABaseItemRestriction<?, ?> serverRestriction = null;
-        ABaseItemRestriction<?, ?> playerRestriction = null;
-
-        if (server != null) { serverRestriction = getRestriction(server, stack); }
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
-        if (player != null) { playerRestriction = getRestriction(player, stack); }
-        return playerRestriction;
+        if (holder.isPlayerActive()) {
+            return restrictions.stream().filter(r ->
+                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
+                    r.isRestricted(stack)
+            ).findFirst().orElse(null);
+        }
+
+        return null;
     }
 
     public List<ABaseItemRestriction<?,?>> getAllRestrictions(ItemStack stack) {
         return restrictions.stream().filter(r -> r.isRestricted(stack)).toList();
     }
 
-//    public ABaseItemRestriction<?, ?> speedUpGetRestriction(Player player, ItemStack stack) {
-//        var modId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).getNamespace();
-//        for (AItemModRestriction restriction : MOD_CACHE.get(modId)) {
-//            if (!AStagesUtil.hasStage(player, restriction.getStage())) {
-//                return restriction;
-//            }
-//        }
-//    }
+    public ABaseItemRestriction<?, ?> getInventoryRestriction(AHolder holder, ItemStack stack) {
+        if (holder.isServerActive()) {
+            var serverRestriction = INVENTORY_CACHE.stream().filter(r ->
+                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
+                    r.isRestricted(stack)
+            ).findFirst().orElse(null);
 
-    // private ABaseItemRestriction<?>
-
-    public ABaseItemRestriction<?, ?> getInventoryRestriction(Player player, ItemStack stack) {
-        return INVENTORY_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
-    }
-
-    public ABaseItemRestriction<?, ?> getInventoryRestriction(MinecraftServer server, ItemStack stack) {
-        var data = ServerStageData.getData(server);
-        return INVENTORY_CACHE.stream().filter(r -> r.isRestricted(stack) && !data.has(r.getStage())).findFirst().orElse(null);
-    }
-
-    public ABaseItemRestriction<?, ?> getInventoryRestriction(ItemStack stack, @Nullable Player player, @Nullable MinecraftServer server) {
-        ABaseItemRestriction<?, ?> serverRestriction = null;
-        ABaseItemRestriction<?, ?> playerRestriction = null;
-
-        if (server != null) { serverRestriction = getInventoryRestriction(server, stack); }
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
-        if (player != null) { playerRestriction = getInventoryRestriction(player, stack); }
-        return playerRestriction;
-    }
-
-    public ABaseItemRestriction<?, ?> getEquipmentRestriction(Player player, ItemStack stack) {
-        return EQUIPMENT_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
-    }
-
-    public ABaseItemRestriction<?, ?> getEquipmentRestriction(MinecraftServer server, ItemStack stack) {
-        var data = ServerStageData.getData(server);
-        return EQUIPMENT_CACHE.stream().filter(r -> r.isRestricted(stack) && !data.has(r.getStage())).findFirst().orElse(null);
-    }
-
-    public ABaseItemRestriction<?, ?> getEquipmentRestriction(ItemStack stack, @Nullable Player player, @Nullable MinecraftServer server) {
-        ABaseItemRestriction<?, ?> serverRestriction = null;
-        ABaseItemRestriction<?, ?> playerRestriction = null;
-
-        if (server != null) { serverRestriction = getEquipmentRestriction(server, stack); }
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
+        if (holder.isPlayerActive()) {
+            return INVENTORY_CACHE.stream().filter(r ->
+                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
+                    r.isRestricted(stack)
+            ).findFirst().orElse(null);
         }
 
-        if (player != null) { playerRestriction = getEquipmentRestriction(player, stack); }
-        return playerRestriction;
+        return null;
     }
 
-    public ABaseItemRestriction<?, ?> getContainersRestriction(Player player, ItemStack stack, Slot slot) {
+    public ABaseItemRestriction<?, ?> getEquipmentRestriction(AHolder holder, ItemStack stack) {
+        if (holder.isServerActive()) {
+            var serverRestriction = EQUIPMENT_CACHE.stream().filter(r ->
+                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
+                    r.isRestricted(stack)
+            ).findFirst().orElse(null);
+
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
+        }
+
+        if (holder.isPlayerActive()) {
+            return EQUIPMENT_CACHE.stream().filter(r ->
+                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
+                    r.isRestricted(stack)
+            ).findFirst().orElse(null);
+        }
+
+        return null;
+    }
+
+    public ABaseItemRestriction<?, ?> getContainersRestriction(AHolder holder, ItemStack stack, Slot slot) {
+        if (holder.isServerActive()) {
+            var serverRestriction = getContainersRestriction(holder, AStageType.SERVER, stack, slot);
+
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
+        }
+
+        if (holder.isPlayerActive()) {
+            return getContainersRestriction(holder, AStageType.PLAYER, stack, slot);
+        }
+
+        return null;
+    }
+
+    public ABaseItemRestriction<?, ?> getContainersRestriction(AHolder holder, AStageType type, ItemStack stack, Slot slot) {
         var container = slot.container;
         var index = slot.index;
 
@@ -197,44 +193,13 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         if (isPresent) {
             var whitelistedIndexes = containersWhitelist.get(container.getClass());
             if (whitelistedIndexes == null) {
-                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
             } else if (whitelistedIndexes.contains(index)) {
-                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtil.hasStage(player, r.getStage())).findFirst().orElse(null);
+                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
             }
         }
 
         return null;
-    }
-
-    public ABaseItemRestriction<?, ?> getContainersRestriction(MinecraftServer server, ItemStack stack, Slot slot) {
-        var container = slot.container;
-        var index = slot.index;
-        var data = ServerStageData.getData(server);
-
-        var isPresent = containersWhitelist.containsKey(container.getClass());
-        if (isPresent) {
-            var whitelistedIndexes = containersWhitelist.get(container.getClass());
-            if (whitelistedIndexes == null) {
-                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !data.has(r.getStage())).findFirst().orElse(null);
-            } else if (whitelistedIndexes.contains(index)) {
-                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !data.has(r.getStage())).findFirst().orElse(null);
-            }
-        }
-
-        return null;
-    }
-
-    public ABaseItemRestriction<?, ?> getContainersRestriction(ItemStack stack, Slot slot, @Nullable Player player, @Nullable MinecraftServer server) {
-        ABaseItemRestriction<?, ?> serverRestriction = null;
-        ABaseItemRestriction<?, ?> playerRestriction = null;
-
-        if (server != null) { serverRestriction = getContainersRestriction(server, stack, slot); }
-        if (serverRestriction == null) { // If the stage is unlocked in the server, pass!
-            return null;
-        }
-
-        if (player != null) { playerRestriction = getContainersRestriction(player, stack, slot); }
-        return playerRestriction;
     }
 
     public void whiteListContainer(Class<?> containerClass, @Nullable List<Integer> slots) {

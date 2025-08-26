@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -31,7 +32,7 @@ public class ACampfireBlock {
     public void astages$use(BlockState pState, Level level, BlockPos pPos, Player player, InteractionHand pHand, BlockHitResult pHit, CallbackInfoReturnable<InteractionResult> cir, BlockEntity blockentity, CampfireBlockEntity campfireblockentity, ItemStack itemstack, Optional<CampfireCookingRecipe> optional) {
         if (optional.isPresent()) {
             var recipe = optional.get();
-            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()), player, level.getServer());
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
             if (restriction != null) {
                 cir.setReturnValue(InteractionResult.CONSUME);
