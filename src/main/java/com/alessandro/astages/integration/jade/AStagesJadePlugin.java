@@ -1,5 +1,6 @@
 package com.alessandro.astages.integration.jade;
 
+import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.store.Attributes;
@@ -26,7 +27,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
         registration.addRayTraceCallback((hitResult, accessor, originalAccessor) -> {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlockState();
-                var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(original);
+                var restriction = AClientRestrictionManager.ORE_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), original);
 
                 if (restriction != null) {
                     return registration.blockAccessor().from(blockAccessor).blockState(restriction.getReplacement()).build();
@@ -41,7 +42,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
                 var entity = entityAccessor.getEntity();
                 var type = entity.getType();
 
-                var restriction = AClientRestrictionManager.MOB_INSTANCE.getRestriction(type);
+                var restriction = AClientRestrictionManager.MOB_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), type);
 
                 if (restriction != null) {
                     tooltip.clear();

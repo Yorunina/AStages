@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.ore;
 
+import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.ARestrictionManager;
@@ -19,7 +20,7 @@ public class ABlockBehaviour {
         if (player instanceof ServerPlayer serverPlayer) {
             return ARestrictionManager.ORE_INSTANCE.getReplacement(AHolder.serverAndPlayer(serverPlayer), original);
         } else {
-            return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
+            return AClientRestrictionManager.ORE_INSTANCE.getReplacement(AClientHolder.serverAndPlayer(), original);
         }
     }
 }

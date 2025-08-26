@@ -169,6 +169,7 @@ public class AStagesUtil {
         return player instanceof ServerPlayer;
     }
 
+    @Deprecated(forRemoval = true)
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasStage(Player player, String stage) {
         AtomicBoolean toReturn = new AtomicBoolean(false);

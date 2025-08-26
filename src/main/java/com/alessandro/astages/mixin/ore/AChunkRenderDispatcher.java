@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.ore;
 
+import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
@@ -11,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public class AChunkRenderDispatcher {
     @ModifyExpressionValue(method = "compile", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/chunk/RenderChunkRegion;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
     public BlockState astages$getBlockState(BlockState original) {
-        return AClientRestrictionManager.ORE_INSTANCE.getReplacement(original);
+        return AClientRestrictionManager.ORE_INSTANCE.getReplacement(AClientHolder.serverAndPlayer(), original);
     }
 }
