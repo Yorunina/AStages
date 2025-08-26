@@ -1,8 +1,12 @@
 package com.alessandro.astages.core.client.manager;
 
+import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.develop.UnderDevelopment;
+import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.item.*;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
@@ -111,11 +115,24 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
         return IDS.getOrDefault(id, null);
     }
 
-    public AClientBaseItemRestriction<?, ?> getRestriction(ItemStack stack) {
-        var serverRestriction = restrictions.stream().filter(r -> r.isRestricted(stack) && !AClientRestrictionManager.SERVER_STAGES.contains(r.getStage())).findFirst().orElse(null);
-        if (serverRestriction == null) { return null; }
+    public AClientBaseItemRestriction<?, ?> getRestriction(AClientHolder holder, ItemStack stack) {
+        if (holder.isServerActive()) {
+            var serverRestriction = restrictions.stream().filter(r ->
+                AStagesClientUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
+                r.isRestricted(stack)
+            ).findFirst().orElse(null);
 
-        return restrictions.stream().filter(r -> r.isRestricted(stack) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
+            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
+        }
+
+        if (holder.isPlayerActive()) {
+            return restrictions.stream().filter(r ->
+                AStagesClientUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
+                r.isRestricted(stack)
+            ).findFirst().orElse(null);
+        }
+
+        return null;
     }
 
     public String getRestrictionIdForStack(ItemStack stack) {
@@ -130,13 +147,16 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
         return null;
     }
 
-    public AClientItemPropertyRestriction getProperties(ItemStack stack) {
+    @UnderDevelopment
+    @Info("Create strong association between requested restriction and properties")
+    public AClientItemPropertyRestriction getProperties(AClientHolder holder, ItemStack stack) {
         if (stack.isEmpty()) { return null; }
 
         if (properties.containsKey(CustomItemStackKey.build(stack))) {
             var restriction = properties.get(CustomItemStackKey.build(stack));
             if (restriction != null) {
-                return ClientPlayerStage.hasStage(restriction.stage()) || AClientRestrictionManager.SERVER_STAGES.contains(restriction.stage()) ? null : restriction;
+                return AStagesClientUtils.hasStage(holder, AStageType.SERVER, restriction.stage()) ||
+                    AStagesClientUtils.hasStage(holder, AStageType.PLAYER, restriction.stage()) ? null : restriction;
             } else {
                 return null;
             }

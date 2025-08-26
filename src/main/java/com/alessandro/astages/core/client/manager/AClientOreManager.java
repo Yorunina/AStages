@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.client.manager;
 
+import com.alessandro.astages.api.ARestrictionClientUtils;
 import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.AClientOreRestriction;
@@ -47,17 +48,17 @@ public class AClientOreManager extends AClientManager<AClientOreRestriction, Ore
 
     @Override
     public AClientOreRestriction getRestriction(AClientHolder holder, BlockState state) {
-        var cacheRestriction = getRestrictionFromCache(holder, CACHE, state);
+        var cacheRestriction = ARestrictionClientUtils.getRestrictionFromCache(holder, CACHE, state);
         if (cacheRestriction != null) { return cacheRestriction; }
 
-        return getRestrictionFromCache(holder, BLOCK_CACHE, state.getBlock());
+        return ARestrictionClientUtils.getRestrictionFromCache(holder, BLOCK_CACHE, state.getBlock());
     }
 
     public AClientOreRestriction getRestriction(AClientHolder holder, BlockItem item) {
-        var cacheRestriction = getRestrictionFromCache(holder, CACHE, item.getBlock().defaultBlockState());
+        var cacheRestriction = ARestrictionClientUtils.getRestrictionFromCache(holder, CACHE, item.getBlock().defaultBlockState());
         if (cacheRestriction != null) { return cacheRestriction; }
 
-        return getRestrictionFromCache(holder, BLOCK_CACHE, item.getBlock());
+        return ARestrictionClientUtils.getRestrictionFromCache(holder, BLOCK_CACHE, item.getBlock());
     }
 
     public BlockState getReplacement(AClientHolder holder, BlockState original) {

@@ -111,7 +111,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         if (holder.isServerActive()) {
             var serverRestriction = restrictions.stream().filter(r ->
                 AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
-                    r.isRestricted(stack)
+                r.isRestricted(stack)
             ).findFirst().orElse(null);
 
             if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
@@ -120,7 +120,7 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         if (holder.isPlayerActive()) {
             return restrictions.stream().filter(r ->
                 AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
-                    r.isRestricted(stack)
+                r.isRestricted(stack)
             ).findFirst().orElse(null);
         }
 

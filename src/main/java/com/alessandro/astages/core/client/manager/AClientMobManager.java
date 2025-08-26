@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.client.manager;
 
+import com.alessandro.astages.api.ARestrictionClientUtils;
 import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
 import com.alessandro.astages.store.client.AClientManager;
@@ -29,7 +30,7 @@ public class AClientMobManager extends AClientManager<AClientMobRestriction, Ent
 
     @Override
     public AClientMobRestriction getRestriction(AClientHolder holder, EntityType<?> type) {
-        return getRestrictionFromCache(holder, CACHE, type);
+        return ARestrictionClientUtils.getRestrictionFromCache(holder, CACHE, type);
     }
 
     @Override

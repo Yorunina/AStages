@@ -1,16 +1,17 @@
 package com.alessandro.astages.core.client.manager;
 
-import com.alessandro.astages.capability.ClientPlayerStage;
-import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.api.AStagesClientUtils;
+import com.alessandro.astages.api.base.OrderedMultiMap;
+import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.holder.AClientHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.client.restriction.recipe.AClientBaseRecipeRestriction;
 import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeModRestriction;
 import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.api.base.OrderedMultiMap;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.develop.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -55,21 +56,21 @@ public class AClientRecipeManager implements AClientMinimalManager<AClientBaseRe
         return IDS.getOrDefault(id, null);
     }
 
-    public AClientBaseRecipeRestriction<?, ?, ?> getRestriction(RecipeWrapper wrapper) {
-        var serverModRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !AClientRestrictionManager.SERVER_STAGES.contains(r.getStage())).findFirst().orElse(null);
+    public AClientBaseRecipeRestriction<?, ?, ?> getRestriction(AClientHolder holder, RecipeWrapper wrapper) {
+        var serverModRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !AStagesClientUtils.hasStage(holder, AStageType.SERVER, r.getStage())).findFirst().orElse(null);
         if (serverModRestriction == null) { return null; }
-        var modRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !ClientPlayerStage.hasStage(r.getStage())).findFirst().orElse(null);
+        var modRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !AStagesClientUtils.hasStage(holder, AStageType.PLAYER, r.getStage())).findFirst().orElse(null);
         if (modRestriction != null) { return modRestriction; }
 
         var restrictions = RECIPE_TYPE_CACHE.get(wrapper.type());
         for (var restriction : restrictions) {
-            if (restriction.getRecipes().contains(wrapper.recipe()) && AClientRestrictionManager.SERVER_STAGES.contains(restriction.getStage())) {
+            if (restriction.getRecipes().contains(wrapper.recipe()) && AStagesClientUtils.hasStage(holder, AStageType.SERVER, restriction.getStage())) {
                 return null;
             }
         }
 
         for (var restriction : restrictions) {
-            if (restriction.getRecipes().contains(wrapper.recipe()) && !ClientPlayerStage.hasStage(restriction.getStage())) {
+            if (restriction.getRecipes().contains(wrapper.recipe()) && !AStagesClientUtils.hasStage(holder, AStageType.PLAYER, restriction.getStage())) {
                 return restriction;
             }
         }

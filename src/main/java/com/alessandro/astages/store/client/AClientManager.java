@@ -1,7 +1,6 @@
 package com.alessandro.astages.store.client;
 
 import com.alessandro.astages.api.AStagesClientUtils;
-import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -53,33 +52,6 @@ public abstract class AClientManager<R extends AClientRestriction<R, U, V>, U, V
                 AStagesClientUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
                 r.isRestricted(object)
             ).findFirst().orElse(null);
-        }
-
-        return null;
-    }
-
-    public <W> R getRestrictionFromCache(AClientHolder holder, OrderedMultiMap<W, R> cache, W value) {
-        if (holder.isServerActive()) {
-            var serverRestriction = getRestrictionFromCache(holder, AStageType.SERVER, cache, value);
-            if (serverRestriction == null) { return null; }
-        }
-
-        if (holder.isPlayerActive()) {
-            return getRestrictionFromCache(holder, AStageType.PLAYER, cache, value);
-        }
-
-        return null;
-    }
-
-    public <W> R getRestrictionFromCache(AClientHolder holder, AStageType type, OrderedMultiMap<W, R> cache, W value) {
-        var restrictions = cache.get(value);
-
-        if (!restrictions.isEmpty()) {
-            for (var restriction : restrictions) {
-                if (!AStagesClientUtils.hasStage(holder, type, restriction.getStage())) {
-                    return restriction;
-                }
-            }
         }
 
         return null;

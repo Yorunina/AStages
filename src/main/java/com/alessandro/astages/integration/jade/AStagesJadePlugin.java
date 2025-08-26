@@ -56,8 +56,8 @@ public class AStagesJadePlugin implements IWailaPlugin {
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
                 var stack = AStagesUtil.blockToStack(original);
-                var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(stack);
-                var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(stack);
+                var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), stack);
+                var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), stack);
 
                 if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
                     tooltip.clear();
@@ -72,8 +72,8 @@ public class AStagesJadePlugin implements IWailaPlugin {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(itemEntity.getItem());
-                    var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(itemEntity.getItem());
+                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), itemEntity.getItem());
+                    var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), itemEntity.getItem());
 
                     if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
                         tooltip.clear();

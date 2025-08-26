@@ -1,5 +1,6 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -22,7 +23,7 @@ public class AStonecutterScreen {
 
         while (iterator.hasNext()) {
             var recipe = iterator.next();
-            var restriction = AClientRestrictionManager.RECIPE_INSTANCE.getRestriction(new RecipeWrapper(recipe.getType(), recipe.getId()));
+            var restriction = AClientRestrictionManager.RECIPE_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
             if (restriction != null) {
                 iterator.remove();
