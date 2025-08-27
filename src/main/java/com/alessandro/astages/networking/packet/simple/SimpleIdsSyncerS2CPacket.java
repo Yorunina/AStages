@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking.packet.simple;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -12,16 +12,16 @@ import java.util.function.Supplier;
 @NotNullParams
 public class SimpleIdsSyncerS2CPacket {
     private final Collection<String> ids;
-    private final SyncOperation operation;
+    private final ASyncOperation operation;
 
-    public SimpleIdsSyncerS2CPacket(Collection<String> ids, SyncOperation operation) {
+    public SimpleIdsSyncerS2CPacket(Collection<String> ids, ASyncOperation operation) {
         this.ids = ids;
         this.operation = operation;
     }
 
     public SimpleIdsSyncerS2CPacket(FriendlyByteBuf buf) {
         ids = buf.readList(FriendlyByteBuf::readUtf);
-        operation = buf.readEnum(SyncOperation.class);
+        operation = buf.readEnum(ASyncOperation.class);
     }
 
     public void toBytes(FriendlyByteBuf buf) {

@@ -21,7 +21,7 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -120,11 +120,11 @@ public class ARestrictionManager {
         ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), AOperation.LOGIN));
     }
 
-    public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, SyncOperation operation) {
+    public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, ASyncOperation operation) {
         ANetworking.sendTo(player, new SimpleIdsSyncerS2CPacket(ids, operation));
     }
 
-    public static void reflectAllStagesChangesToClients(@Nullable ServerPlayer player, Collection<String> stages, SyncOperation operation) {
+    public static void reflectAllStagesChangesToClients(@Nullable ServerPlayer player, Collection<String> stages, ASyncOperation operation) {
         ANetworking.sendTo(player, new StageSyncerS2CPacket(stages, operation));
     }
 
@@ -134,8 +134,8 @@ public class ARestrictionManager {
 
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
         clientSynchronization(null);
-        reflectSimpleIdsChangesToClients(null, ARestrictionManager.SIMPLE_IDS, SyncOperation.ADD);
-        reflectAllStagesChangesToClients(null, ARestrictionManager.ALL_STAGES, SyncOperation.ADD);
+        reflectSimpleIdsChangesToClients(null, ARestrictionManager.SIMPLE_IDS, ASyncOperation.ADD);
+        reflectAllStagesChangesToClients(null, ARestrictionManager.ALL_STAGES, ASyncOperation.ADD);
         APluginManager.callMethod(ServerLifecycleHooks.getCurrentServer(), AStagesPlugin::reloadAfterScripts);
         CommonEventSettings.allInventoryChanged();
     }

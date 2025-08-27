@@ -1,12 +1,12 @@
 package com.alessandro.astages.mixin.recipe.minecraft;
 
+import com.alessandro.astages.api.APlayerUtils;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.nullability.Nullable;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +35,7 @@ public class AAbstractFurnaceBlockEntity {
         blockEntity.getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> atomicOwner.set(blockStage.getOwner()));
 
         UUID blockOwner = atomicOwner.get();
-        Player player = AStagesUtil.getPlayerFromUUID(level.getServer(), blockOwner);
+        Player player = APlayerUtils.getPlayerFromUUID(level.getServer(), blockOwner);
         if (player == null || recipe == null) { return; }
 
         var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), new RecipeWrapper(recipe.getType(), recipe.getId()));

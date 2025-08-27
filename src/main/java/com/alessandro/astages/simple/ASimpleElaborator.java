@@ -11,7 +11,7 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -228,6 +228,6 @@ public class ASimpleElaborator {
     }
 
     public static void commonCommandOperations(String id) {
-        ARestrictionManager.reflectSimpleIdsChangesToClients(null, List.of(id), SyncOperation.ADD);
+        ARestrictionManager.reflectSimpleIdsChangesToClients(null, List.of(id), ASyncOperation.ADD);
     }
 }

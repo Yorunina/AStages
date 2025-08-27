@@ -3,6 +3,7 @@ package com.alessandro.astages.store;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 
 @NotNullParamsAndMethodsReturn
+@Deprecated(forRemoval = true)
 public class NonnullAttribute<T> /*extends Attribute<T>*/ {
 //    private NonnullAttribute(String id, Class<T> type, T defaultValue) {
 //        super(id, type, defaultValue);

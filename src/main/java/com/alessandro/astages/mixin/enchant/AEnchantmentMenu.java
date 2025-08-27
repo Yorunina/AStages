@@ -1,12 +1,12 @@
 package com.alessandro.astages.mixin.enchant;
 
+import com.alessandro.astages.api.APlayerUtils;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.wrapper.EnchantWrapper;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -38,7 +38,7 @@ public abstract class AEnchantmentMenu {
             var blockEntity = l.getBlockEntity(pos);
 
             if (blockEntity != null && l.getServer() != null) {
-                blockEntity.getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> owner.set(AStagesUtil.getPlayerFromUUID(l.getServer(), blockStage.getOwner())));
+                blockEntity.getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> owner.set(APlayerUtils.getPlayerFromUUID(l.getServer(), blockStage.getOwner())));
             }
         });
 

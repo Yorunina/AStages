@@ -1,4 +1,4 @@
-package com.alessandro.astages.store;
+package com.alessandro.astages.api.feature;
 
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.api.nullability.Nullable;

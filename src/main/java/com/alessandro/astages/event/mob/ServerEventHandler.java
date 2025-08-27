@@ -1,12 +1,12 @@
 package com.alessandro.astages.event.mob;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.APlayerUtils;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -25,8 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ServerEventHandler {
     @SubscribeEvent
     public static void checkMobSpawning(MobSpawnEvent.FinalizeSpawn event) {
-        Player nearestPlayer = AStagesUtil.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
-        var server = event.getEntity().getServer();
+        Player nearestPlayer = APlayerUtils.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
         var level = event.getEntity().level();
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), event.getEntity().getType());
 
@@ -106,7 +105,6 @@ public class ServerEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
         var player = event.getEntity();
-        var server = player.getServer();
         var entityType = event.getTarget().getType();
 
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), entityType);
@@ -120,7 +118,6 @@ public class ServerEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onPlayerAttack(AttackEntityEvent event) {
         var player = event.getEntity();
-        var server = player.getServer();
         var entityType = event.getTarget().getType();
 
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), entityType);

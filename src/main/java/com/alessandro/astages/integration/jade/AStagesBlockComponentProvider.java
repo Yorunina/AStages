@@ -1,5 +1,6 @@
 package com.alessandro.astages.integration.jade;
 
+import com.alessandro.astages.api.APlayerUtils;
 import com.alessandro.astages.capability.BlockStageProvider;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
@@ -41,7 +42,7 @@ public enum AStagesBlockComponentProvider implements IBlockComponentProvider, IS
 
         blockEntity.getCapability(BlockStageProvider.BLOCK_STAGE).ifPresent(blockStage -> {
             if (blockAccessor.getPlayer().getServer() != null) {
-                var player = AStagesUtil.getPlayerFromUUID(blockAccessor.getPlayer().getServer(), blockStage.getOwner());
+                var player = APlayerUtils.getPlayerFromUUID(blockAccessor.getPlayer().getServer(), blockStage.getOwner());
 
                 if (player != null) {
                     compoundTag.putString(OWNER_KEY, player.getName().getString());

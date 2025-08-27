@@ -10,7 +10,7 @@ import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
 import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -34,8 +34,8 @@ public class PlayerEventHandler {
         if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer player) {
             ARestrictionManager.clearClientOnLogin(player);
             ARestrictionManager.reflectServerStagesChangesToClients(player, player.server);
-            ARestrictionManager.reflectSimpleIdsChangesToClients(player, ARestrictionManager.SIMPLE_IDS, SyncOperation.ADD);
-            ARestrictionManager.reflectAllStagesChangesToClients(player, ARestrictionManager.ALL_STAGES, SyncOperation.ADD);
+            ARestrictionManager.reflectSimpleIdsChangesToClients(player, ARestrictionManager.SIMPLE_IDS, ASyncOperation.ADD);
+            ARestrictionManager.reflectAllStagesChangesToClients(player, ARestrictionManager.ALL_STAGES, ASyncOperation.ADD);
             ARestrictionManager.clientSynchronization(player);
         }
     }

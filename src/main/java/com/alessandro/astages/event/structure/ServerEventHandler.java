@@ -1,14 +1,15 @@
 package com.alessandro.astages.event.structure;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AInventoryUtils;
+import com.alessandro.astages.api.APlayerUtils;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.StructureData;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -153,7 +154,7 @@ public class ServerEventHandler {
                         if (!restriction.isBlockInteractable(clickedBlock)) {
                             event.setCanceled(true);
                             restriction.displayMessage(Attributes.Structure.INTERACT_MESSAGE, structure, player);
-                            AStagesUtil.updateSelectedSlot(player);
+                            AInventoryUtils.updateSelectedSlot(player);
                             break;
                         }
                     }
@@ -201,7 +202,7 @@ public class ServerEventHandler {
                         if (!restriction.isBlockPlaceable(event.getPlacedBlock())) {
                             event.setCanceled(true);
                             restriction.displayMessage(Attributes.Structure.PLACING_MESSAGE, structure, player);
-                            AStagesUtil.updateSelectedSlot(player);
+                            AInventoryUtils.updateSelectedSlot(player);
                             break;
                         }
                     }
@@ -212,7 +213,7 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onExplosionDetonation(ExplosionEvent.Detonate event) {
-        var player = AStagesUtil.getNearestPlayer(event.getLevel(), event.getExplosion().getPosition());
+        var player = APlayerUtils.getNearestPlayer(event.getLevel(), event.getExplosion().getPosition());
         if (canBeRunForPlayer(player)) {
             UUID playerUUID = player.getUUID();
 

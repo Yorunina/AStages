@@ -10,7 +10,7 @@ import com.alessandro.astages.core.server.restriction.AMobRestriction;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
-import com.alessandro.astages.store.ClientSynchronizable;
+import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.store.server.AManager;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;

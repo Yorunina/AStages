@@ -41,20 +41,24 @@ public class AStagesUtil {
         return new ResourceLocation(location);
     }
 
+    @Deprecated(forRemoval = true)
     public static void updateSelectedSlot(Player player) {
         updateSelectedSlot((ServerPlayer) player);
     }
 
+    @Deprecated(forRemoval = true)
     public static void updateSelectedSlot(ServerPlayer player) {
         // Synchronize changes with client!
         var slot = player.getInventory().selected;
         player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
     }
 
+    @Deprecated(forRemoval = true)
     public static @Nullable Player getNearestPlayer(Level level, BlockPos pos) {
         return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
     }
 
+    @Deprecated(forRemoval = true)
     public static @Nullable Player getNearestPlayer(Level level, Vec3 pos) {
         var players = level.players();
         var minDistance = Double.MAX_VALUE;
@@ -177,6 +181,7 @@ public class AStagesUtil {
         return toReturn.get();
     }
 
+    @Deprecated(forRemoval = true)
     public static @Nullable Player getPlayerFromUUID(MinecraftServer server, UUID uuid) {
         return server.getPlayerList().getPlayer(uuid);
     }

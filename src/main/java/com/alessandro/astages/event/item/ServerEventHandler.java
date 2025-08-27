@@ -1,6 +1,7 @@
 package com.alessandro.astages.event.item;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AInventoryUtils;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
@@ -76,7 +77,7 @@ public class ServerEventHandler {
             if (restriction != null && restriction.isDisabled(Attributes.RIGHT_CLICK_INTERACTIONS)) {
                 event.setCanceled(true);
                 if (event.getEntity() instanceof ServerPlayer player) {
-                    AStagesUtil.updateSelectedSlot(player);
+                    AInventoryUtils.updateSelectedSlot(player);
                 }
                 restriction.displayMessage(Attributes.Item.USING_MESSAGE, event.getItemStack(), event.getEntity());
             }
@@ -90,7 +91,7 @@ public class ServerEventHandler {
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {
                     event.setCanceled(true);
                     if (event.getEntity() instanceof ServerPlayer player) {
-                        AStagesUtil.updateSelectedSlot(player);
+                        AInventoryUtils.updateSelectedSlot(player);
                     }
                     restriction.displayMessage(Attributes.Item.USING_MESSAGE, block, event.getEntity());
                 }
@@ -152,7 +153,7 @@ public class ServerEventHandler {
 
             if (restriction != null && restriction.isDisabled(Attributes.BLOCK_PLACING)) {
                 event.setCanceled(true);
-                AStagesUtil.updateSelectedSlot(player);
+                AInventoryUtils.updateSelectedSlot(player);
                 restriction.displayMessage(Attributes.Item.PLACING_MESSAGE, stack, player);
             }
         }

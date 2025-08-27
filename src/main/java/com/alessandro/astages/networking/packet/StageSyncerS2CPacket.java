@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking.packet;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.util.SyncOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -12,16 +12,16 @@ import java.util.function.Supplier;
 @NotNullParams
 public class StageSyncerS2CPacket {
     private final Collection<String> stages;
-    private final SyncOperation operation;
+    private final ASyncOperation operation;
 
-    public StageSyncerS2CPacket(Collection<String> stages, SyncOperation operation) {
+    public StageSyncerS2CPacket(Collection<String> stages, ASyncOperation operation) {
         this.stages = stages;
         this.operation = operation;
     }
 
     public StageSyncerS2CPacket(FriendlyByteBuf buf) {
         stages = buf.readList(FriendlyByteBuf::readUtf);
-        operation = buf.readEnum(SyncOperation.class);
+        operation = buf.readEnum(ASyncOperation.class);
     }
 
     public void toBytes(FriendlyByteBuf buf) {

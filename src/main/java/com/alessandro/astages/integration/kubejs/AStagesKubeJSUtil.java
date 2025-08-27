@@ -1,5 +1,6 @@
 package com.alessandro.astages.integration.kubejs;
 
+import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
@@ -22,7 +23,6 @@ import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.util.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
-import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -73,7 +73,7 @@ public class AStagesKubeJSUtil {
     }
 
     public static boolean playerHasStage(String stage, Player player) {
-        return AStagesUtil.hasStage(player, stage);
+        return AStagesUtils.hasStage(player, stage);
     }
 
     public static boolean playerHasAtLeastOneStage(List<String> stages, Player player) {

@@ -2,7 +2,7 @@ package com.alessandro.astages.store.client;
 
 import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
-import com.alessandro.astages.store.SetAttributeNotSupported;
+import com.alessandro.astages.api.exception.SetAttributeNotSupported;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 

@@ -4,7 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.store.Attribute;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.ConfigurableAttributeStore;
-import com.alessandro.astages.store.SetAttributeNotSupported;
+import com.alessandro.astages.api.exception.SetAttributeNotSupported;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

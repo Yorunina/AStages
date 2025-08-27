@@ -16,7 +16,7 @@ import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.store.ClientSynchronizable;
+import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;
