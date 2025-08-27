@@ -21,7 +21,7 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.ACompareCondition;
+import com.alessandro.astages.api.constant.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;

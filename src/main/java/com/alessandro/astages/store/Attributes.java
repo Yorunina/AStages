@@ -2,7 +2,7 @@ package com.alessandro.astages.store;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.registry.AStagesRegistries;
-import com.alessandro.astages.util.ACompareCondition;
+import com.alessandro.astages.api.constant.ACompareCondition;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
