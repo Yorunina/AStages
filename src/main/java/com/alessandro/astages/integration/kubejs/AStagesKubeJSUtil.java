@@ -1,7 +1,8 @@
 package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.api.AStagesUtils;
-import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.ACompareCondition;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.PlayerStage;
@@ -21,7 +22,6 @@ import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.core.wrapper.RecipeModWrapper;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.api.constant.ACompareCondition;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -45,96 +45,61 @@ import java.util.List;
 public class AStagesKubeJSUtil {
     // Player Stages
     public static void addStageToPlayer(String stage, Player player) {
-
-        getPlayerCapability(player).ifPresent(playerStage -> {
-            playerStage.addStage(stage);
-            playerStage.setChangedFor(player, AOperation.ADD, stage);
-        });
+        AStagesUtils.addStage(AHolder.player(player), stage);
     }
 
     public static void removeStageFromPlayer(String stage, Player player) {
-        getPlayerCapability(player).ifPresent(playerStage -> {
-            playerStage.removeStage(stage);
-            playerStage.setChangedFor(player, AOperation.REMOVE, stage);
-        });
+        AStagesUtils.removeStage(AHolder.player(player), stage);
     }
 
     public static List<String> getStagesFromPlayer(Player player) {
-        List<String> toReturn = new ArrayList<>();
-        getPlayerCapability(player).ifPresent(playerStage -> toReturn.addAll(playerStage.getStages()));
-        return toReturn;
+        return new ArrayList<>(AStagesUtils.getStages(AHolder.player(player)));
     }
 
     public static void removeAllStagesFromPlayer(Player player) {
-        getPlayerCapability(player).ifPresent(playerStage -> {
-            playerStage.removeAllStages();
-            playerStage.setChangedFor(player, AOperation.REMOVE_ALL, playerStage.getStages());
-        });
+        AStagesUtils.removeAllStages(AHolder.player(player));
     }
 
     public static boolean playerHasStage(String stage, Player player) {
-        return AStagesUtils.hasStage(player, stage);
+        return AStagesUtils.hasStage(AHolder.player(player), stage);
     }
 
     public static boolean playerHasAtLeastOneStage(List<String> stages, Player player) {
-        for (var stage : stages) {
-            if (playerHasStage(stage, player)) {
-                return true;
-            }
-        }
-
-        return false;
+        return AStagesUtils.hasAtLeastOneStage(AHolder.player(player), stages);
     }
 
     public static boolean playerHasAllStages(List<String> stages, Player player) {
-        for (var stage : stages) {
-            if (!playerHasStage(stage, player)) {
-                return false;
-            }
-        }
-
-        return true;
+        return AStagesUtils.hasAllStages(AHolder.player(player), stages);
     }
 
+    @Deprecated(forRemoval = true)
     public static LazyOptional<PlayerStage> getPlayerCapability(Player player) {
         return player.getCapability(PlayerStageProvider.PLAYER_STAGE);
     }
 
     // Server Stages
-    public static void addStageToServer(String stage, MinecraftServer server) {
-        ServerStageData.getData(server).add(stage);
+    public static void addStageToServer(String stage, MinecraftServer server) { // Server ignored!
+        AStagesUtils.addStage(AHolder.server(), stage);
     }
 
-    public static void removeStageFromServer(String stage, MinecraftServer server) {
-        ServerStageData.getData(server).remove(stage);
+    public static void removeStageFromServer(String stage, MinecraftServer server) { // Server ignored!
+        AStagesUtils.removeStage(AHolder.server(), stage);
     }
 
-    public static void removeAllStagesFromServer(MinecraftServer server) {
-        ServerStageData.getData(server).removeAll();
+    public static void removeAllStagesFromServer(MinecraftServer server) { // Server ignored!
+        AStagesUtils.removeAllStages(AHolder.server());
     }
 
-    public static boolean serverHasStage(String stage, MinecraftServer server) {
-        return ServerStageData.getData(server).has(stage);
+    public static boolean serverHasStage(String stage, MinecraftServer server) { // Server ignored!
+        return AStagesUtils.hasStage(AHolder.server(), stage);
     }
 
-    public static boolean serverHasAtLeastOneStage(List<String> stages, MinecraftServer server) {
-        for (var stage : stages) {
-            if (serverHasStage(stage, server)) {
-                return true;
-            }
-        }
-
-        return false;
+    public static boolean serverHasAtLeastOneStage(List<String> stages, MinecraftServer server) { // Server ignored!
+        return AStagesUtils.hasAtLeastOneStage(AHolder.server(), stages);
     }
 
-    public static boolean serverHasAllStages(List<String> stages, MinecraftServer server) {
-        for (var stage : stages) {
-            if (!serverHasStage(stage, server)) {
-                return false;
-            }
-        }
-
-        return true;
+    public static boolean serverHasAllStages(List<String> stages, MinecraftServer server) { // Server ignored!
+        return AStagesUtils.hasAllStages(AHolder.server(), stages);
     }
 
     public static ServerStageData getServerData(MinecraftServer server) {
@@ -149,9 +114,7 @@ public class AStagesKubeJSUtil {
     // STAGES
     public static AStage customizeStage(String s) {
         var stage = new AStage(s);
-
         AStageManager.addStage(stage);
-
         return stage;
     }
 

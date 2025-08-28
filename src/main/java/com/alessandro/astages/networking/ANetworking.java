@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking;
 
-import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
-import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.ClientStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.StagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
@@ -39,16 +39,16 @@ public class ANetworking {
         INSTANCE = net;
 
         // STAGES
-        net.messageBuilder(StageDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StageDataSyncS2CPacket::new)
-                .encoder(StageDataSyncS2CPacket::toBytes)
-                .consumerMainThread(StageDataSyncS2CPacket::handle)
+        net.messageBuilder(ClientStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ClientStagesSyncerS2CPacket::new)
+                .encoder(ClientStagesSyncerS2CPacket::toBytes)
+                .consumerMainThread(ClientStagesSyncerS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(StageSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(StageSyncerS2CPacket::new)
-            .encoder(StageSyncerS2CPacket::toBytes)
-            .consumerMainThread(StageSyncerS2CPacket::handle)
+        net.messageBuilder(StagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(StagesSyncerS2CPacket::new)
+            .encoder(StagesSyncerS2CPacket::toBytes)
+            .consumerMainThread(StagesSyncerS2CPacket::handle)
             .add();
 
         // ITEMS

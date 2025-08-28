@@ -27,4 +27,10 @@ public class AStageHolder {
     public HashSet<String> getForType(AStageType type) {
         return stages.getOrDefault(type, new HashSet<>());
     }
+
+    public Set<String> getAllStages() {
+        var toReturn = new HashSet<String>();
+        stages.forEach((type, stages) -> toReturn.addAll(stages));
+        return toReturn;
+    }
 }

@@ -1,70 +1,90 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
-import com.alessandro.astages.core.stage.AStageManager;
+import com.alessandro.astages.api.event.server.*;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
-import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @NotNullParamsAndMethodsReturn
 public class ServerStageData extends SavedData {
     private static final String STAGE_ID = "astages_server_stages";
-    private List<String> serverStages = new ArrayList<>();
+    private final List<String> serverStages = new ArrayList<>();
 
-    public void add(String... stages) {
-        var list = List.of(stages);
-        list.forEach(ServerStageData::checkStage);
-
-        serverStages.addAll(list);
-        setDirty();
-        synchronizeChanges(AOperation.ADD);
-    }
-
-//    public void set(List<String> stages) {
-//        serverStages = stages;
-//        setDirty();
-//        synchronizeChanges(PlayerStage.Operation.ADD);
-//    }
-
-    public void remove(String... stages) {
-        serverStages.removeAll(List.of(stages));
-        setDirty();
-        synchronizeChanges(AOperation.REMOVE);
-    }
-
-    public void removeAll() {
-        serverStages.clear();
-        setDirty();
-        synchronizeChanges(AOperation.REMOVE_ALL);
-    }
-
-    private void synchronizeChanges(AOperation operation) {
-        ANetworking.sendTo(null, new ServerStagesSyncerS2CPacket(serverStages, operation));
-    }
-
-    public static void checkStage(String stage) {
-        if (AStageManager.isPlayerOnly(stage)) {
-            throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in player only!");
-        }
-    }
-
-    public List<String> get() {
+    public List<String> getServerStages() {
         return serverStages;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean has(String stage) {
+    public boolean hasServerStage(String stage) {
         return serverStages.contains(stage);
+    }
+
+    public void addServerStage(String stage) {
+        serverStages.add(stage);
+        setDirty();
+    }
+
+    public void addServerStages(List<String> stages) {
+        serverStages.addAll(stages);
+        setDirty();
+    }
+
+    public void removeServerStage(String stage) {
+        serverStages.remove(stage);
+        setDirty();
+    }
+
+    public void removeServerStages(List<String> stages) {
+        serverStages.removeAll(stages);
+        setDirty();
+    }
+
+    public void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, String stage) {
+        synchronizeWithClient(player, operation, Collections.singletonList(stage));
+    }
+
+    public void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, List<String> stages) {
+        AStagesUtils.checkServerStages(operation, stages);
+
+        var server = ServerLifecycleHooks.getCurrentServer();
+        var event = new StageSyncedServerEvent(ServerLifecycleHooks.getCurrentServer(), operation, stages);
+        MinecraftForge.EVENT_BUS.post(event);
+
+        if (!event.isCanceled()) {
+            ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(stages, operation)); // TODO! Wrong packet!
+
+            switch (operation) {
+                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedServerEvent(server, stages.get(0)));
+                case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedServerEvent(server, stages));
+                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedServerEvent(server, stages.get(0)));
+                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedServerEvent(server, stages));
+                case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginServerEvent(server, stages));
+            }
+        } else {
+            switch (event.getOperation()) {
+                case ADD -> removeServerStage(stages.get(0));
+                case ADD_ALL, LOGIN -> removeServerStages(stages);
+                case REMOVE -> addServerStage(stages.get(0));
+                case REMOVE_ALL -> addServerStages(stages);
+            }
+        }
     }
 
     @Contract(" -> new")

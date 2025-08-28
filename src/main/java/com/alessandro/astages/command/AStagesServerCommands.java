@@ -1,16 +1,16 @@
 package com.alessandro.astages.command;
 
-import com.alessandro.astages.capability.ServerStageData;
-import com.alessandro.astages.command.argument.AStagesServerRemoveArgument;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.command.argument.AStagesServerRemoveArgument;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 @NotNullParams
@@ -18,37 +18,37 @@ public class AStagesServerCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("astages").requires(c -> c.hasPermission(2)).then(Commands.literal("server")
             .then(Commands.literal("add").then(Commands.argument("stage", StringArgumentType.string())
-                .executes(context -> addServerStageCommand(context.getSource().getServer(), StringArgumentType.getString(context, "stage")))
+                .executes(context -> addServerStageCommand(StringArgumentType.getString(context, "stage")))
             ))
             .then(Commands.literal("remove").then(Commands.argument("stage", AStagesServerRemoveArgument.stages())
-                .executes(context -> removeServerStageCommand(context.getSource().getServer(), AStagesServerRemoveArgument.getStage(context, "stage")))
+                .executes(context -> removeServerStageCommand(AStagesServerRemoveArgument.getStage(context, "stage")))
             ))
             .then(Commands.literal("remove_all")
-                .executes(context -> removeAllServerStageCommand(context.getSource().getServer()))
+                .executes(context -> removeAllServerStageCommand())
             )
             .then(Commands.literal("info")
-                .executes(context -> infoCommand(context.getSource().getServer(), context.getSource().getPlayer()))
+                .executes(context -> infoCommand(context.getSource().getPlayer()))
             )
         ));
     }
 
-    private static int addServerStageCommand(MinecraftServer server, String stageToAdd) {
-        ServerStageData.getData(server).add(stageToAdd);
+    private static int addServerStageCommand(String stageToAdd) {
+        AStagesUtils.addStage(AHolder.server(), stageToAdd);
         return 1;
     }
 
-    private static int removeServerStageCommand(MinecraftServer server, String stageToRemove) {
-        ServerStageData.getData(server).remove(stageToRemove);
+    private static int removeServerStageCommand(String stageToRemove) {
+        AStagesUtils.removeStage(AHolder.server(), stageToRemove);
         return 1;
     }
 
-    private static int removeAllServerStageCommand(MinecraftServer server) {
-        ServerStageData.getData(server).removeAll();
+    private static int removeAllServerStageCommand() {
+        AStagesUtils.removeAllStages(AHolder.server());
         return 1;
     }
 
-    private static int infoCommand(MinecraftServer server, @Nullable ServerPlayer executor) {
-        var serverStage = ServerStageData.getData(server).get();
+    private static int infoCommand(@Nullable ServerPlayer executor) {
+        var serverStage = AStagesUtils.getStages(AHolder.server());
 
         if (executor != null) {
             if (serverStage.isEmpty()) {

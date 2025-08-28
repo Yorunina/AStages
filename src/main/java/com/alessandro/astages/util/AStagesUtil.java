@@ -3,31 +3,21 @@ package com.alessandro.astages.util;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.nullability.Nullable;
-import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.stage.AStageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
-
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @NotNullParamsAndMethodsReturn
 public class AStagesUtil {
@@ -41,39 +31,39 @@ public class AStagesUtil {
         return new ResourceLocation(location);
     }
 
-    @Deprecated(forRemoval = true)
-    public static void updateSelectedSlot(Player player) {
-        updateSelectedSlot((ServerPlayer) player);
-    }
-
-    @Deprecated(forRemoval = true)
-    public static void updateSelectedSlot(ServerPlayer player) {
-        // Synchronize changes with client!
-        var slot = player.getInventory().selected;
-        player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
-    }
-
-    @Deprecated(forRemoval = true)
-    public static @Nullable Player getNearestPlayer(Level level, BlockPos pos) {
-        return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
-    }
-
-    @Deprecated(forRemoval = true)
-    public static @Nullable Player getNearestPlayer(Level level, Vec3 pos) {
-        var players = level.players();
-        var minDistance = Double.MAX_VALUE;
-        Player toReturn = null;
-
-        for (Player player : players) {
-            var distance = player.distanceToSqr(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5);
-            if (distance < minDistance) {
-                minDistance = distance;
-                toReturn = player;
-            }
-        }
-
-        return toReturn;
-    }
+//    @Deprecated(forRemoval = true)
+//    public static void updateSelectedSlot(Player player) {
+//        updateSelectedSlot((ServerPlayer) player);
+//    }
+//
+//    @Deprecated(forRemoval = true)
+//    public static void updateSelectedSlot(ServerPlayer player) {
+//        // Synchronize changes with client!
+//        var slot = player.getInventory().selected;
+//        player.connection.send(new ClientboundContainerSetSlotPacket(-2, 0, slot, player.getInventory().getItem(slot)));
+//    }
+//
+//    @Deprecated(forRemoval = true)
+//    public static @Nullable Player getNearestPlayer(Level level, BlockPos pos) {
+//        return getNearestPlayer(level, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
+//    }
+//
+//    @Deprecated(forRemoval = true)
+//    public static @Nullable Player getNearestPlayer(Level level, Vec3 pos) {
+//        var players = level.players();
+//        var minDistance = Double.MAX_VALUE;
+//        Player toReturn = null;
+//
+//        for (Player player : players) {
+//            var distance = player.distanceToSqr(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5);
+//            if (distance < minDistance) {
+//                minDistance = distance;
+//                toReturn = player;
+//            }
+//        }
+//
+//        return toReturn;
+//    }
 
     public static void showTitles(ServerPlayer player, AOperation operation, String stage) {
         Component title = Component.empty();
@@ -173,18 +163,18 @@ public class AStagesUtil {
         return player instanceof ServerPlayer;
     }
 
-    @Deprecated(forRemoval = true)
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean hasStage(Player player, String stage) {
-        AtomicBoolean toReturn = new AtomicBoolean(false);
-        player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
-        return toReturn.get();
-    }
+//    @Deprecated(forRemoval = true)
+//    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+//    public static boolean hasStage(Player player, String stage) {
+//        AtomicBoolean toReturn = new AtomicBoolean(false);
+//        player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
+//        return toReturn.get();
+//    }
 
-    @Deprecated(forRemoval = true)
-    public static @Nullable Player getPlayerFromUUID(MinecraftServer server, UUID uuid) {
-        return server.getPlayerList().getPlayer(uuid);
-    }
+//    @Deprecated(forRemoval = true)
+//    public static @Nullable Player getPlayerFromUUID(MinecraftServer server, UUID uuid) {
+//        return server.getPlayerList().getPlayer(uuid);
+//    }
 
     public static BakedModel getBakedModelFromState(BlockState state) {
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);

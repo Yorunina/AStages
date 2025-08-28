@@ -1,4 +1,4 @@
-package com.alessandro.astages.event.custom.actions;
+package com.alessandro.astages.api.event.player;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;

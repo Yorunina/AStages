@@ -1,15 +1,13 @@
 package com.alessandro.astages.capability;
 
-import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
-import com.alessandro.astages.event.custom.actions.*;
 import com.alessandro.astages.networking.ANetworking;
-import com.alessandro.astages.networking.packet.StageDataSyncS2CPacket;
+import com.alessandro.astages.networking.packet.ClientStagesSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 @NotNullParams
 @AutoRegisterCapability
 public class PlayerStage {
@@ -40,13 +39,13 @@ public class PlayerStage {
     }
 
     public void setChangedFor(Player player, AOperation operation, List<String> stages, boolean silentTitle) {
-        AStagesUtils.checkStages(player, operation, stages);
+        AStagesUtils.checkPlayerStages(player, operation, stages);
 
         StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stages);
         MinecraftForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
-            ANetworking.sendToPlayer(new StageDataSyncS2CPacket(stages, operation), (ServerPlayer) player);
+            ANetworking.sendToPlayer(new ClientStagesSyncerS2CPacket(stages, operation), (ServerPlayer) player);
 
             if (!silentTitle) {
                 if (player instanceof ServerPlayer serverPlayer) {
@@ -56,10 +55,9 @@ public class PlayerStage {
 
             switch (operation) {
                 case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stages.get(0)));
-                case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStageAddedPlayerEvent(player, stages));
+                case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedPlayerEvent(player, stages));
                 case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, stages.get(0)));
-                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStageRemovedPlayerEvent(player, stages));
-                case GET -> MinecraftForge.EVENT_BUS.post(new StageGetPlayerEvent(player, stages));
+                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedPlayerEvent(player, stages));
                 case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginPlayerEvent(player, stages));
             }
         } else {
@@ -68,7 +66,6 @@ public class PlayerStage {
                 case ADD_ALL, LOGIN -> this.stages.removeAll(stages);
                 case REMOVE -> this.stages.add(stages.get(0));
                 case REMOVE_ALL -> this.stages.addAll(stages);
-                case GET -> AStages.LOGGER.info("Get operation cannot be cancelled!");
             }
         }
     }
@@ -83,7 +80,7 @@ public class PlayerStage {
 
     public void addStage(String stage) {
         if (stages.contains(stage)) { return; }
-        AStagesUtils.checkStages(null, AOperation.ADD, Collections.singletonList(stage));
+        AStagesUtils.checkPlayerStages(null, AOperation.ADD, Collections.singletonList(stage));
 
         stages.add(stage);
     }

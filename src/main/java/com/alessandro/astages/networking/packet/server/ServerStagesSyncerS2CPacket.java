@@ -1,18 +1,15 @@
 package com.alessandro.astages.networking.packet.server;
 
+import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AOperation;
-import com.alessandro.astages.capability.PlayerStage;
-import com.alessandro.astages.core.AClientRestrictionManager;
-import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
+import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Supplier;
 
 @NotNullParams
@@ -38,20 +35,13 @@ public class ServerStagesSyncerS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
-            List<String> differencesBetweenClientAndServer = new ArrayList<>(AClientRestrictionManager.SERVER_STAGES);
-            differencesBetweenClientAndServer.removeAll(stages);
+            switch (operation) {
+                case ADD, ADD_ALL -> AStagesClientUtils.addStages(AClientHolder.server(), stages);
+                case REMOVE, REMOVE_ALL -> AStagesClientUtils.removeStages(AClientHolder.server(), stages);
+                case LOGIN -> AStagesClientUtils.setStages(AClientHolder.server(), stages);
+            }
 
-            List<String> differencesBetweenServerAndClient = new ArrayList<>(stages);
-            differencesBetweenServerAndClient.removeAll(AClientRestrictionManager.SERVER_STAGES);
-
-            Set<String> differences = new HashSet<>();
-            differences.addAll(differencesBetweenClientAndServer);
-            differences.addAll(differencesBetweenServerAndClient);
-
-            MinecraftForge.EVENT_BUS.post(new ClientSynchronizeServerStagesEvent(new ArrayList<>(differences), operation));
-
-            AClientRestrictionManager.SERVER_STAGES.clear();
-            AClientRestrictionManager.SERVER_STAGES.addAll(stages);
+            MinecraftForge.EVENT_BUS.post(new ClientSynchronizeServerStagesEvent(stages, operation));
         });
 
         ctx.get().setPacketHandled(true);

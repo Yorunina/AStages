@@ -8,7 +8,7 @@ import com.alessandro.astages.capability.PlayerStageProvider;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
-import com.alessandro.astages.event.custom.StageSyncedPlayerEvent;
+import com.alessandro.astages.api.event.player.StageSyncedPlayerEvent;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.api.constant.ASyncOperation;
 import net.minecraft.server.level.ServerPlayer;

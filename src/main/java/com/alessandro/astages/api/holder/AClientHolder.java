@@ -1,9 +1,9 @@
 package com.alessandro.astages.api.holder;
 
-import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.nullability.NotNullMethodsReturn;
-import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.capability.ClientServerStageData;
 
 @NotNullMethodsReturn
 public class AClientHolder {
@@ -35,21 +35,31 @@ public class AClientHolder {
         return isPlayer;
     }
 
-    public AStageHolder stages() {
+    public AStageHolder getStages() {
         if (isServer && isPlayer) { // Server stages is prioritized!
             return AStageHolder.init()
-                .hold(AStageType.PLAYER, AStagesClientUtils.getStages())
-                .hold(AStageType.SERVER, AClientRestrictionManager.SERVER_STAGES);
+                .hold(AStageType.PLAYER, ClientPlayerStage.getClientStages())
+                .hold(AStageType.SERVER, ClientServerStageData.getServerStages());
         }
 
         if (isPlayer) {
-            return AStageHolder.initAndHold(AStageType.PLAYER, AStagesClientUtils.getStages());
+            return AStageHolder.initAndHold(AStageType.PLAYER, ClientPlayerStage.getClientStages());
         }
 
         if (isServer) {
-            return AStageHolder.initAndHold(AStageType.SERVER, AClientRestrictionManager.SERVER_STAGES);
+            return AStageHolder.initAndHold(AStageType.SERVER, ClientServerStageData.getServerStages());
         }
 
         return AStageHolder.init();
+    }
+
+    public void perform(Runnable forPlayer, Runnable forServer) {
+        if (isServer) {
+            forServer.run();
+        }
+
+        if (isPlayer) {
+            forPlayer.run();
+        }
     }
 }

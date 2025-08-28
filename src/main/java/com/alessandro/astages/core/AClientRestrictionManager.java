@@ -22,7 +22,6 @@ public class AClientRestrictionManager {
     public static final AClientMobManager MOB_INSTANCE = new AClientMobManager();
 
     public static final Set<String> ORE_STAGES = new HashSet<>();
-    public static final Set<String> SERVER_STAGES = new HashSet<>();
 
     @Info("For automatic command completion")
     public static final Set<String> ALL_STAGES = new HashSet<>();
@@ -51,7 +50,6 @@ public class AClientRestrictionManager {
         MOB_INSTANCE.reloadBeforeScripts();
 
         ORE_STAGES.clear();
-        SERVER_STAGES.clear();
         DIMENSION_IDS.clear();
         SIMPLE_IDS.clear();
     }

@@ -8,7 +8,7 @@ import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.networking.ANetworking;
-import com.alessandro.astages.networking.packet.StageSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.StagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
@@ -117,7 +117,7 @@ public class ARestrictionManager {
 
     public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
         var data = ServerStageData.getData(server);
-        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.get(), AOperation.LOGIN));
+        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.getServerStages(), AOperation.LOGIN));
     }
 
     public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, ASyncOperation operation) {
@@ -125,7 +125,7 @@ public class ARestrictionManager {
     }
 
     public static void reflectAllStagesChangesToClients(@Nullable ServerPlayer player, Collection<String> stages, ASyncOperation operation) {
-        ANetworking.sendTo(player, new StageSyncerS2CPacket(stages, operation));
+        ANetworking.sendTo(player, new StagesSyncerS2CPacket(stages, operation));
     }
 
     public static void reloadAfterScripts() {

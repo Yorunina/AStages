@@ -1,4 +1,4 @@
-package com.alessandro.astages.event.custom;
+package com.alessandro.astages.api.event.player;
 
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.develop.Info;

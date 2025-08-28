@@ -10,16 +10,16 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 @NotNullParams
-public class StageSyncerS2CPacket {
+public class StagesSyncerS2CPacket {
     private final Collection<String> stages;
     private final ASyncOperation operation;
 
-    public StageSyncerS2CPacket(Collection<String> stages, ASyncOperation operation) {
+    public StagesSyncerS2CPacket(Collection<String> stages, ASyncOperation operation) {
         this.stages = stages;
         this.operation = operation;
     }
 
-    public StageSyncerS2CPacket(FriendlyByteBuf buf) {
+    public StagesSyncerS2CPacket(FriendlyByteBuf buf) {
         stages = buf.readList(FriendlyByteBuf::readUtf);
         operation = buf.readEnum(ASyncOperation.class);
     }

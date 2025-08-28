@@ -5,7 +5,7 @@ public enum AOperation {
     ADD_ALL(true, false),
     REMOVE(false, true),
     REMOVE_ALL(false, false),
-    GET(false, false),
+    @Deprecated(forRemoval = true) GET(false, false),
     LOGIN(false, false);
 
     private final boolean needToBeChecked;
