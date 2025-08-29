@@ -44,11 +44,12 @@ public class AHolder {
     }
 
     public static AHolder serverAndPlayer(Player player) {
-        return new AHolder(true, true, false);
+        return new AHolder(true, true, false).addPlayer(player);
     }
 
-    private void addPlayer(Player player) {
+    private AHolder addPlayer(Player player) {
         players.add(player);
+        return this;
     }
 
     public boolean isServerActive() {
