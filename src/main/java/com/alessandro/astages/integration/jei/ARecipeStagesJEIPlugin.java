@@ -35,10 +35,12 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         if (!Mods.JEI.isLoaded()) return;
 
         if (EffectiveSide.get().isClient()) {
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientRecipeUpdateEvent.class, e -> updateRecipeGui());
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientRecipeUpdateEvent.class,
+                e -> updateRecipeGui()
+            );
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
-                if (e.getOperation() != AOperation.LOGIN && e.getOperation() != AOperation.GET) {
+                if (e.getOperation() != AOperation.LOGIN) {
                     updateRecipeGui();
                 }
             });

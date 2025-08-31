@@ -37,7 +37,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 @NotNullParamsAndMethodsReturn
 @Mod.EventBusSubscriber(modid = AStages.MODID)
@@ -295,9 +294,7 @@ public class OfflinePlayerStage {
     }
 
     public static List<String> getPlayerStagesFromCapability(Player player) {
-        AtomicReference<List<String>> playerStages = new AtomicReference<>(new ArrayList<>());
-        player.getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> playerStages.set(playerStage.getStages()));
-        return playerStages.get();
+        return PlayerStageWrapper.getStages(player);
     }
 
     private static CompoundTag readNbtFromFile(File file) {

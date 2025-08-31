@@ -41,7 +41,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
 
         if (EffectiveSide.get().isClient() && !EffectiveSide.get().isServer()) {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
-                if (e.getOperation() != AOperation.LOGIN && e.getOperation() != AOperation.GET) {
+                if (e.getOperation() != AOperation.LOGIN) {
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
             });

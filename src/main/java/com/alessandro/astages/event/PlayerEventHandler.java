@@ -1,66 +1,54 @@
 package com.alessandro.astages.event;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.event.player.StageSyncedPlayerEvent;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.capability.PlayerStageProvider;
+import com.alessandro.astages.capability.PlayerStageWrapper;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
-import com.alessandro.astages.api.event.player.StageSyncedPlayerEvent;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.constant.ASyncOperation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
+
 @NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class PlayerEventHandler {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (!event.getEntity().level().isClientSide) {
-            event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> playerStage.setChangedFor(event.getEntity(), AOperation.LOGIN, playerStage.getStages()));
-        }
+        var player = event.getEntity();
+        player.inventoryMenu.addSlotListener(new AInventorySlotListener(player));
 
-        event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
+        if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+            var playerStages = AStagesUtils.getStages(AHolder.player(player));
+            AStagesUtils.synchronizeWithClient(AHolder.player(player), serverPlayer, AOperation.LOGIN, new ArrayList<>(playerStages), true);
 
-        if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer player) {
-            ARestrictionManager.clearClientOnLogin(player);
-            ARestrictionManager.reflectServerStagesChangesToClients(player, player.server);
-            ARestrictionManager.reflectSimpleIdsChangesToClients(player, ARestrictionManager.SIMPLE_IDS, ASyncOperation.ADD);
-            ARestrictionManager.reflectAllStagesChangesToClients(player, ARestrictionManager.ALL_STAGES, ASyncOperation.ADD);
-            ARestrictionManager.clientSynchronization(player);
+            ARestrictionManager.clearClientOnLogin(serverPlayer);
+            ARestrictionManager.reflectServerStagesChangesToClients(serverPlayer, serverPlayer.server);
+            ARestrictionManager.reflectSimpleIdsChangesToClients(serverPlayer, ARestrictionManager.SIMPLE_IDS, ASyncOperation.ADD);
+            ARestrictionManager.reflectAllStagesChangesToClients(serverPlayer, ARestrictionManager.ALL_STAGES, ASyncOperation.ADD);
+            ARestrictionManager.clientSynchronization(serverPlayer);
         }
     }
 
     @SubscribeEvent
     public static void onAttachedCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            if (!event.getObject().getCapability(PlayerStageProvider.PLAYER_STAGE).isPresent()) {
-                event.addCapability(AStagesUtil.fromNamespaceAndPath("properties"), new PlayerStageProvider());
-            }
-        }
+        PlayerStageWrapper.onAttachedCapabilities(event);
     }
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        event.getOriginal().reviveCaps();
-
-        event.getOriginal().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(oldStore -> {
-            event.getEntity().getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(newStore -> {
-                newStore.copyFrom(oldStore);
-            });
-        });
-
-        event.getOriginal().invalidateCaps();
-
         event.getEntity().inventoryMenu.addSlotListener(new AInventorySlotListener(event.getEntity()));
     }
 

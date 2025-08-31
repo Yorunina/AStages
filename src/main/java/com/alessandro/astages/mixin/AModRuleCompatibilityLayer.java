@@ -1,7 +1,7 @@
 package com.alessandro.astages.mixin;
 
-import com.alessandro.astages.api.constant.AOperation;
-import com.alessandro.astages.capability.PlayerStageProvider;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.holder.AHolder;
 import mcjty.incontrol.compat.ModRuleCompatibilityLayer;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,17 +25,7 @@ public class AModRuleCompatibilityLayer {
     @Overwrite
     public boolean hasGameStage(Player player, String stage) {
         if (player == null) { return false; }
-        var cap = player.getCapability(PlayerStageProvider.PLAYER_STAGE);
-
-        if (cap.isPresent()) {
-            var playerStage = cap.resolve();
-
-            if (playerStage.isPresent()) {
-                return playerStage.get().getStages().contains(stage);
-            }
-        }
-
-        return false;
+        return AStagesUtils.hasStage(AHolder.player(player), stage);
     }
 
     /**
@@ -45,16 +35,7 @@ public class AModRuleCompatibilityLayer {
     @Overwrite
     public void addGameStage(Player player, String stage) {
         if (player == null) { return; }
-        var cap = player.getCapability(PlayerStageProvider.PLAYER_STAGE);
-
-        if (cap.isPresent()) {
-            var playerStage = cap.resolve();
-
-            if (playerStage.isPresent()) {
-                playerStage.get().addStage(stage);
-                playerStage.get().setChangedFor(player, AOperation.ADD, stage);
-            }
-        }
+        AStagesUtils.addStage(AHolder.player(player), stage, false);
     }
 
     /**
@@ -64,15 +45,6 @@ public class AModRuleCompatibilityLayer {
     @Overwrite
     public void removeGameStage(Player player, String stage) {
         if (player == null) { return; }
-        var cap = player.getCapability(PlayerStageProvider.PLAYER_STAGE);
-
-        if (cap.isPresent()) {
-            var playerStage = cap.resolve();
-
-            if (playerStage.isPresent()) {
-                playerStage.get().removeStage(stage);
-                playerStage.get().setChangedFor(player, AOperation.REMOVE, stage);
-            }
-        }
+        AStagesUtils.removeStage(AHolder.player(player), stage, false);
     }
 }

@@ -7,7 +7,7 @@ import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.PlayerStage;
-import com.alessandro.astages.capability.PlayerStageProvider;
+import com.alessandro.astages.capability.PlayerStageWrapper;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.*;
@@ -69,9 +69,10 @@ public class AStagesKubeJSUtil {
         return AStagesUtils.hasAllStages(AHolder.player(player), stages);
     }
 
+    @SuppressWarnings("removal")
     @Deprecated(forRemoval = true)
     public static LazyOptional<PlayerStage> getPlayerCapability(Player player) {
-        return player.getCapability(PlayerStageProvider.PLAYER_STAGE);
+        return PlayerStageWrapper.getPlayerCapability(player);
     }
 
     // Server Stages

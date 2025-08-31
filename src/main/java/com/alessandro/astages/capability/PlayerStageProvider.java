@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
+@SuppressWarnings("removal")
 @Deprecated(forRemoval = true)
 @NotNullParamsAndMethodsReturn
 public class PlayerStageProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {

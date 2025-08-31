@@ -1,17 +1,14 @@
 package com.alessandro.astages.mixin;
 
-import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.Nullable;
-import com.alessandro.astages.capability.PlayerStageProvider;
 import dev.latvian.mods.kubejs.player.PlayerEventJS;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(value = PlayerEventJS.class, remap = false)
 public abstract class APlayerEventJS {
@@ -24,9 +21,7 @@ public abstract class APlayerEventJS {
     @Info("Checks if the player has the specified game stage")
     @Overwrite
     public boolean hasGameStage(String stage) {
-        AtomicBoolean toReturn = new AtomicBoolean(false);
-        Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> toReturn.set(playerStage.getStages().contains(stage)));
-        return toReturn.get();
+        return AStagesUtils.hasStage(AHolder.player(getPlayer()), stage);
     }
 
     /**
@@ -36,10 +31,7 @@ public abstract class APlayerEventJS {
     @Info("Adds the specified game stage to the player")
     @Overwrite
     public void addGameStage(String stage) {
-        Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
-            playerStage.addStage(stage);
-            playerStage.setChangedFor(getPlayer(), AOperation.ADD, stage);
-        });
+        AStagesUtils.addStage(AHolder.player(getPlayer()), stage, false);
     }
 
     /**
@@ -49,9 +41,6 @@ public abstract class APlayerEventJS {
     @Info("Removes the specified game stage from the player")
     @Overwrite
     public void removeGameStage(String stage) {
-        Objects.requireNonNull(getPlayer()).getCapability(PlayerStageProvider.PLAYER_STAGE).ifPresent(playerStage -> {
-            playerStage.removeStage(stage);
-            playerStage.setChangedFor(getPlayer(), AOperation.REMOVE, stage);
-        });
+        AStagesUtils.removeStage(AHolder.player(getPlayer()), stage, false);
     }
 }

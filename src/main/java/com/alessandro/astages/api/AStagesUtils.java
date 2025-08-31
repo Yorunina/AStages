@@ -14,6 +14,7 @@ import com.alessandro.astages.core.stage.AStageManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -142,6 +143,14 @@ public class AStagesUtils {
 
         return toReturn.get();
     }
+
+    public static void synchronizeWithClient(AHolder holder, ServerPlayer toPlayer, AOperation operation, List<String> stages, boolean silentTitle) {
+        holder.perform(
+            player -> OfflinePlayerStage.synchronizeWithClient(player, operation, stages, silentTitle),
+            server -> ServerStageData.getData(server).synchronizeWithClient(toPlayer, operation, stages)
+        );
+    }
+
 
     public static void checkPlayerStages(@Nullable Player player, AOperation operation, List<String> stages) {
         checkStages(player, stage -> {

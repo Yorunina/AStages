@@ -1,7 +1,6 @@
 package com.alessandro.astages.core.client.manager;
 
 import com.alessandro.astages.api.AStagesClientUtils;
-import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.develop.UnderDevelopment;
@@ -37,15 +36,13 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     private final HashMap<CustomItemStackKey, AClientItemPropertyRestriction> properties = new HashMap<>();
 
     static {
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
-            if (e.getOperation() != AOperation.GET) {
-                AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
-            }
-        });
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class,
+            e -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties()
+        );
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class, e -> {
-            AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
-        });
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class,
+            e -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties()
+        );
     }
 
     public List<AClientItemRestriction> getItemRestrictions() {

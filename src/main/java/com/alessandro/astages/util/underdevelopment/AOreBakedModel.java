@@ -17,6 +17,7 @@ import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.List;
 
+@SuppressWarnings("removal")
 @Deprecated(forRemoval = true)
 @NotNullParamsAndMethodsReturn
 public class AOreBakedModel implements IDynamicBakedModel {

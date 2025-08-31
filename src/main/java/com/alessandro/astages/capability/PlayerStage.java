@@ -5,7 +5,7 @@ import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.event.player.*;
-import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.ClientStagesSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Deprecated(forRemoval = true)
-@NotNullParams
+@NotNullParamsAndMethodsReturn
 @AutoRegisterCapability
 public class PlayerStage {
     private List<String> stages = new ArrayList<>();
