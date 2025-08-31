@@ -11,6 +11,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @NotNullParamsAndMethodsReturn
@@ -19,7 +20,7 @@ public class AHolder {
     private final boolean isPlayer;
     private final boolean isMultiple;
 
-    private final List<Player> players = new ArrayList<>();
+    private final List<UUID> uuids = new ArrayList<>();
 
     private AHolder(boolean isServer, boolean isPlayer, boolean isMultiple) {
         this.isServer = isServer;
@@ -31,6 +32,10 @@ public class AHolder {
         var toReturn = new AHolder(false, true, false);
         toReturn.addPlayer(player);
         return toReturn;
+    }
+
+    public static AHolder player(UUID uuid) {
+        return new AHolder(false, true, false).addPlayer(uuid);
     }
 
     public static AHolder players(List<Player> players) {
@@ -47,8 +52,13 @@ public class AHolder {
         return new AHolder(true, true, false).addPlayer(player);
     }
 
+    private AHolder addPlayer(UUID uuid) {
+        uuids.add(uuid);
+        return this;
+    }
+
     private AHolder addPlayer(Player player) {
-        players.add(player);
+        uuids.add(player.getUUID());
         return this;
     }
 
@@ -62,12 +72,12 @@ public class AHolder {
 
     public AStageHolder getStages() {
         if (isPlayer && !isMultiple) {
-            return AStageHolder.initAndHold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromFile(players.get(0)));
+            return AStageHolder.initAndHold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(ServerLifecycleHooks.getCurrentServer(), uuids.get(0)));
         }
 
         if (isServer && isPlayer) { // Server stages is prioritized!
             return AStageHolder.init()
-                .hold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromFile(players.get(0)))
+                .hold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(uuids.get(0)))
                 .hold(AStageType.SERVER, ServerStageData.getData(ServerLifecycleHooks.getCurrentServer()).getServerStages());
         }
 
@@ -77,14 +87,14 @@ public class AHolder {
 
         if (isPlayer) {
             var stageSet = new HashSet<String>();
-            players.forEach(player -> stageSet.addAll(OfflinePlayerStage.getPlayerStagesFromFile(players.get(0))));
+            uuids.forEach(uuid -> stageSet.addAll(OfflinePlayerStage.getPlayerStagesFromCache(uuid)));
             return AStageHolder.initAndHold(AStageType.PLAYER, stageSet);
         }
 
         return AStageHolder.init();
     }
 
-    public void perform(Consumer<Player> forPlayer, Consumer<MinecraftServer> forServer) {
+    public void perform(Consumer<UUID> forPlayer, Consumer<MinecraftServer> forServer) {
         advancedPerform(forPlayer, players -> {
             for (var player : players) {
                 forPlayer.accept(player);
@@ -92,17 +102,17 @@ public class AHolder {
         }, forServer);
     }
 
-    public void advancedPerform(Consumer<Player> forPlayer, Consumer<List<Player>> forPlayers, Consumer<MinecraftServer> forServer) {
+    public void advancedPerform(Consumer<UUID> forPlayer, Consumer<List<UUID>> forPlayers, Consumer<MinecraftServer> forServer) {
         if (isServer) {
             forServer.accept(ServerLifecycleHooks.getCurrentServer());
         }
 
         if (isPlayer && !isMultiple) {
-            forPlayer.accept(players.get(0));
+            forPlayer.accept(uuids.get(0));
         }
 
         if (isPlayer && isMultiple) {
-            forPlayers.accept(players);
+            forPlayers.accept(uuids);
         }
     }
 }

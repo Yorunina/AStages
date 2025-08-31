@@ -33,17 +33,17 @@ public class AStagesServerCommands {
     }
 
     private static int addServerStageCommand(String stageToAdd) {
-        AStagesUtils.addStage(AHolder.server(), stageToAdd);
+        AStagesUtils.addStage(AHolder.server(), stageToAdd, false);
         return 1;
     }
 
     private static int removeServerStageCommand(String stageToRemove) {
-        AStagesUtils.removeStage(AHolder.server(), stageToRemove);
+        AStagesUtils.removeStage(AHolder.server(), stageToRemove, false);
         return 1;
     }
 
     private static int removeAllServerStageCommand() {
-        AStagesUtils.removeAllStages(AHolder.server());
+        AStagesUtils.removeAllStages(AHolder.server(), false);
         return 1;
     }
 

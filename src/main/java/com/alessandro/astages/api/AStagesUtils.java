@@ -2,6 +2,7 @@ package com.alessandro.astages.api;
 
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.holder.AStageHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
@@ -19,6 +20,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 @NotNullParamsAndMethodsReturn
@@ -47,11 +49,11 @@ public class AStagesUtils {
         return getStages(holder).containsAll(stages);
     }
 
-    public static void addStage(AHolder holder, String stage) {
+    public static void addStage(AHolder holder, String stage, boolean silentTitle) {
         holder.perform(
             player -> {
                 OfflinePlayerStage.addPlayerStage(player, stage);
-                OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD, stage, false);
+                OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD, stage, silentTitle);
             }, server -> {
                 var data = ServerStageData.getData(server);
                 data.addServerStage(stage);
@@ -60,11 +62,11 @@ public class AStagesUtils {
         );
     }
 
-    public static void addStages(AHolder holder, List<String> stages) {
+    public static void addStages(AHolder holder, List<String> stages, boolean silentTitle) {
         holder.perform(
             player -> {
                 OfflinePlayerStage.addPlayerStages(player, stages);
-                OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD_ALL, stages, false);
+                OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD_ALL, stages, silentTitle);
             }, server -> {
                 var data = ServerStageData.getData(server);
                 data.addServerStages(stages);
@@ -73,13 +75,13 @@ public class AStagesUtils {
         );
     }
 
-    public static void addAllStages(AHolder holder) {
+    public static void addAllStages(AHolder holder, boolean silentTitle) {
         var stages = new ArrayList<>(ARestrictionManager.ALL_STAGES);
 
         holder.perform(
             player -> {
                 OfflinePlayerStage.addPlayerStages(player, stages);
-                OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD_ALL, stages, false);
+                OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD_ALL, stages, silentTitle);
             }, server -> {
                 var data = ServerStageData.getData(server);
                 data.addServerStages(stages);
@@ -88,45 +90,57 @@ public class AStagesUtils {
         );
     }
 
-    public static void removeStage(AHolder holder, String stage) {
+    public static AStatus removeStage(AHolder holder, String stage, boolean silentTitle) {
+        AtomicReference<AStatus> toReturn = new AtomicReference<>(AStatus.NOT_PRESENT);
+
         holder.perform(
             player -> {
-                OfflinePlayerStage.removePlayerStage(player, stage);
-                OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE, stage, false);
+                toReturn.set(OfflinePlayerStage.removePlayerStage(player, stage));
+                OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE, stage, silentTitle);
             }, server -> {
                 var data = ServerStageData.getData(server);
-                data.removeServerStage(stage);
+                toReturn.set(data.removeServerStage(stage));
                 data.synchronizeWithClient(null, AOperation.REMOVE, stage);
             }
         );
+
+        return toReturn.get();
     }
 
-    public static void removeStages(AHolder holder, List<String> stages) {
+    public static AStatus removeStages(AHolder holder, List<String> stages, boolean silentTitle) {
+        AtomicReference<AStatus> toReturn = new AtomicReference<>(AStatus.NOT_PRESENT);
+
         holder.perform(
             player -> {
-                OfflinePlayerStage.removePlayerStages(player, stages);
-                OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE_ALL, stages, false);
+                toReturn.set(OfflinePlayerStage.removePlayerStages(player, stages));
+                OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE_ALL, stages, silentTitle);
             }, server -> {
                 var data = ServerStageData.getData(server);
-                data.removeServerStages(stages);
+                toReturn.set(data.removeServerStages(stages));
                 data.synchronizeWithClient(null, AOperation.REMOVE_ALL, stages);
             }
         );
+
+        return toReturn.get();
     }
 
-    public static void removeAllStages(AHolder holder) {
+    public static AStatus removeAllStages(AHolder holder, boolean silentTitle) {
+        AtomicReference<AStatus> toReturn = new AtomicReference<>(AStatus.NOT_PRESENT);
+
         holder.perform(
             player -> {
-                var stages = OfflinePlayerStage.getPlayerStagesFromFile(player);
-                OfflinePlayerStage.removePlayerStages(player, stages);
-                OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE_ALL, stages, false);
+                var stages = OfflinePlayerStage.getPlayerStagesFromCache(player);
+                toReturn.set(OfflinePlayerStage.removePlayerStages(player, stages));
+                OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE_ALL, stages, silentTitle);
             }, server -> {
                 var data = ServerStageData.getData(server);
                 var stages = data.getServerStages();
-                data.removeServerStages(stages);
+                toReturn.set(data.removeServerStages(stages));
                 data.synchronizeWithClient(null, AOperation.REMOVE_ALL, stages);
             }
         );
+
+        return toReturn.get();
     }
 
     public static void checkPlayerStages(@Nullable Player player, AOperation operation, List<String> stages) {
@@ -161,7 +175,7 @@ public class AStagesUtils {
 
         for (var stage : stages) {
             if (!ARestrictionManager.ALL_STAGES.contains(stage)) {
-                chatSource.sendSystemMessage(Component.literal("⚠️ Warning: stage " + stage + " not recognized!").withStyle(ChatFormatting.GOLD));
+                chatSource.sendSystemMessage(Component.literal("⚠ Warning: stage " + stage + " not recognized!").withStyle(ChatFormatting.GOLD));
             }
         }
     }

@@ -2,6 +2,7 @@ package com.alessandro.astages.capability;
 
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.event.server.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
@@ -46,14 +47,16 @@ public class ServerStageData extends SavedData {
         setDirty();
     }
 
-    public void removeServerStage(String stage) {
-        serverStages.remove(stage);
+    public AStatus removeServerStage(String stage) {
+        var toReturn = serverStages.remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
         setDirty();
+        return toReturn;
     }
 
-    public void removeServerStages(List<String> stages) {
-        serverStages.removeAll(stages);
+    public AStatus removeServerStages(List<String> stages) {
+        var toReturn = serverStages.removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
         setDirty();
+        return toReturn;
     }
 
     public void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, String stage) {

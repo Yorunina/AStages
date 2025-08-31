@@ -2,16 +2,28 @@ package com.alessandro.astages.api;
 
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
+import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
 
 @NotNullParamsAndMethodsReturn
 public class APlayerUtils {
+    public static @Nullable ServerPlayer getPlayerFromCommand(CommandContext<CommandSourceStack> context, UUID uuid) {
+        return context.getSource().getServer().getPlayerList().getPlayer(uuid);
+    }
+
+    public static @Nullable Player getPlayerFromUUID(UUID uuid) {
+        return getPlayerFromUUID(ServerLifecycleHooks.getCurrentServer(), uuid);
+    }
+
     public static @Nullable Player getPlayerFromUUID(MinecraftServer server, UUID uuid) {
         return server.getPlayerList().getPlayer(uuid);
     }

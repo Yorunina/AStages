@@ -42,11 +42,11 @@ import java.util.List;
 public class AStagesKubeJSUtil {
     // Player Stages
     public static void addStageToPlayer(String stage, Player player) {
-        AStagesUtils.addStage(AHolder.player(player), stage);
+        AStagesUtils.addStage(AHolder.player(player), stage, false);
     }
 
     public static void removeStageFromPlayer(String stage, Player player) {
-        AStagesUtils.removeStage(AHolder.player(player), stage);
+        AStagesUtils.removeStage(AHolder.player(player), stage, false);
     }
 
     public static List<String> getStagesFromPlayer(Player player) {
@@ -54,7 +54,7 @@ public class AStagesKubeJSUtil {
     }
 
     public static void removeAllStagesFromPlayer(Player player) {
-        AStagesUtils.removeAllStages(AHolder.player(player));
+        AStagesUtils.removeAllStages(AHolder.player(player), false);
     }
 
     public static boolean playerHasStage(String stage, Player player) {
@@ -76,15 +76,15 @@ public class AStagesKubeJSUtil {
 
     // Server Stages
     public static void addStageToServer(String stage, MinecraftServer server) { // Server ignored!
-        AStagesUtils.addStage(AHolder.server(), stage);
+        AStagesUtils.addStage(AHolder.server(), stage, false);
     }
 
     public static void removeStageFromServer(String stage, MinecraftServer server) { // Server ignored!
-        AStagesUtils.removeStage(AHolder.server(), stage);
+        AStagesUtils.removeStage(AHolder.server(), stage, false);
     }
 
     public static void removeAllStagesFromServer(MinecraftServer server) { // Server ignored!
-        AStagesUtils.removeAllStages(AHolder.server());
+        AStagesUtils.removeAllStages(AHolder.server(), false);
     }
 
     public static boolean serverHasStage(String stage, MinecraftServer server) { // Server ignored!

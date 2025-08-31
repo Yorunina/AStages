@@ -1,7 +1,7 @@
 package com.alessandro.astages;
 
 import com.alessandro.astages.util.underdevelopment.block.ModBlocks;
-import com.alessandro.astages.command.argument.ModArguments;
+import com.alessandro.astages.command.argument.ACommandArguments;
 import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
@@ -44,7 +44,7 @@ public class AStages {
 
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
-        ModArguments.ARGUMENT_TYPES.register(modEventBus);
+        ACommandArguments.ARGUMENT_TYPES.register(modEventBus);
 
         Attributes.ATTRIBUTES.register(modEventBus);
         Attributes.Item.ATTRIBUTES.register(modEventBus);

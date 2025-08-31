@@ -8,7 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModArguments {
+public class ACommandArguments {
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, AStages.MODID);
 
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> DIMENSION_IDS_ARGUMENT = ARGUMENT_TYPES.register("dimension_ids", () -> ArgumentTypeInfos.registerByClass(AStagesDimensionArgument.class, SingletonArgumentInfo.contextFree(AStagesDimensionArgument::dimensionIds)));
@@ -19,4 +19,5 @@ public class ModArguments {
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> REMOVE_SERVER_STAGES_ARGUMENT = ARGUMENT_TYPES.register("remove_server_stages", () -> ArgumentTypeInfos.registerByClass(AStagesServerRemoveArgument.class, SingletonArgumentInfo.contextFree(AStagesServerRemoveArgument::stages)));
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> RESTRICTION_TYPE_ARGUMENT = ARGUMENT_TYPES.register("restriction_type", () -> ArgumentTypeInfos.registerByClass(AStagesRestrictionTypeArgument.class, SingletonArgumentInfo.contextFree(AStagesRestrictionTypeArgument::types)));
     @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> SIMPLE_RESTRICTION_TYPE_ARGUMENT = ARGUMENT_TYPES.register("simple_restriction_type", () -> ArgumentTypeInfos.registerByClass(AStagesSimpleRestrictionTypeArgument.class, SingletonArgumentInfo.contextFree(AStagesSimpleRestrictionTypeArgument::types)));
+    @SuppressWarnings("unused") public static final RegistryObject<ArgumentTypeInfo<?, ?>> PLAYER_ARGUMENT = ARGUMENT_TYPES.register("player", () -> ArgumentTypeInfos.registerByClass(AStagesPlayerArgument.class, SingletonArgumentInfo.contextFree(AStagesPlayerArgument::onlineAndOfflinePlayers)));
 }
