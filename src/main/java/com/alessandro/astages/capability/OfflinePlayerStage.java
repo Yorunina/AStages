@@ -9,7 +9,7 @@ import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.ANetworking;
-import com.alessandro.astages.networking.packet.ClientStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;

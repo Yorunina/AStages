@@ -1,6 +1,7 @@
 package com.alessandro.astages.command.argument;
 
 import com.alessandro.astages.api.ACommandUtils;
+import com.alessandro.astages.api.develop.NotYetImplemented;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.capability.OfflinePlayerStage;
 import com.mojang.brigadier.StringReader;
@@ -36,6 +37,7 @@ public class AStagesPlayerArgument implements ArgumentType<String> {
         return ACommandUtils.parseGenericString(reader);
     }
 
+    @NotYetImplemented("Add entity selector support")
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         S source = context.getSource();

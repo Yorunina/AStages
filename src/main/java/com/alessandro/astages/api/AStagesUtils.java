@@ -179,12 +179,11 @@ public class AStagesUtils {
             }
         }
 
-        if (operation == AOperation.LOGIN) { return; }
-        if (chatSource == null) { return; }
-
-        for (var stage : stages) {
-            if (!ARestrictionManager.ALL_STAGES.contains(stage)) {
-                chatSource.sendSystemMessage(Component.literal("⚠ Warning: stage " + stage + " not recognized!").withStyle(ChatFormatting.GOLD));
+        if (chatSource != null && operation.handleStageRecognization()) {
+            for (var stage : stages) {
+                if (!ARestrictionManager.ALL_STAGES.contains(stage)) {
+                    chatSource.sendSystemMessage(Component.literal("⚠ Warning: stage " + stage + " not recognized!").withStyle(ChatFormatting.GOLD));
+                }
             }
         }
     }

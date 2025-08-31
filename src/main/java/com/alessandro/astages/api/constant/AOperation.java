@@ -1,19 +1,21 @@
 package com.alessandro.astages.api.constant;
 
 public enum AOperation {
-    ADD(true, true),
-    ADD_ALL(true, false),
-    REMOVE(false, true),
-    REMOVE_ALL(false, false),
-    @Deprecated(forRemoval = true) GET(false, false),
-    LOGIN(false, false);
+    ADD(true, true, true),
+    ADD_ALL(true, false, true),
+    REMOVE(false, true, false),
+    REMOVE_ALL(false, false, false),
+    @Deprecated(forRemoval = true) GET(false, false, false),
+    LOGIN(false, false, false);
 
     private final boolean needToBeChecked;
     private final boolean supportOnlyOneStage;
+    private final boolean handleStageRecognization;
 
-    AOperation(boolean needToBeChecked, boolean supportOnlyOneStage) {
+    AOperation(boolean needToBeChecked, boolean supportOnlyOneStage, boolean handleStageRecognization) {
         this.needToBeChecked = needToBeChecked;
         this.supportOnlyOneStage = supportOnlyOneStage;
+        this.handleStageRecognization = handleStageRecognization;
     }
 
     public boolean needToBeChecked() {
@@ -22,5 +24,9 @@ public enum AOperation {
 
     public boolean supportOnlyOneStage() {
         return supportOnlyOneStage;
+    }
+
+    public boolean handleStageRecognization() {
+        return handleStageRecognization;
     }
 }

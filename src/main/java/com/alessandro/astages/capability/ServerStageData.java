@@ -7,7 +7,7 @@ import com.alessandro.astages.api.event.server.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.ANetworking;
-import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -71,7 +71,7 @@ public class ServerStageData extends SavedData {
         MinecraftForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
-            ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(stages, operation)); // TODO! Wrong packet!
+            ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(stages, operation));
 
             switch (operation) {
                 case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedServerEvent(server, stages.get(0)));

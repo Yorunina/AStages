@@ -84,7 +84,7 @@ public class AStagesModificationCommands {
         return 1;
     }
 
-    @NotYetImplemented("Not present for remove_all action!")
+    @NotYetImplemented("Not present message for remove_all action!")
     private static int removeAllStages(CommandContext<CommandSourceStack> context, String username, boolean silentChat, boolean silentTitle) {
         var uuid = OfflinePlayerStage.USERNAME_UUID.get(username);
         var result = AStagesUtils.removeAllStages(AHolder.player(uuid), silentTitle);

@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking;
 
-import com.alessandro.astages.networking.packet.ClientStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.StagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
@@ -10,7 +10,7 @@ import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
-import com.alessandro.astages.networking.packet.server.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
 import com.alessandro.astages.api.nullability.Nullable;

@@ -1,4 +1,4 @@
-package com.alessandro.astages.networking.packet;
+package com.alessandro.astages.networking.packet.stages;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.api.constant.ASyncOperation;
