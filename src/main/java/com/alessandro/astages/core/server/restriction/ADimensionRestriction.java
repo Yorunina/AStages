@@ -4,7 +4,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
-import com.alessandro.astages.util.ATime;
+import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.ChatFormatting;

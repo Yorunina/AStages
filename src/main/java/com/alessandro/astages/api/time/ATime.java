@@ -1,4 +1,4 @@
-package com.alessandro.astages.util;
+package com.alessandro.astages.api.time;
 
 import com.alessandro.astages.api.nullability.Nullable;
 
@@ -12,6 +12,10 @@ public class ATime {
 
     public ATime(String timeString) {
         this.timeString = timeString;
+    }
+
+    public String getTimeString() {
+        return timeString;
     }
 
     public int getTicks() {

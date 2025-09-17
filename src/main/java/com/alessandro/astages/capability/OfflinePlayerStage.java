@@ -1,9 +1,11 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AFileIOUtils;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
+import com.alessandro.astages.api.develop.ChangeVisibilityTo;
 import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
@@ -11,13 +13,6 @@ import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -32,66 +27,34 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
 
 @NotNullParamsAndMethodsReturn
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class OfflinePlayerStage {
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-    public static final Type TYPE_UUID_USERNAME = new TypeToken<Map<UUID, String>>(){}.getType();
-    public static final Type TYPE_USERNAME_UUID = new TypeToken<Map<String, UUID>>(){}.getType();
-
     public static final Map<UUID, List<String>> CACHE = new HashMap<>();
     public static Map<UUID, String> UUID_USERNAME;
     public static Map<String, UUID> USERNAME_UUID;
 
     public static final LevelResource ASTAGES_DATA_DIR = new LevelResource("astagesdata");
-    public static final String STAGE_KEY = "stages";
+    public static final LevelResource PERMANENT_STAGES_DIR = new LevelResource("permanent");
+    public static final LevelResource TEMPORARY_STAGES_DIR = new LevelResource("temporary");
 
     @SubscribeEvent
     public static void serverStarted(ServerStartingEvent event) {
         var server = event.getServer();
         checkAStagesDataFolder(server);
 
-        try (var fileReader = new FileReader(getConfigFile("uuid_to_username", server))) {
-            UUID_USERNAME = GSON.fromJson(fileReader, TYPE_UUID_USERNAME);
-
-            if (UUID_USERNAME == null) {
-                UUID_USERNAME = new HashMap<>();
-            }
-        } catch (IOException exception) {
-            AStages.LOGGER.error(exception.getLocalizedMessage());
-        }
-
-        try (var fileReader = new FileReader(getConfigFile("username_to_uuid", server))) {
-            USERNAME_UUID = GSON.fromJson(fileReader, TYPE_USERNAME_UUID);
-
-            if (USERNAME_UUID == null) {
-                USERNAME_UUID = new HashMap<>();
-            }
-        } catch (IOException exception) {
-            AStages.LOGGER.error(exception.getLocalizedMessage());
-        }
+        UUID_USERNAME = AFileIOUtils.readMapOrDefault(getConfigFile("uuid_to_username", server), UUID.class, String.class);
+        USERNAME_UUID = AFileIOUtils.readMapOrDefault(getConfigFile("username_to_uuid", server), String.class, UUID.class);
     }
 
     @SubscribeEvent
     public static void serverStopped(ServerStoppingEvent event) {
         var server = event.getServer();
-        try (var fileWriter = new FileWriter(getConfigFile("uuid_to_username", server))) {
-            GSON.toJson(UUID_USERNAME, fileWriter);
-        } catch (IOException exception) {
-            AStages.LOGGER.error(exception.getLocalizedMessage());
-        }
 
-        try (var fileWriter = new FileWriter(getConfigFile("username_to_uuid", server))) {
-            GSON.toJson(USERNAME_UUID, fileWriter);
-        } catch (IOException exception) {
-            AStages.LOGGER.error(exception.getLocalizedMessage());
-        }
+        AFileIOUtils.writeFileContent(getConfigFile("uuid_to_username", server), UUID_USERNAME);
+        AFileIOUtils.writeFileContent(getConfigFile("username_to_uuid", server), USERNAME_UUID);
     }
 
     @Info("Migration purpose only!")
@@ -102,16 +65,12 @@ public class OfflinePlayerStage {
         UUID_USERNAME.put(playerUUID, playerName);
         USERNAME_UUID.put(playerName, playerUUID);
 
-        var file = getPlayerStageFile(event.getEntity());
-        CompoundTag tag = readNbtFromFile(file);
+        var file = getPermanentStagesFile(event.getEntity());
+        var stageList = AFileIOUtils.readList(file, String.class);
 
-        if (!tag.contains(STAGE_KEY)) {
-            var listTag = new ListTag();
-            getPlayerStagesFromCapability(event.getEntity()).forEach(stage -> listTag.add(StringTag.valueOf(stage)));
-
-            tag.put(STAGE_KEY, listTag);
-
-            writeNbtToFile(tag, file);
+        if (stageList == null) {
+            var oldList = getPlayerStagesFromCapability(event.getEntity());
+            AFileIOUtils.writeFileContent(file, oldList);
         }
     }
 
@@ -123,53 +82,50 @@ public class OfflinePlayerStage {
     }
 
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void checkAStagesDataFolder(MinecraftServer server) {
         var dataDir = server.getWorldPath(ASTAGES_DATA_DIR).toFile();
+        var permanentDir = new File(dataDir, PERMANENT_STAGES_DIR.getId());
+        var temporaryDir = new File(dataDir, TEMPORARY_STAGES_DIR.getId());
 
-        if (!dataDir.exists()) {
-            dataDir.mkdirs();
-        }
+        AFileIOUtils.createDirectory(dataDir);
+        AFileIOUtils.createDirectory(permanentDir);
+        AFileIOUtils.createDirectory(temporaryDir);
+    }
+
+    private static File getPermanentStagesDataFolder(MinecraftServer server) {
+        return new File(getAStagesDataFolder(server), PERMANENT_STAGES_DIR.getId());
+    }
+
+    @ChangeVisibilityTo(ChangeVisibilityTo.Visibility.PRIVATE)
+    public static File getTemporaryStagesDataFolder(MinecraftServer server) {
+        return new File(getAStagesDataFolder(server), TEMPORARY_STAGES_DIR.getId());
     }
 
     private static File getAStagesDataFolder(MinecraftServer server) {
         return server.getWorldPath(ASTAGES_DATA_DIR).toFile();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static File getConfigFile(String fileName, MinecraftServer server) {
         var file = new File(getAStagesDataFolder(server), fileName + ".json");
-
-        if (!file.exists()) {
-            try {
-                // Create file only if DOESN'T exist
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return file;
+        return AFileIOUtils.getOrCreateFile(file);
     }
 
-    private static File getPlayerStageFile(Player player) {
-        return getPlayerStageFile(player.getServer(), player.getUUID());
+    private static File getPermanentStagesFile(Player player) {
+        return getPermanentStagesFile(player.getServer(), player.getUUID());
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private static File getPlayerStageFile(@Nullable MinecraftServer server, UUID uuid) {
-        var file = new File(getAStagesDataFolder(Objects.requireNonNull(server)), uuid + ".dat");
+    private static File getPermanentStagesFile(@Nullable MinecraftServer server, UUID uuid) {
+        var file = new File(getPermanentStagesDataFolder(Objects.requireNonNull(server)), uuid + ".json");
+        return AFileIOUtils.getOrCreateFile(file);
+    }
 
-        if (!file.exists()) {
-            try {
-                // Create file only if DOESN'T exist
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public static File getTemporaryStagesFile(Player player) {
+        return getTemporaryStagesFile(player.getServer(), player.getUUID());
+    }
 
-        return file;
+    public static File getTemporaryStagesFile(@Nullable MinecraftServer server, UUID uuid) {
+        var file = new File(getTemporaryStagesDataFolder(Objects.requireNonNull(server)), uuid + ".json");
+        return AFileIOUtils.getOrCreateFile(file);
     }
 
     public static List<String> getPlayerStagesFromCache(Player player) {
@@ -182,19 +138,7 @@ public class OfflinePlayerStage {
 
     public static List<String> getPlayerStagesFromCache(@Nullable MinecraftServer server, UUID uuid) {
         if (!CACHE.containsKey(uuid)) {
-            var file = getPlayerStageFile(server, uuid);
-            var nbt = readNbtFromFile(file);
-            var stages = new ArrayList<String>();
-
-            var listTag = (ListTag) nbt.get(STAGE_KEY);
-            if (listTag != null) {
-                listTag.forEach(tag -> {
-                    if (tag instanceof StringTag stringTag) {
-                        stages.add(stringTag.getAsString());
-                    }
-                });
-            }
-
+            var stages = AFileIOUtils.readListOfDefault(getPermanentStagesFile(server, uuid), String.class);
             CACHE.put(uuid, stages);
         }
 
@@ -217,6 +161,7 @@ public class OfflinePlayerStage {
         CACHE.computeIfAbsent(uuid, k -> new ArrayList<>()).addAll(stages);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static AStatus removePlayerStage(Player player, String stage) {
         return removePlayerStage(player.getUUID(), stage);
     }
@@ -225,6 +170,7 @@ public class OfflinePlayerStage {
         return CACHE.computeIfAbsent(uuid, k -> new ArrayList<>()).remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static AStatus removePlayerStages(Player player, List<String> stages) {
         return removePlayerStages(player.getUUID(), stages);
     }
@@ -284,32 +230,10 @@ public class OfflinePlayerStage {
     // When saving, call this
     public static void markAsDirty(Player player) {
         var stages = CACHE.get(player.getUUID());
-        var tag = new CompoundTag();
-
-        var listTag = new ListTag();
-        stages.forEach(stage -> listTag.add(StringTag.valueOf(stage)));
-        tag.put(STAGE_KEY, listTag);
-
-        writeNbtToFile(tag, getPlayerStageFile(player));
+        AFileIOUtils.writeFileContent(getPermanentStagesFile(player), stages);
     }
 
     public static List<String> getPlayerStagesFromCapability(Player player) {
         return PlayerStageWrapper.getStages(player);
-    }
-
-    private static CompoundTag readNbtFromFile(File file) {
-        CompoundTag tag = null;
-        try { tag = NbtIo.read(file); } catch (IOException ignoredException) { }
-        if (tag == null) { tag = new CompoundTag(); }
-
-        return tag;
-    }
-
-    private static void writeNbtToFile(CompoundTag tag, File file) {
-        try {
-            NbtIo.write(tag, file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

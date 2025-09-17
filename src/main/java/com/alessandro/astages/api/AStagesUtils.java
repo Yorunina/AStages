@@ -10,7 +10,7 @@ import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.OfflinePlayerStage;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.core.stage.AStageManager;
+import com.alessandro.astages.core.AStageManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.network.chat.Component;
@@ -154,7 +154,7 @@ public class AStagesUtils {
 
     public static void checkPlayerStages(@Nullable Player player, AOperation operation, List<String> stages) {
         checkStages(player, stage -> {
-            if (AStageManager.isServerOnly(stage)) {
+            if (AStageManager.GENERIC_INSTANCE.isServerOnly(stage)) {
                 throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in server only!");
             }
         }, operation, stages);
@@ -162,7 +162,7 @@ public class AStagesUtils {
 
     public static void checkServerStages(AOperation operation, List<String> stages) {
         checkStages(ServerLifecycleHooks.getCurrentServer(), stage -> {
-            if (AStageManager.isPlayerOnly(stage)) {
+            if (AStageManager.GENERIC_INSTANCE.isPlayerOnly(stage)) {
                 throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in player only!");
             }
         }, operation, stages);

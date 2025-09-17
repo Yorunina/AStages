@@ -1,5 +1,6 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.api.AFileIOUtils;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
@@ -14,14 +15,14 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Contract;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 
 @NotNullParamsAndMethodsReturn
 public class ServerStageData extends SavedData {
@@ -119,6 +120,15 @@ public class ServerStageData extends SavedData {
         nbt.put("server_stages", listTag);
 
         return nbt;
+    }
+
+    public static File getTemporaryStagesFile() {
+        return getTemporaryStagesFile(ServerLifecycleHooks.getCurrentServer());
+    }
+
+    public static File getTemporaryStagesFile(@Nullable MinecraftServer server) {
+        var file = new File(OfflinePlayerStage.getTemporaryStagesDataFolder(Objects.requireNonNull(server)), "server" + ".json");
+        return AFileIOUtils.getOrCreateFile(file);
     }
 
     public static ServerStageData getData(ServerLevel level) {

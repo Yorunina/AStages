@@ -4,7 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.config.AStagesCommon;
-import com.alessandro.astages.core.stage.AStageManager;
+import com.alessandro.astages.core.AStageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.network.chat.Component;
@@ -73,7 +73,7 @@ public class AStagesUtil {
         var fadeOut = 0;
         var stay = 0;
 
-        var aStage = AStageManager.getStage(stage);
+        var aStage = AStageManager.GENERIC_INSTANCE.getStage(stage);
         if (aStage != null) {
             fadeIn = aStage.getFadeIn();
             stay = aStage.getStay();

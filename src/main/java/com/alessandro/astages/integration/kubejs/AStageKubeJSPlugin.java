@@ -2,16 +2,16 @@ package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.AStageManager;
 import com.alessandro.astages.core.server.restriction.*;
 import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
-import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.event.custom.ReloadScriptEvent;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.ATime;
+import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;

@@ -1,11 +1,16 @@
-package com.alessandro.astages.core.stage;
+package com.alessandro.astages.core.stage.permanent;
 
+import com.alessandro.astages.api.stage.event.GrantedEvent;
+import com.alessandro.astages.api.stage.implementation.AGrantable;
 import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
-public class AStage {
+public abstract class AStageDisplay implements AGrantable {
     private final String stage;
     private final String description;
 
@@ -22,7 +27,10 @@ public class AStage {
     private boolean serverOnly = false;
     private boolean playerOnly = false;
 
-    public AStage(@NotNull String stage) {
+    private boolean hasCustomGrantEvent = false;
+    private Consumer<GrantedEvent> grantedEvent;
+
+    public AStageDisplay(@NotNull String stage) {
         this.stage = stage;
         this.description = AStagesUtil.capitalizeWords(stage.replace('_', ' '));
     }
@@ -30,7 +38,7 @@ public class AStage {
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof AStage aStage)) return false;
+        if (!(object instanceof AStageDisplay aStage)) return false;
 
         return stage.equals(aStage.stage);
     }
@@ -52,7 +60,7 @@ public class AStage {
         return addTitle;
     }
 
-    public AStage setAddTitle(Component addTitle) {
+    public AStageDisplay setAddTitle(Component addTitle) {
         this.addTitle = addTitle;
         return this;
     }
@@ -61,7 +69,7 @@ public class AStage {
         return removeTitle;
     }
 
-    public AStage setRemoveTitle(Component removeTitle) {
+    public AStageDisplay setRemoveTitle(Component removeTitle) {
         this.removeTitle = removeTitle;
         return this;
     }
@@ -70,7 +78,7 @@ public class AStage {
         return addSubTitle;
     }
 
-    public AStage setAddSubTitle(Component addSubTitle) {
+    public AStageDisplay setAddSubTitle(Component addSubTitle) {
         this.addSubTitle = addSubTitle;
         return this;
     }
@@ -79,7 +87,7 @@ public class AStage {
         return removeSubTitle;
     }
 
-    public AStage setRemoveSubTitle(Component removeSubTitle) {
+    public AStageDisplay setRemoveSubTitle(Component removeSubTitle) {
         this.removeSubTitle = removeSubTitle;
         return this;
     }
@@ -88,7 +96,7 @@ public class AStage {
         return addChatMessage;
     }
 
-    public AStage setAddChatMessage(Component addChatMessage) {
+    public AStageDisplay setAddChatMessage(Component addChatMessage) {
         this.addChatMessage = addChatMessage;
         return this;
     }
@@ -97,7 +105,7 @@ public class AStage {
         return removeChatMessage;
     }
 
-    public AStage setRemoveChatMessage(Component removeChatMessage) {
+    public AStageDisplay setRemoveChatMessage(Component removeChatMessage) {
         this.removeChatMessage = removeChatMessage;
         return this;
     }
@@ -106,7 +114,7 @@ public class AStage {
         return fadeIn;
     }
 
-    public AStage setFadeIn(int fadeIn) {
+    public AStageDisplay setFadeIn(int fadeIn) {
         this.fadeIn = fadeIn;
         return this;
     }
@@ -115,7 +123,7 @@ public class AStage {
         return fadeOut;
     }
 
-    public AStage setFadeOut(int fadeOut) {
+    public AStageDisplay setFadeOut(int fadeOut) {
         this.fadeOut = fadeOut;
         return this;
     }
@@ -124,7 +132,7 @@ public class AStage {
         return stay;
     }
 
-    public AStage setStay(int stay) {
+    public AStageDisplay setStay(int stay) {
         this.stay = stay;
         return this;
     }
@@ -133,7 +141,7 @@ public class AStage {
         return serverOnly;
     }
 
-    public AStage setServerOnly(boolean serverOnly) {
+    public AStageDisplay setServerOnly(boolean serverOnly) {
         this.serverOnly = serverOnly;
         return this;
     }
@@ -142,8 +150,23 @@ public class AStage {
         return playerOnly;
     }
 
-    public AStage setPlayerOnly(boolean playerOnly) {
+    public AStageDisplay setPlayerOnly(boolean playerOnly) {
         this.playerOnly = playerOnly;
         return this;
+    }
+
+    public AStageDisplay whenGranted(Consumer<GrantedEvent> consumer) {
+        grantedEvent = consumer;
+        hasCustomGrantEvent = true;
+        return this;
+    }
+
+    @Override
+    public void postGrantedEvent(GrantedEvent event) {
+        grantedEvent.accept(event);
+    }
+
+    public boolean hasCustomGrantEvent() {
+        return hasCustomGrantEvent;
     }
 }

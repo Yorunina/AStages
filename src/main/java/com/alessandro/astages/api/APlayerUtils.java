@@ -13,9 +13,16 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @NotNullParamsAndMethodsReturn
 public class APlayerUtils {
+    public static void runOnceASecond(Player player, Consumer<Player> consumer) {
+        if (player.tickCount % 20 == 0) {
+            consumer.accept(player);
+        }
+    }
+
     public static @Nullable ServerPlayer getPlayerFromCommand(CommandContext<CommandSourceStack> context, UUID uuid) {
         return context.getSource().getServer().getPlayerList().getPlayer(uuid);
     }

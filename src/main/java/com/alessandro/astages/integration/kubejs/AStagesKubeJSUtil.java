@@ -6,10 +6,12 @@ import com.alessandro.astages.api.constant.ACompareCondition;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.api.stage.Stage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageWrapper;
 import com.alessandro.astages.capability.ServerStageData;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.AStageManager;
 import com.alessandro.astages.core.server.restriction.*;
 import com.alessandro.astages.core.server.restriction.item.AItemModRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemPredicateRestriction;
@@ -17,8 +19,6 @@ import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
-import com.alessandro.astages.core.stage.AStage;
-import com.alessandro.astages.core.stage.AStageManager;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -110,9 +110,9 @@ public class AStagesKubeJSUtil {
     }
 
     // STAGES
-    public static AStage customizeStage(String s) {
-        var stage = new AStage(s);
-        AStageManager.addStage(stage);
+    public static Stage customizeStage(String s) {
+        var stage = new Stage(s);
+        AStageManager.PERMANENT_INSTANCE.addStage(stage);
         return stage;
     }
 

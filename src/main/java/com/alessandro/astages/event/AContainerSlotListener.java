@@ -18,7 +18,5 @@ public record AContainerSlotListener(Player player) implements ContainerListener
     }
 
     @Override
-    public void dataChanged(AbstractContainerMenu container, int index, int item) {
-
-    }
+    public void dataChanged(AbstractContainerMenu container, int index, int item) { }
 }
