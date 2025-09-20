@@ -2,21 +2,18 @@ package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AFileIOUtils;
+import com.alessandro.astages.api.AStagesFolderSystem;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
-import com.alessandro.astages.api.develop.ChangeVisibilityTo;
 import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
 import com.alessandro.astages.util.AStagesUtil;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -36,25 +33,16 @@ public class OfflinePlayerStage {
     public static Map<UUID, String> UUID_USERNAME;
     public static Map<String, UUID> USERNAME_UUID;
 
-    public static final LevelResource ASTAGES_DATA_DIR = new LevelResource("astagesdata");
-    public static final LevelResource PERMANENT_STAGES_DIR = new LevelResource("permanent");
-    public static final LevelResource TEMPORARY_STAGES_DIR = new LevelResource("temporary");
-
     @SubscribeEvent
     public static void serverStarted(ServerStartingEvent event) {
-        var server = event.getServer();
-        checkAStagesDataFolder(server);
-
-        UUID_USERNAME = AFileIOUtils.readMapOrDefault(getConfigFile("uuid_to_username", server), UUID.class, String.class);
-        USERNAME_UUID = AFileIOUtils.readMapOrDefault(getConfigFile("username_to_uuid", server), String.class, UUID.class);
+        UUID_USERNAME = AFileIOUtils.readMapOrDefault(getConfigFile("uuid_to_username"), UUID.class, String.class);
+        USERNAME_UUID = AFileIOUtils.readMapOrDefault(getConfigFile("username_to_uuid"), String.class, UUID.class);
     }
 
     @SubscribeEvent
     public static void serverStopped(ServerStoppingEvent event) {
-        var server = event.getServer();
-
-        AFileIOUtils.writeFileContent(getConfigFile("uuid_to_username", server), UUID_USERNAME);
-        AFileIOUtils.writeFileContent(getConfigFile("username_to_uuid", server), USERNAME_UUID);
+        AFileIOUtils.writeFileContent(getConfigFile("uuid_to_username"), UUID_USERNAME);
+        AFileIOUtils.writeFileContent(getConfigFile("username_to_uuid"), USERNAME_UUID);
     }
 
     @Info("Migration purpose only!")
@@ -81,64 +69,36 @@ public class OfflinePlayerStage {
         CACHE.remove(player.getUUID()); // Clear CACHE
     }
 
-
-    private static void checkAStagesDataFolder(MinecraftServer server) {
-        var dataDir = server.getWorldPath(ASTAGES_DATA_DIR).toFile();
-        var permanentDir = new File(dataDir, PERMANENT_STAGES_DIR.getId());
-        var temporaryDir = new File(dataDir, TEMPORARY_STAGES_DIR.getId());
-
-        AFileIOUtils.createDirectory(dataDir);
-        AFileIOUtils.createDirectory(permanentDir);
-        AFileIOUtils.createDirectory(temporaryDir);
-    }
-
-    private static File getPermanentStagesDataFolder(MinecraftServer server) {
-        return new File(getAStagesDataFolder(server), PERMANENT_STAGES_DIR.getId());
-    }
-
-    @ChangeVisibilityTo(ChangeVisibilityTo.Visibility.PRIVATE)
-    public static File getTemporaryStagesDataFolder(MinecraftServer server) {
-        return new File(getAStagesDataFolder(server), TEMPORARY_STAGES_DIR.getId());
-    }
-
-    private static File getAStagesDataFolder(MinecraftServer server) {
-        return server.getWorldPath(ASTAGES_DATA_DIR).toFile();
-    }
-
-    private static File getConfigFile(String fileName, MinecraftServer server) {
-        var file = new File(getAStagesDataFolder(server), fileName + ".json");
+    private static File getConfigFile(String fileName) {
+        var file = new File(AStagesFolderSystem.getAStagesDataFolder(), fileName + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
     private static File getPermanentStagesFile(Player player) {
-        return getPermanentStagesFile(player.getServer(), player.getUUID());
+        return getPermanentStagesFile(player.getUUID());
     }
 
-    private static File getPermanentStagesFile(@Nullable MinecraftServer server, UUID uuid) {
-        var file = new File(getPermanentStagesDataFolder(Objects.requireNonNull(server)), uuid + ".json");
+    private static File getPermanentStagesFile(UUID uuid) {
+        var file = new File(AStagesFolderSystem.getPlayerPermanentFolder(), uuid + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
     public static File getTemporaryStagesFile(Player player) {
-        return getTemporaryStagesFile(player.getServer(), player.getUUID());
+        return getTemporaryStagesFile(player.getUUID());
     }
 
-    public static File getTemporaryStagesFile(@Nullable MinecraftServer server, UUID uuid) {
-        var file = new File(getTemporaryStagesDataFolder(Objects.requireNonNull(server)), uuid + ".json");
+    public static File getTemporaryStagesFile(UUID uuid) {
+        var file = new File(AStagesFolderSystem.getPlayerTemporaryFolder(), uuid + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
     public static List<String> getPlayerStagesFromCache(Player player) {
-        return getPlayerStagesFromCache(player.getServer(), player.getUUID());
+        return getPlayerStagesFromCache(player.getUUID());
     }
 
     public static List<String> getPlayerStagesFromCache(UUID uuid) {
-        return getPlayerStagesFromCache(ServerLifecycleHooks.getCurrentServer(), uuid);
-    }
-
-    public static List<String> getPlayerStagesFromCache(@Nullable MinecraftServer server, UUID uuid) {
         if (!CACHE.containsKey(uuid)) {
-            var stages = AFileIOUtils.readListOfDefault(getPermanentStagesFile(server, uuid), String.class);
+            var stages = AFileIOUtils.readListOrDefault(getPermanentStagesFile(uuid), String.class);
             CACHE.put(uuid, stages);
         }
 

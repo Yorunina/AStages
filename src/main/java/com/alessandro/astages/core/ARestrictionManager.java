@@ -2,17 +2,18 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
-import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.capability.ServerStage;
 import com.alessandro.astages.core.server.manager.*;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.networking.ANetworking;
-import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
-import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
 import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.ForPlugins;
@@ -21,8 +22,6 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.api.constant.ASyncOperation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -115,9 +114,8 @@ public class ARestrictionManager {
         APluginManager.callMethod(player, AStagesPlugin::clientSynchronization);
     }
 
-    public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player, MinecraftServer server) {
-        var data = ServerStageData.getData(server);
-        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(data.getServerStages(), AOperation.LOGIN));
+    public static void reflectServerStagesChangesToClients(@Nullable ServerPlayer player) {
+        ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(ServerStage.getServerStages(), AOperation.LOGIN));
     }
 
     public static void reflectSimpleIdsChangesToClients(@Nullable ServerPlayer player, Collection<String> ids, ASyncOperation operation) {

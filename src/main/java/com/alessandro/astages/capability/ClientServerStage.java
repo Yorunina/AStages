@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class ClientServerStageData {
+public class ClientServerStage {
     private static List<String> serverStages = new ArrayList<>();
 
     public static List<String> getServerStages() {
@@ -15,7 +15,7 @@ public class ClientServerStageData {
     }
 
     public static void setServerStages(List<String> stages) {
-        ClientServerStageData.serverStages = stages;
+        ClientServerStage.serverStages = stages;
     }
 
     public static void addServerStage(String stage) {

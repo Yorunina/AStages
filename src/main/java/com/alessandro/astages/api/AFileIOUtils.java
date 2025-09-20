@@ -46,7 +46,7 @@ public class AFileIOUtils {
         return file;
     }
 
-    public static <E> List<E> readListOfDefault(File file, Class<E> elementClazz) {
+    public static <E> List<E> readListOrDefault(File file, Class<E> elementClazz) {
         var content = readList(file, elementClazz);
         return content == null ? new ArrayList<>() : content;
     }

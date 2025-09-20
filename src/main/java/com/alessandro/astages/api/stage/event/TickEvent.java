@@ -1,4 +1,6 @@
 package com.alessandro.astages.api.stage.event;
 
-public class TickEvent {
-}
+import com.alessandro.astages.api.develop.NotYetImplemented;
+
+@NotYetImplemented
+public class TickEvent { }

@@ -3,7 +3,7 @@ package com.alessandro.astages.api.holder;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.capability.OfflinePlayerStage;
-import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.capability.ServerStage;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -72,17 +72,17 @@ public class AHolder {
 
     public AStageHolder getStages() {
         if (isPlayer && !isMultiple) {
-            return AStageHolder.initAndHold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(ServerLifecycleHooks.getCurrentServer(), uuids.get(0)));
+            return AStageHolder.initAndHold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(uuids.get(0)));
         }
 
         if (isServer && isPlayer) { // Server stages is prioritized!
             return AStageHolder.init()
                 .hold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(uuids.get(0)))
-                .hold(AStageType.SERVER, ServerStageData.getData(ServerLifecycleHooks.getCurrentServer()).getServerStages());
+                .hold(AStageType.SERVER, ServerStage.getServerStages());
         }
 
         if (isServer) {
-            return AStageHolder.initAndHold(AStageType.SERVER, ServerStageData.getData(ServerLifecycleHooks.getCurrentServer()).getServerStages());
+            return AStageHolder.initAndHold(AStageType.SERVER, ServerStage.getServerStages());
         }
 
         if (isPlayer) {

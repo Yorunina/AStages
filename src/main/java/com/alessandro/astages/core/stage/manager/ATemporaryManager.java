@@ -6,32 +6,20 @@ import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.api.stage.TemporaryStage;
 import com.alessandro.astages.api.stage.TemporaryStageContainer;
 import com.alessandro.astages.core.AStageManager;
+import com.alessandro.astages.store.stage.AStageBaseManager;
 
 import java.util.*;
 
 @NotNullParams
-public class ATemporaryManager {
-    private final Map<String, TemporaryStage> STAGES = new HashMap<>();
+public class ATemporaryManager extends AStageBaseManager<TemporaryStage> {
     @Info("For events! Null key store server stages!")
     private final HashMap<UUID, HashMap<String, TemporaryStageContainer>> TEMPORARY_STAGES = new HashMap<>();
-
-    public Map<String, TemporaryStage> getStages() {
-        return STAGES;
-    }
-
-    public void reloadBeforeScripts() {
-        STAGES.clear();
-    }
 
     public void addStage(TemporaryStage stage) {
         if (AStageManager.GENERIC_INSTANCE.checkForDuplicates(stage)) {
             AStageManager.GENERIC_INSTANCE.addStageNoCheck(stage);
-            STAGES.put(stage.getStage(), stage);
+            addStageInternal(stage.getStage(), stage);
         }
-    }
-
-    public @Nullable TemporaryStage getStage(String stageKey) {
-        return STAGES.getOrDefault(stageKey, null);
     }
 
     public Set<TemporaryStage> getStages(List<String> stageKeys) {

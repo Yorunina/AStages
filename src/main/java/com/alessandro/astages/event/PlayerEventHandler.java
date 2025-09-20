@@ -35,7 +35,7 @@ public class PlayerEventHandler {
             AStagesUtils.synchronizeWithClient(AHolder.player(player), serverPlayer, AOperation.LOGIN, new ArrayList<>(playerStages), true);
 
             ARestrictionManager.clearClientOnLogin(serverPlayer);
-            ARestrictionManager.reflectServerStagesChangesToClients(serverPlayer, serverPlayer.server);
+            ARestrictionManager.reflectServerStagesChangesToClients(serverPlayer);
             ARestrictionManager.reflectSimpleIdsChangesToClients(serverPlayer, ARestrictionManager.SIMPLE_IDS, ASyncOperation.ADD);
             ARestrictionManager.reflectAllStagesChangesToClients(serverPlayer, ARestrictionManager.ALL_STAGES, ASyncOperation.ADD);
             ARestrictionManager.clientSynchronization(serverPlayer);

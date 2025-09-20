@@ -1,5 +1,6 @@
 package com.alessandro.astages.core;
 
+import com.alessandro.astages.api.develop.UnderDevelopment;
 import com.alessandro.astages.api.stage.TemporaryStage;
 import com.alessandro.astages.api.time.AMutableTime;
 import com.alessandro.astages.api.time.ATime;
@@ -15,16 +16,16 @@ public class AStageManager {
     public static final APermanentManager PERMANENT_INSTANCE = new APermanentManager();
     public static final ATemporaryManager TEMPORARY_INSTANCE = new ATemporaryManager();
 
+    @UnderDevelopment
     public static void reloadBeforeScripts() {
-//        GENERIC_INSTANCE.reloadBeforeScripts();
-//        PERMANENT_INSTANCE.reloadBeforeScripts();
-//        TEMPORARY_INSTANCE.reloadBeforeScripts();
+        GENERIC_INSTANCE.reloadBeforeScripts();
+        PERMANENT_INSTANCE.reloadBeforeScripts();
+        TEMPORARY_INSTANCE.reloadBeforeScripts();
     }
 
+    @UnderDevelopment
     public static void reloadAfterScripts() {
         GENERIC_INSTANCE.reloadAfterScripts();
-//        PERMANENT_INSTANCE.reloadAfterScripts();
-//        TEMPORARY_INSTANCE.reloadAfterScripts();
     }
 
     static {

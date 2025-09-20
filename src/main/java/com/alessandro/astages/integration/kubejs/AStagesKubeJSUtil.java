@@ -100,6 +100,8 @@ public class AStagesKubeJSUtil {
         return AStagesUtils.hasAllStages(AHolder.server(), stages);
     }
 
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
     public static ServerStageData getServerData(MinecraftServer server) {
         return ServerStageData.getData(server);
     }

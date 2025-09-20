@@ -1,0 +1,129 @@
+package com.alessandro.astages.capability;
+
+import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AFileIOUtils;
+import com.alessandro.astages.api.AStagesFolderSystem;
+import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.AStatus;
+import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.event.server.*;
+import com.alessandro.astages.api.nullability.NotNullMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.networking.ANetworking;
+import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+@NotNullMethodsReturn
+@Mod.EventBusSubscriber(modid = AStages.MODID)
+public class ServerStage {
+    private static List<String> CACHE = new ArrayList<>();
+
+    @SubscribeEvent
+    public static void onServerStarting(ServerStartingEvent event) {
+        CACHE = AFileIOUtils.readListOrDefault(getPermanentStagesFile(), String.class);
+    }
+
+    @SubscribeEvent
+    public static void onServerStopping(ServerStoppingEvent event) {
+        markAsDirty();
+        CACHE.clear();
+    }
+
+    @Info("Migration purpose only!")
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onServerStartingHighest(ServerStartingEvent event) {
+        var file = getPermanentStagesFile();
+        var stageList = AFileIOUtils.readList(file, String.class);
+
+        if (stageList == null) {
+            var oldList = getServerStagesFromData(event.getServer());
+            AFileIOUtils.writeFileContent(file, oldList);
+        }
+    }
+
+    private static File getPermanentStagesFile() {
+        var file = new File(AStagesFolderSystem.getServerPermanentFolder(), "server" + ".json");
+        return AFileIOUtils.getOrCreateFile(file);
+    }
+
+    public static File getTemporaryStagesFile() {
+        var file = new File(AStagesFolderSystem.getServerTemporaryFolder(), "server" + ".json");
+        return AFileIOUtils.getOrCreateFile(file);
+    }
+
+    public static List<String> getServerStages() {
+        return CACHE;
+    }
+
+    public static void addServerStage(String stage) {
+        CACHE.add(stage);
+    }
+
+    public static void addServerStages(List<String> stages) {
+        CACHE.addAll(stages);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public static AStatus removeServerStage(String stage) {
+        return CACHE.remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public static AStatus removeServerStages(List<String> stages) {
+        return CACHE.removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+    }
+
+    public static void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, String stage) {
+        synchronizeWithClient(player, operation, Collections.singletonList(stage));
+    }
+
+    public static void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, List<String> stages) {
+        AStagesUtils.checkServerStages(operation, stages);
+
+        var server = ServerLifecycleHooks.getCurrentServer();
+        var event = new StageSyncedServerEvent(ServerLifecycleHooks.getCurrentServer(), operation, stages);
+        MinecraftForge.EVENT_BUS.post(event);
+
+        if (!event.isCanceled()) {
+            ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(stages, operation));
+
+            switch (operation) {
+                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedServerEvent(server, stages.get(0)));
+                case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedServerEvent(server, stages));
+                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedServerEvent(server, stages.get(0)));
+                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedServerEvent(server, stages));
+                case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginServerEvent(server, stages));
+            }
+        } else {
+            switch (event.getOperation()) {
+                case ADD -> removeServerStage(stages.get(0));
+                case ADD_ALL, LOGIN -> removeServerStages(stages);
+                case REMOVE -> addServerStage(stages.get(0));
+                case REMOVE_ALL -> addServerStages(stages);
+            }
+        }
+    }
+
+    // When saving, call this
+    public static void markAsDirty() {
+        AFileIOUtils.writeFileContent(getPermanentStagesFile(), CACHE);
+    }
+
+    public static List<String> getServerStagesFromData(MinecraftServer server) {
+        return ServerStageWrapper.getStages(server);
+    }
+}

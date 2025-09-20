@@ -8,7 +8,7 @@ import com.alessandro.astages.api.holder.AStageHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.OfflinePlayerStage;
-import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.capability.ServerStage;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.AStageManager;
 import net.minecraft.ChatFormatting;
@@ -56,9 +56,8 @@ public class AStagesUtils {
                 OfflinePlayerStage.addPlayerStage(player, stage);
                 OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD, stage, silentTitle);
             }, server -> {
-                var data = ServerStageData.getData(server);
-                data.addServerStage(stage);
-                data.synchronizeWithClient(null, AOperation.ADD, stage);
+                ServerStage.addServerStage(stage);
+                ServerStage.synchronizeWithClient(null, AOperation.ADD, stage);
             }
         );
     }
@@ -69,9 +68,8 @@ public class AStagesUtils {
                 OfflinePlayerStage.addPlayerStages(player, stages);
                 OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD_ALL, stages, silentTitle);
             }, server -> {
-                var data = ServerStageData.getData(server);
-                data.addServerStages(stages);
-                data.synchronizeWithClient(null, AOperation.ADD_ALL, stages);
+                ServerStage.addServerStages(stages);
+                ServerStage.synchronizeWithClient(null, AOperation.ADD_ALL, stages);
             }
         );
     }
@@ -84,9 +82,8 @@ public class AStagesUtils {
                 OfflinePlayerStage.addPlayerStages(player, stages);
                 OfflinePlayerStage.synchronizeWithClient(player, AOperation.ADD_ALL, stages, silentTitle);
             }, server -> {
-                var data = ServerStageData.getData(server);
-                data.addServerStages(stages);
-                data.synchronizeWithClient(null, AOperation.ADD_ALL, stages);
+                ServerStage.addServerStages(stages);
+                ServerStage.synchronizeWithClient(null, AOperation.ADD_ALL, stages);
             }
         );
     }
@@ -99,9 +96,8 @@ public class AStagesUtils {
                 toReturn.set(OfflinePlayerStage.removePlayerStage(player, stage));
                 OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE, stage, silentTitle);
             }, server -> {
-                var data = ServerStageData.getData(server);
-                toReturn.set(data.removeServerStage(stage));
-                data.synchronizeWithClient(null, AOperation.REMOVE, stage);
+                toReturn.set(ServerStage.removeServerStage(stage));
+                ServerStage.synchronizeWithClient(null, AOperation.REMOVE, stage);
             }
         );
 
@@ -116,9 +112,8 @@ public class AStagesUtils {
                 toReturn.set(OfflinePlayerStage.removePlayerStages(player, stages));
                 OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE_ALL, stages, silentTitle);
             }, server -> {
-                var data = ServerStageData.getData(server);
-                toReturn.set(data.removeServerStages(stages));
-                data.synchronizeWithClient(null, AOperation.REMOVE_ALL, stages);
+                toReturn.set(ServerStage.removeServerStages(stages));
+                ServerStage.synchronizeWithClient(null, AOperation.REMOVE_ALL, stages);
             }
         );
 
@@ -134,10 +129,9 @@ public class AStagesUtils {
                 toReturn.set(OfflinePlayerStage.removePlayerStages(player, stages));
                 OfflinePlayerStage.synchronizeWithClient(player, AOperation.REMOVE_ALL, stages, silentTitle);
             }, server -> {
-                var data = ServerStageData.getData(server);
-                var stages = data.getServerStages();
-                toReturn.set(data.removeServerStages(stages));
-                data.synchronizeWithClient(null, AOperation.REMOVE_ALL, stages);
+                var stages = ServerStage.getServerStages();
+                toReturn.set(ServerStage.removeServerStages(stages));
+                ServerStage.synchronizeWithClient(null, AOperation.REMOVE_ALL, stages);
             }
         );
 
@@ -147,7 +141,7 @@ public class AStagesUtils {
     public static void synchronizeWithClient(AHolder holder, ServerPlayer toPlayer, AOperation operation, List<String> stages, boolean silentTitle) {
         holder.perform(
             player -> OfflinePlayerStage.synchronizeWithClient(player, operation, stages, silentTitle),
-            server -> ServerStageData.getData(server).synchronizeWithClient(toPlayer, operation, stages)
+            server -> ServerStage.synchronizeWithClient(toPlayer, operation, stages)
         );
     }
 

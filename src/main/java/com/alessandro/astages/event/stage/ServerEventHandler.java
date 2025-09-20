@@ -11,7 +11,7 @@ import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.stage.event.ExpiredEvent;
 import com.alessandro.astages.api.stage.event.GrantedEvent;
-import com.alessandro.astages.capability.ServerStageData;
+import com.alessandro.astages.capability.ServerStage;
 import com.alessandro.astages.core.AStageManager;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 public class ServerEventHandler {
     @SubscribeEvent
     public static void onServerStarted(ServerStartedEvent event) {
-        var file = ServerStageData.getTemporaryStagesFile();
+        var file = ServerStage.getTemporaryStagesFile();
         var actualTimerMap = AFileIOUtils.readMapOrDefault(file, String.class, Integer.class);
 
         actualTimerMap.forEach(AStageManager.TEMPORARY_INSTANCE::addAlreadyObtainedServerStageToExpire);
@@ -35,7 +35,7 @@ public class ServerEventHandler {
 
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
-        var file = ServerStageData.getTemporaryStagesFile();
+        var file = ServerStage.getTemporaryStagesFile();
 
         var mapToWrite = new HashMap<String, Integer>();
         var stageContainer = AStageManager.TEMPORARY_INSTANCE.getStageContainersForServer();

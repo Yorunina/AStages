@@ -1,6 +1,7 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.api.AFileIOUtils;
+import com.alessandro.astages.api.AStagesFolderSystem;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
@@ -15,15 +16,17 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+@Deprecated(forRemoval = true)
 @NotNullParamsAndMethodsReturn
 public class ServerStageData extends SavedData {
     private static final String STAGE_ID = "astages_server_stages";
@@ -123,11 +126,7 @@ public class ServerStageData extends SavedData {
     }
 
     public static File getTemporaryStagesFile() {
-        return getTemporaryStagesFile(ServerLifecycleHooks.getCurrentServer());
-    }
-
-    public static File getTemporaryStagesFile(@Nullable MinecraftServer server) {
-        var file = new File(OfflinePlayerStage.getTemporaryStagesDataFolder(Objects.requireNonNull(server)), "server" + ".json");
+        var file = new File(AStagesFolderSystem.getServerTemporaryFolder(), "server" + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 

@@ -1,4 +1,4 @@
-package com.alessandro.astages.core.stage.permanent;
+package com.alessandro.astages.util.underdevelopment;
 
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStageType;

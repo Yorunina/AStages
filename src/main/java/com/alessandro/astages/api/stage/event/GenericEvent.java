@@ -25,4 +25,12 @@ public class GenericEvent {
     public boolean isClientSide() {
         return isClientSide;
     }
+
+    public boolean isPlayerAvailable() {
+        return player != null;
+    }
+
+    public boolean isServerAvailable() {
+        return server != null;
+    }
 }
