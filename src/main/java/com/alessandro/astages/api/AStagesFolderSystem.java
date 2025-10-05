@@ -1,78 +1,78 @@
 package com.alessandro.astages.api;
 
+import com.alessandro.astages.api.develop.NotYetImplemented;
+import com.alessandro.astages.api.foldersystem.ADirectoryResource;
+import com.alessandro.astages.api.foldersystem.AFolder;
+import com.alessandro.astages.api.misc.Ref;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.plugin.APluginManager;
+import com.alessandro.astages.plugin.AStagesPlugin;
+import com.alessandro.astages.plugin.ForPlugins;
+import com.alessandro.astages.plugin.container.FolderContainer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 @NotNullParamsAndMethodsReturn
 public class AStagesFolderSystem {
-    public static final LevelResource ASTAGES_DATA_DIR = new LevelResource("astagesdata");
-    public static final LevelResource SERVER_DATA_DIR = new LevelResource("server");
-    public static final LevelResource PLAYER_DATA_DIR = new LevelResource("player");
-    public static final LevelResource PERMANENT_STAGES_DIR = new LevelResource("permanent");
-    public static final LevelResource TEMPORARY_STAGES_DIR = new LevelResource("temporary");
+    @NotYetImplemented @SuppressWarnings("unused") @ForPlugins public static Map<String, File> FOLDER_FILES = new HashMap<>();
+    @NotYetImplemented @SuppressWarnings("unused") @ForPlugins public static Map<String, LevelResource> FOLDER_RESOURCES = new HashMap<>();
 
-    private static File astagesDataFolder;
-    private static File serverDataFolder;
-    private static File playerDataFolder;
-    private static File serverPermanentFolder;
-    private static File playerPermanentFolder;
-    private static File serverTemporaryFolder;
-    private static File playerTemporaryFolder;
+    public static final ADirectoryResource ASTAGES_DATA_DIR = new ADirectoryResource("astagesdata");
+    public static final ADirectoryResource SERVER_DATA_DIR = new ADirectoryResource("server");
+    public static final ADirectoryResource PLAYER_DATA_DIR = new ADirectoryResource("player");
+    public static final ADirectoryResource PERMANENT_STAGES_DIR = new ADirectoryResource("permanent");
+    public static final ADirectoryResource TEMPORARY_STAGES_DIR = new ADirectoryResource("temporary");
+
+    private static final Ref<Path> astagesDataFolder = new Ref<>();
+    private static final Ref<Path> serverPermanentFolder = new Ref<>();
+    private static final Ref<Path> playerPermanentFolder = new Ref<>();
+    private static final Ref<Path> serverTemporaryFolder = new Ref<>();
+    private static final Ref<Path> playerTemporaryFolder = new Ref<>();
 
     public static void buildPaths(MinecraftServer server) {
-        astagesDataFolder = server.getWorldPath(ASTAGES_DATA_DIR).toFile();
+        var root = new AFolder(ASTAGES_DATA_DIR, true, astagesDataFolder);
 
-        serverDataFolder = new File(astagesDataFolder, SERVER_DATA_DIR.getId());
-        playerDataFolder = new File(astagesDataFolder, PLAYER_DATA_DIR.getId());
+        root
+            .subFolder(SERVER_DATA_DIR, false, null, serverDir -> {
+                serverDir.subFolder(PERMANENT_STAGES_DIR, false, serverPermanentFolder);
+                serverDir.subFolder(TEMPORARY_STAGES_DIR, false, serverTemporaryFolder);
+            })
+            .subFolder(PLAYER_DATA_DIR, false, null, playerDir -> {
+                playerDir.subFolder(PERMANENT_STAGES_DIR, false, playerPermanentFolder);
+                playerDir.subFolder(TEMPORARY_STAGES_DIR, false, playerTemporaryFolder);
+            });
 
-        serverPermanentFolder = new File(serverDataFolder, PERMANENT_STAGES_DIR.getId());
-        playerPermanentFolder = new File(playerDataFolder, PERMANENT_STAGES_DIR.getId());
+        root.buildAndPopulateMaps(server).forEach(AFileIOUtils::createDirectory);
 
-        serverTemporaryFolder = new File(serverDataFolder, TEMPORARY_STAGES_DIR.getId());
-        playerTemporaryFolder = new File(playerDataFolder, TEMPORARY_STAGES_DIR.getId());
+        var folderContainer = new FolderContainer();
+        APluginManager.callMethod(folderContainer, AStagesPlugin::registerFolders);
+        for (var folder : folderContainer.getFolders()) {
+            folder.buildAndPopulateMaps(server).forEach(AFileIOUtils::createDirectory);
+        }
     }
 
-    public static void createDirectories() {
-        AFileIOUtils.createDirectory(astagesDataFolder);
-
-        AFileIOUtils.createDirectory(serverDataFolder);
-        AFileIOUtils.createDirectory(playerDataFolder);
-
-        AFileIOUtils.createDirectory(serverPermanentFolder);
-        AFileIOUtils.createDirectory(playerPermanentFolder);
-
-        AFileIOUtils.createDirectory(serverTemporaryFolder);
-        AFileIOUtils.createDirectory(playerTemporaryFolder);
+    public static Path getAStagesDataFolder() {
+        return astagesDataFolder.getValue();
     }
 
-    public static File getAStagesDataFolder() {
-        return astagesDataFolder;
+    public static Path getServerPermanentFolder() {
+        return serverPermanentFolder.getValue();
     }
 
-    public static File getServerDataFolder() {
-        return serverDataFolder;
+    public static Path getPlayerPermanentFolder() {
+        return playerPermanentFolder.getValue();
     }
 
-    public static File getPlayerDataFolder() {
-        return playerDataFolder;
+    public static Path getServerTemporaryFolder() {
+        return serverTemporaryFolder.getValue();
     }
 
-    public static File getServerPermanentFolder() {
-        return serverPermanentFolder;
-    }
-
-    public static File getPlayerPermanentFolder() {
-        return playerPermanentFolder;
-    }
-
-    public static File getServerTemporaryFolder() {
-        return serverTemporaryFolder;
-    }
-
-    public static File getPlayerTemporaryFolder() {
-        return playerTemporaryFolder;
+    public static Path getPlayerTemporaryFolder() {
+        return playerTemporaryFolder.getValue();
     }
 }

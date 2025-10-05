@@ -14,6 +14,5 @@ public class ServerEventHandler {
     public static void onServerStarting(ServerAboutToStartEvent event) {
         var server = event.getServer();
         AStagesFolderSystem.buildPaths(server);
-        AStagesFolderSystem.createDirectories();
     }
 }

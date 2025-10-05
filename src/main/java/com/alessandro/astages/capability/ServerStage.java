@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,13 +55,13 @@ public class ServerStage {
         }
     }
 
-    private static File getPermanentStagesFile() {
-        var file = new File(AStagesFolderSystem.getServerPermanentFolder(), "server" + ".json");
+    private static Path getPermanentStagesFile() {
+        var file = AStagesFolderSystem.getServerPermanentFolder().resolve("server.json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    public static File getTemporaryStagesFile() {
-        var file = new File(AStagesFolderSystem.getServerTemporaryFolder(), "server" + ".json");
+    public static Path getTemporaryStagesFile() {
+        var file = AStagesFolderSystem.getServerTemporaryFolder().resolve("server.json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 

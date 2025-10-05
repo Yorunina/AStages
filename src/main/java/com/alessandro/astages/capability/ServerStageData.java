@@ -21,7 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Contract;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -125,8 +125,8 @@ public class ServerStageData extends SavedData {
         return nbt;
     }
 
-    public static File getTemporaryStagesFile() {
-        var file = new File(AStagesFolderSystem.getServerTemporaryFolder(), "server" + ".json");
+    public static Path getTemporaryStagesFile() {
+        var file = AStagesFolderSystem.getServerTemporaryFolder().resolve("server.json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 

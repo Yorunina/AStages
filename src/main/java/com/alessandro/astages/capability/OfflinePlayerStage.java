@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 
 @NotNullParamsAndMethodsReturn
@@ -69,26 +69,26 @@ public class OfflinePlayerStage {
         CACHE.remove(player.getUUID()); // Clear CACHE
     }
 
-    private static File getConfigFile(String fileName) {
-        var file = new File(AStagesFolderSystem.getAStagesDataFolder(), fileName + ".json");
+    private static Path getConfigFile(String fileName) {
+        var file = AStagesFolderSystem.getAStagesDataFolder().resolve(fileName + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    private static File getPermanentStagesFile(Player player) {
+    private static Path getPermanentStagesFile(Player player) {
         return getPermanentStagesFile(player.getUUID());
     }
 
-    private static File getPermanentStagesFile(UUID uuid) {
-        var file = new File(AStagesFolderSystem.getPlayerPermanentFolder(), uuid + ".json");
+    private static Path getPermanentStagesFile(UUID uuid) {
+        var file = AStagesFolderSystem.getPlayerPermanentFolder().resolve(uuid + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    public static File getTemporaryStagesFile(Player player) {
+    public static Path getTemporaryStagesFile(Player player) {
         return getTemporaryStagesFile(player.getUUID());
     }
 
-    public static File getTemporaryStagesFile(UUID uuid) {
-        var file = new File(AStagesFolderSystem.getPlayerTemporaryFolder(), uuid + ".json");
+    public static Path getTemporaryStagesFile(UUID uuid) {
+        var file = AStagesFolderSystem.getPlayerTemporaryFolder().resolve(uuid + ".json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 
