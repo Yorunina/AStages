@@ -10,6 +10,7 @@ import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.capability.PlayerStageWrapper;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.AStageManager;
 import com.alessandro.astages.event.custom.ContainerChangedEvent;
 import com.alessandro.astages.event.custom.PlayerInventoryChangedEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,8 +20,6 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.ArrayList;
 
 @NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
@@ -32,9 +31,10 @@ public class PlayerEventHandler {
 
         if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
             var playerStages = AStagesUtils.getStages(AHolder.player(player));
-            AStagesUtils.synchronizeWithClient(AHolder.player(player), serverPlayer, AOperation.LOGIN, new ArrayList<>(playerStages), true);
+            AStagesUtils.synchronizeWithClient(AHolder.player(player), serverPlayer, AOperation.LOGIN, playerStages, true);
 
             ARestrictionManager.clearClientOnLogin(serverPlayer);
+            AStageManager.clientSynchronization(serverPlayer);
             ARestrictionManager.reflectServerStagesChangesToClients(serverPlayer);
             ARestrictionManager.reflectSimpleIdsChangesToClients(serverPlayer, ARestrictionManager.SIMPLE_IDS, ASyncOperation.ADD);
             ARestrictionManager.reflectAllStagesChangesToClients(serverPlayer, ARestrictionManager.ALL_STAGES, ASyncOperation.ADD);

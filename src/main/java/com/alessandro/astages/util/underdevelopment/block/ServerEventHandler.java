@@ -1,7 +1,7 @@
 package com.alessandro.astages.util.underdevelopment.block;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -39,7 +39,7 @@ public class ServerEventHandler {
         if (tick == 20) {
             if (level instanceof ServerLevel serverLevel) {
                 var manager = serverLevel.structureManager();
-                Structure structure = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).get(AStagesUtil.parse("minecraft:pillager_outpost"));
+                Structure structure = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).get(AResourceLocation.parse("minecraft:pillager_outpost"));
 
                 for (UUID uuid : com.alessandro.astages.event.structure.ServerEventHandler.playerIsInStructure.keySet()) {
 //                    if (player.getUUID().equals(uuid) && com.alessandro.astages.event.structure.ServerEventHandler.playerIsInStructure.get(uuid)) {

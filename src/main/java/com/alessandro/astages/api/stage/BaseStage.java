@@ -1,10 +1,11 @@
 package com.alessandro.astages.api.stage;
 
+import com.alessandro.astages.api.ATextUtils;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.stage.event.GrantedEvent;
 import com.alessandro.astages.api.stage.implementation.AGrantable;
-import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Consumer;
 
@@ -23,7 +24,7 @@ public abstract class BaseStage<T extends BaseStage<T>> implements AGrantable {
     private Consumer<GrantedEvent> grantedEvent;
 
     public BaseStage(String stage) {
-        this(stage, AStagesUtil.capitalizeWords(stage.replace('_', ' ')));
+        this(stage, ATextUtils.capitalizeWords(stage.replace('_', ' ')));
     }
 
     public BaseStage(String stage, String description) {
@@ -164,6 +165,15 @@ public abstract class BaseStage<T extends BaseStage<T>> implements AGrantable {
 
     public T setStay(int stay) {
         displayConfig.stay = stay;
+        return (T) this;
+    }
+
+    public ItemStack getStack() {
+        return displayConfig.stack;
+    }
+
+    public T setStack(ItemStack stack) {
+        displayConfig.stack = stack;
         return (T) this;
     }
 }

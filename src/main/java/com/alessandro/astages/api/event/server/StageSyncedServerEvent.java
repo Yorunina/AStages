@@ -1,23 +1,23 @@
 package com.alessandro.astages.api.event.server;
 
+import com.alessandro.astages.api.ASetUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.event.custom.ServerEvent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.eventbus.api.Cancelable;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Cancelable
 public class StageSyncedServerEvent extends ServerEvent {
     final AOperation operation;
-    final List<String> stagesSynced;
+    final Set<String> stagesSynced;
 
     public StageSyncedServerEvent(MinecraftServer server, AOperation operation, String stageSynced) {
-        this(server, operation, Collections.singletonList(stageSynced));
+        this(server, operation, ASetUtils.singleton(stageSynced));
     }
 
-    public StageSyncedServerEvent(MinecraftServer server, AOperation operation, List<String> stagesSynced) {
+    public StageSyncedServerEvent(MinecraftServer server, AOperation operation, Set<String> stagesSynced) {
         super(server);
         this.operation = operation;
         this.stagesSynced = stagesSynced;
@@ -27,7 +27,7 @@ public class StageSyncedServerEvent extends ServerEvent {
         return operation;
     }
 
-    public List<String> getStagesSynced() {
+    public Set<String> getStagesSynced() {
         return stagesSynced;
     }
 }

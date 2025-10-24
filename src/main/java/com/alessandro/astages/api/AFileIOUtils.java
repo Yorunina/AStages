@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @NotNullParamsAndMethodsReturn
 public class AFileIOUtils {
@@ -55,6 +52,15 @@ public class AFileIOUtils {
 
     public static <E> @Nullable List<E> readList(Path file, Class<E> elementClazz) {
         return readFileContent(file, TypeToken.getParameterized(List.class, elementClazz).getType());
+    }
+
+    public static <E> HashSet<E> readHashSetOrDefault(Path file, Class<E> elementClazz) {
+        var content = readHashSet(file, elementClazz);
+        return content == null ? new HashSet<>() : content;
+    }
+
+    public static <E> @Nullable HashSet<E> readHashSet(Path file, Class<E> elementClazz) {
+        return readFileContent(file, TypeToken.getParameterized(HashSet.class, elementClazz).getType());
     }
 
     public static <K, V> Map<K, V> readMapOrDefault(Path file, Class<K> keyClazz, Class<V> valueClazz) {

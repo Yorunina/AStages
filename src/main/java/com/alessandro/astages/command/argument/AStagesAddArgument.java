@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 
 @NotNullParamsAndMethodsReturn
@@ -40,7 +39,7 @@ public class AStagesAddArgument implements ArgumentType<String> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        var toReturn = new HashSet<>(AClientRestrictionManager.ALL_STAGES);
+        var toReturn = AClientRestrictionManager.ALL_STAGES;
         AStagesClientUtils.getStages(AClientHolder.player()).forEach(toReturn::remove);
 
         return SharedSuggestionProvider.suggest(toReturn.stream().sorted(), builder);

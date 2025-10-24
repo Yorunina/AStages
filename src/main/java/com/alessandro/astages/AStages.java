@@ -1,5 +1,6 @@
 package com.alessandro.astages;
 
+import com.alessandro.astages.loot.AModifiers;
 import com.alessandro.astages.util.underdevelopment.block.ModBlocks;
 import com.alessandro.astages.command.argument.ACommandArguments;
 import com.alessandro.astages.config.AStagesClient;
@@ -45,6 +46,7 @@ public class AStages {
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ACommandArguments.ARGUMENT_TYPES.register(modEventBus);
+        AModifiers.MODIFIERS.register(modEventBus);
 
         Attributes.ATTRIBUTES.register(modEventBus);
         Attributes.Item.ATTRIBUTES.register(modEventBus);

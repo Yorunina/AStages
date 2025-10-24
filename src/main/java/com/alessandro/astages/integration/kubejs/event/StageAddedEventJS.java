@@ -13,7 +13,7 @@ public class StageAddedEventJS extends PlayerEventJS {
 
     @Override
     public Player getEntity() {
-        return event.getEntity();
+        return event.getPlayer();
     }
 
     public String getStage() {

@@ -1,11 +1,11 @@
 package com.alessandro.astages.integration.jade;
 
+import com.alessandro.astages.api.ABlockStateUtils;
 import com.alessandro.astages.api.holder.AClientHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -55,7 +55,7 @@ public class AStagesJadePlugin implements IWailaPlugin {
 
             if (accessor instanceof BlockAccessor blockAccessor) {
                 var original = blockAccessor.getBlock();
-                var stack = AStagesUtil.blockToStack(original);
+                var stack = ABlockStateUtils.blockToStack(original);
                 var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), stack);
                 var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), stack);
 

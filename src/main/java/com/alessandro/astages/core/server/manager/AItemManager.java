@@ -4,6 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.config.AStagesCommon;
@@ -107,6 +108,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         return IDS.getOrDefault(id, null);
     }
 
+    public ARestrictionHolder<ABaseItemRestriction<?, ?>> getHolder(String id) {
+        return ARestrictionHolder.hold(getRestriction(id));
+    }
+
     public ABaseItemRestriction<?, ?> getRestriction(AHolder holder, ItemStack stack) {
         if (holder.isServerActive()) {
             var serverRestriction = restrictions.stream().filter(r ->
@@ -125,6 +130,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         }
 
         return null;
+    }
+
+    public ARestrictionHolder<ABaseItemRestriction<?, ?>> getHolder(AHolder holder, ItemStack stack) {
+        return ARestrictionHolder.hold(getRestriction(holder, stack));
     }
 
     public List<ABaseItemRestriction<?,?>> getAllRestrictions(ItemStack stack) {
@@ -151,6 +160,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         return null;
     }
 
+    public ARestrictionHolder<ABaseItemRestriction<?, ?>> getInventoryHolder(AHolder holder, ItemStack stack) {
+        return ARestrictionHolder.hold(getInventoryRestriction(holder, stack));
+    }
+
     public ABaseItemRestriction<?, ?> getEquipmentRestriction(AHolder holder, ItemStack stack) {
         if (holder.isServerActive()) {
             var serverRestriction = EQUIPMENT_CACHE.stream().filter(r ->
@@ -171,6 +184,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         return null;
     }
 
+    public ARestrictionHolder<ABaseItemRestriction<?, ?>> getEquipmentHolder(AHolder holder, ItemStack stack) {
+        return ARestrictionHolder.hold(getEquipmentRestriction(holder, stack));
+    }
+
     public ABaseItemRestriction<?, ?> getContainersRestriction(AHolder holder, ItemStack stack, Slot slot) {
         if (holder.isServerActive()) {
             var serverRestriction = getContainersRestriction(holder, AStageType.SERVER, stack, slot);
@@ -183,6 +200,10 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         }
 
         return null;
+    }
+
+    public ARestrictionHolder<ABaseItemRestriction<?, ?>> getContainersHolder(AHolder holder, ItemStack stack, Slot slot) {
+        return ARestrictionHolder.hold(getContainersRestriction(holder, stack, slot));
     }
 
     public ABaseItemRestriction<?, ?> getContainersRestriction(AHolder holder, AStageType type, ItemStack stack, Slot slot) {

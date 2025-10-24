@@ -1,14 +1,16 @@
 package com.alessandro.astages.integration.jei;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.integration.Mods;
-import com.alessandro.astages.util.AStagesUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -22,6 +24,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -29,19 +32,25 @@ import java.util.stream.Stream;
 @JeiPlugin
 public class ARecipeStagesJEIPlugin implements IModPlugin {
     private IJeiRuntime runtime;
-    private static final ResourceLocation PLUGIN_ID = AStagesUtil.fromNamespaceAndPath("recipe_jei");
+    private static final ResourceLocation PLUGIN_ID = AResourceLocation.fromNamespaceAndPath("recipe_jei");
 
     public ARecipeStagesJEIPlugin() {
         if (!Mods.JEI.isLoaded()) return;
 
         if (EffectiveSide.get().isClient()) {
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientRecipeUpdateEvent.class,
-                e -> updateRecipeGui()
+                e -> updateRecipeGui(null, null)
             );
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != AOperation.LOGIN) {
-                    updateRecipeGui();
+                    updateRecipeGui(e.getOperation(), e.getStagesSynced());
+                }
+            });
+
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class, e -> {
+                if (e.getOperation() != AOperation.LOGIN) {
+                    updateRecipeGui(e.getOperation(), e.getStagesSynced());
                 }
             });
         }
@@ -57,7 +66,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         runtime = jeiRuntime;
     }
 
-    public void updateRecipeGui() {
+    public void updateRecipeGui(@Nullable AOperation operation, @Nullable Set<String> syncedStages) {
         if (runtime != null && AClientRestrictionManager.ableToUpdateJeiUI()) {
             AStages.LOGGER.info("AStages client recipe update started!");
             var time = System.currentTimeMillis();

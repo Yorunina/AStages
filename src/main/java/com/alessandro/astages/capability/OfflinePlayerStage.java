@@ -1,9 +1,7 @@
 package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.api.AFileIOUtils;
-import com.alessandro.astages.api.AStagesFolderSystem;
-import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.*;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.develop.Info;
@@ -11,7 +9,6 @@ import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
-import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +26,7 @@ import java.util.*;
 @NotNullParamsAndMethodsReturn
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class OfflinePlayerStage {
-    public static final Map<UUID, List<String>> CACHE = new HashMap<>();
+    public static final Map<UUID, Set<String>> CACHE = new HashMap<>();
     public static Map<UUID, String> UUID_USERNAME;
     public static Map<String, UUID> USERNAME_UUID;
 
@@ -92,13 +89,13 @@ public class OfflinePlayerStage {
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    public static List<String> getPlayerStagesFromCache(Player player) {
+    public static Set<String> getPlayerStagesFromCache(Player player) {
         return getPlayerStagesFromCache(player.getUUID());
     }
 
-    public static List<String> getPlayerStagesFromCache(UUID uuid) {
+    public static Set<String> getPlayerStagesFromCache(UUID uuid) {
         if (!CACHE.containsKey(uuid)) {
-            var stages = AFileIOUtils.readListOrDefault(getPermanentStagesFile(uuid), String.class);
+            var stages = AFileIOUtils.readHashSetOrDefault(getPermanentStagesFile(uuid), String.class);
             CACHE.put(uuid, stages);
         }
 
@@ -110,15 +107,15 @@ public class OfflinePlayerStage {
     }
 
     public static void addPlayerStage(UUID uuid, String stage) {
-        CACHE.computeIfAbsent(uuid, k -> new ArrayList<>()).add(stage);
+        CACHE.computeIfAbsent(uuid, k -> new HashSet<>()).add(stage);
     }
 
-    public static void addPlayerStages(Player player, List<String> stages) {
+    public static void addPlayerStages(Player player, Set<String> stages) {
         addPlayerStages(player.getUUID(), stages);
     }
 
-    public static void addPlayerStages(UUID uuid, List<String> stages) {
-        CACHE.computeIfAbsent(uuid, k -> new ArrayList<>()).addAll(stages);
+    public static void addPlayerStages(UUID uuid, Set<String> stages) {
+        CACHE.computeIfAbsent(uuid, k -> new HashSet<>()).addAll(stages);
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -127,16 +124,16 @@ public class OfflinePlayerStage {
     }
 
     public static AStatus removePlayerStage(UUID uuid, String stage) {
-        return CACHE.computeIfAbsent(uuid, k -> new ArrayList<>()).remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+        return CACHE.computeIfAbsent(uuid, k -> new HashSet<>()).remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public static AStatus removePlayerStages(Player player, List<String> stages) {
+    public static AStatus removePlayerStages(Player player, Set<String> stages) {
         return removePlayerStages(player.getUUID(), stages);
     }
 
-    public static AStatus removePlayerStages(UUID uuid, List<String> stages) {
-        return CACHE.computeIfAbsent(uuid, k -> new ArrayList<>()).removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+    public static AStatus removePlayerStages(UUID uuid, Set<String> stages) {
+        return CACHE.computeIfAbsent(uuid, k -> new HashSet<>()).removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
     }
 
     @Info("Synchronization is required only if the player is 'physically' in the server!")
@@ -146,16 +143,16 @@ public class OfflinePlayerStage {
     }
 
     public static void synchronizeWithClient(Player player, AOperation operation, String stage, boolean silentTitle) {
-        synchronizeWithClient(player, operation, Collections.singletonList(stage), silentTitle);
+        synchronizeWithClient(player, operation, ASetUtils.singleton(stage), silentTitle);
     }
 
     @Info("Synchronization is required only if the player is 'physically' in the server!")
-    public static void synchronizeWithClient(UUID uuid, AOperation operation, List<String> stages, boolean silentTitle) {
+    public static void synchronizeWithClient(UUID uuid, AOperation operation, Set<String> stages, boolean silentTitle) {
         var player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
         if (player != null) { synchronizeWithClient(player, operation, stages, silentTitle); }
     }
 
-    public static void synchronizeWithClient(Player player, AOperation operation, List<String> stages, boolean silentTitle) {
+    public static void synchronizeWithClient(Player player, AOperation operation, Set<String> stages, boolean silentTitle) {
         AStagesUtils.checkPlayerStages(player, operation, stages);
 
         var event = new StageSyncedPlayerEvent(player, operation, stages);
@@ -166,22 +163,22 @@ public class OfflinePlayerStage {
 
             if (!silentTitle) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    stages.forEach(stage -> AStagesUtil.showTitles(serverPlayer, operation, stage));
+                    stages.forEach(stage -> ATitleUtils.showTitles(serverPlayer, operation, stage));
                 }
             }
 
             switch (operation) {
-                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stages.get(0)));
+                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
                 case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedPlayerEvent(player, stages));
-                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, stages.get(0)));
+                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
                 case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedPlayerEvent(player, stages));
                 case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginPlayerEvent(player, stages));
             }
         } else {
             switch (event.getOperation()) {
-                case ADD -> removePlayerStage(player, stages.get(0));
+                case ADD -> removePlayerStage(player, ASetUtils.getOnlyElement(stages));
                 case ADD_ALL, LOGIN -> removePlayerStages(player, stages);
-                case REMOVE -> addPlayerStage(player, stages.get(0));
+                case REMOVE -> addPlayerStage(player, ASetUtils.getOnlyElement(stages));
                 case REMOVE_ALL -> addPlayerStages(player, stages);
             }
         }

@@ -1,13 +1,12 @@
 package com.alessandro.astages.event.custom;
 
 import com.alessandro.astages.api.constant.AOperation;
-import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.event.custom.types.ClientStageEvent;
 
-import java.util.List;
+import java.util.Set;
 
 public class ClientSynchronizeServerStagesEvent extends ClientStageEvent {
-    public ClientSynchronizeServerStagesEvent(List<String> serverStagesSynced, AOperation operation) {
+    public ClientSynchronizeServerStagesEvent(Set<String> serverStagesSynced, AOperation operation) {
         super(serverStagesSynced, operation);
     }
 }

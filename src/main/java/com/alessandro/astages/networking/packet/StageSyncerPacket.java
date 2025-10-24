@@ -5,21 +5,22 @@ import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 @NotNullParamsAndMethodsReturn
 public abstract class StageSyncerPacket {
-    private final List<String> stages;
+    private final Set<String> stages;
     private final AOperation operation;
 
-    public StageSyncerPacket(List<String> stages, AOperation operation) {
+    public StageSyncerPacket(Set<String> stages, AOperation operation) {
         this.stages = stages;
         this.operation = operation;
     }
 
     public StageSyncerPacket(FriendlyByteBuf buf) {
-        this.stages = buf.readList(FriendlyByteBuf::readUtf);
+        this.stages = buf.readCollection(HashSet::new, FriendlyByteBuf::readUtf);
         this.operation = buf.readEnum(AOperation.class);
     }
 
@@ -35,7 +36,7 @@ public abstract class StageSyncerPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    public List<String> getStages() {
+    public Set<String> getStages() {
         return stages;
     }
 

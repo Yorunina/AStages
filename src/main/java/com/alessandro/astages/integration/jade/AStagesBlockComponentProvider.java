@@ -1,9 +1,9 @@
 package com.alessandro.astages.integration.jade;
 
 import com.alessandro.astages.api.APlayerUtils;
-import com.alessandro.astages.capability.BlockStageProvider;
-import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.capability.BlockStageProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +33,7 @@ public enum AStagesBlockComponentProvider implements IBlockComponentProvider, IS
     @Contract(pure = true)
     @Override
     public ResourceLocation getUid() {
-        return AStagesUtil.fromNamespaceAndPath("block_component_provider");
+        return AResourceLocation.fromNamespaceAndPath("block_component_provider");
     }
 
     @Override

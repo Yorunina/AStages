@@ -1,26 +1,22 @@
 package com.alessandro.astages.core.stage.manager;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.api.stage.BaseStage;
 import com.alessandro.astages.api.stage.implementation.AGrantable;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.networking.ANetworking;
+import com.alessandro.astages.networking.packet.stages.StageDisplaySyncerS2CPacket;
 import com.alessandro.astages.store.stage.AStageBaseManager;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @NotNullParams
-public class AGenericManager extends AStageBaseManager<BaseStage<?>> {
-    public void reloadAfterScripts() {
-        getStages().values().forEach(stage -> {
-            if (!stage.isServerOnly()) {
-                ARestrictionManager.ALL_STAGES.add(stage.getStage());
-            }
-        });
-    }
-
+public class AGenericManager extends AStageBaseManager<BaseStage<?>> implements ClientSynchronizable {
     public void addStage(BaseStage<?> stage) {
         if (checkForDuplicates(stage)) {
             addStageInternal(stage.getStage(), stage);
@@ -40,7 +36,16 @@ public class AGenericManager extends AStageBaseManager<BaseStage<?>> {
         return true;
     }
 
-    public Set<AGrantable> getStagesWithCustomGrantedEvent(List<String> stageKeys) {
+    @Override
+    public void reloadAfterScripts() {
+        getStages().values().forEach(stage -> {
+            if (!stage.isServerOnly()) {
+                ARestrictionManager.ALL_STAGES.add(stage.getStage());
+            }
+        });
+    }
+
+    public Set<AGrantable> getStagesWithCustomGrantedEvent(Set<String> stageKeys) {
         var toReturn = new HashSet<AGrantable>();
 
         for (var stageKey : stageKeys) {
@@ -66,5 +71,10 @@ public class AGenericManager extends AStageBaseManager<BaseStage<?>> {
         if (stage != null) { return stage.isPlayerOnly(); }
 
         return false;
+    }
+
+    @Override
+    public void synchronizeWithClient(@Nullable ServerPlayer player) {
+        getStages().forEach((stageKey, stage) -> ANetworking.sendTo(player, new StageDisplaySyncerS2CPacket(stage.getStage(), stage.getStack())));
     }
 }

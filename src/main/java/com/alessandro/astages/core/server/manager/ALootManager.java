@@ -3,6 +3,7 @@ package com.alessandro.astages.core.server.manager;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
@@ -32,6 +33,10 @@ public class ALootManager extends AManager<ALootRestriction, Void, ItemStack> {
         }
 
         return null;
+    }
+
+    public ARestrictionHolder<ALootRestriction> getHolder(AHolder holder, ItemStack stack, @Nullable EntityType<?> entityType, @Nullable ResourceLocation lootTable) {
+        return ARestrictionHolder.hold(getRestriction(holder, stack, entityType, lootTable));
     }
 
     @Override

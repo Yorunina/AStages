@@ -18,5 +18,10 @@ public class GatherDataEventHandler {
             event.includeClient(),
             new ALanguageProvider(packOutput, "en_us")
         );
+
+//        event.getGenerator().addProvider(
+//            event.includeServer(),
+//            new ALootProvider(packOutput)
+//        );
     }
 }

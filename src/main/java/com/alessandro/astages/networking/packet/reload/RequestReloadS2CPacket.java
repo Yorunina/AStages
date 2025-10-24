@@ -2,6 +2,7 @@ package com.alessandro.astages.networking.packet.reload;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientStageManager;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
@@ -32,7 +33,10 @@ public class RequestReloadS2CPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             switch (reloadType) {
-                case CLIENT_BEFORE -> AClientRestrictionManager.reloadBeforeScripts();
+                case CLIENT_BEFORE -> {
+                    AClientStageManager.reloadBeforeScripts();
+                    AClientRestrictionManager.reloadBeforeScripts();
+                }
                 case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
                 case RELOAD_BEFORE -> AClientRestrictionManager.reloadStarted();
                 case JEI_ITEM -> MinecraftForge.EVENT_BUS.post(new ClientItemUpdateEvent());

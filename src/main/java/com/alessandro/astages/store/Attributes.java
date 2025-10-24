@@ -1,9 +1,9 @@
 package com.alessandro.astages.store;
 
 import com.alessandro.astages.AStages;
-import com.alessandro.astages.registry.AStagesRegistries;
+import com.alessandro.astages.api.ATextUtils;
 import com.alessandro.astages.api.constant.ACompareCondition;
-import com.alessandro.astages.util.AStagesUtil;
+import com.alessandro.astages.registry.AStagesRegistries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -96,11 +96,11 @@ public class Attributes {
     // STRUCTURE
     public static class Structure {
         public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.Keys.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<ResourceLocation, Component>> ATTACK_MESSAGE = Attribute.create("structure_attack_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.attack", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> INTERACT_MESSAGE = Attribute.create("structure_interact_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.interact", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("structure_enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.enter", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> PLACING_MESSAGE = Attribute.create("structure_placing_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.place", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> MINING_MESSAGE = Attribute.create("structure_mining_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.break", AStagesUtil.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> ATTACK_MESSAGE = Attribute.create("structure_attack_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.attack", ATextUtils.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> INTERACT_MESSAGE = Attribute.create("structure_interact_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.interact", ATextUtils.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("structure_enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.enter", ATextUtils.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> PLACING_MESSAGE = Attribute.create("structure_placing_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.place", ATextUtils.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> MINING_MESSAGE = Attribute.create("structure_mining_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.structure.break", ATextUtils.structureToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
     }
 
     // SCREEN
@@ -112,9 +112,9 @@ public class Attributes {
     // DIMENSION
     public static class Dimension {
         public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.Keys.ATTRIBUTES, AStages.MODID));
-        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("dimension_enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("dimension_leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
-        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("dimension_expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", AStagesUtil.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> ENTER_MESSAGE = Attribute.create("dimension_enter_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.enter", ATextUtils.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> LEAVE_MESSAGE = Attribute.create("dimension_leave_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.leave", ATextUtils.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
+        public static final Attribute<Function<ResourceLocation, Component>> EXPIRED_MESSAGE = Attribute.create("dimension_expired_message", AttributeTypes.RESOURCE_LOCATION_TO_COMPONENT, resourceLocation -> Component.translatable("message.astages.dimension.expired", ATextUtils.dimensionToDescription(resourceLocation)).withStyle(ChatFormatting.RED));
     }
 
     // MOB

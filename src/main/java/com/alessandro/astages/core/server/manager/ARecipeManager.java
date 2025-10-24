@@ -5,7 +5,9 @@ import com.alessandro.astages.api.ARestrictionUtils;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.constant.AStageType;
+import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.config.AStagesCommon;
@@ -18,7 +20,6 @@ import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
-import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
@@ -80,6 +81,10 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
         }
 
         return null;
+    }
+
+    public ARestrictionHolder<ABaseRecipeRestriction<?, ?, ?>> getHolder(AHolder holder, RecipeWrapper wrapper) {
+        return ARestrictionHolder.hold(getRestriction(holder, wrapper));
     }
 
     public ABaseRecipeRestriction<?, ?, ?> getRestriction(AHolder holder, AStageType type, RecipeWrapper wrapper) {

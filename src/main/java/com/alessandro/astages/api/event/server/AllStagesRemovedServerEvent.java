@@ -1,15 +1,12 @@
 package com.alessandro.astages.api.event.server;
 
-import com.alessandro.astages.api.event.custom.ServerEvent;
+import com.alessandro.astages.api.event.custom.MultipleStagesServerEvent;
 import net.minecraft.server.MinecraftServer;
 
-import java.util.List;
+import java.util.Set;
 
-public class AllStagesRemovedServerEvent extends ServerEvent {
-    public final List<String> stages;
-
-    public AllStagesRemovedServerEvent(MinecraftServer server, List<String> stages) {
-        super(server);
-        this.stages = stages;
+public class AllStagesRemovedServerEvent extends MultipleStagesServerEvent {
+    public AllStagesRemovedServerEvent(MinecraftServer server, Set<String> stages) {
+        super(server, stages);
     }
 }

@@ -1,48 +1,38 @@
 package com.alessandro.astages.core;
 
-import com.alessandro.astages.api.develop.UnderDevelopment;
-import com.alessandro.astages.api.stage.TemporaryStage;
-import com.alessandro.astages.api.time.AMutableTime;
-import com.alessandro.astages.api.time.ATime;
+import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.api.stage.Stage;
 import com.alessandro.astages.core.stage.manager.AGenericManager;
 import com.alessandro.astages.core.stage.manager.APermanentManager;
 import com.alessandro.astages.core.stage.manager.ATemporaryManager;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class AStageManager {
     public static final AGenericManager GENERIC_INSTANCE = new AGenericManager();
     public static final APermanentManager PERMANENT_INSTANCE = new APermanentManager();
     public static final ATemporaryManager TEMPORARY_INSTANCE = new ATemporaryManager();
 
-    @UnderDevelopment
     public static void reloadBeforeScripts() {
-        GENERIC_INSTANCE.reloadBeforeScripts();
-        PERMANENT_INSTANCE.reloadBeforeScripts();
-        TEMPORARY_INSTANCE.reloadBeforeScripts();
+        // GENERIC_INSTANCE.reloadBeforeScripts();
+        // PERMANENT_INSTANCE.reloadBeforeScripts();
+        // TEMPORARY_INSTANCE.reloadBeforeScripts();
     }
 
-    @UnderDevelopment
     public static void reloadAfterScripts() {
         GENERIC_INSTANCE.reloadAfterScripts();
+
+        if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
+        clientSynchronization(null);
+    }
+
+    public static void clientSynchronization(@Nullable ServerPlayer player) {
+        GENERIC_INSTANCE.synchronizeWithClient(player);
     }
 
     static {
-        var buff = new TemporaryStage("stage", AMutableTime.fromFixed(new ATime("10s")))
-            .whenGranted(event -> {
-                event.getServer().sendSystemMessage(Component.literal("New Buff Unlocked!"));
-                if (event.getPlayer() == null) { return; }
-                event.getPlayer().sendSystemMessage(Component.literal("New Buff Unlocked!"));
-                event.getPlayer().addEffect(new MobEffectInstance(MobEffects.REGENERATION, 10000, 255, false, false, false));
-            })
-            .whenExpired(event -> {
-                event.getServer().sendSystemMessage(Component.literal("Buff Expired!"));
-                if (event.getPlayer() == null) { return; }
-                event.getPlayer().sendSystemMessage(Component.literal("Buff Expired!"));
-                event.getPlayer().removeEffect(MobEffects.REGENERATION);
-            });
-
-        TEMPORARY_INSTANCE.addStage(buff);
+        PERMANENT_INSTANCE.addStage(new Stage("stage_12").setStack(new ItemStack(Items.EMERALD)));
     }
 }

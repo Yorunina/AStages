@@ -8,23 +8,23 @@ import java.util.*;
 
 @NotNullMethodsReturn
 public class AStageHolder {
-    private final Map<AStageType, HashSet<String>> stages = new HashMap<>();
+    private final Map<AStageType, Set<String>> stages = new HashMap<>();
 
     @Contract(" -> new")
     public static AStageHolder init() {
         return new AStageHolder();
     }
 
-    public static AStageHolder initAndHold(AStageType type, Collection<String> stages) {
+    public static AStageHolder initAndHold(AStageType type, Set<String> stages) {
         return AStageHolder.init().hold(type, stages);
     }
 
-    public AStageHolder hold(AStageType type, Collection<String> stages) {
-        this.stages.put(type, new HashSet<>(stages));
+    public AStageHolder hold(AStageType type, Set<String> stages) {
+        this.stages.put(type, stages);
         return this;
     }
 
-    public HashSet<String> getForType(AStageType type) {
+    public Set<String> getForType(AStageType type) {
         return stages.getOrDefault(type, new HashSet<>());
     }
 

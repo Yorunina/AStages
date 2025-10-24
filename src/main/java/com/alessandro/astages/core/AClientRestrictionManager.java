@@ -62,7 +62,7 @@ public class AClientRestrictionManager {
         return ORE_STAGES.contains(stage);
     }
 
-    public static boolean areOreStages(List<String> stages) {
+    public static boolean areOreStages(Set<String> stages) {
         for (String stage : ORE_STAGES) {
             if (stages.contains(stage)) {
                 return true;

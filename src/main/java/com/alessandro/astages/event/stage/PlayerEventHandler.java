@@ -48,7 +48,7 @@ public class PlayerEventHandler {
     public static void onClientSync(StageSyncedPlayerEvent event) {
         if (event.getOperation() != AOperation.ADD && event.getOperation() != AOperation.ADD_ALL) { return; }
 
-        var player = event.getEntity();
+        var player = event.getPlayer();
         var server = player.getServer();
         var isClientSide = player.level().isClientSide;
 

@@ -1,13 +1,10 @@
 package com.alessandro.astages.api.event.server;
 
-import com.alessandro.astages.api.event.custom.ServerEvent;
+import com.alessandro.astages.api.event.custom.SingleStageServerEvent;
 import net.minecraft.server.MinecraftServer;
 
-public class StageAddedServerEvent extends ServerEvent {
-    public final String stage;
-
+public class StageAddedServerEvent extends SingleStageServerEvent {
     public StageAddedServerEvent(MinecraftServer server, String stage) {
-        super(server);
-        this.stage = stage;
+        super(server, stage);
     }
 }

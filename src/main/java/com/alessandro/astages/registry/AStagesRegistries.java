@@ -1,9 +1,9 @@
 package com.alessandro.astages.registry;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.store.Attribute;
-import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
@@ -16,6 +16,6 @@ public class AStagesRegistries {
     }
 
     public static class Keys {
-        public static final ResourceKey<Registry<Attribute<?>>> ATTRIBUTES = ResourceKey.createRegistryKey(AStagesUtil.fromNamespaceAndPath("attributes"));
+        public static final ResourceKey<Registry<Attribute<?>>> ATTRIBUTES = ResourceKey.createRegistryKey(AResourceLocation.fromNamespaceAndPath("attributes"));
     }
 }

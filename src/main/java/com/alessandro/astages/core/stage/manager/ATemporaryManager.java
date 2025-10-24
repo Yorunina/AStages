@@ -22,7 +22,7 @@ public class ATemporaryManager extends AStageBaseManager<TemporaryStage> {
         }
     }
 
-    public Set<TemporaryStage> getStages(List<String> stageKeys) {
+    public Set<TemporaryStage> getStages(Set<String> stageKeys) {
         var toReturn = new HashSet<TemporaryStage>();
 
         for (var stageKey : stageKeys) {

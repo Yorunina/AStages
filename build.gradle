@@ -276,6 +276,10 @@ dependencies {
     // Just Enough Resources
     // implementation fg.deobf("curse.maven:just-enough-resources-jer-240630:5057220")
 
+    implementation fg.deobf("curse.maven:ftb-library-forge-404465:6807424")
+    implementation fg.deobf("curse.maven:ftb-teams-forge-404468:6130786")
+    implementation fg.deobf("curse.maven:ftb-quests-forge-289412:6829212")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

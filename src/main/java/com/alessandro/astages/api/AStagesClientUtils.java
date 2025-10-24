@@ -8,8 +8,6 @@ import com.alessandro.astages.capability.ClientPlayerStage;
 import com.alessandro.astages.capability.ClientServerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @NotNullParamsAndMethodsReturn
@@ -18,7 +16,7 @@ public class AStagesClientUtils {
         return holder.getStages().getAllStages();
     }
 
-    public static void setStages(AClientHolder holder, List<String> stages) {
+    public static void setStages(AClientHolder holder, Set<String> stages) {
         holder.perform(
             () -> ClientPlayerStage.setClientStages(stages),
             () -> ClientServerStage.setServerStages(stages)
@@ -37,11 +35,11 @@ public class AStagesClientUtils {
         return holder.getForType(type).contains(stage);
     }
 
-    public static boolean hasAtLeastOneStage(AClientHolder holder, List<String> stages) {
+    public static boolean hasAtLeastOneStage(AClientHolder holder, Set<String> stages) {
         return getStages(holder).stream().anyMatch(stages::contains);
     }
 
-    public static boolean hasAllStages(AClientHolder holder, List<String> stages) {
+    public static boolean hasAllStages(AClientHolder holder, Set<String> stages) {
         return getStages(holder).containsAll(stages);
     }
 
@@ -52,7 +50,7 @@ public class AStagesClientUtils {
         );
     }
 
-    public static void addStages(AClientHolder holder, List<String> stages) {
+    public static void addStages(AClientHolder holder, Set<String> stages) {
         holder.perform(
             () -> ClientPlayerStage.addClientStages(stages),
             () -> ClientServerStage.addServerStages(stages)
@@ -60,7 +58,7 @@ public class AStagesClientUtils {
     }
 
     public static void addAllStages(AClientHolder holder) {
-        var stages = new ArrayList<>(AClientRestrictionManager.ALL_STAGES);
+        var stages = AClientRestrictionManager.ALL_STAGES;
 
         holder.perform(
             () -> ClientPlayerStage.addClientStages(stages),
@@ -75,7 +73,7 @@ public class AStagesClientUtils {
         );
     }
 
-    public static void removeStages(AClientHolder holder, List<String> stages) {
+    public static void removeStages(AClientHolder holder, Set<String> stages) {
         holder.perform(
             () -> ClientPlayerStage.removeClientStages(stages),
             () -> ClientServerStage.removeServerStages(stages)

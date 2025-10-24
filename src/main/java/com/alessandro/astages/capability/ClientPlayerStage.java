@@ -1,20 +1,24 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.api.nullability.NotNullMethodsReturn;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@NotNullMethodsReturn
 @OnlyIn(Dist.CLIENT)
 public class ClientPlayerStage {
-    private static List<String> playerStages = new ArrayList<>();
+    private static Set<String> playerStages = new HashSet<>();
 
-    public static List<String> getClientStages() {
+    public static Set<String> getClientStages() {
         return playerStages;
     }
 
-    public static void setClientStages(List<String> stages) {
+    public static void setClientStages(Set<String> stages) {
         ClientPlayerStage.playerStages = stages;
     }
 
@@ -22,7 +26,7 @@ public class ClientPlayerStage {
         playerStages.add(stage);
     }
 
-    public static void addClientStages(List<String> stages) {
+    public static void addClientStages(Set<String> stages) {
         playerStages.addAll(stages);
     }
 
@@ -30,13 +34,13 @@ public class ClientPlayerStage {
         playerStages.remove(stage);
     }
 
-    public static void removeClientStages(List<String> stages) {
+    public static void removeClientStages(Set<String> stages) {
         playerStages.removeAll(stages);
     }
 
     @Deprecated(forRemoval = true)
     public static List<String> getPlayerStages() {
-        return playerStages;
+        return new ArrayList<>(playerStages);
     }
 
     @Deprecated(forRemoval = true)

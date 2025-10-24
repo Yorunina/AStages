@@ -1,16 +1,16 @@
 package com.alessandro.astages.event.item;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.ABlockStateUtils;
 import com.alessandro.astages.api.AInventoryUtils;
+import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.api.nullability.Nullable;
-import com.alessandro.astages.api.develop.Info;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -48,12 +48,12 @@ public class ServerEventHandler {
         boolean isClientSide = event.getPlayer().level().isClientSide;
         if (isClientSide) { return; }
 
-        var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(AHolder.serverAndPlayer(event.getPlayer()), AStagesUtil.stateToStack(event.getState()));
+        var restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(AHolder.serverAndPlayer(event.getPlayer()), ABlockStateUtils.stateToStack(event.getState()));
         if (restriction != null && restriction.isDisabled(Attributes.BLOCK_BREAKING)) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);
 
-            restriction.displayMessage(Attributes.Item.MINING_MESSAGE, AStagesUtil.stateToStack(event.getState()), event.getPlayer());
+            restriction.displayMessage(Attributes.Item.MINING_MESSAGE, ABlockStateUtils.stateToStack(event.getState()), event.getPlayer());
         }
     }
 
@@ -85,7 +85,7 @@ public class ServerEventHandler {
 //                return;
 //            }
             else if (restriction == null) {
-                var block = AStagesUtil.stateToStack(event.getLevel().getBlockState(event.getPos()));
+                var block = ABlockStateUtils.stateToStack(event.getLevel().getBlockState(event.getPos()));
                 restriction = ARestrictionManager.ITEM_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer), block);
 
                 if (restriction != null && restriction.isDisabled(Attributes.BLOCK_INTERACTIONS)) {

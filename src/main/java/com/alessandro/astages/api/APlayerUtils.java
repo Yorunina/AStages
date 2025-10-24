@@ -5,11 +5,13 @@ import com.alessandro.astages.api.nullability.Nullable;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
@@ -17,6 +19,10 @@ import java.util.function.Consumer;
 
 @NotNullParamsAndMethodsReturn
 public class APlayerUtils {
+    public static void sendVanillaPacket(ServerPlayer player, Packet<?> packet) {
+        player.connection.send(packet);
+    }
+
     public static void runOnceASecond(Player player, Consumer<Player> consumer) {
         if (player.tickCount % 20 == 0) {
             consumer.accept(player);
@@ -53,5 +59,9 @@ public class APlayerUtils {
         }
 
         return toReturn;
+    }
+
+    public static boolean isRealPlayer(Player player) {
+        return player instanceof ServerPlayer && !(player instanceof FakePlayer);
     }
 }

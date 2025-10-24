@@ -1,6 +1,8 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.api.ASetUtils;
 import com.alessandro.astages.api.AStagesUtils;
+import com.alessandro.astages.api.ATitleUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.develop.Info;
@@ -8,7 +10,6 @@ import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
-import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +19,7 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Deprecated(forRemoval = true)
 @NotNullParamsAndMethodsReturn
@@ -31,14 +33,14 @@ public class PlayerStage {
     }
 
     public void setChangedFor(Player player, AOperation operation, String stage, boolean silentTitle) {
-        setChangedFor(player, operation, Collections.singletonList(stage), silentTitle);
+        setChangedFor(player, operation, ASetUtils.singleton(stage), silentTitle);
     }
 
-    public void setChangedFor(Player player, AOperation operation, List<String> stages) {
+    public void setChangedFor(Player player, AOperation operation, Set<String> stages) {
         setChangedFor(player, operation, stages, false);
     }
 
-    public void setChangedFor(Player player, AOperation operation, List<String> stages, boolean silentTitle) {
+    public void setChangedFor(Player player, AOperation operation, Set<String> stages, boolean silentTitle) {
         AStagesUtils.checkPlayerStages(player, operation, stages);
 
         StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stages);
@@ -49,22 +51,22 @@ public class PlayerStage {
 
             if (!silentTitle) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    stages.forEach(stage -> AStagesUtil.showTitles(serverPlayer, operation, stage));
+                    stages.forEach(stage -> ATitleUtils.showTitles(serverPlayer, operation, stage));
                 }
             }
 
             switch (operation) {
-                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, stages.get(0)));
+                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
                 case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedPlayerEvent(player, stages));
-                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, stages.get(0)));
+                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
                 case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedPlayerEvent(player, stages));
                 case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginPlayerEvent(player, stages));
             }
         } else {
             switch (event.getOperation()) {
-                case ADD -> this.stages.remove(stages.get(0));
+                case ADD -> this.stages.remove(ASetUtils.getOnlyElement(stages));
                 case ADD_ALL, LOGIN -> this.stages.removeAll(stages);
-                case REMOVE -> this.stages.add(stages.get(0));
+                case REMOVE -> this.stages.add(ASetUtils.getOnlyElement(stages));
                 case REMOVE_ALL -> this.stages.addAll(stages);
             }
         }
@@ -80,7 +82,7 @@ public class PlayerStage {
 
     public void addStage(String stage) {
         if (stages.contains(stage)) { return; }
-        AStagesUtils.checkPlayerStages(null, AOperation.ADD, Collections.singletonList(stage));
+        AStagesUtils.checkPlayerStages(null, AOperation.ADD, ASetUtils.singleton(stage));
 
         stages.add(stage);
     }

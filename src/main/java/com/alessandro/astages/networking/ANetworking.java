@@ -1,7 +1,7 @@
 package com.alessandro.astages.networking;
 
-import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
+import com.alessandro.astages.api.AResourceLocation;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
@@ -10,10 +10,11 @@ import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
-import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
-import com.alessandro.astages.util.AStagesUtil;
-import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.StageDisplaySyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -30,7 +31,7 @@ public class ANetworking {
 
     public static void register() {
         SimpleChannel net = NetworkRegistry.ChannelBuilder
-                .named(AStagesUtil.fromNamespaceAndPath("messages"))
+                .named(AResourceLocation.fromNamespaceAndPath("messages"))
                 .networkProtocolVersion(() -> "1.0")
                 .clientAcceptedVersions(s -> true)
                 .serverAcceptedVersions(s -> true)
@@ -49,6 +50,12 @@ public class ANetworking {
             .decoder(StagesSyncerS2CPacket::new)
             .encoder(StagesSyncerS2CPacket::toBytes)
             .consumerMainThread(StagesSyncerS2CPacket::handle)
+            .add();
+
+        net.messageBuilder(StageDisplaySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(StageDisplaySyncerS2CPacket::new)
+            .encoder(StageDisplaySyncerS2CPacket::toBytes)
+            .consumerMainThread(StageDisplaySyncerS2CPacket::handle)
             .add();
 
         // ITEMS

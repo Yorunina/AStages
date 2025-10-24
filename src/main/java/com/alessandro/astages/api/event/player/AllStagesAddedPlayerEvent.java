@@ -1,15 +1,12 @@
 package com.alessandro.astages.api.event.player;
 
+import com.alessandro.astages.api.event.custom.MultipleStagesPlayerEvent;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 
-import java.util.List;
+import java.util.Set;
 
-public class AllStagesAddedPlayerEvent extends PlayerEvent {
-    public final List<String> stages;
-
-    public AllStagesAddedPlayerEvent(Player player, List<String> stages) {
-        super(player);
-        this.stages = stages;
+public class AllStagesAddedPlayerEvent extends MultipleStagesPlayerEvent {
+    public AllStagesAddedPlayerEvent(Player player, Set<String> stages) {
+        super(player, stages);
     }
 }

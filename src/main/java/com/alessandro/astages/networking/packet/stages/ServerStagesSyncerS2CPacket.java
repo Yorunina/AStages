@@ -1,5 +1,6 @@
 package com.alessandro.astages.networking.packet.stages;
 
+import com.alessandro.astages.api.ASetUtils;
 import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.holder.AClientHolder;
@@ -9,11 +10,11 @@ import com.alessandro.astages.networking.packet.StageSyncerPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.List;
+import java.util.Set;
 
 @NotNullParams
 public class ServerStagesSyncerS2CPacket extends StageSyncerPacket {
-    public ServerStagesSyncerS2CPacket(List<String> stages, AOperation operation) {
+    public ServerStagesSyncerS2CPacket(Set<String> stages, AOperation operation) {
         super(stages, operation);
     }
 
@@ -24,14 +25,13 @@ public class ServerStagesSyncerS2CPacket extends StageSyncerPacket {
     public void handle() {
         // HERE WE ARE ON CLIENT!
         switch (getOperation()) {
-            case ADD -> AStagesClientUtils.addStage(AClientHolder.server(), getStages().get(0));
+            case ADD -> AStagesClientUtils.addStage(AClientHolder.server(), ASetUtils.getOnlyElement(getStages()));
             case ADD_ALL -> AStagesClientUtils.addStages(AClientHolder.server(), getStages());
-            case REMOVE -> AStagesClientUtils.removeStage(AClientHolder.server(), getStages().get(0));
+            case REMOVE -> AStagesClientUtils.removeStage(AClientHolder.server(), ASetUtils.getOnlyElement(getStages()));
             case REMOVE_ALL -> AStagesClientUtils.removeStages(AClientHolder.server(), getStages());
             case LOGIN -> AStagesClientUtils.setStages(AClientHolder.server(), getStages());
         }
 
         MinecraftForge.EVENT_BUS.post(new ClientSynchronizeServerStagesEvent(getStages(), getOperation()));
-
     }
 }

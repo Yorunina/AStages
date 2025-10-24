@@ -3,6 +3,7 @@ package com.alessandro.astages.core;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.constant.ASyncOperation;
+import com.alessandro.astages.api.develop.NotYetImplemented;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ServerStage;
@@ -138,6 +139,7 @@ public class ARestrictionManager {
         CommonEventSettings.allInventoryChanged();
     }
 
+    @NotYetImplemented("Move to another class!")
     public static void clearClientOnLogin(ServerPlayer player) {
         ANetworking.sendToPlayer(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE), player);
         APluginManager.callMethod(AStagesPlugin::clearClientOnLogin);

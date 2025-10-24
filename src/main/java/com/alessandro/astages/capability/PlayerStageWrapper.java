@@ -1,7 +1,7 @@
 package com.alessandro.astages.capability;
 
+import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.util.AStagesUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,7 +27,7 @@ public class PlayerStageWrapper {
     public static void onAttachedCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             if (!event.getObject().getCapability(PlayerStageProvider.PLAYER_STAGE).isPresent()) {
-                event.addCapability(AStagesUtil.fromNamespaceAndPath("properties"), new PlayerStageProvider());
+                event.addCapability(AResourceLocation.fromNamespaceAndPath("properties"), new PlayerStageProvider());
             }
         }
     }

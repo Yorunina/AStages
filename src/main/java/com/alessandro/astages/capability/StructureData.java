@@ -11,11 +11,12 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NotNullParamsAndMethodsReturn
 public class StructureData extends SavedData {
     private static final String STRUCTURE_ID = "astages_structure_data_";
-    private final HashSet<BlockPos> placedByPlayerBlocks = new HashSet<>(); // StructureStart: Block Positions
+    private final Set<BlockPos> placedByPlayerBlocks = new HashSet<>(); // StructureStart: Block Positions
 
     public static StructureData create() {
         return new StructureData();

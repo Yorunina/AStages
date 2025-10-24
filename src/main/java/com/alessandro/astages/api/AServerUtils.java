@@ -12,4 +12,12 @@ public class AServerUtils {
             consumer.accept(server);
         }
     }
+
+    public static void runForSide(boolean discriminantForClient, Runnable client, Runnable server) {
+        if (discriminantForClient) {
+            client.run();
+        } else {
+            server.run();
+        }
+    }
 }

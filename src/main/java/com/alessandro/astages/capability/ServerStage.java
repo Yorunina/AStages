@@ -2,6 +2,7 @@ package com.alessandro.astages.capability;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AFileIOUtils;
+import com.alessandro.astages.api.ASetUtils;
 import com.alessandro.astages.api.AStagesFolderSystem;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AOperation;
@@ -23,18 +24,18 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NotNullMethodsReturn
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class ServerStage {
-    private static List<String> CACHE = new ArrayList<>();
+    private static Set<String> CACHE = new HashSet<>();
 
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
-        CACHE = AFileIOUtils.readListOrDefault(getPermanentStagesFile(), String.class);
+        CACHE = AFileIOUtils.readHashSetOrDefault(getPermanentStagesFile(), String.class);
     }
 
     @SubscribeEvent
@@ -65,7 +66,7 @@ public class ServerStage {
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    public static List<String> getServerStages() {
+    public static Set<String> getServerStages() {
         return CACHE;
     }
 
@@ -73,7 +74,7 @@ public class ServerStage {
         CACHE.add(stage);
     }
 
-    public static void addServerStages(List<String> stages) {
+    public static void addServerStages(Set<String> stages) {
         CACHE.addAll(stages);
     }
 
@@ -83,15 +84,15 @@ public class ServerStage {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public static AStatus removeServerStages(List<String> stages) {
+    public static AStatus removeServerStages(Set<String> stages) {
         return CACHE.removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
     }
 
     public static void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, String stage) {
-        synchronizeWithClient(player, operation, Collections.singletonList(stage));
+        synchronizeWithClient(player, operation, ASetUtils.singleton(stage));
     }
 
-    public static void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, List<String> stages) {
+    public static void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, Set<String> stages) {
         AStagesUtils.checkServerStages(operation, stages);
 
         var server = ServerLifecycleHooks.getCurrentServer();
@@ -102,17 +103,17 @@ public class ServerStage {
             ANetworking.sendTo(player, new ServerStagesSyncerS2CPacket(stages, operation));
 
             switch (operation) {
-                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedServerEvent(server, stages.get(0)));
+                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedServerEvent(server, ASetUtils.getOnlyElement(stages)));
                 case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedServerEvent(server, stages));
-                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedServerEvent(server, stages.get(0)));
+                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedServerEvent(server, ASetUtils.getOnlyElement(stages)));
                 case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedServerEvent(server, stages));
                 case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginServerEvent(server, stages));
             }
         } else {
             switch (event.getOperation()) {
-                case ADD -> removeServerStage(stages.get(0));
+                case ADD -> removeServerStage(ASetUtils.getOnlyElement(stages));
                 case ADD_ALL, LOGIN -> removeServerStages(stages);
-                case REMOVE -> addServerStage(stages.get(0));
+                case REMOVE -> addServerStage(ASetUtils.getOnlyElement(stages));
                 case REMOVE_ALL -> addServerStages(stages);
             }
         }

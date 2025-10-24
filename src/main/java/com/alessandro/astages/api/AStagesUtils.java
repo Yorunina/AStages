@@ -18,7 +18,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -62,7 +61,7 @@ public class AStagesUtils {
         );
     }
 
-    public static void addStages(AHolder holder, List<String> stages, boolean silentTitle) {
+    public static void addStages(AHolder holder, Set<String> stages, boolean silentTitle) {
         holder.perform(
             player -> {
                 OfflinePlayerStage.addPlayerStages(player, stages);
@@ -75,7 +74,7 @@ public class AStagesUtils {
     }
 
     public static void addAllStages(AHolder holder, boolean silentTitle) {
-        var stages = new ArrayList<>(ARestrictionManager.ALL_STAGES);
+        var stages = ARestrictionManager.ALL_STAGES;
 
         holder.perform(
             player -> {
@@ -104,7 +103,7 @@ public class AStagesUtils {
         return toReturn.get();
     }
 
-    public static AStatus removeStages(AHolder holder, List<String> stages, boolean silentTitle) {
+    public static AStatus removeStages(AHolder holder, Set<String> stages, boolean silentTitle) {
         AtomicReference<AStatus> toReturn = new AtomicReference<>(AStatus.NOT_PRESENT);
 
         holder.perform(
@@ -138,7 +137,7 @@ public class AStagesUtils {
         return toReturn.get();
     }
 
-    public static void synchronizeWithClient(AHolder holder, ServerPlayer toPlayer, AOperation operation, List<String> stages, boolean silentTitle) {
+    public static void synchronizeWithClient(AHolder holder, ServerPlayer toPlayer, AOperation operation, Set<String> stages, boolean silentTitle) {
         holder.perform(
             player -> OfflinePlayerStage.synchronizeWithClient(player, operation, stages, silentTitle),
             server -> ServerStage.synchronizeWithClient(toPlayer, operation, stages)
@@ -146,7 +145,7 @@ public class AStagesUtils {
     }
 
 
-    public static void checkPlayerStages(@Nullable Player player, AOperation operation, List<String> stages) {
+    public static void checkPlayerStages(@Nullable Player player, AOperation operation, Set<String> stages) {
         checkStages(player, stage -> {
             if (AStageManager.GENERIC_INSTANCE.isServerOnly(stage)) {
                 throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in server only!");
@@ -154,7 +153,7 @@ public class AStagesUtils {
         }, operation, stages);
     }
 
-    public static void checkServerStages(AOperation operation, List<String> stages) {
+    public static void checkServerStages(AOperation operation, Set<String> stages) {
         checkStages(ServerLifecycleHooks.getCurrentServer(), stage -> {
             if (AStageManager.GENERIC_INSTANCE.isPlayerOnly(stage)) {
                 throw new IllegalArgumentException("Trying to add stage " + stage + " that is marked as available in player only!");
@@ -162,7 +161,7 @@ public class AStagesUtils {
         }, operation, stages);
     }
 
-    public static void checkStages(@Nullable CommandSource chatSource, Consumer<String> checker, AOperation operation, List<String> stages) {
+    public static void checkStages(@Nullable CommandSource chatSource, Consumer<String> checker, AOperation operation, Set<String> stages) {
         if (operation.supportOnlyOneStage() && stages.size() != 1) {
             throw new IllegalArgumentException("Trying to perform an action that supports single stage, using multiple ones!");
         }

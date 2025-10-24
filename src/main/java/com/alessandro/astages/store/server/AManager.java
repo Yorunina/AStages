@@ -4,6 +4,7 @@ import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
@@ -63,6 +64,10 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
         return IDS.getOrDefault(id, null);
     }
 
+    public ARestrictionHolder<R> getHolder(String id) {
+        return ARestrictionHolder.hold(getRestriction(id));
+    }
+
     public R getRestriction(AHolder holder, V object) {
         if (holder.isServerActive()) {
             var serverRestriction = restrictions.stream().filter(r ->
@@ -81,6 +86,10 @@ public abstract class AManager<R extends ARestriction<R, U, V>, U, V> implements
         }
 
         return null;
+    }
+
+    public ARestrictionHolder<R> getHolder(AHolder holder, V object) {
+        return ARestrictionHolder.hold(getRestriction(holder, object));
     }
 
     @Override
