@@ -1,6 +1,7 @@
 package com.alessandro.astages;
 
 import com.alessandro.astages.loot.AModifiers;
+import com.alessandro.astages.store.*;
 import com.alessandro.astages.util.underdevelopment.block.ModBlocks;
 import com.alessandro.astages.command.argument.ACommandArguments;
 import com.alessandro.astages.config.AStagesClient;
@@ -13,9 +14,6 @@ import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
-import com.alessandro.astages.store.Attribute;
-import com.alessandro.astages.store.AttributeStore;
-import com.alessandro.astages.store.Attributes;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
@@ -39,6 +37,7 @@ public class AStages {
     public static final Stopwatch TIMER = Stopwatch.createUnstarted();
 
     public static Supplier<IForgeRegistry<Attribute<?>>> ATTRIBUTES_REGISTRY = Attributes.ATTRIBUTES.makeRegistry(RegistryBuilder::new);
+    public static Supplier<IForgeRegistry<ARestrictionType>> RESTRICTION_TYPES_REGISTRY = ARestrictionTypes.RESTRICTION_TYPES.makeRegistry(RegistryBuilder::new);
 
     public AStages() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -56,6 +55,8 @@ public class AStages {
         Attributes.Dimension.ATTRIBUTES.register(modEventBus);
         Attributes.Mob.ATTRIBUTES.register(modEventBus);
         Attributes.Region.ATTRIBUTES.register(modEventBus);
+
+        ARestrictionTypes.RESTRICTION_TYPES.register(modEventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AStagesClient.SPEC, "astages-client.toml");

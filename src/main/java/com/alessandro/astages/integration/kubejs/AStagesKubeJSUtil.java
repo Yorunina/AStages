@@ -19,7 +19,7 @@ import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.core.server.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
-import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;

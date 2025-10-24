@@ -11,8 +11,9 @@ import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.mob.MobSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.api.feature.ClientSynchronizable;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.AManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 
@@ -64,6 +65,6 @@ public class AMobManager extends AManager<AMobRestriction, EntityType<?>, Entity
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.MOB;
+        return ARestrictionTypes.MOB;
     }
 }

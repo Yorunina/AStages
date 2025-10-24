@@ -6,8 +6,9 @@ import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.AManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 
 @NotNullParams
@@ -51,6 +52,6 @@ public class ADimensionManager extends AManager<ADimensionRestriction, ResourceL
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.DIMENSION;
+        return ARestrictionTypes.DIMENSION;
     }
 }

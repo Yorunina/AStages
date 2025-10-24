@@ -4,7 +4,7 @@ import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

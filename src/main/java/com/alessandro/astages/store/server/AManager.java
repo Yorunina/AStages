@@ -8,7 +8,7 @@ import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

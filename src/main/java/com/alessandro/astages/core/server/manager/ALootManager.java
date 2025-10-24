@@ -7,8 +7,9 @@ import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.AManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +42,6 @@ public class ALootManager extends AManager<ALootRestriction, Void, ItemStack> {
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.LOOT;
+        return ARestrictionTypes.LOOT;
     }
 }

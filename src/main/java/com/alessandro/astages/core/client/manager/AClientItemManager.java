@@ -13,9 +13,10 @@ import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.integration.jei.CustomItemStackKey;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.item.RequestItemPropertyC2SPacket;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -205,6 +206,6 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.ITEM;
+        return ARestrictionTypes.ITEM;
     }
 }

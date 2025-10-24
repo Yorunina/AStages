@@ -19,9 +19,9 @@ import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.ForPlugins;
 import com.alessandro.astages.simple.ASimpleRestrictionManager;
+import com.alessandro.astages.store.ARestrictionType;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.AMinimalManager;
-import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -31,7 +31,7 @@ import java.util.*;
 @NotNullParams
 public class ARestrictionManager {
     private static final Map<ARestrictionType, AMinimalManager<?>> ASSOCIATION_MAP = new HashMap<>();
-    @ForPlugins public static final Map<Object, AMinimalManager<?>> EXTERNAL_MANAGERS = new HashMap<>();
+    @ForPlugins public static final Map<ARestrictionType, AMinimalManager<?>> EXTERNAL_MANAGERS = new HashMap<>();
     @ForPlugins public static final Map<Class<?>, AttributeStore> ATTACHED_ATTRIBUTES = new HashMap<>();
 
     // ADD SLOT RESTRICTION
@@ -159,12 +159,12 @@ public class ARestrictionManager {
     }
 
     @ForPlugins
-    public static void registerManager(Object type, AMinimalManager<?> manager) {
+    public static void registerManager(ARestrictionType type, AMinimalManager<?> manager) {
         EXTERNAL_MANAGERS.put(type, manager);
     }
 
     @ForPlugins
-    public static @Nullable AMinimalManager<?> getInstance(Object type) {
+    public static @Nullable AMinimalManager<?> getInstance(ARestrictionType type) {
         return EXTERNAL_MANAGERS.getOrDefault(type, null);
     }
 

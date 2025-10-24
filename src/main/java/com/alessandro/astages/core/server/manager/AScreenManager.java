@@ -7,8 +7,9 @@ import com.alessandro.astages.api.holder.ARestrictionHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.core.server.restriction.AScreenRestriction;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.AManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -42,7 +43,7 @@ public class AScreenManager extends AManager<AScreenRestriction, MenuType<?>, Ab
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.SCREEN;
+        return ARestrictionTypes.SCREEN;
     }
 
 //    public final OrderedMultiMap<MenuType<?>, AScreenRestriction> CACHE = OrderedMultiMap.create();

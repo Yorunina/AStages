@@ -2,8 +2,9 @@ package com.alessandro.astages.util.underdevelopment;
 
 import com.alessandro.astages.api.develop.UnderDevelopment;
 import com.alessandro.astages.core.server.restriction.item.AItemRestriction;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.ARestriction;
-import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.develop.NotYetImplemented;
 import net.minecraft.world.item.Item;
@@ -36,7 +37,7 @@ public class StageHelper {
 
         properties.accept(restriction);
 
-        RESTRICTIONS.put(ARestrictionType.ITEM, restriction);
+        RESTRICTIONS.put(ARestrictionTypes.ITEM, restriction);
         return this;
     }
 

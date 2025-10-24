@@ -5,9 +5,10 @@ import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.client.restriction.AClientOreRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientManager;
-import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.world.item.BlockItem;
@@ -83,6 +84,6 @@ public class AClientOreManager extends AClientManager<AClientOreRestriction, Ore
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.ORE;
+        return ARestrictionTypes.ORE;
     }
 }

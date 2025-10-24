@@ -16,10 +16,11 @@ import com.alessandro.astages.networking.packet.item.ItemPredicateSyncerS2CPacke
 import com.alessandro.astages.networking.packet.item.ItemSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.ItemTagSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.store.server.AMinimalManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -309,6 +310,6 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
     }
 
     public ARestrictionType associatedType() {
-        return ARestrictionType.ITEM;
+        return ARestrictionTypes.ITEM;
     }
 }

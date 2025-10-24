@@ -7,8 +7,9 @@ import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.server.restriction.AStructureRestriction;
 import com.alessandro.astages.event.structure.ServerEventHandler;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.AManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 
 @NotNullParams
@@ -53,6 +54,6 @@ public class AStructureManager extends AManager<AStructureRestriction, ResourceL
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.STRUCTURE;
+        return ARestrictionTypes.STRUCTURE;
     }
 }

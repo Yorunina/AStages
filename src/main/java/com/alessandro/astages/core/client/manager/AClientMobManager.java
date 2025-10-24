@@ -3,8 +3,9 @@ package com.alessandro.astages.core.client.manager;
 import com.alessandro.astages.api.ARestrictionClientUtils;
 import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.core.client.restriction.AClientMobRestriction;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.client.AClientManager;
-import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.api.base.OrderedMultiMap;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.world.entity.EntityType;
@@ -41,6 +42,6 @@ public class AClientMobManager extends AClientManager<AClientMobRestriction, Ent
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.MOB;
+        return ARestrictionTypes.MOB;
     }
 }

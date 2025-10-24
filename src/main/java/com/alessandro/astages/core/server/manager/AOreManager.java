@@ -12,10 +12,11 @@ import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.ore.OreSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.api.feature.ClientSynchronizable;
 import com.alessandro.astages.store.server.AManager;
-import com.alessandro.astages.util.ARestrictionType;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
@@ -98,6 +99,6 @@ public class AOreManager extends AManager<AOreRestriction, OreWrapper, BlockStat
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.ORE;
+        return ARestrictionTypes.ORE;
     }
 }

@@ -10,8 +10,9 @@ import com.alessandro.astages.core.client.restriction.recipe.AClientBaseRecipeRe
 import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeModRestriction;
 import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestriction;
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -99,6 +100,6 @@ public class AClientRecipeManager implements AClientMinimalManager<AClientBaseRe
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.RECIPE;
+        return ARestrictionTypes.RECIPE;
     }
 }

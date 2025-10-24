@@ -20,8 +20,9 @@ import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.recipe.RecipeModSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
+import com.alessandro.astages.store.ARestrictionType;
+import com.alessandro.astages.store.ARestrictionTypes;
 import com.alessandro.astages.store.server.AMinimalManager;
-import com.alessandro.astages.util.ARestrictionType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -146,6 +147,6 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
 
     @Override
     public ARestrictionType associatedType() {
-        return ARestrictionType.RECIPE;
+        return ARestrictionTypes.RECIPE;
     }
 }
