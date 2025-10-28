@@ -9,6 +9,7 @@ import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.OfflinePlayerStage;
 import com.alessandro.astages.capability.ServerStage;
+import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.AStageManager;
 import net.minecraft.ChatFormatting;
@@ -172,10 +173,12 @@ public class AStagesUtils {
             }
         }
 
-        if (chatSource != null && operation.handleStageRecognization()) {
-            for (var stage : stages) {
-                if (!ARestrictionManager.ALL_STAGES.contains(stage)) {
-                    chatSource.sendSystemMessage(Component.literal("⚠ Warning: stage " + stage + " not recognized!").withStyle(ChatFormatting.GOLD));
+        if (AStagesCommon.ENABLE_STAGE_WARNING.get()) {
+            if (chatSource != null && operation.handleStageRecognization()) {
+                for (var stage : stages) {
+                    if (!ARestrictionManager.ALL_STAGES.contains(stage)) {
+                        chatSource.sendSystemMessage(Component.literal("⚠ Warning: stage " + stage + " not recognized!").withStyle(ChatFormatting.GOLD));
+                    }
                 }
             }
         }
