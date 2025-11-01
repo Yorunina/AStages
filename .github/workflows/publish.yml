@@ -1,0 +1,26 @@
+name: Release
+on: [workflow_dispatch] # Push
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    environment: publish
+    runs-on: ubuntu-22.04
+    container:
+      image: mcr.microsoft.com/openjdk/jdk:17-ubuntu
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Get mod version
+        id: get_version
+        run: echo "mod_version=$(grep '^mod_version' gradle.properties | cut -d'=' -f2)" >> $GITHUB_OUTPUT
+
+      - run: ./gradlew build publishMods
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}

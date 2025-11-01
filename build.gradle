@@ -16,6 +16,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'maven-publish'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'me.modmuss50.mod-publish-plugin' version '1.1.0'
 }
 
 apply plugin: 'org.spongepowered.mixin'
@@ -317,6 +318,21 @@ tasks.named('jar', Jar).configure {
 
     finalizedBy 'reobfJar'
 }
+
+publishMods {
+    file = tasks.jarJar.archiveFile
+    type = STABLE // ALPHA, BETA
+    changelog = 'Changelog!'
+    modLoaders.add('forge')
+
+    curseforge {
+        accessToken = providers.environmentVariable('CURSEFORGE_API_KEY')
+        projectId = '1120180'
+        minecraftVersions.add(minecraft_version)
+    }
+}
+
+// tasks.publishMods.dependsOn jarJar
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
