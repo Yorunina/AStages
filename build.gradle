@@ -322,13 +322,17 @@ tasks.named('jar', Jar).configure {
 publishMods {
     file = tasks.jarJar.archiveFile
     type = STABLE // ALPHA, BETA
-    changelog = 'Changelog!'
     modLoaders.add('forge')
 
     curseforge {
         accessToken = providers.environmentVariable('CURSEFORGE_API_KEY')
         projectId = '1120180'
         minecraftVersions.add(minecraft_version)
+
+        changelog = '# Changelog!'
+        changelogType = 'markdown'
+
+        displayName = 'astages-' + mod_version
     }
 }
 
