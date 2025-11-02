@@ -2,23 +2,28 @@
   "categories": [
     {
       "title": "🚀 API Changes",
-      "labels": ["api", "breaking-change"]
+      "labels": ["api", "breaking-change"],
+      "commits": ["^api", "^breaking-change"]
     },
     {
       "title": "✨ Added",
-      "labels": ["feature", "enhancement", "addition"]
+      "labels": ["feature", "enhancement", "addition"],
+      "commits": ["^feature", "^enhancement", "^addition"]
     },
     {
       "title": "🔧 Changed",
-      "labels": ["change", "refactor", "improvement"]
+      "labels": ["change", "refactor", "improvement"],
+      "commits": ["^change", "^refactor", "^improvement"]
     },
     {
       "title": "🐛 Fixed Bugs",
-      "labels": ["bug", "fix", "bugfix"]
+      "labels": ["bug", "fix", "bugfix"],
+      "commits": ["^bug", "^fix", "^bugfix"]
     },
     {
       "title": "🧹 Other",
-      "labels": ["chore", "docs", "misc"]
+      "labels": ["chore", "docs", "misc"],
+      "commits": ["^chore", "^docs", "^misc"]
     }
   ],
   "ignore_labels": ["skip-changelog"],
