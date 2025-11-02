@@ -17,6 +17,7 @@ jobs:
         with:
           configuration: ".github/changelog-config.json"
           commitMode: true
+          fetchViaCommits: true
           fromTag: '92bf686'
           toTag: 'b353c5e'
         env:
