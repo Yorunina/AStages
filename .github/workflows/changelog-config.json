@@ -1,0 +1,28 @@
+{
+  "categories": [
+    {
+      "title": "🚀 API Changes",
+      "labels": ["api", "breaking-change"]
+    },
+    {
+      "title": "✨ Added",
+      "labels": ["feature", "enhancement", "addition"]
+    },
+    {
+      "title": "🔧 Changed",
+      "labels": ["change", "refactor", "improvement"]
+    },
+    {
+      "title": "🐛 Fixed Bugs",
+      "labels": ["bug", "fix", "bugfix"]
+    },
+    {
+      "title": "🧹 Other",
+      "labels": ["chore", "docs", "misc"]
+    }
+  ],
+  "ignore_labels": ["skip-changelog"],
+  "sort": "ASC",
+  "template": "${{CHANGELOG}}",
+  "pr_template": "- [#${{NUMBER}}] ${{TITLE}} by @${{AUTHOR}}"
+}
