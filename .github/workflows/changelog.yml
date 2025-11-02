@@ -17,18 +17,17 @@ jobs:
         with:
           configuration: ".github/changelog-config.json"
           commitMode: true
-          fetchViaCommits: true
           fromTag: '92bf686'
           toTag: 'b353c5e'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write changelog file
+        run: |
+          echo "${{ steps.build_changelog.outputs.changelog }}" > CHANGELOG.md
 
       - name: Save changelog to artifact
         uses: actions/upload-artifact@v4
         with:
           name: changelog
           path: CHANGELOG.md
-
-      - name: Write changelog file
-        run: |
-          echo "${{ steps.build_changelog.outputs.changelog }}" > CHANGELOG.md
