@@ -71,8 +71,8 @@ public class AStages {
         var attributeContainer = AttributeContainer.initialize();
         APluginManager.callMethod(attributeContainer, AStagesPlugin::attachAttributes);
         var result = attributeContainer.get();
-        for (var claz : result.keySet()) {
-            ARestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(claz, key -> AttributeStore.builder()).combineWith(result.get(claz));
+        for (var clazz : result.keySet()) {
+            ARestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
         }
     }
 
