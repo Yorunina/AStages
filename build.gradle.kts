@@ -282,42 +282,59 @@ publishMods {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val formattedDate: String = today.format(formatter)
 
+    when {
+        mod_version.contains("alpha", true) -> {
+            type.set(ALPHA)
+            changelog.set(
+                """
+                        ## [$mod_version] - $formattedDate
+                        ### This is an alpha version meant to be used only by developers!
+                        ### Changelog can be found in Discord server.
+                    """.trimIndent()
+            )
+        }
+        mod_version.contains("beta", true) -> {
+            type.set(BETA)
+            changelog.set(
+                """
+                        ## [$mod_version] - $formattedDate
+                        ### This is a beta version meant to be used only by developers!
+                        ### Changelog can be found in Discord server.
+                    """.trimIndent()
+            )
+        }
+        else -> {
+            type.set(STABLE)
+            changelog.set("# Changelog!")
+        }
+    }
+
     curseforge {
         accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
         projectId.set("1120180")
         minecraftVersions.add(minecraft_version)
         changelogType.set("markdown")
-        projectSlug.set("astages")
         optional("roughly-enough-items", "jei", "kubejs")
 
-        when {
-            mod_version.contains("alpha", true) -> {
-                type.set(ALPHA)
-                changelog.set(
-                    """
-                        ## [$mod_version] - $formattedDate
-                        ### This is an alpha version meant to be used only by developers!
-                        ### Changelog can be found in Discord server.
-                    """.trimIndent()
-                )
-            }
-            mod_version.contains("beta", true) -> {
-                type.set(BETA)
-                changelog.set(
-                    """
-                        ## [$mod_version] - $formattedDate
-                        ### This is a beta version meant to be used only by developers!
-                        ### Changelog can be found in Discord server.
-                    """.trimIndent()
-                )
-            }
-            else -> {
-                type.set(STABLE)
-                changelog.set("# Changelog!")
-            }
-        }
-
         displayName.set("astages-$mod_version")
+
+        projectSlug.set("astages") // For discord setup
+        announcementTitle.set("Download from CurseForge") // For discord setup
+    }
+
+    modrinth {
+
+    }
+
+    discord {
+        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
+        username.set("AServer")
+        avatarUrl.set("URL_HERE!!!!!!!!!!")
+        content.set(changelog)
+
+        style {
+            link
+        }
     }
 }
 

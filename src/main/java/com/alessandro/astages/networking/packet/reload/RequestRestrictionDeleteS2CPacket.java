@@ -2,6 +2,7 @@ package com.alessandro.astages.networking.packet.reload;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.ARestrictionType;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,7 +11,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 @NotNullParams
-public class RequestRestrictionDeleteS2CPacket {
+public class RequestRestrictionDeleteS2CPacket implements AStagesPacket {
     private final String id;
     private final ARestrictionType type;
 

@@ -91,7 +91,7 @@ public class ARestrictionManager {
         ORE_STAGES.clear();
         SIMPLE_IDS.clear();
 
-        ANetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
+        ANetworking.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
 
         APluginManager.callMethod(AStagesPlugin::reloadBeforeScripts);
 
@@ -141,7 +141,7 @@ public class ARestrictionManager {
 
     @NotYetImplemented("Move to another class!")
     public static void clearClientOnLogin(ServerPlayer player) {
-        ANetworking.sendToPlayer(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE), player);
+        ANetworking.sendToPlayer(player, new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
         APluginManager.callMethod(AStagesPlugin::clearClientOnLogin);
     }
 

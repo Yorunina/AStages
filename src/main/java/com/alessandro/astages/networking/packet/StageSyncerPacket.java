@@ -2,6 +2,7 @@ package com.alessandro.astages.networking.packet;
 
 import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -10,7 +11,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 @NotNullParamsAndMethodsReturn
-public abstract class StageSyncerPacket {
+public abstract class StageSyncerPacket implements AStagesPacket {
     private final Set<String> stages;
     private final AOperation operation;
 

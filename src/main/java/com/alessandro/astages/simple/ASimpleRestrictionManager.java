@@ -134,7 +134,7 @@ public class ASimpleRestrictionManager {
         }
 
         if (type == ASimpleRestrictionType.ORE) {
-            ANetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.ORE));
+            ANetworking.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.ORE));
         }
     }
 

@@ -88,8 +88,8 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
 
     @Override
     public void markAsDirty() {
-        ANetworking.sendToClients(new OreSyncerS2CPacket(this));
-        ANetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.ORE));
+        ANetworking.sendToAllPlayers(new OreSyncerS2CPacket(this));
+        ANetworking.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.ORE));
     }
 
     @SuppressWarnings("unused")

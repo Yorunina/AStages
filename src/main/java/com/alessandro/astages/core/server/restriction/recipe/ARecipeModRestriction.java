@@ -37,7 +37,7 @@ public class ARecipeModRestriction extends ABaseRecipeRestriction<ARecipeModRest
     @Override
     public void markAsDirty() {
         if (modId != null) {
-            ANetworking.sendToClients(new RecipeModSyncerS2CPacket(this));
+            ANetworking.sendToAllPlayers(new RecipeModSyncerS2CPacket(this));
         }
 
         super.markAsDirty();
