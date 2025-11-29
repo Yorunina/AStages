@@ -1,0 +1,32 @@
+[changelog]
+header = """
+## [{{ context.version }}] - {{ now(format="%d-%m-%Y") }}
+"""
+
+commit_parsers = [
+    { message = "^added", group = "Added" },
+    { message = "^feat", group = "Added" },
+    { message = "^add", group = "Added" },
+
+    { message = "^change", group = "Changes" },
+    { message = "^update", group = "Changes" },
+    { message = "^refactor", group = "Changes" },
+    { message = "^balance", group = "Changes" },
+
+    { message = "^fix", group = "Technical" },
+    { message = "^tech", group = "Technical" },
+    { message = "^perf", group = "Technical" },
+    { message = "^chore", group = "Technical" },
+
+    { message = ".*", group = "Other" }
+]
+
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group }}
+{% for commit in commits %}
+- **{{ commit.message | trim | capitalize }}** ({{ commit.id | truncate(length=7) }})
+{% endfor %}
+{% endfor %}
+
+"""
