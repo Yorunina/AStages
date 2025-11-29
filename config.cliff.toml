@@ -1,32 +1,64 @@
+# File: .cliff.toml
+
 [changelog]
 header = """
-## [{{ context.version }}] - {{ now(format="%d-%m-%Y") }}
+## [{{ context.version }}] - {{ now("UTC").format("%d-%m-%Y") }}
 """
-
-commit_parsers = [
-    { message = "^added", group = "Added" },
-    { message = "^feat", group = "Added" },
-    { message = "^add", group = "Added" },
-
-    { message = "^change", group = "Changes" },
-    { message = "^update", group = "Changes" },
-    { message = "^refactor", group = "Changes" },
-    { message = "^balance", group = "Changes" },
-
-    { message = "^fix", group = "Technical" },
-    { message = "^tech", group = "Technical" },
-    { message = "^perf", group = "Technical" },
-    { message = "^chore", group = "Technical" },
-
-    { message = ".*", group = "Other" }
-]
-
 body = """
-{% for group, commits in commits | group_by(attribute="group") %}
-### {{ group }}
-{% for commit in commits %}
-- **{{ commit.message | trim | capitalize }}** ({{ commit.id | truncate(length=7) }})
+{% if groups.Added %}
+### Added
+{% for commit in groups.Added %}
+- **{{ commit.message | upper_first }}**
 {% endfor %}
-{% endfor %}
+{% endif %}
 
+{% if groups.Changed %}
+### Changes
+{% for commit in groups.Changed %}
+- **{{ commit.message | upper_first }}**
+{% endfor %}
+{% endif %}
+
+{% if groups.Fixed %}
+### Fixed
+{% for commit in groups.Fixed %}
+- **{{ commit.message | upper_first }}**
+{% endfor %}
+{% endif %}
+
+{% if groups.Technical %}
+### Technical
+{% for commit in groups.Technical %}
+- **{{ commit.message | upper_first }}**
+{% endfor %}
+{% endif %}
 """
+
+footer = """
+This build includes experimental features that MUST be manually activated.
+"""
+
+# Gruppi di conventional commits
+[[group]]
+title = "Added"
+pattern = "^(feat|add)"
+
+[[group]]
+title = "Changed"
+pattern = "^(change|refactor)"
+
+[[group]]
+title = "Fixed"
+pattern = "^(fix)"
+
+[[group]]
+title = "Technical"
+pattern = "^(chore|perf|style|docs|test)"
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+
+[context]
+# Sarà popolato dinamicamente dalla GitHub Action
+version = ""

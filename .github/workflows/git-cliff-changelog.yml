@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       from:
-        description: "Starting Commit/Tag (es: v1.3.0 o SHA)"
-        required: true
+        description: "Starting Commit/Tag (es. v1.3.0 o SHA)"
+        required: false
         default: ""
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read version
+      - name: Read version from gradle.properties
         id: version
         run: |
           VERSION=$(grep '^mod_version' gradle.properties | cut -d'=' -f2)
@@ -27,23 +27,29 @@ jobs:
       - name: Install git-cliff
         uses: taiki-e/install-action@v2
         with:
-          crate: git-cliff
-          version: latest
+          tool: git-cliff
 
-      - name: Generate CHANGELOG
+      - name: Generate CHANGELOG.md
         env:
           MOD_VERSION: ${{ steps.version.outputs.version }}
         run: |
           if [ -z "${{ github.event.inputs.from }}" ]; then
-            git-cliff --context version=$MOD_VERSION --output CHANGELOG.md
+            echo "Generating changelog from start"
+            git-cliff --config .cliff.toml \
+                      --context version="${MOD_VERSION}" \
+                      --output CHANGELOG.md
           else
-            git-cliff ${{ github.event.inputs.from }}..HEAD --context version=$MOD_VERSION --output CHANGELOG.md
+            echo "Generating changelog from: ${{ github.event.inputs.from }}"
+            git-cliff --config .cliff.toml \
+                      ${{ github.event.inputs.from }}..HEAD \
+                      --context version="${MOD_VERSION}" \
+                      --output CHANGELOG.md
           fi
 
-      - name: Commit and push
+      - name: Commit and push CHANGELOG
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "GitHub Actions"
           git add CHANGELOG.md
           git commit -m "docs(changelog): update changelog for version ${{ steps.version.outputs.version }}" || echo "No changes to commit"
-          git push
+          git push || echo "Nothing to push"
