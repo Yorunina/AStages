@@ -25,7 +25,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Install git-cliff
-        uses: orhun/git-cliff-action@v2
+        uses: orhun/git-cliff-action@v1
 
       - name: Generate CHANGELOG
         env:
