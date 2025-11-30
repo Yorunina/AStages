@@ -6,7 +6,6 @@ on:
       start-ref:
         description: "First tag/commit for changelog generation"
         required: true
-        default: ""
 
 jobs:
   changelog:
@@ -35,9 +34,7 @@ jobs:
         run: |
           git-cliff \
             --config cliff.toml \
-            --include-path "**" \
-            --from "${{ github.event.inputs.start-ref }}" \
-            --to HEAD \
+            "${{ github.event.inputs.start-ref }}".. \
             --output CHANGELOG.md
 
       - name: Commit changelog
