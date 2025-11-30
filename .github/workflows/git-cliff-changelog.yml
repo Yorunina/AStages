@@ -24,26 +24,26 @@ jobs:
           VERSION=$(grep '^mod_version' gradle.properties | cut -d'=' -f2)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Install git-cliff
+      - name: Create .cliff.env for git-cliff 3.0
+        run: |
+          echo "VERSION=${{ steps.version.outputs.version }}" > .cliff.env
+          cat .cliff.env
+
+      - name: Install git-cliff 3.0.0
         uses: taiki-e/install-action@v2
         with:
-          tool: git-cliff
+          tool: git-cliff@3.0.0
 
       - name: Generate CHANGELOG.md
-        env:
-          MOD_VERSION: ${{ steps.version.outputs.version }}
         run: |
           if [ -z "${{ github.event.inputs.from }}" ]; then
             echo "Generating changelog from start"
-            git-cliff --config .cliff.toml \
-                      --context version="${MOD_VERSION}" \
-                      --output CHANGELOG.md
+            git-cliff --config .cliff.toml --output CHANGELOG.md
           else
             echo "Generating changelog from: ${{ github.event.inputs.from }}"
             git-cliff --config .cliff.toml \
-                      ${{ github.event.inputs.from }}..HEAD \
-                      --context version="${MOD_VERSION}" \
-                      --output CHANGELOG.md
+                       ${{ github.event.inputs.from }}..HEAD \
+                       --output CHANGELOG.md
           fi
 
       - name: Commit and push CHANGELOG

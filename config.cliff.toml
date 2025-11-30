@@ -2,7 +2,7 @@
 
 [changelog]
 header = """
-## [{{ context.version }}] - {{ now("UTC").format("%d-%m-%Y") }}
+## [{{ env.VERSION }}] - {{ now("UTC").format("%d-%m-%Y") }}
 """
 body = """
 {% if groups.Added %}
@@ -38,7 +38,6 @@ footer = """
 This build includes experimental features that MUST be manually activated.
 """
 
-# Gruppi di conventional commits
 [[group]]
 title = "Added"
 pattern = "^(feat|add)"
@@ -58,7 +57,3 @@ pattern = "^(chore|perf|style|docs|test)"
 [git]
 conventional_commits = true
 filter_unconventional = false
-
-[context]
-# Sarà popolato dinamicamente dalla GitHub Action
-version = ""
