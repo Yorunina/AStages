@@ -1,7 +1,9 @@
 package com.alessandro.astages.event.custom;
 
+import com.alessandro.astages.api.develop.Info;
 import net.minecraftforge.eventbus.api.Event;
 
+@Info("Not required in 1.21.X, used only in 1.20.X versions!")
 public class ReloadScriptEvent extends Event {
     private final EventScriptType scriptType;
 

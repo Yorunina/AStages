@@ -1,6 +1,7 @@
 package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.constant.ARestrictionStage;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.AStageManager;
 import com.alessandro.astages.core.server.restriction.*;
@@ -30,11 +31,13 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
                 if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
                     AStageManager.reloadBeforeScripts();
                     ARestrictionManager.reloadBeforeScripts();
+                    ARestrictionManager.addRestrictionsViaJavaCode(ARestrictionStage.BEFORE_JS);
                 }
             });
 
             MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.AfterScriptsLoaded.class, e -> {
                 if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
+                    ARestrictionManager.addRestrictionsViaJavaCode(ARestrictionStage.AFTER_JS);
                     AStageManager.reloadAfterScripts();
                     ARestrictionManager.reloadAfterScripts();
                 }
