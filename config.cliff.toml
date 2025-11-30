@@ -1,59 +1,48 @@
-# File: .cliff.toml
+[remote.github]
+owner = "OWNER"
+repo = "REPO"
 
 [changelog]
 header = """
-## [{{ env.VERSION }}] - {{ now("UTC").format("%d-%m-%Y") }}
+# Changelog – Version {{ env.VERSION }}
+
 """
+
 body = """
-{% if groups.Added %}
-### Added
-{% for commit in groups.Added %}
-- **{{ commit.message | upper_first }}**
+{% for group, commits in commits | group_by(attribute="group") %}
+## {{ group | upper_first }}
+{% for commit in commits %}
+- {{ commit.message | trim }} ({{ commit.id | truncate(length=7, end="") }})
 {% endfor %}
-{% endif %}
-
-{% if groups.Changed %}
-### Changes
-{% for commit in groups.Changed %}
-- **{{ commit.message | upper_first }}**
 {% endfor %}
-{% endif %}
-
-{% if groups.Fixed %}
-### Fixed
-{% for commit in groups.Fixed %}
-- **{{ commit.message | upper_first }}**
-{% endfor %}
-{% endif %}
-
-{% if groups.Technical %}
-### Technical
-{% for commit in groups.Technical %}
-- **{{ commit.message | upper_first }}**
-{% endfor %}
-{% endif %}
 """
 
 footer = """
-This build includes experimental features that MUST be manually activated.
+
 """
-
-[[group]]
-title = "Added"
-pattern = "^(feat|add)"
-
-[[group]]
-title = "Changed"
-pattern = "^(change|refactor)"
-
-[[group]]
-title = "Fixed"
-pattern = "^(fix)"
-
-[[group]]
-title = "Technical"
-pattern = "^(chore|perf|style|docs|test)"
 
 [git]
 conventional_commits = true
-filter_unconventional = false
+filter_unconventional = true
+commit_parsers = [
+    { message = "^feat", group = "Features" },
+    { message = "^fix", group = "Bug Fixes" },
+    { message = "^docs", group = "Documentation" },
+    { message = "^style", group = "Styling" },
+    { message = "^refactor", group = "Refactoring" },
+    { message = "^perf", group = "Performance" },
+    { message = "^test", group = "Testing" },
+    { message = "^build", group = "Build System" },
+    { message = "^ci", group = "CI" },
+    { message = "^chore", group = "Miscellaneous" },
+    { message = "^revert", group = "Reverts" }
+]
+
+filter_commits = true
+exclude_commits = [
+    "^Merge branch",
+    "^Merge pull request"
+]
+
+[preprocessor]
+keywords = ["BREAKING CHANGE"]

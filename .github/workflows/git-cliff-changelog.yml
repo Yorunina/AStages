@@ -3,9 +3,9 @@ name: Generate Changelog
 on:
   workflow_dispatch:
     inputs:
-      from:
-        description: "Starting Commit/Tag (es. v1.3.0 o SHA)"
-        required: false
+      start-ref:
+        description: "First tag/commit for changelog generation"
+        required: true
         default: ""
 
 jobs:
@@ -21,35 +21,29 @@ jobs:
       - name: Read version from gradle.properties
         id: version
         run: |
-          VERSION=$(grep '^mod_version' gradle.properties | cut -d'=' -f2)
+          VERSION=$(grep "^version" gradle.properties | cut -d'=' -f2)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Create .cliff.env for git-cliff 3.0
-        run: |
-          echo "VERSION=${{ steps.version.outputs.version }}" > .cliff.env
-          cat .cliff.env
-
-      - name: Install git-cliff 3.0.0
+      - name: Install git-cliff
         uses: taiki-e/install-action@v2
         with:
-          tool: git-cliff@3.0.0
+          tool: git-cliff
 
-      - name: Generate CHANGELOG.md
+      - name: Generate changelog
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          if [ -z "${{ github.event.inputs.from }}" ]; then
-            echo "Generating changelog from start"
-            git-cliff --config .cliff.toml --output CHANGELOG.md
-          else
-            echo "Generating changelog from: ${{ github.event.inputs.from }}"
-            git-cliff --config .cliff.toml \
-                       ${{ github.event.inputs.from }}..HEAD \
-                       --output CHANGELOG.md
-          fi
+          git-cliff \
+            --config cliff.toml \
+            --include-path "**" \
+            --from "${{ github.event.inputs.start-ref }}" \
+            --to HEAD \
+            --output CHANGELOG.md
 
-      - name: Commit and push CHANGELOG
+      - name: Commit changelog
         run: |
+          git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git config user.name "GitHub Actions"
           git add CHANGELOG.md
-          git commit -m "docs(changelog): update changelog for version ${{ steps.version.outputs.version }}" || echo "No changes to commit"
-          git push || echo "Nothing to push"
+          git commit -m "chore: update changelog for version ${{ steps.version.outputs.version }}" || echo "No changes to commit"
+          git push
