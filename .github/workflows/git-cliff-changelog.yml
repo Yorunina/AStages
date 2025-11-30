@@ -32,11 +32,10 @@ jobs:
           tool: git-cliff
 
       - name: Generate changelog
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
         run: |
           git-cliff \
             --config cliff.toml \
+            --context VERSION=${{ steps.version.outputs.version }} \
             "${{ github.event.inputs.start-ref }}".. \
             --output CHANGELOG.md
 

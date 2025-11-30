@@ -1,10 +1,10 @@
 [remote.github]
-owner = "OWNER"
-repo = "REPO"
+owner = "Alessandro-Casale"
+repo = "AStages"
 
 [changelog]
 header = """
-# Changelog – Version {{ env.VERSION }}
+# Changelog – Version {{ VERSION }}
 
 """
 
