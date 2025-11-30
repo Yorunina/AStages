@@ -36,7 +36,8 @@ jobs:
           git-cliff \
             --config cliff.toml \
             --context VERSION=${{ steps.version.outputs.version }} \
-            -- --range "${{ github.event.inputs.start-ref }}.." \
+            --start "${{ github.event.inputs.start-ref }}" \
+            --end HEAD \
             --output CHANGELOG.md
 
       - name: Commit changelog
