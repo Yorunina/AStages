@@ -12,6 +12,11 @@ public class AResourceLocation {
     }
 
     @SuppressWarnings("removal")
+    public static ResourceLocation fromNamespaceAndPath(String namespace, String path) {
+        return new ResourceLocation(namespace, path);
+    }
+
+    @SuppressWarnings("removal")
     public static ResourceLocation parse(String location) {
         return new ResourceLocation(location);
     }
