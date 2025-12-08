@@ -30,6 +30,7 @@ public class ServerEventHandler {
         } else {
             player = APlayerUtils.getNearestPlayer(entity.level(), entity.blockPosition());
         }
+        if (player == null) return;
 
         while (iterator.hasNext()) {
             var drop = iterator.next();

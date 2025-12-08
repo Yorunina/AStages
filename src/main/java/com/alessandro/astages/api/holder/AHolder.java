@@ -49,7 +49,7 @@ public class AHolder {
     }
 
     public static AHolder serverAndPlayer(Player player) {
-        return new AHolder(true, true, false).addPlayer(player);
+        return new AHolder(true, true, true).addPlayer(player);
     }
 
     private AHolder addPlayer(UUID uuid) {

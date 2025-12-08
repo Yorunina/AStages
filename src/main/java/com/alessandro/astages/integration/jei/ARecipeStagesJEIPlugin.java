@@ -6,6 +6,7 @@ import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.capability.ClientServerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
@@ -95,7 +96,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
         for (var stage : map.keySet()) {
             recipeList = lookup.get().filter(c -> map.get(stage).contains(c.getId())).toList();
 
-            if (ClientPlayerStage.hasStage(stage)) {
+            if (ClientPlayerStage.hasStage(stage) || ClientServerStage.getServerStages().contains(stage)) {
                 runtime.getRecipeManager().unhideRecipes(jeiType, recipeList);
             } else {
                 runtime.getRecipeManager().hideRecipes(jeiType, recipeList);
@@ -120,7 +121,7 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
             .filter(r -> r.getId().getNamespace().equals(modId))
             .toList();
 
-        if (ClientPlayerStage.hasStage(stage)) {
+        if (ClientPlayerStage.hasStage(stage) || ClientServerStage.getServerStages().contains(stage)) {
             runtime.getRecipeManager().unhideRecipes(type, newList);
         } else {
             runtime.getRecipeManager().hideRecipes(type, newList);

@@ -27,6 +27,9 @@ public class ServerEventHandler {
     public static void checkMobSpawning(MobSpawnEvent.FinalizeSpawn event) {
         Player nearestPlayer = APlayerUtils.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
         var level = event.getEntity().level();
+        if  (nearestPlayer == null) {
+            return;
+        }
         var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), event.getEntity().getType());
 
         if (restriction != null) {

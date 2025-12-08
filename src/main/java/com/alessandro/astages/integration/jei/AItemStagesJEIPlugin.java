@@ -6,6 +6,7 @@ import com.alessandro.astages.api.constant.AOperation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ClientPlayerStage;
+import com.alessandro.astages.capability.ClientServerStage;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.event.custom.ClientSynchronizeServerStagesEvent;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
@@ -106,7 +107,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
 
                 for (var stage : ITEM_CACHE.keySet()) {
                     // You don't need to "add" stacks, is really weird, no?!
-                    if (!ClientPlayerStage.hasStage(stage)) {
+                    if (!ClientPlayerStage.hasStage(stage) && !ClientServerStage.getServerStages().contains(stage)) {
                         var itemList = ITEM_CACHE.get(stage);
                         if (itemList.size() < 500) {
                             manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ITEM_CACHE.get(stage));
@@ -124,7 +125,7 @@ public class AItemStagesJEIPlugin implements IModPlugin {
                 }
 
                 for (var stage : GENERIC_CACHE.keySet()) {
-                    if (!ClientPlayerStage.hasStage(stage)) {
+                    if (!ClientPlayerStage.hasStage(stage) && !ClientServerStage.getServerStages().contains(stage)) {
                         for (var type : GENERIC_CACHE.get(stage).keySet()) {
                             manager.removeIngredientsAtRuntime((IIngredientType<T>) type, (Collection<T>) GENERIC_CACHE.get(stage).get(type));
                         }
