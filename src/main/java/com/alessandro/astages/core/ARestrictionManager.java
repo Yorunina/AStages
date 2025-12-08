@@ -2,8 +2,10 @@ package com.alessandro.astages.core;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.ARestrictionStage;
 import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.develop.NotYetImplemented;
+import com.alessandro.astages.api.event.AddRestrictionEvent;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.capability.ServerStage;
@@ -24,6 +26,7 @@ import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.AMinimalManager;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.*;
@@ -91,7 +94,7 @@ public class ARestrictionManager {
         ORE_STAGES.clear();
         SIMPLE_IDS.clear();
 
-        ANetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
+        ANetworking.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
 
         APluginManager.callMethod(AStagesPlugin::reloadBeforeScripts);
 
@@ -141,8 +144,12 @@ public class ARestrictionManager {
 
     @NotYetImplemented("Move to another class!")
     public static void clearClientOnLogin(ServerPlayer player) {
-        ANetworking.sendToPlayer(new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE), player);
+        ANetworking.sendToPlayer(player, new RequestReloadS2CPacket(ReloadType.CLIENT_BEFORE));
         APluginManager.callMethod(AStagesPlugin::clearClientOnLogin);
+    }
+
+    public static void addRestrictionsViaJavaCode(ARestrictionStage stage) {
+        MinecraftForge.EVENT_BUS.post(new AddRestrictionEvent(stage));
     }
 
     public static void removeRestriction(String id, ARestrictionType type) {

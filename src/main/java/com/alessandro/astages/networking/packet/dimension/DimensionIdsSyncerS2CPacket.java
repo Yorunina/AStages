@@ -2,6 +2,7 @@ package com.alessandro.astages.networking.packet.dimension;
 
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @NotNullParams
-public class DimensionIdsSyncerS2CPacket {
+public class DimensionIdsSyncerS2CPacket implements AStagesPacket {
     private final List<String> ids;
 
     public DimensionIdsSyncerS2CPacket(List<String> ids) {

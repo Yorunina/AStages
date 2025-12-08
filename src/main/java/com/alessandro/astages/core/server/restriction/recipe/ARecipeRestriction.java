@@ -55,7 +55,7 @@ public class ARecipeRestriction extends ABaseRecipeRestriction<ARecipeRestrictio
     @Override
     public void markAsDirty() {
         if (type != null && !recipes.isEmpty()) {
-            ANetworking.sendToClients(new RecipeSyncerS2CPacket(this));
+            ANetworking.sendToAllPlayers(new RecipeSyncerS2CPacket(this));
         }
 
         super.markAsDirty();

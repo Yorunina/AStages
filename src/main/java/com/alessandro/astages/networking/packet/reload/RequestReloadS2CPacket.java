@@ -6,6 +6,7 @@ import com.alessandro.astages.core.AClientStageManager;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
+import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.util.ReloadType;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,7 +16,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 @NotNullParams
-public class RequestReloadS2CPacket {
+public class RequestReloadS2CPacket implements AStagesPacket {
     private final ReloadType reloadType;
 
     public RequestReloadS2CPacket(ReloadType reloadType) {

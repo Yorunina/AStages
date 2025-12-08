@@ -1,13 +1,14 @@
 package com.alessandro.astages.networking.packet;
 
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 @NotNullParams
-public abstract class RestrictionSyncerPacket {
+public abstract class RestrictionSyncerPacket implements AStagesPacket {
     private final String id;
     private final String stage;
 

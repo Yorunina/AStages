@@ -2,6 +2,7 @@ package com.alessandro.astages.networking.packet.item;
 
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ANetworking;
+import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @NotNullParams
-public class RequestItemPropertyC2SPacket {
+public class RequestItemPropertyC2SPacket implements AStagesPacket {
     private static final Function<String, RuntimeException> EXCEPTION = id -> new RuntimeException("Illegal identifier synchronization: " + id + " de-synchronized between server and client!");
     private static final Function<String, RuntimeException> NULL_EXCEPTION = id -> new NullPointerException("Illegal null synchronization: " + id + " not found on server!");
 
@@ -48,11 +49,11 @@ public class RequestItemPropertyC2SPacket {
                 if (!Objects.equals(serverRestriction.getId(), id)) { throw EXCEPTION.apply(id); }
                 if (!Objects.equals(serverRestriction.getStage(), stage)) { throw EXCEPTION.apply(id); }
 
-                ANetworking.sendToPlayer(new ItemPropertySyncerS2CPacket(id, stage, stack,
+                ANetworking.sendToPlayer(ctx.get().getSender(), new ItemPropertySyncerS2CPacket(id, stage, stack,
                     serverRestriction.get(Attributes.Item.HIDDEN_NAME).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_ITEM_MESSAGE).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack)
-                ), ctx.get().getSender());
+                ));
             } else {
                 throw NULL_EXCEPTION.apply(id);
             }

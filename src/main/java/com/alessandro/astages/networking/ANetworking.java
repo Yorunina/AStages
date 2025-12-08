@@ -1,6 +1,8 @@
 package com.alessandro.astages.networking;
 
 import com.alessandro.astages.api.AResourceLocation;
+import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.networking.packet.dimension.DimensionIdsSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.item.*;
@@ -15,12 +17,16 @@ import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPack
 import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.stages.StageDisplaySyncerS2CPacket;
 import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+import java.lang.reflect.InvocationTargetException;
+
+@NotNullParams
 public class ANetworking {
     private static SimpleChannel INSTANCE;
 
@@ -30,150 +36,185 @@ public class ANetworking {
     }
 
     public static void register() {
-        SimpleChannel net = NetworkRegistry.ChannelBuilder
+        INSTANCE = NetworkRegistry.ChannelBuilder
                 .named(AResourceLocation.fromNamespaceAndPath("messages"))
                 .networkProtocolVersion(() -> "1.0")
                 .clientAcceptedVersions(s -> true)
                 .serverAcceptedVersions(s -> true)
                 .simpleChannel();
 
-        INSTANCE = net;
-
         // STAGES
-        net.messageBuilder(ClientStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ClientStagesSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ClientStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ClientStagesSyncerS2CPacket::new)
                 .encoder(ClientStagesSyncerS2CPacket::toBytes)
                 .consumerMainThread(ClientStagesSyncerS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(StagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(StagesSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(StagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(StagesSyncerS2CPacket::new)
             .encoder(StagesSyncerS2CPacket::toBytes)
             .consumerMainThread(StagesSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(StageDisplaySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(StageDisplaySyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(StageDisplaySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(StageDisplaySyncerS2CPacket::new)
             .encoder(StageDisplaySyncerS2CPacket::toBytes)
             .consumerMainThread(StageDisplaySyncerS2CPacket::handle)
             .add();
 
         // ITEMS
-        net.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ItemSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ItemSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ItemSyncerS2CPacket::new)
             .encoder(ItemSyncerS2CPacket::toBytes)
             .consumerMainThread(ItemSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(ItemTagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ItemTagSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ItemTagSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ItemTagSyncerS2CPacket::new)
             .encoder(ItemTagSyncerS2CPacket::toBytes)
             .consumerMainThread(ItemTagSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(ItemModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ItemModSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ItemModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ItemModSyncerS2CPacket::new)
             .encoder(ItemModSyncerS2CPacket::toBytes)
             .consumerMainThread(ItemModSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(ItemPredicateSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ItemPredicateSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ItemPredicateSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ItemPredicateSyncerS2CPacket::new)
             .encoder(ItemPredicateSyncerS2CPacket::toBytes)
             .consumerMainThread(ItemPredicateSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(ItemPropertySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ItemPropertySyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ItemPropertySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ItemPropertySyncerS2CPacket::new)
             .encoder(ItemPropertySyncerS2CPacket::toBytes)
             .consumerMainThread(ItemPropertySyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(RequestItemPropertyC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+//        registerPacket(RequestItemPropertyC2SPacket.class, NetworkDirection.PLAY_TO_SERVER);
+        INSTANCE.messageBuilder(RequestItemPropertyC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
             .decoder(RequestItemPropertyC2SPacket::new)
             .encoder(RequestItemPropertyC2SPacket::toBytes)
             .consumerMainThread(RequestItemPropertyC2SPacket::handle)
             .add();
 
         // RECIPES
-        net.messageBuilder(RecipeSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(RecipeSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(RecipeSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(RecipeSyncerS2CPacket::new)
             .encoder(RecipeSyncerS2CPacket::toBytes)
             .consumerMainThread(RecipeSyncerS2CPacket::handle)
             .add();
 
-        net.messageBuilder(RecipeModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(RecipeModSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(RecipeModSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(RecipeModSyncerS2CPacket::new)
             .encoder(RecipeModSyncerS2CPacket::toBytes)
             .consumerMainThread(RecipeModSyncerS2CPacket::handle)
             .add();
 
         // ORES
-        net.messageBuilder(OreSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(OreSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(OreSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(OreSyncerS2CPacket::new)
             .encoder(OreSyncerS2CPacket::toBytes)
             .consumerMainThread(OreSyncerS2CPacket::handle)
             .add();
 
         // MOB
-        net.messageBuilder(MobSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(MobSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(MobSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(MobSyncerS2CPacket::new)
             .encoder(MobSyncerS2CPacket::toBytes)
             .consumerMainThread(MobSyncerS2CPacket::handle)
             .add();
 
         // DIMENSION
-        net.messageBuilder(DimensionIdsSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(DimensionIdsSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(DimensionIdsSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(DimensionIdsSyncerS2CPacket::new)
             .encoder(DimensionIdsSyncerS2CPacket::toBytes)
             .consumerMainThread(DimensionIdsSyncerS2CPacket::handle)
             .add();
 
         // SERVER
-        net.messageBuilder(ServerStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(ServerStagesSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(ServerStagesSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(ServerStagesSyncerS2CPacket::new)
             .encoder(ServerStagesSyncerS2CPacket::toBytes)
             .consumerMainThread(ServerStagesSyncerS2CPacket::handle)
             .add();
 
         // SIMPLE
-        net.messageBuilder(SimpleIdsSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(SimpleIdsSyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(SimpleIdsSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(SimpleIdsSyncerS2CPacket::new)
                 .encoder(SimpleIdsSyncerS2CPacket::toBytes)
                 .consumerMainThread(SimpleIdsSyncerS2CPacket::handle)
                 .add();
 
         // RELOADING
-        net.messageBuilder(RequestReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(RequestReloadS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(RequestReloadS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(RequestReloadS2CPacket::new)
                 .encoder(RequestReloadS2CPacket::toBytes)
                 .consumerMainThread(RequestReloadS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(RequestRestrictionDeleteS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+//        registerPacket(RequestRestrictionDeleteS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        INSTANCE.messageBuilder(RequestRestrictionDeleteS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(RequestRestrictionDeleteS2CPacket::new)
                 .encoder(RequestRestrictionDeleteS2CPacket::toBytes)
                 .consumerMainThread(RequestRestrictionDeleteS2CPacket::handle)
                 .add();
     }
 
+    @Info("Send to server!")
     public static <MSG> void sendToServer(MSG message) {
         INSTANCE.sendToServer(message);
     }
 
-    public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
+    @Info("Send to client!")
+    public static <MSG> void sendToPlayer(ServerPlayer player, MSG message) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
 
-    public static <MSG> void sendToClients(MSG message) {
+    @Info("Send to client!")
+    public static <MSG> void sendToAllPlayers(MSG message) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), message);
     }
 
+    @Info("Send to client!")
     public static <MSG> void sendTo(@Nullable ServerPlayer player, MSG message) {
         if (player == null) { // If Null -> Whole Server!
-            ANetworking.sendToClients(message);
+            ANetworking.sendToAllPlayers(message);
         } else {
-            ANetworking.sendToPlayer(message, player);
+            ANetworking.sendToPlayer(player, message);
         }
+    }
+
+    public static <T extends AStagesPacket> void registerPacket(Class<T> packetClass, NetworkDirection direction) {
+        INSTANCE.messageBuilder(packetClass, id(), direction)
+            .decoder(buf -> {
+                try {
+                    return packetClass.getConstructor(FriendlyByteBuf.class).newInstance(buf);
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                         InvocationTargetException exception) {
+                    throw new RuntimeException("Missing FriendlyByteBuf in " + packetClass + "!");
+                }
+            })
+            .encoder(AStagesPacket::toBytes)
+            .consumerMainThread(AStagesPacket::handle)
+            .add();
     }
 }

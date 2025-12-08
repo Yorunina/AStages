@@ -3,6 +3,7 @@ package com.alessandro.astages.networking.packet.stages;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.networking.AStagesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -10,7 +11,7 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 @NotNullParams
-public class StagesSyncerS2CPacket {
+public class StagesSyncerS2CPacket implements AStagesPacket {
     private final Collection<String> stages;
     private final ASyncOperation operation;
 

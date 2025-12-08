@@ -49,6 +49,6 @@ public class ABaseRecipeRestriction<R extends ARestriction<R, U, V>, U, V> exten
 
     @Override
     public void markAsDirty() {
-        ANetworking.sendToClients(new RequestReloadS2CPacket(ReloadType.JEI_RECIPE));
+        ANetworking.sendToAllPlayers(new RequestReloadS2CPacket(ReloadType.JEI_RECIPE));
     }
 }

@@ -159,7 +159,7 @@ public class OfflinePlayerStage {
         MinecraftForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
-            ANetworking.sendToPlayer(new ClientStagesSyncerS2CPacket(stages, operation), (ServerPlayer) player);
+            ANetworking.sendToPlayer((ServerPlayer) player, new ClientStagesSyncerS2CPacket(stages, operation));
 
             if (!silentTitle) {
                 if (player instanceof ServerPlayer serverPlayer) {
