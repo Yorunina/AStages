@@ -2,19 +2,19 @@ package com.alessandro.astages.core.server.restriction.item;
 
 import com.alessandro.astages.api.feature.AChangeable;
 import com.alessandro.astages.api.feature.AMarkable;
-import com.alessandro.astages.store.Attribute;
-import com.alessandro.astages.store.AttributeStore;
+import com.alessandro.astages.api.nullability.NotNull;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.server.restriction.ALootRestriction;
 import com.alessandro.astages.event.CommonEventSettings;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
-import com.alessandro.astages.store.*;
+import com.alessandro.astages.store.Attribute;
+import com.alessandro.astages.store.AttributeStore;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ReloadType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
