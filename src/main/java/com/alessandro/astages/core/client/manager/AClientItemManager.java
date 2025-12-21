@@ -116,7 +116,7 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     public AClientBaseItemRestriction<?, ?> getRestriction(AClientHolder holder, ItemStack stack) {
         if (holder.isServerActive()) {
             var serverRestriction = restrictions.stream().filter(r ->
-                AStagesClientUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
+                !AStagesClientUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
                 r.isRestricted(stack)
             ).findFirst().orElse(null);
 
@@ -125,7 +125,7 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
 
         if (holder.isPlayerActive()) {
             return restrictions.stream().filter(r ->
-                AStagesClientUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
+                !AStagesClientUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
                 r.isRestricted(stack)
             ).findFirst().orElse(null);
         }
@@ -185,7 +185,7 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
         Set<String> toReturn = new HashSet<>();
 
         mods.forEach(restriction -> {
-            if (Objects.equals(restriction.getModId(), resourceLocation.getNamespace()) && restriction.isEnabled(Attributes.HIDING_JEI)) {
+            if (restriction.getModIds().contains(resourceLocation.getNamespace()) && restriction.isEnabled(Attributes.HIDING_JEI)) {
                 toReturn.add(restriction.getStage());
             }
         });
