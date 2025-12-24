@@ -16,6 +16,7 @@ import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -78,6 +79,7 @@ public class AStages {
 
     static {
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(ChestBlockEntity.class, null);
+        ARestrictionManager.ITEM_INSTANCE.whiteListContainer(CompoundContainer.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(BarrelBlockEntity.class, null);
     }
 }
