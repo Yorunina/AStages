@@ -323,19 +323,26 @@ publishMods {
     }
 
     modrinth {
+        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+        projectId.set("6wy8fmIk")
+        minecraftVersions.add(minecraft_version)
+        optional("roughly-enough-items", "jei", "kubejs")
 
+        displayName.set("astages-$mod_version")
+
+        announcementTitle.set("Download from Modrinth")
     }
 
-    discord {
-        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
-        username.set("AServer")
-        avatarUrl.set("URL_HERE!!!!!!!!!!")
-        content.set(changelog)
-
-        style {
-            link
-        }
-    }
+//    discord {
+//        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
+//        username.set("AServer")
+//        avatarUrl.set("URL_HERE!!!!!!!!!!")
+//        content.set(changelog)
+//
+//        style {
+//            link
+//        }
+//    }
 }
 
 tasks.withType<JavaCompile>().configureEach {
