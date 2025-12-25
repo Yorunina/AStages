@@ -326,7 +326,7 @@ publishMods {
         accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
         projectId.set("6wy8fmIk")
         minecraftVersions.add(minecraft_version)
-        optional("roughly-enough-items", "jei", "kubejs")
+        optional("rei", "jei", "kubejs")
 
         displayName.set("astages-$mod_version")
 
