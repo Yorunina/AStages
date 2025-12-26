@@ -288,8 +288,8 @@ publishMods {
             changelog.set(
                 """
                         ## [$mod_version] - $formattedDate
-                        ### This is an alpha version meant to be used only by developers!
-                        ### Changelog can be found in Discord server.
+                        This is an alpha version meant to be used only by developers!   
+                        Changelog can be found in Discord server.
                     """.trimIndent()
             )
         }
@@ -298,8 +298,8 @@ publishMods {
             changelog.set(
                 """
                         ## [$mod_version] - $formattedDate
-                        ### This is a beta version meant to be used only by developers!
-                        ### Changelog can be found in Discord server.
+                        This is a beta version meant to be used only by developers!   
+                        Changelog can be found in Discord server.
                     """.trimIndent()
             )
         }
