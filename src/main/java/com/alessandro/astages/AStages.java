@@ -39,6 +39,7 @@ public class AStages {
 
     public static Supplier<IForgeRegistry<Attribute<?>>> ATTRIBUTES_REGISTRY = Attributes.ATTRIBUTES.makeRegistry(RegistryBuilder::new);
     public static Supplier<IForgeRegistry<ARestrictionType>> RESTRICTION_TYPES_REGISTRY = ARestrictionTypes.RESTRICTION_TYPES.makeRegistry(RegistryBuilder::new);
+    public static Supplier<IForgeRegistry<ASimpleRestrictionType>> SIMPLE_RESTRICTION_TYPES_REGISTRY = ASimpleRestrictionTypes.SIMPLE_RESTRICTION_TYPES.makeRegistry(RegistryBuilder::new);
 
     public AStages() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -58,9 +59,10 @@ public class AStages {
         Attributes.Region.ATTRIBUTES.register(modEventBus);
 
         ARestrictionTypes.RESTRICTION_TYPES.register(modEventBus);
+        ASimpleRestrictionTypes.SIMPLE_RESTRICTION_TYPES.register(modEventBus);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages-common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AStagesClient.SPEC, "astages-client.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AStagesCommon.SPEC, "astages/astages-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, AStagesClient.SPEC, "astages/astages-client.toml");
         ANetworking.register();
 
         APluginFinder.getAllPlugins();

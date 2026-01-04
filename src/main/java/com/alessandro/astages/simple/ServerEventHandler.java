@@ -7,14 +7,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
-public class ForgeEventHandler {
+public class ServerEventHandler {
     @SubscribeEvent
     public static void serverLoading(ServerStartingEvent event) {
+        ASimpleMigrationManager.startMigration();
         ASimpleRestrictionManager.readFromFile();
     }
 
     @SubscribeEvent
     public static void serverStopped(ServerStoppingEvent event) {
-        ASimpleRestrictionManager.writeToFile();
+        ASimpleRestrictionManager.writeToFile(true);
     }
 }

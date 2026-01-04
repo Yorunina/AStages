@@ -1,6 +1,7 @@
 package com.alessandro.astages.api;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -26,6 +27,7 @@ public class AResourceLocation {
     }
 
     @SuppressWarnings("removal")
+    @Info("Default namespace is `astages`!")
     public static ResourceLocation fromNamespaceAndPath(String path) {
         return new ResourceLocation(AStages.MODID, path);
     }
