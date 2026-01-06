@@ -69,10 +69,11 @@ public class ASimpleElaborator {
         commonOperations(simple);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void elaborateOre(ASimpleRestriction simple, boolean markAsDirty) {
         String[] splice = simple.object.split("//");
-        BlockState original = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(AResourceLocation.parse(splice[0]))).defaultBlockState();
-        var replacement = Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(AResourceLocation.parse(splice[1]))).defaultBlockState();
+        BlockState original = ForgeRegistries.BLOCKS.getValue(AResourceLocation.parse(splice[0])).defaultBlockState();
+        var replacement = ForgeRegistries.BLOCKS.getValue(AResourceLocation.parse(splice[1])).defaultBlockState();
 
         if (Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue() != null) { // Only for suppressing unboxing error
             // For backward compatibility
@@ -105,12 +106,14 @@ public class ASimpleElaborator {
         throw new UnsupportedOperationException("Biome elaboration not supported! Id of Restriction not allowed: " + simple.id + ".");
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void elaborateTame(ASimpleRestriction simple, boolean ignoredMarkAsDirty) {
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
 
         commonOperations(simple);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void elaborateMount(ASimpleRestriction simple, boolean ignoredMarkAsDirty) {
         ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
 
@@ -126,9 +129,10 @@ public class ASimpleElaborator {
         commonOperations(simple);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static void elaborateArmor(ASimpleRestriction simple, boolean markAsDirty) {
         var restriction = new AItemRestriction(simple.id, simple.stage);
-        restriction.restrict(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(AResourceLocation.parse(simple.object))));
+        restriction.restrict(ForgeRegistries.ITEMS.getValue(AResourceLocation.parse(simple.object)));
         restriction.setArmorAttributes();
 
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
@@ -155,9 +159,9 @@ public class ASimpleElaborator {
 
     public static int commandOreWithDefaultValue(CommandContext<CommandSourceStack> c) {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionTypes.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
-            Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
+            ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock()) +
                 "//" +
-                Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
+                ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock()) +
                 "//" +
                 Attributes.AFFECTS_PLAYER_ACTIONS.getDefaultValue()
         );
@@ -165,9 +169,9 @@ public class ASimpleElaborator {
 
     public static int commandOre(CommandContext<CommandSourceStack> c) {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionTypes.ORE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
-            Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock())) +
+            ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "original").getState().getBlock()) +
                 "//" +
-                Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock())) +
+                ForgeRegistries.BLOCKS.getKey(BlockStateArgument.getBlock(c, "replacement").getState().getBlock()) +
                 "//" +
                 BoolArgumentType.getBool(c, "affects_player_actions")
         );
@@ -186,6 +190,7 @@ public class ASimpleElaborator {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionTypes.STRUCTURE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"), structureId.toString());
     }
 
+    @SuppressWarnings("unused")
     public static int commandBiome(CommandContext<CommandSourceStack> ignoredC) {
         throw new UnsupportedOperationException("Biome elaboration not supported!");
     }
@@ -200,9 +205,9 @@ public class ASimpleElaborator {
 
     public static int commandRecipe(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
         return addRestrictionForType(c.getSource().getPlayer(), ASimpleRestrictionTypes.RECIPE, StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "stage"),
-            Objects.requireNonNull(Objects.requireNonNull(ForgeRegistries.RECIPE_TYPES.getKey(ResourceLocationArgument.getRecipe(c, "recipe").getType())).toString()) +
+            ForgeRegistries.RECIPE_TYPES.getKey(ResourceLocationArgument.getRecipe(c, "recipe").getType()) +
                 "//" +
-                Objects.requireNonNull(ResourceLocationArgument.getRecipe(c, "recipe").getId().toString())
+                ResourceLocationArgument.getRecipe(c, "recipe").getId()
         );
     }
 
