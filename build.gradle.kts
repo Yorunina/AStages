@@ -20,6 +20,8 @@ import java.time.format.DateTimeFormatter
 @Suppress("PropertyName") val minecraft_version_range: String by project
 @Suppress("PropertyName") val loader_version_range: String by project
 @Suppress("PropertyName") val forge_version_range: String by project
+val logoLocation = "https://raw.githubusercontent.com/Alessandro-Casale/AStages/1.20.X/logo/astages.png"
+
 
 buildscript {
     repositories {
@@ -335,16 +337,20 @@ publishMods {
         announcementTitle.set("Download from Modrinth")
     }
 
-//    discord {
-//        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
-//        username.set("AServer")
-//        avatarUrl.set("URL_HERE!!!!!!!!!!")
-//        content.set(changelog)
-//
-//        style {
-//            link
-//        }
-//    }
+    discord {
+        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
+        username.set("AServer")
+        avatarUrl.set(logoLocation)
+        content.set(changelog)
+
+        setPlatforms(publishMods.platforms["curseforge"], publishMods.platforms["modrinth"])
+
+        style {
+            thumbnailUrl = logoLocation
+            look = "MODERN"
+            link = "BUTTON"
+        }
+    }
 }
 
 tasks.withType<JavaCompile>().configureEach {
