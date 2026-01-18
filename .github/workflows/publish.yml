@@ -30,7 +30,7 @@ jobs:
           futureRelease: ${{ steps.get_version.outputs.mod_version }}
 
       - name: Print changelogs
-        id: get_version
+        id: print_changelog
         run: echo ${{ steps.changelog.outputs.changelog }}
 
       - run: ./gradlew build publishMods
