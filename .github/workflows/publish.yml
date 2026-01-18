@@ -31,12 +31,12 @@ jobs:
 
       - name: Print changelogs
         id: print_changelog
-        run: echo ${{ steps.changelog.outputs.changelog }}
+        run: echo "${{ steps.changelog.outputs.changelog }}"
 
-      - run: ./gradlew build publishMods
-        env:
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-          CHANGELOGS: ${{ steps.changelog.outputs.changelog }}
+#      - run: ./gradlew build publishMods
+#        env:
+#          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+#          MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
+#          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+#          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+#          CHANGELOGS: ${{ steps.changelog.outputs.changelog }}
