@@ -310,8 +310,17 @@ publishMods {
         }
         else -> {
             type.set(STABLE)
-            changelog.set("# Changelog!")
+            changelog.set(providers.environmentVariable("CHANGELOGS"))
         }
+    }
+
+    github {
+        accessToken.set(providers.environmentVariable("GITHUB_TOKEN"))
+        repository.set("Alessandro-Casale/AStages")
+        commitish.set("1.20.X")
+        tagName.set(mod_version)
+
+        announcementTitle.set("Download from GitHub")
     }
 
     curseforge {
