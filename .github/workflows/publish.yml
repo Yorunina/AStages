@@ -29,6 +29,10 @@ jobs:
           unreleasedOnly: true
           futureRelease: ${{ steps.get_version.outputs.mod_version }}
 
+      - name: Print changelogs
+        id: get_version
+        run: echo ${{ steps.changelog.outputs.changelog }}
+
       - run: ./gradlew build publishMods
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
