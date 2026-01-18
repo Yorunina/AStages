@@ -352,7 +352,6 @@ publishMods {
 //        username.set("AServer")
 //        avatarUrl.set(logoLocation)
 //        content.set(changelog)
-//
 //        setPlatforms(publishMods.platforms["curseforge"], publishMods.platforms["modrinth"])
 //
 //        style {
