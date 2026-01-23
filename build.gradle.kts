@@ -319,35 +319,35 @@ publishMods {
         repository.set("Alessandro-Casale/AStages")
         val version = mod_version.substringBeforeLast("-")
         val branch = mod_version.substringAfterLast("-")
-        commitish.set(branch)
+        commitish.set(branch.toMcRange())
         tagName.set("v$version")
 
         announcementTitle.set("Download from GitHub")
     }
 
-//    curseforge {
-//        accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
-//        projectId.set("1120180")
-//        minecraftVersions.add(minecraft_version)
-//        changelogType.set("markdown")
-//        optional("roughly-enough-items", "jei", "kubejs")
-//
-//        displayName.set("astages-$mod_version")
-//
-//        projectSlug.set("astages") // For discord setup
-//        announcementTitle.set("Download from CurseForge") // For discord setup
-//    }
-//
-//    modrinth {
-//        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
-//        projectId.set("6wy8fmIk")
-//        minecraftVersions.add(minecraft_version)
-//        optional("rei", "jei", "kubejs")
-//
-//        displayName.set("astages-$mod_version")
-//
-//        announcementTitle.set("Download from Modrinth")
-//    }
+    curseforge {
+        accessToken.set(providers.environmentVariable("CURSEFORGE_API_KEY"))
+        projectId.set("1120180")
+        minecraftVersions.add(minecraft_version)
+        changelogType.set("markdown")
+        optional("roughly-enough-items", "jei", "kubejs")
+
+        displayName.set("astages-$mod_version")
+
+        projectSlug.set("astages") // For discord setup
+        announcementTitle.set("Download from CurseForge") // For discord setup
+    }
+
+    modrinth {
+        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+        projectId.set("6wy8fmIk")
+        minecraftVersions.add(minecraft_version)
+        optional("rei", "jei", "kubejs")
+
+        displayName.set("astages-$mod_version")
+
+        announcementTitle.set("Download from Modrinth")
+    }
 
 //    discord {
 //        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
@@ -362,6 +362,10 @@ publishMods {
 //            link = "BUTTON"
 //        }
 //    }
+}
+
+fun String.toMcRange(): String {
+    return this.substringBeforeLast(".") + ".X"
 }
 
 tasks.withType<JavaCompile>().configureEach {
