@@ -38,3 +38,8 @@ jobs:
                 "labels": ["internal", "refactor"]
               }
             }
+      - name: Upload changelog
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: CHANGELOG.md
