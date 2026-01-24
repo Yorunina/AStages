@@ -16,6 +16,9 @@ jobs:
           pullRequests: true
           issues: true
           unreleased: true
+          prLabel: ""
+          stripGeneratorNotice: true
+          author: false
           configureSections: |
             {
               "API": {
