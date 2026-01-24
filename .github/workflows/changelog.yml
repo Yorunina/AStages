@@ -16,7 +16,7 @@ jobs:
           pullRequests: true
           issues: true
           unreleased: true
-          merge_prefix: ""
+#          merge_prefix: ""
           stripGeneratorNotice: true
           author: false
           configureSections: |
@@ -40,6 +40,10 @@ jobs:
                 "labels": ["internal", "refactor"]
               }
             }
+      - name: Remove "Merged pull requests" header
+        run: |
+          sed -i '/^\*\*Merged pull requests:\*\*/d' CHANGELOG.md
+
       - name: Upload changelog
         uses: actions/upload-artifact@v4
         with:
