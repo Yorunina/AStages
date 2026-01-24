@@ -16,12 +16,24 @@ jobs:
           pullRequests: true
           issues: true
           unreleased: true
-          addSections: |
+          configureSections: |
             {
-              "API": ["api"],
-              "Added": ["added", "feature"],
-              "Removed": ["removed"],
-              "Fixed": ["bug", "fix"],
-              "Compatibility": ["compatibility", "integration"],
-              "Internal": ["internal", "refactor"]
+              "API": {
+                "labels": ["api"]
+              },
+              "Added": {
+                "labels": ["added", "feature"]
+              },
+              "Removed": {
+                "labels": ["removed"]
+              },
+              "Fixed": {
+                "labels": ["bug", "fix"]
+              },
+              "Compatibility": {
+                "labels": ["compatibility", "integration"]
+              },
+              "Internal": {
+                "labels": ["internal", "refactor"]
+              }
             }
