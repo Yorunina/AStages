@@ -1,6 +1,8 @@
 package com.alessandro.astages.networking.packet.reload;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.ALoader;
+import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.AClientRestrictionManager;
 import com.alessandro.astages.core.AClientStageManager;
 import com.alessandro.astages.event.custom.actions.ClientItemUpdateEvent;
@@ -8,9 +10,7 @@ import com.alessandro.astages.event.custom.actions.ClientOreUpdateEvent;
 import com.alessandro.astages.event.custom.actions.ClientRecipeUpdateEvent;
 import com.alessandro.astages.networking.AStagesPacket;
 import com.alessandro.astages.util.ReloadType;
-import com.alessandro.astages.api.nullability.NotNullParams;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -40,9 +40,9 @@ public class RequestReloadS2CPacket implements AStagesPacket {
                 }
                 case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
                 case RELOAD_BEFORE -> AClientRestrictionManager.reloadStarted();
-                case JEI_ITEM -> MinecraftForge.EVENT_BUS.post(new ClientItemUpdateEvent());
-                case JEI_RECIPE -> MinecraftForge.EVENT_BUS.post(new ClientRecipeUpdateEvent());
-                case ORE -> MinecraftForge.EVENT_BUS.post(new ClientOreUpdateEvent());
+                case JEI_ITEM -> ALoader.EVENT_BUS.post(new ClientItemUpdateEvent());
+                case JEI_RECIPE -> ALoader.EVENT_BUS.post(new ClientRecipeUpdateEvent());
+                case ORE -> ALoader.EVENT_BUS.post(new ClientOreUpdateEvent());
                 case ITEM -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties();
                 case RECIPE -> AStages.LOGGER.debug("No other operations required for MarkAsDirty method for recipe restrictions!");
             }

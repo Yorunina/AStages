@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.client.manager;
 
+import com.alessandro.astages.api.ALoader;
 import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.develop.Info;
@@ -19,7 +20,6 @@ import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 
 import java.util.*;
@@ -37,11 +37,11 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     private final HashMap<CustomItemStackKey, AClientItemPropertyRestriction> properties = new HashMap<>();
 
     static {
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class,
+        ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class,
             e -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties()
         );
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class,
+        ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class,
             e -> AClientRestrictionManager.ITEM_INSTANCE.clearProperties()
         );
     }

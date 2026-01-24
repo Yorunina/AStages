@@ -11,7 +11,6 @@ import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -159,7 +158,7 @@ public class OfflinePlayerStage {
         AStagesUtils.checkPlayerStages(player, operation, stages);
 
         var event = new StageSyncedPlayerEvent(player, operation, stages);
-        MinecraftForge.EVENT_BUS.post(event);
+        ALoader.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) {
             ANetworking.sendToPlayer((ServerPlayer) player, new ClientStagesSyncerS2CPacket(stages, operation));
@@ -171,11 +170,11 @@ public class OfflinePlayerStage {
             }
 
             switch (operation) {
-                case ADD -> MinecraftForge.EVENT_BUS.post(new StageAddedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
-                case ADD_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesAddedPlayerEvent(player, stages));
-                case REMOVE -> MinecraftForge.EVENT_BUS.post(new StageRemovedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
-                case REMOVE_ALL -> MinecraftForge.EVENT_BUS.post(new AllStagesRemovedPlayerEvent(player, stages));
-                case LOGIN -> MinecraftForge.EVENT_BUS.post(new StageLoginPlayerEvent(player, stages));
+                case ADD -> ALoader.EVENT_BUS.post(new StageAddedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
+                case ADD_ALL -> ALoader.EVENT_BUS.post(new AllStagesAddedPlayerEvent(player, stages));
+                case REMOVE -> ALoader.EVENT_BUS.post(new StageRemovedPlayerEvent(player, ASetUtils.getOnlyElement(stages)));
+                case REMOVE_ALL -> ALoader.EVENT_BUS.post(new AllStagesRemovedPlayerEvent(player, stages));
+                case LOGIN -> ALoader.EVENT_BUS.post(new StageLoginPlayerEvent(player, stages));
             }
         } else {
             switch (event.getOperation()) {

@@ -1,5 +1,6 @@
 package com.alessandro.astages.networking.packet.stages;
 
+import com.alessandro.astages.api.ALoader;
 import com.alessandro.astages.api.ASetUtils;
 import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AOperation;
@@ -8,7 +9,6 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.event.custom.ClientSynchronizeStagesEvent;
 import com.alessandro.astages.networking.packet.StageSyncerPacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Set;
 
@@ -32,6 +32,6 @@ public class ClientStagesSyncerS2CPacket extends StageSyncerPacket {
             case LOGIN -> AStagesClientUtils.setStages(AClientHolder.player(), getStages());
         }
 
-        MinecraftForge.EVENT_BUS.post(new ClientSynchronizeStagesEvent(getStages(), getOperation()));
+        ALoader.EVENT_BUS.post(new ClientSynchronizeStagesEvent(getStages(), getOperation()));
     }
 }

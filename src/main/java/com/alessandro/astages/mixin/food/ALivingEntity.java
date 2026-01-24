@@ -1,10 +1,10 @@
 package com.alessandro.astages.mixin.food;
 
+import com.alessandro.astages.api.ALoader;
 import com.alessandro.astages.event.custom.LivingEntityEatEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +20,6 @@ public class ALivingEntity {
 
     @Inject(method = "eat", at = @At("HEAD"))
     private void astages$eat(Level level, ItemStack food, CallbackInfoReturnable<ItemStack> cir) {
-        MinecraftForge.EVENT_BUS.post(new LivingEntityEatEvent(livingEntity$self(), food));
+        ALoader.EVENT_BUS.post(new LivingEntityEatEvent(livingEntity$self(), food));
     }
 }

@@ -1,7 +1,10 @@
 package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.ALoader;
 import com.alessandro.astages.api.constant.ARestrictionStage;
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.AStageManager;
 import com.alessandro.astages.core.server.restriction.*;
@@ -12,13 +15,10 @@ import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import com.alessandro.astages.store.Attributes;
-import com.alessandro.astages.api.time.ATime;
-import com.alessandro.astages.api.nullability.NotNullParams;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 
 @NotNullParams
@@ -27,7 +27,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         if (Mods.KUBEJS.isLoaded()) {
             KubeJSStageEventHandler.init();
 
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.BeforeScriptsLoaded.class, e -> {
+            ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.BeforeScriptsLoaded.class, e -> {
                 if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
                     AStageManager.reloadBeforeScripts();
                     ARestrictionManager.reloadBeforeScripts();
@@ -35,7 +35,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
                 }
             });
 
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.AfterScriptsLoaded.class, e -> {
+            ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.AfterScriptsLoaded.class, e -> {
                 if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
                     ARestrictionManager.addRestrictionsViaJavaCode(ARestrictionStage.AFTER_JS);
                     AStageManager.reloadAfterScripts();

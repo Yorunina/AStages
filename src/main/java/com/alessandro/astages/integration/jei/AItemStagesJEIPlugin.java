@@ -1,6 +1,7 @@
 package com.alessandro.astages.integration.jei;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.ALoader;
 import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.AStagesClientUtils;
 import com.alessandro.astages.api.constant.AOperation;
@@ -19,7 +20,6 @@ import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 
@@ -38,17 +38,17 @@ public class AItemStagesJEIPlugin implements IModPlugin {
         if (!Mods.JEI.isLoaded()) return;
 
         if (EffectiveSide.get().isClient()) {
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientItemUpdateEvent.class,
+            ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientItemUpdateEvent.class,
                 e -> updateGui(null, null)
             );
 
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
+            ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeStagesEvent.class, e -> {
                 if (e.getOperation() != AOperation.LOGIN) {
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
             });
 
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class, e -> {
+            ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ClientSynchronizeServerStagesEvent.class, e -> {
                 if (e.getOperation() != AOperation.LOGIN) {
                     updateGui(e.getOperation(), e.getStagesSynced());
                 }
