@@ -13,6 +13,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
+          sinceTag: true
+          filterByMilestone: false
           pullRequests: true
           issues: true
           unreleased: true
