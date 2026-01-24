@@ -16,7 +16,7 @@ jobs:
           pullRequests: true
           issues: true
           unreleased: true
-          prLabel: ""
+          merge_prefix: ""
           stripGeneratorNotice: true
           author: false
           configureSections: |
