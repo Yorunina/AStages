@@ -16,7 +16,7 @@ jobs:
           pullRequests: true
           issues: true
           unreleased: true
-#          merge_prefix: ""
+          unreleasedOnly: true
           stripGeneratorNotice: true
           author: false
           configureSections: |
