@@ -13,9 +13,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
-          sinceTag: false
-#          pullRequests: true
-#          issues: true
+          sinceTag: true
+          pullRequests: true
+          issues: true
           unreleased: true
           configureSections: |
             {
