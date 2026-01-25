@@ -35,10 +35,7 @@ jobs:
               },
               "Performance Improvements": {
                 "labels": ["perf"]
-              },
-#              "Internal": {
-#                "labels": ["internal", "refactor"]
-#              }
+              }
             }
 
       - name: Remove "Merged pull requests" header
