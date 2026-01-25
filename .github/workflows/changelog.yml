@@ -14,7 +14,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
           pullRequests: true
-          issues: true
+#          issues: true
           unreleased: true
           unreleasedOnly: true
           stripGeneratorNotice: true
@@ -25,21 +25,22 @@ jobs:
                 "labels": ["api"]
               },
               "Added": {
-                "labels": ["added", "feature"]
+                "labels": ["feat"]
               },
               "Removed": {
                 "labels": ["removed"]
               },
               "Fixed": {
-                "labels": ["bug", "fix"]
+                "labels": ["fix"]
               },
-              "Compatibility": {
-                "labels": ["compatibility", "integration"]
+              "Performance Improvements": {
+                "labels": ["perf"]
               },
-              "Internal": {
-                "labels": ["internal", "refactor"]
-              }
+#              "Internal": {
+#                "labels": ["internal", "refactor"]
+#              }
             }
+
       - name: Remove "Merged pull requests" header
         run: |
           sed -i '/^\*\*Merged pull requests:\*\*/d' CHANGELOG.md
@@ -47,6 +48,14 @@ jobs:
       - name: Remove "Full Changelog" lines
         run: |
           sed -i '/Full Changelog/d' CHANGELOG.md
+
+      - name: Clean PR titles
+        run: |
+          sed -i 's/^-\s*api:\s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*fix:\s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*feat:\s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*removed:\s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*perf:\s*/- /i' CHANGELOG.md
 
       - name: Upload changelog
         uses: actions/upload-artifact@v4
