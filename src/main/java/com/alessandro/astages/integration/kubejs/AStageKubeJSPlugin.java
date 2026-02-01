@@ -2,7 +2,7 @@ package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.ALoader;
-import com.alessandro.astages.api.constant.ARestrictionStage;
+import com.alessandro.astages.api.constant.AEventPhase;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.core.ARestrictionManager;
@@ -31,13 +31,15 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
                 if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
                     AStageManager.reloadBeforeScripts();
                     ARestrictionManager.reloadBeforeScripts();
-                    ARestrictionManager.addRestrictionsViaJavaCode(ARestrictionStage.BEFORE_JS);
+                    AStageManager.addStagesViaJavaCode(AEventPhase.BEFORE_JS);
+                    ARestrictionManager.addRestrictionsViaJavaCode(AEventPhase.BEFORE_JS);
                 }
             });
 
             ALoader.EVENT_BUS.addListener(EventPriority.NORMAL, false, ReloadScriptEvent.AfterScriptsLoaded.class, e -> {
                 if (e.getScriptType() == ReloadScriptEvent.EventScriptType.SERVER) {
-                    ARestrictionManager.addRestrictionsViaJavaCode(ARestrictionStage.AFTER_JS);
+                    AStageManager.addStagesViaJavaCode(AEventPhase.AFTER_JS);
+                    ARestrictionManager.addRestrictionsViaJavaCode(AEventPhase.AFTER_JS);
                     AStageManager.reloadAfterScripts();
                     ARestrictionManager.reloadAfterScripts();
                 }
