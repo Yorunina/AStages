@@ -27,7 +27,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
           pullRequests: true
-          headerLabel: nil
           dateFormat: "%d-%m-%Y"
 #          issues: true
 #          unreleased: true
@@ -54,6 +53,10 @@ jobs:
                 "labels": ["perf"]
               }
             }
+
+      - name: Remove title
+        run: |
+          sed -i '/^# Changelog$/d' CHANGELOG.md
 
       - name: Remove "Merged pull requests" header
         run: |
