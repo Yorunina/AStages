@@ -345,6 +345,7 @@ publishMods {
         optional("rei", "jei", "kubejs")
 
         displayName.set("astages-$mod_version")
+        changelog.set(changelog.get().dropFirstLine())
 
         announcementTitle.set("Download from Modrinth")
     }
@@ -366,6 +367,10 @@ publishMods {
 
 fun String.toMcRange(): String {
     return this.substringBeforeLast(".") + ".X"
+}
+
+fun String.dropFirstLine(): String {
+    return lines().drop(1).joinToString("\n")
 }
 
 tasks.withType<JavaCompile>().configureEach {

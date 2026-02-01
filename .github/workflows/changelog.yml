@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Get latest stable tag
         id: latest_tag
         run: |
@@ -24,11 +28,13 @@ jobs:
           output: CHANGELOG.md
           pullRequests: true
 #          issues: true
-          unreleased: true
+#          unreleased: true
+          sinceTag: "${{ steps.latest_tag.outputs.tag }}"
           unreleasedOnly: true
           futureRelease: "2.0.0-1.20.1"
           stripGeneratorNotice: true
           author: false
+          headerLabel: ""
           configureSections: |
             {
               "API": {
