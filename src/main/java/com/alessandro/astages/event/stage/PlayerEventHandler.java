@@ -11,9 +11,11 @@ import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.stage.event.ExpiredEvent;
 import com.alessandro.astages.api.stage.event.GrantedEvent;
+import com.alessandro.astages.api.stage.event.TickEvent;
 import com.alessandro.astages.capability.OfflinePlayerStage;
 import com.alessandro.astages.core.AStageManager;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -66,16 +68,24 @@ public class PlayerEventHandler {
         }
     }
 
-    @Info("For stage expiration calculation!")
+    @Info("For stage expiration calculation! And ticking also!")
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+    public static void onPlayerTick(PlayerTickEvent event) {
         if (event.side == LogicalSide.CLIENT) { return; }
-        if (event.phase == TickEvent.Phase.END) { return; }
+        if (event.phase == Phase.END) { return; }
 
-        APlayerUtils.runOnceASecond(event.player, player -> {
-            var stages = AStageManager.TEMPORARY_INSTANCE.getStageContainersForPlayer(player.getUUID());
-            if (stages == null) { return; }
+        var player = event.player;
+        var stages = AStageManager.TEMPORARY_INSTANCE.getStageContainersForPlayer(event.player.getUUID());
+        if (stages == null) { return; }
+        stages.forEach(container -> {
+            var stage = container.getStage();
 
+            if (stage.hasCustomTickEvent()) {
+                stage.postTickEvent(new TickEvent(player, player.getServer(), false));
+            }
+        });
+
+        APlayerUtils.runOnceASecond(event.player, ignoredPlayer -> {
             var listIterator = stages.iterator();
             while (listIterator.hasNext()) {
                 var stageContainer = listIterator.next();

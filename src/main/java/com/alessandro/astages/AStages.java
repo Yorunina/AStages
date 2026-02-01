@@ -1,21 +1,26 @@
 package com.alessandro.astages;
 
-import com.alessandro.astages.loot.AModifiers;
-import com.alessandro.astages.store.*;
-import com.alessandro.astages.util.underdevelopment.block.ModBlocks;
+import com.alessandro.astages.api.stage.TemporaryStage;
+import com.alessandro.astages.api.time.AMutableTime;
+import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.command.argument.ACommandArguments;
 import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
-import com.alessandro.astages.util.underdevelopment.item.ModItems;
+import com.alessandro.astages.core.AStageManager;
+import com.alessandro.astages.loot.AModifiers;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.plugin.APluginFinder;
 import com.alessandro.astages.plugin.APluginManager;
 import com.alessandro.astages.plugin.AStagesPlugin;
 import com.alessandro.astages.plugin.container.AttributeContainer;
 import com.alessandro.astages.plugin.container.ManagerContainer;
+import com.alessandro.astages.store.*;
+import com.alessandro.astages.util.underdevelopment.block.ModBlocks;
+import com.alessandro.astages.util.underdevelopment.item.ModItems;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -83,5 +88,17 @@ public class AStages {
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(ChestBlockEntity.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(CompoundContainer.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(BarrelBlockEntity.class, null);
+
+        var temporaryStage = new TemporaryStage("stage_temporary", AMutableTime.fromFixed(ATime.of("1m")));
+        temporaryStage.whenGranted(e -> e.getPlayer());
+        temporaryStage.everyTick(e -> {
+            var server = e.getServer();
+
+            if (server != null) {
+                server.sendSystemMessage(Component.literal("Tick!"));
+            }
+        });
+        temporaryStage.whenExpired(e -> e.getPlayer());
+        AStageManager.TEMPORARY_INSTANCE.addStage(temporaryStage);
     }
 }
