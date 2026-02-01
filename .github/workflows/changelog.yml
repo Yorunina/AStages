@@ -27,7 +27,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
           pullRequests: true
-          headerLabel: "# Custom"
+          headerLabel: nil
+          dateFormat: "%d-%m-%Y"
 #          issues: true
 #          unreleased: true
           sinceTag: "${{ steps.latest_tag.outputs.tag }}"
