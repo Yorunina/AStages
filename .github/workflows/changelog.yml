@@ -32,7 +32,7 @@ jobs:
           unreleased: true
           sinceTag: "${{ steps.latest_tag.outputs.tag }}"
 #          unreleasedOnly: true
-          futureRelease: "2.0.0-1.20.1"
+#          futureRelease: "2.0.0-1.20.1"
           stripGeneratorNotice: true
           author: false
           configureSections: |
