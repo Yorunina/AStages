@@ -29,7 +29,7 @@ jobs:
           pullRequests: true
           dateFormat: "%d-%m-%Y"
           issues: false
-#          unreleased: true
+          unreleased: true
           sinceTag: "${{ steps.latest_tag.outputs.tag }}"
 #          unreleasedOnly: true
           futureRelease: "2.0.0-1.20.1"
