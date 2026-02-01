@@ -28,7 +28,7 @@ jobs:
           output: CHANGELOG.md
           pullRequests: true
           dateFormat: "%d-%m-%Y"
-#          issues: true
+          issues: false
 #          unreleased: true
           sinceTag: "${{ steps.latest_tag.outputs.tag }}"
           unreleasedOnly: true
