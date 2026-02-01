@@ -31,7 +31,7 @@ jobs:
           issues: false
 #          unreleased: true
           sinceTag: "${{ steps.latest_tag.outputs.tag }}"
-          unreleasedOnly: true
+#          unreleasedOnly: true
           futureRelease: "2.0.0-1.20.1"
           stripGeneratorNotice: true
           author: false
@@ -66,13 +66,13 @@ jobs:
         run: |
           sed -i '/Full Changelog/d' CHANGELOG.md
 
-#      - name: Clean PR titles
-#        run: |
-#          sed -i 's/^-\s*api: \s*/- /i' CHANGELOG.md
-#          sed -i 's/^-\s*fix: \s*/- /i' CHANGELOG.md
-#          sed -i 's/^-\s*feat: \s*/- /i' CHANGELOG.md
-#          sed -i 's/^-\s*removed: \s*/- /i' CHANGELOG.md
-#          sed -i 's/^-\s*perf: \s*/- /i' CHANGELOG.md
+      - name: Clean PR titles
+        run: |
+          sed -i 's/^-\s*api: \s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*fix: \s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*feat: \s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*removed: \s*/- /i' CHANGELOG.md
+          sed -i 's/^-\s*perf: \s*/- /i' CHANGELOG.md
 
       - name: Upload changelog
         uses: actions/upload-artifact@v4
