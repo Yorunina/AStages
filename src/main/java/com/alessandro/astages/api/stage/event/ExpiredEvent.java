@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 
 @NotNullParams
 public class ExpiredEvent extends GenericEvent {
-    public ExpiredEvent(@Nullable  Player player, @Nullable MinecraftServer server, boolean isClientSide) {
+    public ExpiredEvent(@Nullable Player player, @Nullable MinecraftServer server, boolean isClientSide) {
         super(player, server, isClientSide);
     }
 }

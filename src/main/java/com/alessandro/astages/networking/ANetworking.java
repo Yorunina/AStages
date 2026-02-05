@@ -13,10 +13,7 @@ import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.networking.packet.simple.SimpleIdsSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.stages.ClientStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.stages.ServerStagesSyncerS2CPacket;
-import com.alessandro.astages.networking.packet.stages.StageDisplaySyncerS2CPacket;
-import com.alessandro.astages.networking.packet.stages.StagesSyncerS2CPacket;
+import com.alessandro.astages.networking.packet.stages.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -63,6 +60,18 @@ public class ANetworking {
             .decoder(StageDisplaySyncerS2CPacket::new)
             .encoder(StageDisplaySyncerS2CPacket::toBytes)
             .consumerMainThread(StageDisplaySyncerS2CPacket::handle)
+            .add();
+
+        INSTANCE.messageBuilder(RequestClientStagesS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(RequestClientStagesS2CPacket::new)
+            .encoder(RequestClientStagesS2CPacket::toBytes)
+            .consumerMainThread(RequestClientStagesS2CPacket::handle)
+            .add();
+
+        INSTANCE.messageBuilder(ClientStagesC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+            .decoder(ClientStagesC2SPacket::new)
+            .encoder(ClientStagesC2SPacket::toBytes)
+            .consumerMainThread(ClientStagesC2SPacket::handle)
             .add();
 
         // ITEMS
