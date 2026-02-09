@@ -23,7 +23,7 @@ categories:
       - perf
 
 replacers:
-  - search: '^(feat|fix|api|perf|performance|removed|chore)(\([^)]+\))?!?:\s*'
+  - search: '(?i)^(feat|fix|api|perf|removed)(\([^)]+\))?!?:\s*'
     replace: ''
 
 change-template: '- $TITLE'
