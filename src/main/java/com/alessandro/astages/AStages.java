@@ -1,8 +1,5 @@
 package com.alessandro.astages;
 
-import com.alessandro.astages.api.stage.TemporaryStage;
-import com.alessandro.astages.api.time.AMutableTime;
-import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.command.argument.ACommandArguments;
 import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
@@ -20,7 +17,6 @@ import com.alessandro.astages.util.underdevelopment.block.ModBlocks;
 import com.alessandro.astages.util.underdevelopment.item.ModItems;
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -63,6 +59,8 @@ public class AStages {
         Attributes.Mob.ATTRIBUTES.register(modEventBus);
         Attributes.Region.ATTRIBUTES.register(modEventBus);
 
+        StageAttributes.ATTRIBUTES.register(modEventBus);
+
         ARestrictionTypes.RESTRICTION_TYPES.register(modEventBus);
         ASimpleRestrictionTypes.SIMPLE_RESTRICTION_TYPES.register(modEventBus);
 
@@ -82,23 +80,18 @@ public class AStages {
         for (var clazz : result.keySet()) {
             ARestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
         }
+
+        var stageAttributeContainer = AttributeContainer.initialize();
+        APluginManager.callMethod(attributeContainer, AStagesPlugin::attachStageAttributes);
+        var stageResult = stageAttributeContainer.get();
+        for (var clazz : stageResult.keySet()) {
+            AStageManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
+        }
     }
 
     static {
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(ChestBlockEntity.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(CompoundContainer.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(BarrelBlockEntity.class, null);
-
-        var temporaryStage = new TemporaryStage("stage_temporary", AMutableTime.fromFixed(ATime.of("1m")));
-        temporaryStage.whenGranted(e -> e.getPlayer());
-        temporaryStage.everyTick(e -> {
-            var server = e.getServer();
-
-            if (server != null) {
-                server.sendSystemMessage(Component.literal("Tick!"));
-            }
-        });
-        temporaryStage.whenExpired(e -> e.getPlayer());
-        AStageManager.TEMPORARY_INSTANCE.addStage(temporaryStage);
     }
 }
