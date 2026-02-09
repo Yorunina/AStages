@@ -24,6 +24,10 @@ categories:
 
 change-template: '- $TITLE'
 
+replacers:
+  - search: '^(feat|fix|api|perf|performance|removed|chore)(\([^)]+\))?!?:\s*'
+    replace: ''
+
 template: |
   ## Changelog
   $CHANGES
