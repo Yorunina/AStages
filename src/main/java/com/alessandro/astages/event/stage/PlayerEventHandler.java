@@ -14,6 +14,7 @@ import com.alessandro.astages.api.stage.event.GrantedEvent;
 import com.alessandro.astages.api.stage.event.TickEvent;
 import com.alessandro.astages.capability.OfflinePlayerStage;
 import com.alessandro.astages.core.AStageManager;
+import com.alessandro.astages.store.StageAttributes;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -80,7 +81,7 @@ public class PlayerEventHandler {
         stages.forEach(container -> {
             var stage = container.getStage();
 
-            if (stage.hasCustomTickEvent()) {
+            if (!stage.isValueNull(StageAttributes.TICK_EVENT)) {
                 stage.postTickEvent(new TickEvent(player, player.getServer(), false));
             }
         });
@@ -93,7 +94,7 @@ public class PlayerEventHandler {
 
                 if (wasExpired) {
                     var stage = stageContainer.getStage();
-                    if (stage.hasCustomExpiredEvent()) {
+                    if (!stage.isValueNull(StageAttributes.EXPIRED_EVENT)) {
                         stage.postExpiredEvent(new ExpiredEvent(player, player.getServer(), false));
                     }
 

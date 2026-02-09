@@ -15,6 +15,7 @@ import com.alessandro.astages.integration.Mods;
 import com.alessandro.astages.integration.kubejs.util.KubeJSStageEventHandler;
 import com.alessandro.astages.integration.kubejs.util.StageEvents;
 import com.alessandro.astages.store.Attributes;
+import com.alessandro.astages.store.StageAttributes;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
@@ -81,6 +82,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
         event.add("RegionAttributes", Attributes.Region.class);
         event.add("ScreenAttributes", Attributes.Screen.class);
         event.add("StructureAttributes", Attributes.Structure.class);
+        event.add("StageAttributes", StageAttributes.class);
 
         event.add("AItemRestriction", AItemRestriction.class);
         event.add("ARecipeRestriction", ARecipeRestriction.class);

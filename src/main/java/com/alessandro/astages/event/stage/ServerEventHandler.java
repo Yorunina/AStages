@@ -14,6 +14,7 @@ import com.alessandro.astages.api.stage.event.GrantedEvent;
 import com.alessandro.astages.api.stage.event.TickEvent;
 import com.alessandro.astages.capability.ServerStage;
 import com.alessandro.astages.core.AStageManager;
+import com.alessandro.astages.store.StageAttributes;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -80,7 +81,7 @@ public class ServerEventHandler {
         stages.forEach(container -> {
             var stage = container.getStage();
 
-            if (stage.hasCustomTickEvent()) {
+            if (!stage.isValueNull(StageAttributes.TICK_EVENT)) {
                 stage.postTickEvent(new TickEvent(null, server, false));
             }
         });
@@ -93,7 +94,7 @@ public class ServerEventHandler {
 
                 if (wasExpired) {
                     var stage = stageContainer.getStage();
-                    if (stage.hasCustomExpiredEvent()) {
+                    if (!stage.isValueNull(StageAttributes.EXPIRED_EVENT)) {
                         stage.postExpiredEvent(new ExpiredEvent(null, server, false));
                     }
 
