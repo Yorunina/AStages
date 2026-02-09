@@ -22,11 +22,11 @@ categories:
     labels:
       - perf
 
-change-template: '- $TITLE'
-
 replacers:
   - search: '^(feat|fix|api|perf|performance|removed|chore)(\([^)]+\))?!?:\s*'
     replace: ''
+
+change-template: '- $TITLE'
 
 template: |
   ## Changelog
