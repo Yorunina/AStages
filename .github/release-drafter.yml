@@ -1,0 +1,29 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+categories:
+  - title: 'Features'
+    labels:
+      - feat
+
+  - title: 'Bug Fixes'
+    labels:
+      - fix
+
+  - title: 'API Changes'
+    labels:
+      - api
+
+  - title: 'Removed'
+    labels:
+      - removed
+
+  - title: 'Performance Improvements'
+    labels:
+      - perf
+
+change-template: '- $TITLE'
+
+template: |
+  ## Changelog
+  $CHANGES
