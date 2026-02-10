@@ -1,0 +1,27 @@
+{
+  "template": "# Release ${{RELEASE_VERSION}}\n\n${{CHANGELOG}}\n",
+  "categories": [
+    {
+      "title": "API Changes",
+      "labels": ["api"]
+    },
+    {
+      "title": "New Features",
+      "labels": ["feat"]
+    },
+    {
+      "title": "Removed Features",
+      "labels": ["removed"]
+    },
+    {
+      "title": "Bug Fixes",
+      "labels": ["fix"]
+    },
+    {
+      "title": "Performance Improvements",
+      "labels": ["perf"]
+    }
+  ],
+  "sort": "ASC",
+  "pull_request_template": "- #${{NUMBER}} ${{TITLE}} (@${{AUTHOR}})"
+}
