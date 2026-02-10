@@ -16,7 +16,7 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v6
         with:
           configuration: "configuration_complex.json"
-          repo: "AStages"
+          # repo: "AStages"
           ignorePreReleases: "false"
           fromTag: "v2.0.0-alpha.4"
           # toTag: "v2.0.0-alpha.5"
