@@ -19,6 +19,6 @@ jobs:
           repo: "release-changelog-builder-action"
           ignorePreReleases: "false"
           fromTag: "v2.0.0-alpha.4"
-          toTag: "v2.0.0-alpha.5"
+          # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
