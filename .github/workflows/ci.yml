@@ -1,0 +1,19 @@
+name: Changelog
+on: [workflow_dispatch]
+
+jobs:
+  build_changelog:
+    environment: Token
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Changelog CI
+        uses: saadmk11/changelog-ci@v1.2.0
+        with:
+          config_file: changelog-ci-config.json
+          release_version: 'v2.0.0-alpha.5'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
