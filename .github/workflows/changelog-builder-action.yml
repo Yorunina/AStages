@@ -22,3 +22,9 @@ jobs:
           # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
+
+      - name: Upload changelog
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: CHANGELOG.md
