@@ -20,6 +20,7 @@ jobs:
           ignorePreReleases: "false"
           fromTag: "v2.0.0-alpha.3"
           # toTag: "v2.0.0-alpha.5"
+          baseBranch: '1.20.X'
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
 
