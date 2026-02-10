@@ -1,6 +1,7 @@
 {
   "changelog_type": "pull_request",
   "header_prefix": "Version:",
+  "comment_changelog": true,
   "commit_changelog": false,
   "include_unlabeled_changes": false,
   "group_config": [
