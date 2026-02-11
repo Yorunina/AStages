@@ -22,5 +22,12 @@
       "title": "Performance Improvements",
       "labels": ["perf"]
     }
+  ],
+  "transformers": [
+    {
+      "pattern": "^(api|feat|fix|perf|removed):\\s*",
+      "target": ""
+    }
   ]
+
 }
