@@ -1,5 +1,4 @@
 {
-  "template": "# Release ${{RELEASE_VERSION}}\n\n${{CHANGELOG}}\n",
   "categories": [
     {
       "title": "API Changes",
@@ -22,6 +21,7 @@
       "labels": ["perf"]
     }
   ],
-  "sort": "ASC",
-  "pull_request_template": "- #${{NUMBER}} ${{TITLE}} (@${{AUTHOR}})"
+  "base_branches": [
+    "1.20.X"
+  ]
 }
