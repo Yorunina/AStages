@@ -1,6 +1,6 @@
 {
   "template": "#{{CHANGELOG}}",
-  "pr_template": "- #{{TITLE}}\n ([#{{NUMBER}}](#{{URL}}))",
+  "pr_template": "- #{{TITLE}}. ([##{{NUMBER}}](#{{URL}}))",
   "categories": [
     {
       "title": "API Changes",
