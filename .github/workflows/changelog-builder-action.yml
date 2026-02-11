@@ -33,9 +33,12 @@ jobs:
           # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
-        env:
-          RELEASE_VERSION: ${{ steps.version.outputs.version }}
-          RELEASE_DATE: ${{ steps.date.outputs.today }}
+
+      - name: Prepend version and date
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          DATE="${{ steps.date.outputs.today }}"
+          echo "## [$VERSION] - $DATE\n" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
 
       - name: Upload changelog
         uses: actions/upload-artifact@v4

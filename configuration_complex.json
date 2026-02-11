@@ -1,5 +1,5 @@
 {
-  "template": "## [${{RELEASE_VERSION}}] - ${{RELEASE_DATE}}\n\n#{{CHANGELOG}}\n",
+  "template": "\n\n#{{CHANGELOG}}\n",
   "pr_template": "- #{{TITLE}}. ([##{{NUMBER}}](#{{URL}}))",
   "categories": [
     {
