@@ -20,8 +20,5 @@
       "title": "Performance Improvements",
       "labels": ["perf"]
     }
-  ],
-  "base_branches": [
-    "1.20.X"
   ]
 }

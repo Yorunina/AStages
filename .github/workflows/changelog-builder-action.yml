@@ -18,7 +18,7 @@ jobs:
           configuration: "configuration_complex.json"
           # repo: "AStages"
           ignorePreReleases: "false"
-          fromTag: "v2.0.0-alpha.3"
+          # fromTag: "v2.0.0-alpha.3"
           # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
