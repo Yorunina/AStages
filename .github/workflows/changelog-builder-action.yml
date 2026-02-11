@@ -38,7 +38,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           DATE="${{ steps.date.outputs.today }}"
-          echo "## [$VERSION] - $DATE\n" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
+          echo "## [$VERSION] - $DATE" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
 
       - name: Upload changelog
         uses: actions/upload-artifact@v4
