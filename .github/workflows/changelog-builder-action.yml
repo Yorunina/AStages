@@ -11,6 +11,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Calculate version
+        id: version
+        run: echo "version=2.0.0-alpha.6" >> $GITHUB_OUTPUT
+
+      - name: Set date
+        id: date
+        run: echo "today=$(date +'%d-%m-%Y')" >> $GITHUB_OUTPUT
+
       - name: "Complex Configuration"
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v6
@@ -19,11 +27,15 @@ jobs:
           # repo: "AStages"
           ignorePreReleases: false
           fetchViaCommits: true
+          fromTag: "2.0.0-alpha.3"
           toTag: "HEAD"
           # fromTag: "v2.0.0-alpha.3"
           # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_DATE: ${{ steps.date.outputs.today }}
 
       - name: Upload changelog
         uses: actions/upload-artifact@v4
