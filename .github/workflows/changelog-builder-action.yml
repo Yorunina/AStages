@@ -27,7 +27,7 @@ jobs:
           # repo: "AStages"
           ignorePreReleases: false
           fetchViaCommits: true
-          fromTag: "2.0.0-alpha.3"
+          fromTag: "v2.0.0-alpha.3"
           toTag: "HEAD"
           # fromTag: "v2.0.0-alpha.3"
           # toTag: "v2.0.0-alpha.5"
