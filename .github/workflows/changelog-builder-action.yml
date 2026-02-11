@@ -17,7 +17,8 @@ jobs:
         with:
           configuration: "configuration_complex.json"
           # repo: "AStages"
-          ignorePreReleases: "false"
+          ignorePreReleases: false
+          fetchViaCommits: true
           # fromTag: "v2.0.0-alpha.3"
           # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
