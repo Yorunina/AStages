@@ -1,4 +1,6 @@
 {
+  "template": "#{{CHANGELOG}}\n",
+  "pr_template": "- {{TITLE}} (#{{NUMBER}})",
   "categories": [
     {
       "title": "API Changes",
