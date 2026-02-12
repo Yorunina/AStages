@@ -19,18 +19,23 @@ jobs:
         id: date
         run: echo "today=$(date +'%d-%m-%Y')" >> $GITHUB_OUTPUT
 
-      - name: "Complex Configuration"
-        id: build_changelog
+      - name: Get latest stable version tag
+        id: latest_tag
+        run: |
+          TAG=$(git tag --list 'v*' \
+            | grep -Ev 'alpha|beta|rc' \
+            | sort -V \
+            | tail -n 1)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v6
         with:
-          configuration: "configuration_complex.json"
-          # repo: "AStages"
+          configuration: ".github/changelog-config.json"
           ignorePreReleases: false
           fetchViaCommits: true
-          fromTag: "v2.0.0-alpha.3"
+          fromTag: ${{ steps.latest_tag.outputs.tag }}
           toTag: "HEAD"
-          # fromTag: "v2.0.0-alpha.3"
-          # toTag: "v2.0.0-alpha.5"
           token: ${{ secrets.GITHUB_TOKEN }}
           outputFile: "CHANGELOG.md"
 

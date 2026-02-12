@@ -3,24 +3,24 @@
   "pr_template": "- #{{TITLE}}. ([##{{NUMBER}}](#{{URL}}))",
   "categories": [
     {
-      "title": "API Changes",
-      "labels": ["api"]
-    },
-    {
       "title": "New Features",
       "labels": ["feat"]
-    },
-    {
-      "title": "Removed Features",
-      "labels": ["removed"]
     },
     {
       "title": "Bug Fixes",
       "labels": ["fix"]
     },
     {
+      "title": "API Changes",
+      "labels": ["api"]
+    },
+    {
       "title": "Performance Improvements",
       "labels": ["perf"]
+    },
+    {
+      "title": "Removed Features",
+      "labels": ["removed"]
     }
   ],
   "transformers": [
