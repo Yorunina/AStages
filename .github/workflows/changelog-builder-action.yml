@@ -1,6 +1,9 @@
 name: Changelog Builder Action
 on: [workflow_dispatch]
 
+permissions:
+  contents: write
+
 jobs:
   build_changelog:
     environment: Token
@@ -45,8 +48,16 @@ jobs:
           DATE="${{ steps.date.outputs.today }}"
           echo "## [$VERSION] - $DATE" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
 
-      - name: Upload changelog
-        uses: actions/upload-artifact@v4
-        with:
-          name: changelog
-          path: CHANGELOG.md
+#      - name: Upload changelog
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: changelog
+#          path: CHANGELOG.md
+
+      - name: Commit and push changelog
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add CHANGELOG.md
+          git diff --cached --quiet || git commit -m "docs: update changelog for ${{ steps.version.outputs.version }}"
+          git push
