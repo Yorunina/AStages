@@ -56,8 +56,8 @@ jobs:
 
       - name: Commit and push changelog
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "alessandro-casale"
+          git config user.email "alessandro.casale.developer@gmail.com"
           git add CHANGELOG.md
-          git diff --cached --quiet || git commit -m "docs: update changelog for ${{ steps.version.outputs.version }}"
+          git diff --cached --quiet || git commit -m "docs: Update changelog for ${{ steps.version.outputs.version }}"
           git push
