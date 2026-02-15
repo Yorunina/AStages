@@ -17,26 +17,9 @@ jobs:
       - name: Change wrapper permissions
         uses: actions/checkout@v4
 
-      - name: Get mod version
-        id: get_version
-        run: echo "mod_version=$(grep '^mod_version' gradle.properties | cut -d'=' -f2)" >> $GITHUB_OUTPUT
-
-#      - name: Generate release changelog
-#        id: changelog
-#        uses: janheinrichmerker/action-github-changelog-generator@v2.3
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          unreleasedOnly: true
-#          futureRelease: ${{ steps.get_version.outputs.mod_version }}
-#
-#      - name: Print changelogs
-#        id: print_changelog
-#        run: echo "${{ steps.changelog.outputs.changelog }}"
-
       - run: ./gradlew build publishMods
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-#          CHANGELOGS: ${{ steps.changelog.outputs.changelog }}

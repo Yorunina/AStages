@@ -310,7 +310,9 @@ publishMods {
         }
         else -> {
             type.set(STABLE)
-            changelog.set(providers.environmentVariable("CHANGELOGS"))
+
+            val changelogFile = layout.projectDirectory.file("CHANGELOG.md")
+            changelog.set(providers.fileContents(changelogFile).asText.orElse("No changelog provided."))
         }
     }
 
