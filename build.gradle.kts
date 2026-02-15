@@ -332,7 +332,10 @@ publishMods {
         projectId.set("1120180")
         minecraftVersions.add(minecraft_version)
         changelogType.set("markdown")
-        optional("roughly-enough-items", "jei", "kubejs")
+        optional(
+            "roughly-enough-items", "jei", "kubejs",
+            "in-control", "jade", "fastworkbench"
+        )
 
         displayName.set("astages-$mod_version")
 
@@ -344,7 +347,10 @@ publishMods {
         accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
         projectId.set("6wy8fmIk")
         minecraftVersions.add(minecraft_version)
-        optional("rei", "jei", "kubejs")
+        optional(
+            "rei", "jei", "kubejs",
+            "in-control", "jade"
+        )
 
         displayName.set("astages-$mod_version")
         changelog.set(
