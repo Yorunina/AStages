@@ -14,9 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Calculate version
+      - name: Read version from gradle.properties
         id: version
-        run: echo "version=2.0.0-alpha.6" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=$(grep "^mod_version=" gradle.properties | sed 's/mod_version=//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set date
         id: date
