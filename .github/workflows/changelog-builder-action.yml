@@ -1,4 +1,4 @@
-name: Changelog Builder Action
+name: Changelog
 on: [workflow_dispatch]
 
 permissions:
