@@ -31,7 +31,7 @@ public abstract class AServerPlayer {
     }
 
     @Inject(method = "openMenu", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;send(Lnet/minecraft/network/protocol/Packet;)V"), cancellable = true)
-    public void astages$openMenu(MenuProvider menu, CallbackInfoReturnable<OptionalInt> cir, @Local AbstractContainerMenu abstractcontainermenu) {
+    public void astages$openMenu(MenuProvider menu, CallbackInfoReturnable<OptionalInt> cir, @Local(ordinal = 0) AbstractContainerMenu abstractcontainermenu) {
         AScreenRestriction restriction;
         if (menu instanceof BlockEntity entity) {
             restriction = ARestrictionManager.SCREEN_INSTANCE.getRestriction(AHolder.serverAndPlayer(serverPlayer$self()), abstractcontainermenu, serverLevel().getBlockState(entity.getBlockPos()), entity);
