@@ -35,5 +35,5 @@ public class StageAttributes {
 
     public static final Attribute<Consumer<GrantedEvent>> GRANTED_EVENT = Attribute.create("stages_granted_event", StageAttributeTypes.GRANTED_EVENT, null);
     public static final Attribute<Consumer<TickEvent>> TICK_EVENT = Attribute.create("stages_tick_event", StageAttributeTypes.TICK_EVENT, null);
-    public static final Attribute<Consumer<ExpiredEvent>> EXPIRED_EVENT = Attribute.create("stages_granted_event", StageAttributeTypes.EXPIRED_EVENT, null);
+    public static final Attribute<Consumer<ExpiredEvent>> EXPIRED_EVENT = Attribute.create("stages_expired_event", StageAttributeTypes.EXPIRED_EVENT, null);
 }
