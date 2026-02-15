@@ -287,13 +287,14 @@ publishMods {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val formattedDate: String = today.format(formatter)
     val changelogFile = layout.projectDirectory.file("CHANGELOG.md")
+    val formattedVersion = mod_version.substringBeforeLast("-")
 
     when {
         mod_version.contains("alpha", true) -> {
             type.set(ALPHA)
             changelog.set(
                 """
-                        ## [$mod_version] - $formattedDate
+                        ## [$formattedVersion] - $formattedDate
                         This is an alpha version meant to be used only by developers!   
                         Changelog can be found in Discord server.
                     """.trimIndent()
@@ -303,7 +304,7 @@ publishMods {
             type.set(BETA)
             changelog.set(
                 """
-                        ## [$mod_version] - $formattedDate
+                        ## [$formattedVersion] - $formattedDate
                         This is a beta version meant to be used only by developers!   
                         Changelog can be found in Discord server.
                     """.trimIndent()

@@ -17,8 +17,9 @@ jobs:
       - name: Read version from gradle.properties
         id: version
         run: |
-          VERSION=$(grep "^mod_version=" gradle.properties | sed 's/mod_version=//')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          FULL_VERSION=$(grep "^mod_version=" gradle.properties | sed 's/mod_version=//')
+          CLEAN_VERSION="${FULL_VERSION%-*}"
+          echo "version=$CLEAN_VERSION" >> $GITHUB_OUTPUT
 
       - name: Set date
         id: date
