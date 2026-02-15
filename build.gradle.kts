@@ -286,6 +286,7 @@ publishMods {
     val today = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val formattedDate: String = today.format(formatter)
+    val changelogFile = layout.projectDirectory.file("CHANGELOG.md")
 
     when {
         mod_version.contains("alpha", true) -> {
@@ -310,8 +311,6 @@ publishMods {
         }
         else -> {
             type.set(STABLE)
-
-            val changelogFile = layout.projectDirectory.file("CHANGELOG.md")
             changelog.set(providers.fileContents(changelogFile).asText.orElse("No changelog provided."))
         }
     }
@@ -347,7 +346,11 @@ publishMods {
         optional("rei", "jei", "kubejs")
 
         displayName.set("astages-$mod_version")
-        changelog.set(changelog.get().dropFirstLine())
+        changelog.set(
+            providers.fileContents(changelogFile)
+                .asText
+                .map { it.lineSequence().drop(3).joinToString("\n") }
+        )
 
         announcementTitle.set("Download from Modrinth")
     }
