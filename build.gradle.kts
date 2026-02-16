@@ -1,3 +1,4 @@
+import me.modmuss50.mpp.ReleaseType
 import net.minecraftforge.gradle.userdev.tasks.JarJar
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -353,11 +354,16 @@ publishMods {
         )
 
         displayName.set("astages-$mod_version")
-        changelog.set(
-            providers.fileContents(changelogFile)
-                .asText
-                .map { it.lineSequence().drop(3).joinToString("\n") }
-        )
+
+        if (type.get() == ReleaseType.STABLE) {
+            changelog.set(
+                providers.fileContents(changelogFile)
+                    .asText
+                    .map { it.lineSequence().drop(3).joinToString("\n") }
+            )
+        } else {
+            changelog.set(changelog.get().dropFirstLine())
+        }
 
         announcementTitle.set("Download from Modrinth")
     }
