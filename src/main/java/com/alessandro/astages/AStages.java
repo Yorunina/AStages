@@ -3,6 +3,8 @@ package com.alessandro.astages;
 import com.alessandro.astages.command.argument.ACommandArguments;
 import com.alessandro.astages.config.AStagesClient;
 import com.alessandro.astages.config.AStagesCommon;
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.AClientStageManager;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.core.AStageManager;
 import com.alessandro.astages.loot.AModifiers;
@@ -81,11 +83,25 @@ public class AStages {
             ARestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
         }
 
+        var clientAttributeContainer = AttributeContainer.initialize();
+        APluginManager.callMethod(attributeContainer, AStagesPlugin::attachClientAttributes);
+        var clientResult = clientAttributeContainer.get();
+        for (var clazz : clientResult.keySet()) {
+            AClientRestrictionManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(clientResult.get(clazz));
+        }
+
         var stageAttributeContainer = AttributeContainer.initialize();
         APluginManager.callMethod(attributeContainer, AStagesPlugin::attachStageAttributes);
         var stageResult = stageAttributeContainer.get();
         for (var clazz : stageResult.keySet()) {
-            AStageManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(result.get(clazz));
+            AStageManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(stageResult.get(clazz));
+        }
+
+        var clientStageAttributeContainer = AttributeContainer.initialize();
+        APluginManager.callMethod(attributeContainer, AStagesPlugin::attachClientStageAttributes);
+        var clientStageResult = clientStageAttributeContainer.get();
+        for (var clazz : clientStageResult.keySet()) {
+            AClientStageManager.ATTACHED_ATTRIBUTES.computeIfAbsent(clazz, key -> AttributeStore.builder()).combineWith(clientStageResult.get(clazz));
         }
     }
 
@@ -93,28 +109,5 @@ public class AStages {
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(ChestBlockEntity.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(CompoundContainer.class, null);
         ARestrictionManager.ITEM_INSTANCE.whiteListContainer(BarrelBlockEntity.class, null);
-
-        AStages.LOGGER.debug("ATTRIBUTE STORE CHECK!");
-        var superStore = AttributeStore.builder()
-            .addAttribute(Attributes.AGE, true);
-
-        var restrictionStore = AttributeStore.builder()
-            .addAttribute(Attributes.ATTACKING)
-            .addAttribute(Attributes.BLOCK_PLACING);
-
-        var pluginStore = AttributeStore.builder()
-            .addAttribute(Attributes.BLOCK_BREAKING);
-
-        // var result = AttributeStore.of(superStore, restrictionStore, pluginStore);
-        var result = AttributeStore.compose()
-            .withSuper(superStore)
-            .withSelf(restrictionStore)
-            .withPlugin(pluginStore)
-            .build();
-
-        System.out.println(superStore);
-        System.out.println(restrictionStore);
-        System.out.println(pluginStore);
-        System.out.println(result);
     }
 }
