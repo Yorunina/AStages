@@ -1,8 +1,13 @@
 package com.alessandro.astages.core.client.restriction.item;
 
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.AStageManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
+import com.alessandro.astages.store.AttributeStore;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +18,14 @@ public class AClientItemRestriction extends AClientBaseItemRestriction<AClientIt
 
     public AClientItemRestriction(String id, String stage) {
         super(id, stage);
+    }
+
+    @Override
+    public @NotNull AttributeStore allowedAttributes() {
+        return AttributeStore.compose()
+            .withSuper(super.allowedAttributes())
+            .withPlugin(AClientRestrictionManager.ATTACHED_ATTRIBUTES, AClientItemRestriction.class)
+            .build();
     }
 
     @Override

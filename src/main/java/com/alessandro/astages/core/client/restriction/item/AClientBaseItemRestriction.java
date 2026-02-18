@@ -1,5 +1,8 @@
 package com.alessandro.astages.core.client.restriction.item;
 
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientRestriction;
@@ -13,10 +16,16 @@ public class AClientBaseItemRestriction<R extends AClientRestriction<R, U, ItemS
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
                 .addAttribute(Attributes.RENDERING_NAME)
                 .addAttribute(Attributes.HIDING_TOOLTIP)
                 .addAttribute(Attributes.HIDING_JEI);
+
+        return AttributeStore.compose()
+            .withSuper(super.allowedAttributes())
+            .withSelf(defaultAttributes)
+            .withPlugin(AClientRestrictionManager.ATTACHED_ATTRIBUTES, AClientBaseItemRestriction.class)
+            .build();
     }
 
     @Override

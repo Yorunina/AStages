@@ -4,6 +4,7 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.stage.ClientStage;
 import com.alessandro.astages.core.AClientStageManager;
 import com.alessandro.astages.networking.AStagesPacket;
+import com.alessandro.astages.store.StageAttributes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -33,7 +34,7 @@ public class StageDisplaySyncerS2CPacket implements AStagesPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             // HERE WE ARE ON CLIENT!
-            AClientStageManager.GENERIC_INSTANCE.addStageInternal(stageKey, new ClientStage(stageKey, stack));
+            AClientStageManager.GENERIC_INSTANCE.addStageInternal(stageKey, new ClientStage(stageKey).set(StageAttributes.ICON, stack));
         });
 
         ctx.get().setPacketHandled(true);
