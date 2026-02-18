@@ -1,4 +1,4 @@
-## [2.0.0] - 15-02-2026
+## [2.0.0-alpha.6] - 18-02-2026
 
 
 New Features
@@ -19,5 +19,7 @@ API Changes
 - New method for adding stages via java code, new tests. ([#66](https://github.com/Alessandro-Casale/AStages/pull/66))
 - Moved stage managers and instances to attribute system like restrictions. ([#70](https://github.com/Alessandro-Casale/AStages/pull/70))
 - Plugin integration for `Stage` and `TemporaryStage` classes. ([#76](https://github.com/Alessandro-Casale/AStages/pull/76))
+- Attributes can now be added to all restrictions and stages, both client and server. ([#77](https://github.com/Alessandro-Casale/AStages/pull/77))
+- Add `attachClientAttributes` and `attachClientStageAttributes` methods to AStagesPlugin class. ([#78](https://github.com/Alessandro-Casale/AStages/pull/78))
 
 
