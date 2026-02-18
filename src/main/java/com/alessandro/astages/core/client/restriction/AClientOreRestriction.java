@@ -1,5 +1,9 @@
 package com.alessandro.astages.core.client.restriction;
 
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.AStructureRestriction;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
 import com.alessandro.astages.core.wrapper.OreWrapper;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.Attributes;
@@ -18,8 +22,14 @@ public class AClientOreRestriction extends AClientRestriction<AClientOreRestrict
 
     @Override
     public AttributeStore allowedAttributes() {
-        return AttributeStore.builder()
+        var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.STAGE_ALL_BLOCK_STATES);
+
+        return AttributeStore.compose()
+            .withSuper(super.allowedAttributes())
+            .withSelf(defaultAttributes)
+            .withPlugin(AClientRestrictionManager.ATTACHED_ATTRIBUTES, AClientOreRestriction.class)
+            .build();
     }
 
     @Override

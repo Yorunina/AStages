@@ -1,9 +1,15 @@
 package com.alessandro.astages.core.client.restriction.recipe;
 
-import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.core.AClientRestrictionManager;
+import com.alessandro.astages.core.AStageManager;
+import com.alessandro.astages.core.server.restriction.item.ABaseItemRestriction;
+import com.alessandro.astages.core.server.restriction.recipe.ARecipeRestriction;
+import com.alessandro.astages.core.wrapper.RecipeWrapper;
+import com.alessandro.astages.store.AttributeStore;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +22,14 @@ public class AClientRecipeRestriction extends AClientBaseRecipeRestriction<AClie
 
     public AClientRecipeRestriction(String id, String stage) {
         super(id, stage);
+    }
+
+    @Override
+    public @NotNull AttributeStore allowedAttributes() {
+        return AttributeStore.compose()
+            .withSuper(super.allowedAttributes())
+            .withPlugin(AClientRestrictionManager.ATTACHED_ATTRIBUTES, AClientRecipeRestriction.class)
+            .build();
     }
 
     @Override
