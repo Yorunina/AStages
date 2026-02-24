@@ -106,19 +106,20 @@ public class ARecipeStagesJEIPlugin implements IModPlugin {
 
     private void restrictAllRecipesForMods() {
         for (var mod : AClientRestrictionManager.RECIPE_INSTANCE.mods) {
-            restrictAllRecipesForModAndType(RecipeTypes.CRAFTING, mod.getModId(), mod.getStage());
-            restrictAllRecipesForModAndType(RecipeTypes.SMELTING, mod.getModId(), mod.getStage());
-            restrictAllRecipesForModAndType(RecipeTypes.SMOKING, mod.getModId(), mod.getStage());
-            restrictAllRecipesForModAndType(RecipeTypes.CAMPFIRE_COOKING, mod.getModId(), mod.getStage());
-            restrictAllRecipesForModAndType(RecipeTypes.BLASTING, mod.getModId(), mod.getStage());
-            restrictAllRecipesForModAndType(RecipeTypes.SMITHING, mod.getModId(), mod.getStage());
-            restrictAllRecipesForModAndType(RecipeTypes.STONECUTTING, mod.getModId(), mod.getStage());
+            var ignored = mod.getIgnoredRecipeIds();
+            restrictAllRecipesForModAndType(RecipeTypes.CRAFTING, mod.getModId(), mod.getStage(), ignored);
+            restrictAllRecipesForModAndType(RecipeTypes.SMELTING, mod.getModId(), mod.getStage(), ignored);
+            restrictAllRecipesForModAndType(RecipeTypes.SMOKING, mod.getModId(), mod.getStage(), ignored);
+            restrictAllRecipesForModAndType(RecipeTypes.CAMPFIRE_COOKING, mod.getModId(), mod.getStage(), ignored);
+            restrictAllRecipesForModAndType(RecipeTypes.BLASTING, mod.getModId(), mod.getStage(), ignored);
+            restrictAllRecipesForModAndType(RecipeTypes.SMITHING, mod.getModId(), mod.getStage(), ignored);
+            restrictAllRecipesForModAndType(RecipeTypes.STONECUTTING, mod.getModId(), mod.getStage(), ignored);
         }
     }
 
-    private <C extends Container, T extends Recipe<C>> void restrictAllRecipesForModAndType(mezz.jei.api.recipe.RecipeType<T> type, String modId, String stage) {
+    private <C extends Container, T extends Recipe<C>> void restrictAllRecipesForModAndType(mezz.jei.api.recipe.RecipeType<T> type, String modId, String stage, List<ResourceLocation> ignoredRecipeIds) {
         var newList = runtime.getRecipeManager().createRecipeLookup(type).includeHidden().get()
-            .filter(r -> r.getId().getNamespace().equals(modId))
+            .filter(r -> r.getId().getNamespace().equals(modId) && !ignoredRecipeIds.contains(r.getId()))
             .toList();
 
         if (AStagesClientUtils.hasStage(AClientHolder.serverAndPlayer(), stage)) {
