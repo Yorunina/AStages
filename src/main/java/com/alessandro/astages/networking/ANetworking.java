@@ -56,10 +56,16 @@ public class ANetworking {
             .add();
 
 //        registerPacket(StageDisplaySyncerS2CPacket.class, NetworkDirection.PLAY_TO_CLIENT);
-        INSTANCE.messageBuilder(StageDisplaySyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-            .decoder(StageDisplaySyncerS2CPacket::new)
-            .encoder(StageDisplaySyncerS2CPacket::toBytes)
-            .consumerMainThread(StageDisplaySyncerS2CPacket::handle)
+        INSTANCE.messageBuilder(StageSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(StageSyncerS2CPacket::new)
+            .encoder(StageSyncerS2CPacket::toBytes)
+            .consumerMainThread(StageSyncerS2CPacket::handle)
+            .add();
+
+        INSTANCE.messageBuilder(TemporaryStageSyncerS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(TemporaryStageSyncerS2CPacket::new)
+            .encoder(TemporaryStageSyncerS2CPacket::toBytes)
+            .consumerMainThread(TemporaryStageSyncerS2CPacket::handle)
             .add();
 
         INSTANCE.messageBuilder(RequestClientStagesS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
