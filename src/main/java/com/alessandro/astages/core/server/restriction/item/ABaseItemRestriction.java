@@ -210,12 +210,6 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     }
 
     @SuppressWarnings("unused")
-    public ABaseItemRestriction<R, U> setHiddenName(String name) {
-        set(Attributes.Item.HIDDEN_NAME, stack -> Component.literal(name));
-        return this;
-    }
-
-    @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setDropMessage(Function<ItemStack, Component> message) {
         set(Attributes.Item.DROP_MESSAGE, message);
         return this;
@@ -230,12 +224,6 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setPickupMessage(Function<ItemStack, Component> message) {
         set(Attributes.Item.PICKING_UP_MESSAGE, message);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public ABaseItemRestriction<R, U> setPickupMessage(String message) {
-        set(Attributes.Item.PICKING_UP_MESSAGE, stack -> Component.literal(message));
         return this;
     }
 
