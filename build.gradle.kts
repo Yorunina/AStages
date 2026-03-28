@@ -183,7 +183,7 @@ jarJar.enable()
 dependencies {
     minecraft("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
 
-    implementation(fg.deobf("curse.maven:botania-225643:5002307"))
+    // implementation(fg.deobf("curse.maven:botania-225643:5002307"))
     implementation(fg.deobf("curse.maven:curios-309927:5680164"))
     implementation(fg.deobf("curse.maven:patchouli-306770:4966125"))
 
