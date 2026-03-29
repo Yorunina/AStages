@@ -38,6 +38,7 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
         var defaultAttributes = AttributeStore.builder()
             .addAttribute(Attributes.ALLOW_ACCESS)
             .addAttribute(Attributes.BIDIRECTIONAL)
+            .addAttribute(Attributes.REVERSE)
 
             .addAttribute(Attributes.MAX_ACCESS)
 
@@ -113,6 +114,13 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
         set(Attributes.MAX_ACCESS, value);
         return this;
     }
+
+    @SuppressWarnings("unused")
+    public ADimensionRestriction setReverse(boolean value) {
+        set(Attributes.REVERSE, value);
+        return this;
+    }
+
 
     public String getNbtId() {
         return nbtId + this.getId();

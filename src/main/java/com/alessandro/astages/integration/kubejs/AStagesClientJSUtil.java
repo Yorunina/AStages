@@ -9,7 +9,15 @@ import java.util.List;
 
 @NotNullParamsAndMethodsReturn
 public class AStagesClientJSUtil {
-    public static List<String> getClientStages() {
+    public static List<String> getPlayerClientStages() {
         return new ArrayList<>(AStagesClientUtils.getStages(AClientHolder.player()));
+    }
+
+    public static List<String> getServerClientStages() {
+        return new ArrayList<>(AStagesClientUtils.getStages(AClientHolder.server()));
+    }
+
+    public static List<String> getServerAndPlayerClientStages() {
+        return new ArrayList<>(AStagesClientUtils.getStages(AClientHolder.serverAndPlayer()));
     }
 }

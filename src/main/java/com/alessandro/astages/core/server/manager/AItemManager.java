@@ -1,6 +1,7 @@
 package com.alessandro.astages.core.server.manager;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.ARestrictionUtils;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
@@ -9,6 +10,7 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.config.AStagesCommon;
 import com.alessandro.astages.core.ARestrictionManager;
+import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.alessandro.astages.core.server.restriction.item.*;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.item.ItemModSyncerS2CPacket;
@@ -114,23 +116,21 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
     }
 
     public ABaseItemRestriction<?, ?> getRestriction(AHolder holder, ItemStack stack) {
+        ABaseItemRestriction<?, ?> serverRestriction = null;
+        ABaseItemRestriction<?, ?> playerRestriction = null;
         if (holder.isServerActive()) {
-            var serverRestriction = restrictions.stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
-                r.isRestricted(stack)
+            serverRestriction = restrictions.stream().filter(r ->
+                    r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) && r.isRestricted(stack)
             ).findFirst().orElse(null);
-
-            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
         if (holder.isPlayerActive()) {
-            return restrictions.stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
-                r.isRestricted(stack)
+            playerRestriction = restrictions.stream().filter(r ->
+                    r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) && r.isRestricted(stack)
             ).findFirst().orElse(null);
         }
 
-        return null;
+        return (ABaseItemRestriction<?, ?>) ARestrictionUtils.getServerAndPlayerRestriction(serverRestriction, playerRestriction);
     }
 
     public ARestrictionHolder<ABaseItemRestriction<?, ?>> getHolder(AHolder holder, ItemStack stack) {
@@ -142,23 +142,21 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
     }
 
     public ABaseItemRestriction<?, ?> getInventoryRestriction(AHolder holder, ItemStack stack) {
+        ABaseItemRestriction<?, ?> serverRestriction = null;
+        ABaseItemRestriction<?, ?> playerRestriction = null;
         if (holder.isServerActive()) {
-            var serverRestriction = INVENTORY_CACHE.stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
-                    r.isRestricted(stack)
+            serverRestriction = INVENTORY_CACHE.stream().filter(r ->
+                    r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) && r.isRestricted(stack)
             ).findFirst().orElse(null);
-
-            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
         if (holder.isPlayerActive()) {
-            return INVENTORY_CACHE.stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
-                    r.isRestricted(stack)
+            playerRestriction = INVENTORY_CACHE.stream().filter(r ->
+                    r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) && r.isRestricted(stack)
             ).findFirst().orElse(null);
         }
 
-        return null;
+        return (ABaseItemRestriction<?, ?>) ARestrictionUtils.getServerAndPlayerRestriction(serverRestriction, playerRestriction);
     }
 
     public ARestrictionHolder<ABaseItemRestriction<?, ?>> getInventoryHolder(AHolder holder, ItemStack stack) {
@@ -166,23 +164,21 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
     }
 
     public ABaseItemRestriction<?, ?> getEquipmentRestriction(AHolder holder, ItemStack stack) {
+        ABaseItemRestriction<?, ?> serverRestriction = null;
+        ABaseItemRestriction<?, ?> playerRestriction = null;
         if (holder.isServerActive()) {
-            var serverRestriction = EQUIPMENT_CACHE.stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
-                    r.isRestricted(stack)
+            serverRestriction = EQUIPMENT_CACHE.stream().filter(r ->
+                    r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) && r.isRestricted(stack)
             ).findFirst().orElse(null);
-
-            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
         }
 
         if (holder.isPlayerActive()) {
-            return EQUIPMENT_CACHE.stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
-                    r.isRestricted(stack)
+            playerRestriction = EQUIPMENT_CACHE.stream().filter(r ->
+                    r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) && r.isRestricted(stack)
             ).findFirst().orElse(null);
         }
 
-        return null;
+        return (ABaseItemRestriction<?, ?>) ARestrictionUtils.getServerAndPlayerRestriction(serverRestriction, playerRestriction);
     }
 
     public ARestrictionHolder<ABaseItemRestriction<?, ?>> getEquipmentHolder(AHolder holder, ItemStack stack) {
@@ -190,17 +186,16 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
     }
 
     public ABaseItemRestriction<?, ?> getContainersRestriction(AHolder holder, ItemStack stack, Slot slot) {
+        ABaseItemRestriction<?, ?> serverRestriction = null;
+        ABaseItemRestriction<?, ?> playerRestriction = null;
         if (holder.isServerActive()) {
-            var serverRestriction = getContainersRestriction(holder, AStageType.SERVER, stack, slot);
-
-            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
+            serverRestriction = getContainersRestriction(holder, AStageType.SERVER, stack, slot);
         }
 
         if (holder.isPlayerActive()) {
-            return getContainersRestriction(holder, AStageType.PLAYER, stack, slot);
+            playerRestriction = getContainersRestriction(holder, AStageType.PLAYER, stack, slot);
         }
-
-        return null;
+        return (ABaseItemRestriction<?, ?>) ARestrictionUtils.getServerAndPlayerRestriction(serverRestriction, playerRestriction);
     }
 
     public ARestrictionHolder<ABaseItemRestriction<?, ?>> getContainersHolder(AHolder holder, ItemStack stack, Slot slot) {
@@ -215,9 +210,9 @@ public class AItemManager implements AMinimalManager<ABaseItemRestriction<?, ?>>
         if (isPresent) {
             var whitelistedIndexes = containersWhitelist.get(container.getClass());
             if (whitelistedIndexes == null) {
-                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
+                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
             } else if (whitelistedIndexes.contains(index)) {
-                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && !AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
+                return CONTAINERS_CACHE.stream().filter(r -> r.isRestricted(stack) && r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
             }
         }
 

@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 public class Attributes {
     public static final DeferredRegister<Attribute<?>> ATTRIBUTES = Attribute.setCurrentDeferredRegister(DeferredRegister.create(AStagesRegistries.Keys.ATTRIBUTES, AStages.MODID));
 
+    public static final Attribute<Boolean> REVERSE = Attribute.create("reverse", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> RENDERING_NAME = Attribute.create("rendering_name", AttributeTypes.BOOLEAN, false);
     public static final Attribute<Boolean> HIDING_TOOLTIP = Attribute.create("hiding_tooltip", AttributeTypes.BOOLEAN, true);
     public static final Attribute<Boolean> PICKING_UP = Attribute.create("picking_up", AttributeTypes.BOOLEAN, false);

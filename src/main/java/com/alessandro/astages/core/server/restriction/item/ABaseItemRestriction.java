@@ -44,6 +44,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
             .addAttribute(Attributes.ATTACKING)
             .addAttribute(Attributes.HIDING_JEI)
             .addAttribute(Attributes.BLOCK_PLACING)
+            .addAttribute(Attributes.REVERSE)
             .addAttribute(Attributes.LEFT_CLICK_INTERACTIONS)
             .addAttribute(Attributes.RIGHT_CLICK_INTERACTIONS)
             .addAttribute(Attributes.BLOCK_BREAKING)
@@ -130,6 +131,12 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
     @SuppressWarnings("unused")
     public ABaseItemRestriction<R, U> setCanBeStoredInInventory(boolean value) {
         set(Attributes.STORING_IN_INVENTORY, value);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ABaseItemRestriction<R, U> setReverse(boolean value) {
+        set(Attributes.REVERSE, value);
         return this;
     }
 

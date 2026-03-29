@@ -8,6 +8,7 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.core.server.restriction.ADimensionRestriction;
 import com.alessandro.astages.store.ARestrictionType;
 import com.alessandro.astages.store.ARestrictionTypes;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.AManager;
 import net.minecraft.resources.ResourceLocation;
 
@@ -32,17 +33,20 @@ public class ADimensionManager extends AManager<ADimensionRestriction, ResourceL
 
     @Override
     public ADimensionRestriction getRestriction(AHolder holder, ResourceLocation dimension) {
+        // 有则代表有限制
+        ADimensionRestriction serverRestriction = null;
+        ADimensionRestriction playerRestriction = null;
         if (holder.isServerActive()) {
-            var serverRestriction = ARestrictionUtils.getRestrictionFromCache(holder, AStageType.SERVER, CACHE, dimension);
-            if (serverRestriction == null) { return null; }
+            serverRestriction = ARestrictionUtils.getRestrictionFromCache(holder, AStageType.SERVER, CACHE, dimension);
         }
 
         if (holder.isPlayerActive()) {
-            return ARestrictionUtils.getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, dimension);
+            playerRestriction = ARestrictionUtils.getRestrictionFromCache(holder, AStageType.PLAYER, CACHE, dimension);
         }
 
-        return null;
+        return (ADimensionRestriction) ARestrictionUtils.getServerAndPlayerRestriction(serverRestriction, playerRestriction);
     }
+
 
     @Override
     public void removeRestriction(String id) {

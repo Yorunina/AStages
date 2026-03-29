@@ -58,7 +58,7 @@ public class AStageKubeJSPlugin extends KubeJSPlugin {
             event.add("AStages", AStagesKubeJSUtil.class);
         }
 
-        if (event.getType().isClient()) {
+        if (event.getType().isClient() || event.getType().isStartup()) {
             event.add("AStagesClient", AStagesClientJSUtil.class);
         }
 

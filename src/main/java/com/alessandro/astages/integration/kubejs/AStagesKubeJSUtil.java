@@ -61,6 +61,10 @@ public class AStagesKubeJSUtil {
         return AStagesUtils.hasStage(AHolder.player(player), stage);
     }
 
+    public static boolean serverAndPlayerHasStage(String stage, Player player) {
+        return AStagesUtils.hasStage(AHolder.serverAndPlayer(player), stage);
+    }
+
     public static boolean playerHasAtLeastOneStage(List<String> stages, Player player) {
         return AStagesUtils.hasAtLeastOneStage(AHolder.player(player), stages);
     }

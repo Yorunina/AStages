@@ -30,8 +30,10 @@ public class ServerEventHandler {
     public static void onEntityTravel(EntityTravelToDimensionEvent event) {
         if (event.getEntity() instanceof Player player) {
             ResourceLocation dimension = event.getDimension().location();
-
+            if (dimension.getNamespace().equals("infinity"))  dimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
             ResourceLocation currentDimension = player.level().dimension().location();
+            if (currentDimension.getNamespace().equals("infinity"))  currentDimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
+
             ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
             ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), dimension);
 
@@ -61,6 +63,7 @@ public class ServerEventHandler {
         if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer player) {
             var persistentData = player.getPersistentData();
             ResourceLocation currentDimension = player.level().dimension().location();
+            if (currentDimension.getNamespace().equals("infinity"))  currentDimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
 
             var restriction = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
 

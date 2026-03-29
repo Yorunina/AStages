@@ -1,6 +1,7 @@
 package com.alessandro.astages.mixin.loot;
 
 import com.alessandro.astages.api.holder.AHolder;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.api.nullability.NotNullParams;
@@ -31,7 +32,8 @@ public abstract class ARandomizableContainerBlockEntity {
     }
 
     @Inject(method = "unpackLootTable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/loot/LootTable;fill(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/storage/loot/LootParams;J)V", shift = At.Shift.AFTER))
-    public void astages$unpackLootTable(Player player, CallbackInfo ci, @Local LootTable lootTable) {
+    public void astages$unpackLootTable(@Nullable Player player, CallbackInfo ci, @Local LootTable lootTable) {
+        if (player == null) return;
         var size = randomizableContainerBlockEntity$self().getContainerSize();
 
         for (int slot = 0; slot < size; slot++) {
