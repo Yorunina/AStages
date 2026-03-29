@@ -23,7 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class MobServerEvents {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void checkMobSpawning(MobSpawnEvent.FinalizeSpawn event) {
         Player nearestPlayer = APlayerUtils.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
         var level = event.getEntity().level();
