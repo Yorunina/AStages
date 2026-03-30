@@ -8,8 +8,10 @@ import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -152,5 +154,12 @@ public class ADimensionRestriction extends ARestriction<ADimensionRestriction, R
     public ADimensionRestriction setExpiredDimensionMessage(Function<ResourceLocation, Component> message) {
         set(Attributes.Dimension.EXPIRED_MESSAGE, message);
         return this;
+    }
+
+    public static void removeDimensionAccess(ServerPlayer player, ADimensionRestriction restriction) {
+        var persistentData = player.getPersistentData();
+        if (persistentData.contains(restriction.getNbtAccess())) {
+            persistentData.remove(restriction.getNbtAccess());
+        }
     }
 }

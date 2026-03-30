@@ -264,16 +264,12 @@ public class ARestrictionUtils {
     public static @Nullable ARestriction<?, ?, ?> getServerAndPlayerRestriction(@Nullable ARestriction<?, ?, ?> serverRestriction, @Nullable ARestriction<?, ?, ?> playerRestriction) {
         if (serverRestriction != null) {
             if (serverRestriction.get(Attributes.REVERSE)) {
-                // 强行施加限制的情况，只要有限制就施加
                 return serverRestriction;
             } else {
-                // 非强行情况，需要看玩家是否吃限制
                 return playerRestriction == null ? serverRestriction : playerRestriction;
             }
         } else {
-            // 没有服务端限制的情况，要看客户端是否有强行施加的限制
             if (playerRestriction != null && playerRestriction.get(Attributes.REVERSE)) {
-                // 客户端有强行施加的限制
                 return playerRestriction;
             } else {
                 return null;
