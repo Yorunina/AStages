@@ -27,8 +27,10 @@
     "recipe.minecraft.ASmithingMenu",
     "recipe.minecraft.AStonecutterMenu",
     "reload.AJeiStarter",
+    "reload.AMinecraftServer",
     "reload.AReloadCommand",
     "reload.AScriptManager",
+    "reload.AWorldLoader",
     "screen.AServerPlayer",
     "structure.AEntity"
   ],
