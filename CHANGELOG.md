@@ -1,10 +1,11 @@
-## [2.0.0-alpha.6] - 18-02-2026
+## [2.0.0-alpha.6] - 02-04-2026
 
 
 New Features
 
 - Implement tick method for temporary stages. ([#65](https://github.com/Alessandro-Casale/AStages/pull/65))
 - New methods exposed for both Stages and TemporaryStages. ([#75](https://github.com/Alessandro-Casale/AStages/pull/75))
+- Implement method `ignoreItems` for Recipe Mod Restrictions. ([#79](https://github.com/Alessandro-Casale/AStages/pull/79))
 
 Bug Fixes
 
@@ -12,6 +13,7 @@ Bug Fixes
 - Solved disconnection from servers when client info command is run. ([#68](https://github.com/Alessandro-Casale/AStages/pull/68))
 - Solve a bug which keeps server crashing at startup. ([#73](https://github.com/Alessandro-Casale/AStages/pull/73))
 - Critical server crash caused by invalid registry setup. ([#74](https://github.com/Alessandro-Casale/AStages/pull/74))
+- Solve Jade doesn't show correct item name and solve inventory not being updated when player logged in. ([#92](https://github.com/Alessandro-Casale/AStages/pull/92))
 
 API Changes
 
@@ -21,5 +23,8 @@ API Changes
 - Plugin integration for `Stage` and `TemporaryStage` classes. ([#76](https://github.com/Alessandro-Casale/AStages/pull/76))
 - Attributes can now be added to all restrictions and stages, both client and server. ([#77](https://github.com/Alessandro-Casale/AStages/pull/77))
 - Add `attachClientAttributes` and `attachClientStageAttributes` methods to AStagesPlugin class. ([#78](https://github.com/Alessandro-Casale/AStages/pull/78))
+- Divide Permanent and Temporary stages on the client. ([#80](https://github.com/Alessandro-Casale/AStages/pull/80))
+- Refactor nearly all packages, breaking changes with legacy addons. ([#88](https://github.com/Alessandro-Casale/AStages/pull/88))
+- Refactor reload system in order to be JS independent. ([#90](https://github.com/Alessandro-Casale/AStages/pull/90))
 
 
