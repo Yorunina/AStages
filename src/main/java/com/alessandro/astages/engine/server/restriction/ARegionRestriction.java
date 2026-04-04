@@ -1,12 +1,11 @@
 package com.alessandro.astages.engine.server.restriction;
 
-import com.alessandro.astages.api.develop.Info;
+import com.alessandro.astages.api.exception.UnsupportedMethodException;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.restriction.ARestriction;
 import com.alessandro.astages.api.store.container.AttributeStore;
 import com.alessandro.astages.engine.ARestrictionManager;
 import com.alessandro.astages.engine.store.Attributes;
-import com.google.errorprone.annotations.DoNotCall;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,11 +31,6 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
         super(id, stage);
     }
 
-    @SuppressWarnings("unused")
-    public static ARegionRestriction newBuilder() {
-        return new ARegionRestriction("null", "null");
-    }
-
     @Override
     public AttributeStore allowedAttributes() {
         var defaultAttributes = AttributeStore.builder()
@@ -59,9 +53,9 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
     }
 
     @Override
-    @DoNotCall
-    @Info("Prefer using methods below!")
-    public ARegionRestriction restrict(Void unused) { return null; }
+    public ARegionRestriction restrict(Void unused) {
+        throw UnsupportedMethodException.useInstead("any of ARegionRestriction.setArea(###) methods");
+    }
 
     public ARegionRestriction setDimension(ResourceLocation dimension) {
         set(Attributes.DIMENSION, dimension);
