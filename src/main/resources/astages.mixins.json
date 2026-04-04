@@ -26,7 +26,7 @@
     "recipe.minecraft.ACraftingMenu",
     "recipe.minecraft.ASmithingMenu",
     "recipe.minecraft.AStonecutterMenu",
-    "reload.AJeiStarter",
+    "integration.jei.AJeiStarter",
     "reload.AMinecraftServer",
     "reload.AReloadCommand",
     "reload.AScriptManager",
