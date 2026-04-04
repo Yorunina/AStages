@@ -6,6 +6,7 @@ import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.infrastructure.capability.OfflinePlayerStage;
 import com.alessandro.astages.infrastructure.capability.ServerStage;
+import com.alessandro.astages.infrastructure.config.AStagesCommon;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -57,7 +58,10 @@ public class AHolder {
             holder.addPlayer(player);
         } else {
             holder.setPlayer(false);
-            AStages.LOGGER.debug("Encountered null player, skipped adding it to holder!");
+
+            if (AStagesCommon.ENABLE_DEV_LOGS.get()) {
+                AStages.LOGGER.debug("Encountered null player, skipped adding it to holder!");
+            }
         }
 
         return holder;
