@@ -4,7 +4,7 @@
 New Features
 
 - Offline stages (will be polished in next releases).
-- Added stage warning if a stage is not linked to any restriction/method. (Can be disabled via config flag).
+- Add stage warning if a stage is not linked to any restriction/method. (Can be disabled via config flag).
 - New temporary stages.
 - Add test mode, related methods and config flag.
 - New simple restrictions location can be configured.
@@ -15,10 +15,10 @@ New Features
 
 Bug Fixes
 
-- Solved bug when reloading scripts.
-- Solved bug which prevents restrictions from working as expected (client and server side).
+- Solve bug when reloading scripts.
+- Solve bug which prevents restrictions from working as expected (client and server side).
 - Solve bug which prevents world from loading correctly if a custom stage will be added without setting a custom stack. ([#67](https://github.com/Alessandro-Casale/AStages/pull/67))
-- Solved disconnection from servers when client info command is run. ([#68](https://github.com/Alessandro-Casale/AStages/pull/68))
+- Solve disconnection from servers when client info command is run. ([#68](https://github.com/Alessandro-Casale/AStages/pull/68))
 - Solve a bug which keeps server crashing at startup. ([#73](https://github.com/Alessandro-Casale/AStages/pull/73))
 - Critical server crash caused by invalid registry setup. ([#74](https://github.com/Alessandro-Casale/AStages/pull/74))
 - Solve server crash if null player is used to instantiate a holder. ([#89](https://github.com/Alessandro-Casale/AStages/pull/89))
@@ -29,8 +29,8 @@ Bug Fixes
 API Changes
 
 - Annotations cleanup.
-- Exposed new utility methods.
-- Adopted new Java IO file system.
+- Expose new utility methods.
+- Adopt new Java IO file system.
 - Unify event post/listener system over different loaders. ([#61](https://github.com/Alessandro-Casale/AStages/pull/61))
 - New method for adding stages via java code, new tests. ([#66](https://github.com/Alessandro-Casale/AStages/pull/66))
 - Moved stage managers and instances to attribute system like restrictions. ([#70](https://github.com/Alessandro-Casale/AStages/pull/70))
