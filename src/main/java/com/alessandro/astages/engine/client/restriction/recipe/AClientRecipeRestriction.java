@@ -16,7 +16,6 @@ public class AClientRecipeRestriction extends AClientBaseRecipeRestriction<AClie
     private RecipeType<?> type = null;
     private final List<ResourceLocation> recipes = new ArrayList<>();
 
-
     public AClientRecipeRestriction(String id, String stage) {
         super(id, stage);
     }
