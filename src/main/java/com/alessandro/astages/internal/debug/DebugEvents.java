@@ -13,9 +13,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class DebugEvents {
@@ -35,6 +38,8 @@ public class DebugEvents {
             .setDimension(AResourceLocation.parse("minecraft:overworld"))
             .restrictSpawnType(MobSpawnType.SPAWN_EGG)
             .restrictBiomeSpawn(AResourceLocation.parse("minecraft:plains"));
+
+        ARestrictionUtils.addRestrictionForRecipe("astages:recipe1", "stage_recipe_1", RecipeType.SMITHING, List.of(AResourceLocation.fromNamespaceAndPath("minecraft", "netherite_sword_smithing")));
     }
 
     @SubscribeEvent
