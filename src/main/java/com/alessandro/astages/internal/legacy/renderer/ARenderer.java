@@ -1,4 +1,4 @@
-package com.alessandro.astages.internal.experimental.renderer;
+package com.alessandro.astages.internal.legacy.renderer;
 
 import com.alessandro.astages.api.develop.UnderDevelopment;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Deprecated(forRemoval = true)
 @UnderDevelopment
 public class ARenderer {
         private static VertexBuffer vertexBuffer;

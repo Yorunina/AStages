@@ -1,4 +1,4 @@
-package com.alessandro.astages.internal.experimental.renderer;
+package com.alessandro.astages.internal.legacy.renderer;
 
 
 import com.alessandro.astages.AStages;
@@ -8,6 +8,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated(forRemoval = true)
 @UnderDevelopment
 @Mod.EventBusSubscriber(modid = AStages.MODID, value = Dist.CLIENT)
 public class RenderLevelEvent {

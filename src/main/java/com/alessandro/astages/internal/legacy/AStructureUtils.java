@@ -1,4 +1,4 @@
-package com.alessandro.astages.internal.experimental;
+package com.alessandro.astages.internal.legacy;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public class AStructureUtils {
     private static final int[][] delta = {
         { -1, -1 },
