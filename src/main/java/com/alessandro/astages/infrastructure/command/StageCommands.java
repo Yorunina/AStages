@@ -1,12 +1,12 @@
 package com.alessandro.astages.infrastructure.command;
 
-import com.alessandro.astages.api.util.AStagesUtils;
 import com.alessandro.astages.api.constant.AStageSource;
 import com.alessandro.astages.api.constant.AStatus;
 import com.alessandro.astages.api.develop.NotYetImplemented;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.api.util.AStagesUtils;
 import com.alessandro.astages.infrastructure.command.argument.AStagesAddArgument;
 import com.alessandro.astages.infrastructure.command.argument.AStagesRemoveArgument;
 import com.alessandro.astages.infrastructure.networking.Networking;
@@ -20,6 +20,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Collection;
 
@@ -173,16 +174,28 @@ public class StageCommands {
     private static int info(CommandContext<CommandSourceStack> context, @Nullable ServerPlayer executor, @Nullable ServerPlayer player) {
         if (player == null) { return 0; }
 
+        var server = ServerLifecycleHooks.getCurrentServer();
         var username = player.getGameProfile().getName();
         var uuid = player.getUUID(); // OfflinePlayerStage.USERNAME_UUID.get(player.getGameProfile().getName());
         var stages = AStagesUtils.getStages(AHolder.player(uuid));
 
-        if (stages.isEmpty()) {
-            executor.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", username).withStyle(ChatFormatting.RED));
-        } else {
-            executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", username).withStyle(ChatFormatting.GREEN));
-            for (var stage : stages) {
-                executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
+        if (executor != null) {
+            if (stages.isEmpty()) {
+                executor.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", username).withStyle(ChatFormatting.RED));
+            } else {
+                executor.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", username).withStyle(ChatFormatting.GREEN));
+                for (var stage : stages) {
+                    executor.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
+                }
+            }
+        } else if (server != null) {
+            if (stages.isEmpty()) {
+                server.sendSystemMessage(Component.translatable("chat.astages.info.no_stages", username).withStyle(ChatFormatting.RED));
+            } else {
+                server.sendSystemMessage(Component.translatable("chat.astages.info.has_stages", username).withStyle(ChatFormatting.GREEN));
+                for (var stage : stages) {
+                    server.sendSystemMessage(Component.translatable("chat.astages.info.list_item", stage));
+                }
             }
         }
 
