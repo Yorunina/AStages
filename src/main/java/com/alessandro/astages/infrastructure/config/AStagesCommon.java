@@ -2,7 +2,19 @@ package com.alessandro.astages.infrastructure.config;
 
 import com.alessandro.astages.api.constant.ASimpleLocation;
 import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class AStagesCommon {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -16,6 +28,9 @@ public class AStagesCommon {
     public static final ForgeConfigSpec.EnumValue<ASimpleLocation> SIMPLE_RESTRICTIONS_FOLDER;
     public static final ForgeConfigSpec.IntValue SIMPLE_RESTRICTIONS_RELOADABLE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_TEST_MODE;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW_SPAWN_TYPES;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELIST_SPAWN_TYPES;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELIST_ENTITY_TYPES;
 
     static {
         BUILDER.push("Configs for AStages Mod");
@@ -32,6 +47,38 @@ public class AStagesCommon {
         ENABLE_DEV_LOGS = BUILDER.comment("Show logs related to dev things!")
             .define("Enable Dev Logs", false);
 
+        SHOW_SPAWN_TYPES = BUILDER.comment("Show spawn types in logs for every entity type that is generated via FinalizeSpawnEvent")
+            .define("Enable Spawn Types Logs", false);
+
+        Predicate<Object> spawnTypeValidator = obj -> {
+            if (obj instanceof String s) {
+                try {
+                    MobSpawnType.valueOf(s.toUpperCase());
+                    return true;
+                } catch (IllegalArgumentException e) {
+                    return false;
+                }
+            }
+            return false;
+        };
+
+        WHITELIST_SPAWN_TYPES = BUILDER.comment("Whitelist spawn types showed in logs if `Enable Spawn Types Logs` is true (if empty, all types will be logged). " +
+                "Allowed values: " + Arrays.toString(MobSpawnType.values()))
+            .defineList("Whitelist Spawn Types", List.of(), spawnTypeValidator);
+
+        Predicate<Object> entityTypeValidator = obj -> {
+            if (obj instanceof String s) {
+                ResourceLocation rl = ResourceLocation.tryParse(s.toLowerCase());
+                if (rl != null) {
+                    return ForgeRegistries.ENTITY_TYPES.containsKey(rl);
+                }
+            }
+            return false;
+        };
+
+        WHITELIST_ENTITY_TYPES = BUILDER.comment("Whitelist entity types showed in logs if `Enable Spawn Types Logs` is true (if empty, all types will be logged). (es: 'minecraft:zombie')")
+            .defineList("Whitelist Entity Types", List.of(), entityTypeValidator);
+
         ENABLE_STAGE_WARNING = BUILDER.comment("Show warning when a stage is not associated to any restriction")
             .define("Enable Warning", true);
 
@@ -47,5 +94,22 @@ public class AStagesCommon {
         BUILDER.pop();
 
         SPEC = BUILDER.build();
+    }
+
+    public static @Unmodifiable Set<MobSpawnType> getWhitelistSpawnTypes() {
+        return WHITELIST_SPAWN_TYPES.get().stream()
+            .map(String::toUpperCase)
+            .map(MobSpawnType::valueOf)
+            .collect(Collectors.toSet());
+    }
+
+    public static @Unmodifiable Set<EntityType<?>> getWhitelistEntityTypes() {
+        return WHITELIST_ENTITY_TYPES.get().stream()
+            .map(s -> {
+                ResourceLocation rl = ResourceLocation.tryParse(s);
+                return rl != null ? ForgeRegistries.ENTITY_TYPES.getValue(rl) : null;
+            })
+            .filter(Objects::nonNull) // Remove null values if something went wrong
+            .collect(Collectors.toSet());
     }
 }
