@@ -60,6 +60,10 @@ java {
     }
 }
 
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
+}
+
 minecraft {
     mappings("parchment", "2023.09.03-1.20.1")
 
