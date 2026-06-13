@@ -1,6 +1,5 @@
-package com.alessandro.astages.infrastructure.registry;
+package com.alessandro.astages.infrastructure.advancement;
 
-import com.alessandro.astages.infrastructure.advancement.StageEarnTrigger;
 import net.minecraft.advancements.CriteriaTriggers;
 
 public class ACriteriaTriggers {
