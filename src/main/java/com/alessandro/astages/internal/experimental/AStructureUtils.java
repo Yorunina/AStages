@@ -56,4 +56,76 @@ public class AStructureUtils {
 
         return toReturn;
     }
+//
+//    public static final Map<UUID, List<ResourceLocation>> playerIsInStructure = new HashMap<>();
+//    public static int tick = 0;
+//
+//    @SubscribeEvent(priority = EventPriority.LOW)
+//    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+//        if (ARestrictionManager.STRUCTURE_INSTANCE.getRegistry().getRestrictions().isEmpty()) { return; }
+//        if (event.player.level().isClientSide) { return; }
+//        if (event.phase == TickEvent.Phase.START) { return; }
+//        if (event.player.getServer() == null) { return; }
+//
+//        if (tick % AStagesCommon.TICK_STRUCTURE_UPDATING.get() == 0) {
+//            if (event.player instanceof ServerPlayer player) {
+//                StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
+//                UUID playerUUID = player.getUUID();
+//
+//                var newList = new ArrayList<ResourceLocation>();
+//                manager.getAllStructuresAt(player.getOnPos()).keySet().forEach(structure -> {
+//
+//                    var structureId = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(structure);
+//                    newList.add(structureId);
+//                });
+//
+//                if (playerIsInStructure.containsKey(playerUUID)) {
+//                    playerIsInStructure.get(playerUUID).clear();
+//                }
+//
+//                playerIsInStructure.put(playerUUID, newList);
+//            }
+//        }
+//
+//        tick++;
+//        if (tick >= AStagesCommon.TICK_STRUCTURE_UPDATING.get()) { tick = 0; }
+//    }
+//
+//    //    @SubscribeEvent
+//    public static void testTick(TickEvent.PlayerTickEvent event) {
+//        // if (ARestrictionManager.STRUCTURE_INSTANCE.getRestrictions().isEmpty()) { return; }
+//        if (event.player.level().isClientSide) { return; }
+//        if (event.phase == TickEvent.Phase.START) { return; }
+//        if (event.player.getServer() == null) { return; }
+//
+//        if (event.player instanceof ServerPlayer player) {
+//            StructureManager manager = Objects.requireNonNull(player.getServer().getLevel(player.level().dimension())).structureManager();
+//            var result = AStructureUtils.isCloseToStructure(player, manager, player.getServer().getLevel(player.level().dimension()));
+//            AStages.LOGGER.debug(result.toString());
+//        }
+//    }
+//
+//    private static void teleportPlayerOutFromTheStructure(Player player) {
+//        var range = 1;
+//        var level = player.level();
+//
+//        level.getChunkAt(new BlockPos(0, 0, 0)).getHeight(Heightmap.Types.WORLD_SURFACE_WG, 0, 0);
+//    }
+//
+//    private static void summonMobsOnPlayerEntering(Player player) {
+//        var entity = EntityType.ZOMBIE.create(player.level());
+//
+//        if (entity != null) {
+//            entity.addTag("astages/" + player.getUUID());
+//            entity.setPos(player.position());
+//            entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+//            entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+//            entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+//            entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+//            var sword = new ItemStack(Items.DIAMOND_SWORD);
+//            sword.enchant(Enchantments.SHARPNESS, 10000);
+//            entity.setItemInHand(InteractionHand.MAIN_HAND, sword);
+//            entity.setInvulnerable(true);
+//        }
+//    }
 }

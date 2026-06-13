@@ -3,7 +3,6 @@ package com.alessandro.astages.internal.experimental.block;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.infrastructure.hook.restriction.StructureServerEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -11,8 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 @NotNullParams
@@ -42,7 +39,7 @@ public class ServerEventHandler {
                 var manager = serverLevel.structureManager();
                 Structure structure = manager.registryAccess().registryOrThrow(Registries.STRUCTURE).get(AResourceLocation.parse("minecraft:pillager_outpost"));
 
-                for (UUID uuid : StructureServerEvents.playerIsInStructure.keySet()) {
+//                for (UUID uuid : StructureServerEvents.playerIsInStructure.keySet()) {
 //                    if (player.getUUID().equals(uuid) && com.alessandro.astages.event.structure.ServerEventHandler.playerIsInStructure.get(uuid)) {
                         var s = manager.getStructureAt(player.getOnPos(), structure);
 
@@ -94,7 +91,7 @@ public class ServerEventHandler {
 
     //                            AStages.LOGGER.debug(String.valueOf(bool));
     //                        }
-                        }
+//                        }
 //                    }
                 }
             }
