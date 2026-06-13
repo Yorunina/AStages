@@ -6,7 +6,7 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import java.util.UUID;
 
 @AutoRegisterCapability
-public class BlockStage {
+public class BlockOwner {
     public static String OWNER_KEY = "owner";
     private UUID owner;
 
