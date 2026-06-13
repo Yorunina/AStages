@@ -13,17 +13,17 @@ import net.minecraftforge.common.util.LazyOptional;
 
 @NotNullParamsAndMethodsReturn
 public class BlockStageProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<BlockStage> BLOCK_STAGE = CapabilityManager.get(new CapabilityToken<>() { });
+    public static Capability<BlockOwner> BLOCK_STAGE = CapabilityManager.get(new CapabilityToken<>() { });
 
-    private BlockStage blockStage = null;
-    private final LazyOptional<BlockStage> optional = LazyOptional.of(this::getOrCreateBlockStage);
+    private BlockOwner blockOwner = null;
+    private final LazyOptional<BlockOwner> optional = LazyOptional.of(this::getOrCreateBlockStage);
 
-    private BlockStage getOrCreateBlockStage() {
-        if (this.blockStage == null) {
-            this.blockStage = new BlockStage();
+    private BlockOwner getOrCreateBlockStage() {
+        if (this.blockOwner == null) {
+            this.blockOwner = new BlockOwner();
         }
 
-        return this.blockStage;
+        return this.blockOwner;
     }
 
     @Override

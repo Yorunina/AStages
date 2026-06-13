@@ -6,7 +6,6 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.infrastructure.networking.packet.dimension.SyncDimensionIdsS2C;
 import com.alessandro.astages.infrastructure.networking.packet.item.*;
-import com.alessandro.astages.infrastructure.networking.packet.stages.*;
 import com.alessandro.astages.infrastructure.networking.packet.mob.SyncMobS2C;
 import com.alessandro.astages.infrastructure.networking.packet.ore.SyncOreS2C;
 import com.alessandro.astages.infrastructure.networking.packet.recipe.SyncRecipeModS2C;
@@ -14,6 +13,8 @@ import com.alessandro.astages.infrastructure.networking.packet.recipe.SyncRecipe
 import com.alessandro.astages.infrastructure.networking.packet.reload.RequestReloadS2C;
 import com.alessandro.astages.infrastructure.networking.packet.reload.RequestRestrictionDeleteS2C;
 import com.alessandro.astages.infrastructure.networking.packet.simple.SyncSimpleIdsS2C;
+import com.alessandro.astages.infrastructure.networking.packet.stages.*;
+import com.alessandro.astages.infrastructure.networking.packet.structure.SyncRestrictedStructuresS2C;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -160,6 +161,13 @@ public class Networking {
             .decoder(SyncDimensionIdsS2C::new)
             .encoder(SyncDimensionIdsS2C::toBytes)
             .consumerMainThread(SyncDimensionIdsS2C::handle)
+            .add();
+
+        // STRUCTURE
+        INSTANCE.messageBuilder(SyncRestrictedStructuresS2C.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(SyncRestrictedStructuresS2C::new)
+            .encoder(SyncRestrictedStructuresS2C::toBytes)
+            .consumerMainThread(SyncRestrictedStructuresS2C::handle)
             .add();
 
         // SERVER
