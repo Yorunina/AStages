@@ -6,10 +6,7 @@ import com.alessandro.astages.api.store.ARestrictionType;
 import com.alessandro.astages.api.store.ASimpleRestrictionType;
 import com.alessandro.astages.api.store.Attribute;
 import com.alessandro.astages.api.store.container.AttributeStore;
-import com.alessandro.astages.engine.AClientRestrictionManager;
-import com.alessandro.astages.engine.AClientStageManager;
-import com.alessandro.astages.engine.ARestrictionManager;
-import com.alessandro.astages.engine.AStageManager;
+import com.alessandro.astages.engine.*;
 import com.alessandro.astages.engine.store.ARestrictionTypes;
 import com.alessandro.astages.engine.store.ASimpleRestrictionTypes;
 import com.alessandro.astages.engine.store.Attributes;
@@ -20,8 +17,8 @@ import com.alessandro.astages.infrastructure.config.AStagesCommon;
 import com.alessandro.astages.infrastructure.manager.ClientManagerScanner;
 import com.alessandro.astages.infrastructure.manager.ManagerScanner;
 import com.alessandro.astages.infrastructure.networking.Networking;
-import com.alessandro.astages.engine.PluginManager;
 import com.alessandro.astages.infrastructure.plugin.PluginScanner;
+import com.alessandro.astages.infrastructure.registry.ACriteriaTriggers;
 import com.alessandro.astages.internal.experimental.block.ModBlocks;
 import com.alessandro.astages.internal.experimental.item.ModItems;
 import com.alessandro.astages.internal.experimental.loot.AModifiers;
@@ -59,6 +56,8 @@ public class AStages {
         ModBlocks.BLOCKS.register(modEventBus);
         ACommandArguments.ARGUMENT_TYPES.register(modEventBus);
         AModifiers.MODIFIERS.register(modEventBus);
+
+        ACriteriaTriggers.init();
 
         Attributes.ATTRIBUTES.register(modEventBus);
         Attributes.Item.ATTRIBUTES.register(modEventBus);
