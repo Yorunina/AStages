@@ -54,8 +54,13 @@ public class ClientBorderRenderer {
             renderCleanShield(bufferBuilder, poseStack, originalBox.inflate(0.01D), player.position(), camPos, shieldRadius, time);
         }
 
-        if (isSetup && hasAddedVertices) {
-            BufferUploader.drawWithShader(bufferBuilder.end());
+        if (isSetup) {
+            if (hasAddedVertices) {
+                BufferUploader.drawWithShader(bufferBuilder.end());
+            } else {
+                bufferBuilder.end();
+            }
+
             RenderSystemUtils.cleanupRenderSystemForTransparency();
         }
     }
