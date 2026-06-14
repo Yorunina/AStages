@@ -30,12 +30,20 @@ public class ServerEventHandler {
     public static void onEntityTravel(EntityTravelToDimensionEvent event) {
         if (event.getEntity() instanceof Player player) {
             ResourceLocation dimension = event.getDimension().location();
-            if (dimension.getNamespace().equals("infinity"))  dimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
+
             ResourceLocation currentDimension = player.level().dimension().location();
-            if (currentDimension.getNamespace().equals("infinity"))  currentDimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
 
             ADimensionRestriction fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
+            if (currentDimension.getNamespace().equals("infinity") && fromDim == null) {
+                currentDimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
+                fromDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
+            }
+
             ADimensionRestriction toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), dimension);
+            if (dimension.getNamespace().equals("infinity") && toDim == null) {
+                dimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
+                toDim = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), dimension);
+            }
 
             if (fromDim != null && fromDim.isEnabled(Attributes.BIDIRECTIONAL)) {
                 event.setCanceled(true);
@@ -63,9 +71,12 @@ public class ServerEventHandler {
         if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer player) {
             var persistentData = player.getPersistentData();
             ResourceLocation currentDimension = player.level().dimension().location();
-            if (currentDimension.getNamespace().equals("infinity"))  currentDimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
 
             var restriction = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
+            if (currentDimension.getNamespace().equals("infinity") && restriction == null) {
+                currentDimension = ResourceLocation.fromNamespaceAndPath("infinity", "infinity");
+                restriction = ARestrictionManager.DIMENSION_INSTANCE.getRestriction(AHolder.serverAndPlayer(player), currentDimension);
+            }
 
             if (restriction != null && restriction.getMaxStayTimer() != null) {
                 var nbtId = restriction.getNbtId();

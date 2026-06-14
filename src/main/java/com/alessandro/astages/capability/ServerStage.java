@@ -72,20 +72,30 @@ public class ServerStage {
 
     public static void addServerStage(String stage) {
         CACHE.add(stage);
+        markAsDirty();
     }
 
     public static void addServerStages(Set<String> stages) {
         CACHE.addAll(stages);
+        markAsDirty();
     }
 
     @SuppressWarnings("UnusedReturnValue")
     public static AStatus removeServerStage(String stage) {
-        return CACHE.remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+        var result = CACHE.remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+        if (result == AStatus.SUCCESS) {
+            markAsDirty();
+        }
+        return result;
     }
 
     @SuppressWarnings("UnusedReturnValue")
     public static AStatus removeServerStages(Set<String> stages) {
-        return CACHE.removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+        var result = CACHE.removeAll(stages) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+        if (result == AStatus.SUCCESS) {
+            markAsDirty();
+        }
+        return result;
     }
 
     public static void synchronizeWithClient(@Nullable ServerPlayer player, AOperation operation, String stage) {

@@ -26,10 +26,11 @@ public class ServerEventHandler {
             var level = event.getLevel();
 
             ACropRestriction restriction;
+            AHolder holder = nearestPlayer == null ? AHolder.server() : AHolder.serverAndPlayer(nearestPlayer);
             if (event.getOriginalState().getBlock() instanceof CropBlock crop) {
-                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), new CropWrapper(event.getOriginalState(), crop.getAge(event.getOriginalState())));
+                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(holder, new CropWrapper(event.getOriginalState(), crop.getAge(event.getOriginalState())));
             } else {
-                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), new CropWrapper(event.getOriginalState(), null));
+                restriction = ARestrictionManager.CROP_INSTANCE.getRestriction(holder, new CropWrapper(event.getOriginalState(), null));
             }
 
             if (restriction != null) {

@@ -266,7 +266,7 @@ public class ARestrictionUtils {
             if (serverRestriction.get(Attributes.REVERSE)) {
                 return serverRestriction;
             } else {
-                return playerRestriction == null ? serverRestriction : playerRestriction;
+                return playerRestriction == null ? null : serverRestriction;
             }
         } else {
             if (playerRestriction != null && playerRestriction.get(Attributes.REVERSE)) {

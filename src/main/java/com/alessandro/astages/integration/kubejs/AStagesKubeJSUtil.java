@@ -1,12 +1,14 @@
 package com.alessandro.astages.integration.kubejs;
 
 import com.alessandro.astages.api.ARestrictionUtils;
+import com.alessandro.astages.api.AStagesFolderSystem;
 import com.alessandro.astages.api.AStagesUtils;
 import com.alessandro.astages.api.constant.ACompareCondition;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.api.stage.Stage;
+import com.alessandro.astages.capability.OfflinePlayerStage;
 import com.alessandro.astages.capability.PlayerStage;
 import com.alessandro.astages.capability.PlayerStageWrapper;
 import com.alessandro.astages.capability.ServerStageData;
@@ -34,8 +36,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @NotNullParamsAndMethodsReturn
 @SuppressWarnings("unused")
@@ -51,6 +57,10 @@ public class AStagesKubeJSUtil {
 
     public static List<String> getStagesFromPlayer(Player player) {
         return new ArrayList<>(AStagesUtils.getStages(AHolder.player(player)));
+    }
+
+    public static List<String> getStagesFromServer() {
+        return new ArrayList<>(AStagesUtils.getStages(AHolder.server()));
     }
 
     public static void removeAllStagesFromPlayer(Player player) {
@@ -229,5 +239,18 @@ public class AStagesKubeJSUtil {
     // LOOT Restrictions
     public static ALootRestriction addRestrictionForLoot(String id, String stage) {
         return ARestrictionUtils.addRestrictionForLoot(id, stage);
+    }
+
+    public static void removeAllPlayerStages() {
+        Path playerPermanentFolder = AStagesFolderSystem.getPlayerPermanentFolder();
+        try (Stream<Path> walk = Files.walk(playerPermanentFolder)) {
+            walk.filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        try {
+                            Files.delete(file);
+                        } catch (IOException ignored) {}
+                    });
+        } catch (IOException ignored) {}
+        OfflinePlayerStage.clearCache();
     }
 }

@@ -190,6 +190,15 @@ public class OfflinePlayerStage {
         AFileIOUtils.writeFileContent(getPermanentStagesFile(player), stages);
     }
 
+    public static void markAsDirty(UUID uuid) {
+        var stages = CACHE.get(uuid);
+        AFileIOUtils.writeFileContent(getPermanentStagesFile(uuid), stages);
+    }
+
+    public static void clearCache() {
+        CACHE.clear();
+    }
+
     public static List<String> getPlayerStagesFromCapability(Player player) {
         return PlayerStageWrapper.getStages(player);
     }
