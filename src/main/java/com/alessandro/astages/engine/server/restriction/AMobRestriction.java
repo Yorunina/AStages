@@ -83,104 +83,161 @@ public class AMobRestriction extends ARestriction<AMobRestriction, EntityType<?>
         return associateLootRestriction(getId() + ALootRestriction.IDENTIFIER);
     }
 
-    @SuppressWarnings("unused")
-    public AMobRestriction spawnReplacementWithEquipment(boolean value) {
-        set(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT, value);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public AMobRestriction setEquipment(EquipmentSlot slot, ItemStack stack) {
-        equipments.add(new EquipmentWrapper(slot, stack));
-        return this;
-    }
-
     public List<EquipmentWrapper> getEquipments() {
         return equipments;
-    }
-
-    @SuppressWarnings("unused")
-    public AMobRestriction restrictSpawnType(MobSpawnType... types) {
-        disabledSpawnTypes.addAll(List.of(types));
-        return this;
     }
 
     public List<MobSpawnType> getDisabledSpawnTypes() {
         return disabledSpawnTypes;
     }
 
-    @SuppressWarnings("unused")
-    public AMobRestriction setMinLightLevel(int value) {
+    public List<ResourceLocation> getRestrictedBiomes() {
+        return restrictedBiomes;
+    }
+
+    public AMobRestriction spawnWithEquipment() {
+        set(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT, true);
+        return this;
+    }
+
+    public AMobRestriction equipment(EquipmentSlot slot, ItemStack stack) {
+        equipments.add(new EquipmentWrapper(slot, stack));
+        return this;
+    }
+
+    public AMobRestriction restrictSpawnType(MobSpawnType... types) {
+        disabledSpawnTypes.addAll(List.of(types));
+        return this;
+    }
+
+    public AMobRestriction minLightLevel(int value) {
         set(Attributes.MIN_LIGHT_LEVEL, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public AMobRestriction setMaxLightLevel(int value) {
+    public AMobRestriction maxLightLevel(int value) {
         set(Attributes.MAX_LIGHT_LEVEL, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
     public AMobRestriction restrictBiomeSpawn(ResourceLocation biome) {
         restrictedBiomes.add(biome);
         return this;
     }
 
-    public List<ResourceLocation> getRestrictedBiomes() {
-        return restrictedBiomes;
+    public AMobRestriction dimension(ResourceLocation value) {
+        set(Attributes.DIMENSION, value);
+        return this;
     }
 
-    @Deprecated(forRemoval = true)
-    @SuppressWarnings("unused")
+    public AMobRestriction replaceWith(EntityType<?> value) {
+        set(Attributes.REPLACE, value);
+        return this;
+    }
+
+    public AMobRestriction disableSpawning() {
+        set(Attributes.MOB_SPAWNING, false);
+        return this;
+    }
+
+    public AMobRestriction disableAttack() {
+        set(Attributes.ATTACKING, false);
+        return this;
+    }
+
+    public AMobRestriction disableRightClick() {
+        set(Attributes.RIGHT_CLICK_INTERACTIONS, false);
+        return this;
+    }
+
+    public AMobRestriction jadeMessage(Supplier<Component> message) {
+        set(Attributes.Mob.JADE_MOB_MESSAGE, message);
+        return this;
+    }
+
+    public AMobRestriction attackMessage(Supplier<Component> message) {
+        set(Attributes.Mob.ATTACK_MESSAGE, message);
+        return this;
+    }
+
+    public AMobRestriction interactionMessage(Supplier<Component> message) {
+        set(Attributes.Mob.INTERACTION_MESSAGE, message);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public AMobRestriction spawnReplacementWithEquipment(boolean value) {
+        set(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT, value);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public AMobRestriction setEquipment(EquipmentSlot slot, ItemStack stack) {
+        equipments.add(new EquipmentWrapper(slot, stack));
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public AMobRestriction setMinLightLevel(int value) {
+        set(Attributes.MIN_LIGHT_LEVEL, value);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public AMobRestriction setMaxLightLevel(int value) {
+        set(Attributes.MAX_LIGHT_LEVEL, value);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setDisableSpawner(boolean value) {
         set(Attributes.SPAWNER, !value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setDimension(ResourceLocation value) {
         set(Attributes.DIMENSION, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setReplacing(EntityType<?> value) {
         set(Attributes.REPLACE, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setEnableMobSpawning(boolean value) {
         set(Attributes.MOB_SPAWNING, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setCanBeAttacked(boolean value) {
         set(Attributes.ATTACKING, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setCanBeRightClicked(boolean value) {
         set(Attributes.RIGHT_CLICK_INTERACTIONS, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setJadeMobMessage(Supplier<Component> message) {
         set(Attributes.Mob.JADE_MOB_MESSAGE, message);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setAttackMessage(Supplier<Component> message) {
         set(Attributes.Mob.ATTACK_MESSAGE, message);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AMobRestriction setInteractionMessage(Supplier<Component> message) {
         set(Attributes.Mob.INTERACTION_MESSAGE, message);
         return this;

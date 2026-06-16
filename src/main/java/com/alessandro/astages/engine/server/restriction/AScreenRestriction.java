@@ -73,24 +73,35 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
         return false;
     }
 
-    @SuppressWarnings("unused")
-    public AScreenRestriction setOpenMessage(Function<MenuType<?>, Component> message) {
-        set(Attributes.Screen.OPEN_MESSAGE, message);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public AScreenRestriction setChecker(TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker) {
-        this.checker = checker;
-        set(Attributes.HAS_CHECKER, true);
-        return this;
-    }
-
     public List<MenuType<?>> getMenus() {
         return menus;
     }
 
     public TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> getChecker() {
         return checker;
+    }
+
+    public AScreenRestriction openMessage(Function<MenuType<?>, Component> message) {
+        set(Attributes.Screen.OPEN_MESSAGE, message);
+        return this;
+    }
+
+    public AScreenRestriction checker(TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker) {
+        this.checker = checker;
+        set(Attributes.HAS_CHECKER, true);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public AScreenRestriction setOpenMessage(Function<MenuType<?>, Component> message) {
+        set(Attributes.Screen.OPEN_MESSAGE, message);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public AScreenRestriction setChecker(TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker) {
+        this.checker = checker;
+        set(Attributes.HAS_CHECKER, true);
+        return this;
     }
 }

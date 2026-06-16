@@ -102,31 +102,6 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return this;
     }
 
-    @SuppressWarnings("unused")
-    public ALootRestriction setReplacer(Function<ItemStack, ItemStack> replacer) {
-        this.replacer = replacer;
-        set(Attributes.HAS_REPLACER, true);
-        return this;
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public ALootRestriction setEntityFilter(AFilter filter) {
-        entityFilter = filter;
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public ALootRestriction setLootTableFilter(AFilter filter) {
-        lootTableFilter = filter;
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public ALootRestriction applyForEveryLootTableAndDrop(boolean value) {
-        set(Attributes.APPLY_EVERYWHERE, value);
-        return this;
-    }
-
     @Override
     public boolean isRestricted(ItemStack stack) {
         if (stack.isEmpty()) { return false; }
@@ -185,5 +160,51 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
 
     public Function<ItemStack, ItemStack> getReplacer() {
         return replacer;
+    }
+
+    public ALootRestriction replacer(Function<ItemStack, ItemStack> replacer) {
+        this.replacer = replacer;
+        set(Attributes.HAS_REPLACER, true);
+        return this;
+    }
+
+    public ALootRestriction entityFilter(AFilter filter) {
+        entityFilter = filter;
+        return this;
+    }
+
+    public ALootRestriction lootTableFilter(AFilter filter) {
+        lootTableFilter = filter;
+        return this;
+    }
+
+    public ALootRestriction applyEverywhere() {
+        set(Attributes.APPLY_EVERYWHERE, true);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public ALootRestriction setReplacer(Function<ItemStack, ItemStack> replacer) {
+        this.replacer = replacer;
+        set(Attributes.HAS_REPLACER, true);
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public ALootRestriction setEntityFilter(AFilter filter) {
+        entityFilter = filter;
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public ALootRestriction setLootTableFilter(AFilter filter) {
+        lootTableFilter = filter;
+        return this;
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public ALootRestriction applyForEveryLootTableAndDrop(boolean value) {
+        set(Attributes.APPLY_EVERYWHERE, value);
+        return this;
     }
 }
