@@ -10,8 +10,10 @@ import com.alessandro.astages.infrastructure.networking.packet.mob.SyncMobS2C;
 import com.alessandro.astages.infrastructure.networking.packet.ore.SyncOreS2C;
 import com.alessandro.astages.infrastructure.networking.packet.recipe.SyncRecipeModS2C;
 import com.alessandro.astages.infrastructure.networking.packet.recipe.SyncRecipeS2C;
+import com.alessandro.astages.infrastructure.networking.packet.reload.LogUnknowModelsS2C;
 import com.alessandro.astages.infrastructure.networking.packet.reload.RequestReloadS2C;
 import com.alessandro.astages.infrastructure.networking.packet.reload.RequestRestrictionDeleteS2C;
+import com.alessandro.astages.infrastructure.networking.packet.reload.SendClientModelsC2S;
 import com.alessandro.astages.infrastructure.networking.packet.simple.SyncSimpleIdsS2C;
 import com.alessandro.astages.infrastructure.networking.packet.stages.*;
 import com.alessandro.astages.infrastructure.networking.packet.structure.SyncRestrictedStructuresS2C;
@@ -200,6 +202,18 @@ public class Networking {
                 .encoder(RequestRestrictionDeleteS2C::toBytes)
                 .consumerMainThread(RequestRestrictionDeleteS2C::handle)
                 .add();
+
+        INSTANCE.messageBuilder(SendClientModelsC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
+            .decoder(SendClientModelsC2S::new)
+            .encoder(SendClientModelsC2S::toBytes)
+            .consumerMainThread(SendClientModelsC2S::handle)
+            .add();
+
+        INSTANCE.messageBuilder(LogUnknowModelsS2C.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(LogUnknowModelsS2C::new)
+            .encoder(LogUnknowModelsS2C::toBytes)
+            .consumerMainThread(LogUnknowModelsS2C::handle)
+            .add();
     }
 
     @Info("Send to server!")
