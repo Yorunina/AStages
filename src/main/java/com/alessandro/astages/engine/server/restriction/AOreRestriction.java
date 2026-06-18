@@ -85,13 +85,11 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
     }
 
     public AOreRestriction matchAllBlockStates() {
-        set(Attributes.STAGE_ALL_BLOCK_STATES, true);
-        return this;
+        return set(Attributes.STAGE_ALL_BLOCK_STATES, true);
     }
 
     public AOreRestriction affectPlayerActions() {
-        set(Attributes.AFFECTS_PLAYER_ACTIONS, true);
-        return this;
+        return set(Attributes.AFFECTS_PLAYER_ACTIONS, true);
     }
 
     @Deprecated(forRemoval = true, since = "3.0.0")

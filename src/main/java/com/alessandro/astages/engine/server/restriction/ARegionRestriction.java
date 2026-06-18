@@ -123,28 +123,23 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
     }
 
     public ARegionRestriction explosionsAffectBlocks(boolean value) {
-        set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
-        return this;
+        return set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
     }
 
     public ARegionRestriction explosionsAffectEntities(boolean value) {
-        set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
-        return this;
+        return set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
     }
 
     public ARegionRestriction allowInteractions(boolean value) {
-        set(Attributes.GENERIC_INTERACTIONS, value);
-        return this;
+        return set(Attributes.GENERIC_INTERACTIONS, value);
     }
 
     public ARegionRestriction allowMobSpawning(boolean value) {
-        set(Attributes.MOB_SPAWNING, value);
-        return this;
+        return set(Attributes.MOB_SPAWNING, value);
     }
 
     public ARegionRestriction denyCommands(boolean value) {
-        set(Attributes.PERFORM_COMMANDS, value);
-        return this;
+        return set(Attributes.PERFORM_COMMANDS, value);
     }
 
     public ARegionRestriction denyCommands(String... commands) {
@@ -157,15 +152,12 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
     }
 
     public ARegionRestriction interactMessage(Supplier<Component> message) {
-        set(Attributes.Region.INTERACT_MESSAGE, message);
-        return this;
+        return set(Attributes.Region.INTERACT_MESSAGE, message);
     }
 
     public ARegionRestriction commandMessage(Function<String, Component> message) {
-        set(Attributes.Region.COMMAND_MESSAGE, message);
-        return this;
+        return set(Attributes.Region.COMMAND_MESSAGE, message);
     }
-
 
     @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setMakeExplosionsAffectBlocks(boolean value) {

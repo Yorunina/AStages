@@ -123,39 +123,32 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
         return allowedTargetableEntities.contains(entityType);
     }
 
-    public AStructureRestriction allowAttack(boolean value) {
-        set(Attributes.ATTACKING, value);
-        return this;
+    public AStructureRestriction allowAttack() {
+        return set(Attributes.ATTACKING, true);
     }
 
-    public AStructureRestriction denyEnter(boolean value) {
-        set(Attributes.ENTERING, value);
-        return this;
+    public AStructureRestriction denyEnter() {
+        return set(Attributes.ENTERING, false);
     }
 
-    public AStructureRestriction allowInteractions(boolean value) {
-        set(Attributes.GENERIC_INTERACTIONS, value);
-        return this;
+    public AStructureRestriction allowInteractions() {
+        return set(Attributes.GENERIC_INTERACTIONS, true);
     }
 
-    public AStructureRestriction allowPlacement(boolean value) {
-        set(Attributes.BLOCK_PLACING, value);
-        return this;
+    public AStructureRestriction allowPlacement() {
+        return set(Attributes.BLOCK_PLACING, true);
     }
 
-    public AStructureRestriction allowBreaking(boolean value) {
-        set(Attributes.BLOCK_BREAKING, value);
-        return this;
+    public AStructureRestriction allowBreaking() {
+        return set(Attributes.BLOCK_BREAKING, true);
     }
 
-    public AStructureRestriction explosionsAffectBlocks(boolean value) {
-        set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
-        return this;
+    public AStructureRestriction explosionsAffectBlocks() {
+        return set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, true);
     }
 
-    public AStructureRestriction explosionsAffectEntities(boolean value) {
-        set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
-        return this;
+    public AStructureRestriction explosionsAffectEntities() {
+        return set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, true);
     }
 
     public AStructureRestriction allowBreakableStates(BlockState... states) {
@@ -201,28 +194,23 @@ public class AStructureRestriction extends ARestriction<AStructureRestriction, R
     }
 
     public AStructureRestriction attackMessage(Function<ResourceLocation, Component> message) {
-        set(Attributes.Structure.ATTACK_MESSAGE, message);
-        return this;
+        return set(Attributes.Structure.ATTACK_MESSAGE, message);
     }
 
     public AStructureRestriction interactMessage(Function<ResourceLocation, Component> message) {
-        set(Attributes.Structure.INTERACT_MESSAGE, message);
-        return this;
+        return set(Attributes.Structure.INTERACT_MESSAGE, message);
     }
 
     public AStructureRestriction enterMessage(Function<ResourceLocation, Component> message) {
-        set(Attributes.Structure.ENTER_MESSAGE, message);
-        return this;
+        return set(Attributes.Structure.ENTER_MESSAGE, message);
     }
 
     public AStructureRestriction placeMessage(Function<ResourceLocation, Component> message) {
-        set(Attributes.Structure.PLACING_MESSAGE, message);
-        return this;
+        return set(Attributes.Structure.PLACING_MESSAGE, message);
     }
 
     public AStructureRestriction breakMessage(Function<ResourceLocation, Component> message) {
-        set(Attributes.Structure.MINING_MESSAGE, message);
-        return this;
+        return set(Attributes.Structure.MINING_MESSAGE, message);
     }
 
     @Deprecated(forRemoval = true, since = "3.0.0")

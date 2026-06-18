@@ -82,14 +82,12 @@ public class AScreenRestriction extends ARestriction<AScreenRestriction, MenuTyp
     }
 
     public AScreenRestriction openMessage(Function<MenuType<?>, Component> message) {
-        set(Attributes.Screen.OPEN_MESSAGE, message);
-        return this;
+        return set(Attributes.Screen.OPEN_MESSAGE, message);
     }
 
     public AScreenRestriction checker(TriPredicate<BlockState, BlockEntity, AbstractContainerMenu> checker) {
         this.checker = checker;
-        set(Attributes.HAS_CHECKER, true);
-        return this;
+        return set(Attributes.HAS_CHECKER, true);
     }
 
     @Deprecated(forRemoval = true, since = "3.0.0")

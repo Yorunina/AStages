@@ -56,33 +56,27 @@ public class APetRestriction extends ARestriction<APetRestriction, EntityType<?>
     }
 
     public APetRestriction allowTaming() {
-        set(Attributes.TAMABLE, true);
-        return this;
+        return set(Attributes.TAMABLE, true);
     }
 
     public APetRestriction allowBreeding() {
-        set(Attributes.BREEDABLE, true);
-        return this;
+        return set(Attributes.BREEDABLE, true);
     }
 
     public APetRestriction allowMounting() {
-        set(Attributes.MOUNTABLE, true);
-        return this;
+        return set(Attributes.MOUNTABLE, true);
     }
 
     public APetRestriction tameMessage(Function<Entity, Component> message) {
-        set(Attributes.Pet.TAME_MESSAGE, message);
-        return this;
+        return set(Attributes.Pet.TAME_MESSAGE, message);
     }
 
     public APetRestriction breedMessage(Function<Entity, Component> message) {
-        set(Attributes.Pet.BREED_MESSAGE, message);
-        return this;
+        return set(Attributes.Pet.BREED_MESSAGE, message);
     }
 
     public APetRestriction mountMessage(Function<Entity, Component> message) {
-        set(Attributes.Pet.MOUNT_MESSAGE, message);
-        return this;
+        return set(Attributes.Pet.MOUNT_MESSAGE, message);
     }
 
     @Deprecated(forRemoval = true, since = "3.0.0")

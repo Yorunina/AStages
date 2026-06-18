@@ -122,7 +122,7 @@ public class ABaseItemRestriction<R extends ARestriction<R, U, ItemStack>, U> ex
         return set(Attributes.PICKING_UP, true);
     }
 
-    public R hideTooltip() {
+    public R showTooltip() {
         return set(Attributes.HIDING_TOOLTIP, false);
     }
 

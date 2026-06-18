@@ -164,8 +164,7 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
 
     public ALootRestriction replacer(Function<ItemStack, ItemStack> replacer) {
         this.replacer = replacer;
-        set(Attributes.HAS_REPLACER, true);
-        return this;
+        return set(Attributes.HAS_REPLACER, true);
     }
 
     public ALootRestriction entityFilter(AFilter filter) {
@@ -179,8 +178,7 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     }
 
     public ALootRestriction applyEverywhere() {
-        set(Attributes.APPLY_EVERYWHERE, true);
-        return this;
+        return set(Attributes.APPLY_EVERYWHERE, true);
     }
 
     @Deprecated(forRemoval = true, since = "3.0.0")

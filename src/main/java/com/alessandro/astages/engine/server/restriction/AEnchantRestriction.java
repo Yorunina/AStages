@@ -61,15 +61,15 @@ public class AEnchantRestriction extends ARestriction<AEnchantRestriction, Encha
         };
     }
 
-    public AEnchantRestriction allowAnvil(boolean value) {
+    public AEnchantRestriction allowAnvil() {
         return set(Attributes.ANVIL, true);
     }
 
-    public AEnchantRestriction allowEnchantingTable(boolean value) {
+    public AEnchantRestriction allowEnchantingTable() {
         return set(Attributes.ENCHANTING_TABLE, true);
     }
 
-    public AEnchantRestriction allowInventoryStorage(boolean value) {
+    public AEnchantRestriction allowInventoryStorage() {
         return set(Attributes.STORING_IN_INVENTORY, true);
     }
 
