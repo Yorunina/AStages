@@ -55,7 +55,16 @@ public class SendClientModelsC2S implements AStagesPacket {
             }
 
             if (!missingModels.isEmpty()) {
-                player.connection.disconnect(Component.translatable("message.astages.missing_model.kick", missingModels).withStyle(ChatFormatting.RED));
+                var reason = Component.translatable("message.astages.missing_model.kick", missingModels).withStyle(ChatFormatting.RED);
+
+                if (!unknownModels.isEmpty()) {
+                    reason.append(Component.literal("\n\n"));
+                    reason.append(
+                        Component.translatable("message.astages.missing_model.warning", unknownModels).withStyle(ChatFormatting.GOLD)
+                    );
+                }
+
+                player.connection.disconnect(reason);
             }
         });
 
