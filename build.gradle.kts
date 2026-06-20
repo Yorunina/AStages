@@ -236,6 +236,8 @@ dependencies {
     implementation(fg.deobf("curse.maven:ftb-teams-forge-404468:6130786"))
     implementation(fg.deobf("curse.maven:ftb-quests-forge-289412:6829212"))
 
+    implementation(fg.deobf("curse.maven:modernfix-790626:8255312"))
+
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }
 
