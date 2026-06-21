@@ -17,6 +17,7 @@ import com.alessandro.astages.engine.store.StageAttributes;
 import com.alessandro.astages.infrastructure.integration.Mods;
 import com.alessandro.astages.infrastructure.integration.kubejs.bridge.KubeJSEventBridge;
 import com.alessandro.astages.infrastructure.integration.kubejs.bridge.KubeJSStageEvents;
+import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSClientModelUtils;
 import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSClientUtils;
 import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSModelUtils;
 import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSServerUtils;
@@ -42,13 +43,14 @@ public class AKubeJSPlugin extends KubeJSPlugin {
     public void registerBindings(BindingsEvent event) {
         if (event.getType().isServer() || event.getType().isStartup()) {
             event.add("AStages", KubeJSServerUtils.class);
+            event.add("AModels", KubeJSModelUtils.class);
         }
 
         if (event.getType().isClient()) {
             event.add("AStagesClient", KubeJSClientUtils.class);
+            event.add("AModels", KubeJSClientModelUtils.class);
         }
 
-        event.add("AModels", KubeJSModelUtils.class);
         event.add("ATime", ATime.class);
         event.add("ARestrictionTypes", ARestrictionTypes.class);
 

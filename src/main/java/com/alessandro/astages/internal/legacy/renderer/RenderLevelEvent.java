@@ -17,7 +17,7 @@ public class RenderLevelEvent {
         // if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
             // AStages.LOGGER.debug("Instantiated!");
             // ARenderer.requestRefresh = true;
-        ARenderer.renderBlocks(event.getPoseStack(), event.getProjectionMatrix());
+        // ARenderer.renderBlocks(event.getPoseStack(), event.getProjectionMatrix());
         // }
     }
 }
