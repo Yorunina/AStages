@@ -84,13 +84,21 @@ public class AOreRestriction extends ARestriction<AOreRestriction, OreWrapper, B
         Networking.sendToAllPlayers(new RequestReloadS2C(ReloadType.ORE));
     }
 
-    @SuppressWarnings("unused")
+    public AOreRestriction matchAllBlockStates() {
+        return set(Attributes.STAGE_ALL_BLOCK_STATES, true);
+    }
+
+    public AOreRestriction affectPlayerActions() {
+        return set(Attributes.AFFECTS_PLAYER_ACTIONS, true);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AOreRestriction setStageAllBlockStates(boolean value) {
         set(Attributes.STAGE_ALL_BLOCK_STATES, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public AOreRestriction setAffectsPlayerActions(boolean value) {
         set(Attributes.AFFECTS_PLAYER_ACTIONS, value);
         return this;

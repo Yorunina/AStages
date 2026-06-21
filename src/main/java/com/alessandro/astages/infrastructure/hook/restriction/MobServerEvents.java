@@ -44,37 +44,33 @@ public class MobServerEvents {
                 return;
             }
 
-             if (!restriction.isValueNull(Attributes.DIMENSION)) {
-                 if (restriction.get(Attributes.DIMENSION).equals(level.dimension().location())) {
-                     preventSpawning(event, restriction, level);
-                     return;
-                 }
-             }
+            var dimensionRS = level.dimension().location();
+            if (restriction.getRestrictedDimensions().contains(dimensionRS)) {
+                preventSpawning(event, restriction, level);
+                return;
+            }
 
-             var biome = level.getBiome(event.getEntity().blockPosition()).get();
-             var biomeRS = ForgeRegistries.BIOMES.getKey(biome);
-             if (restriction.getRestrictedBiomes().contains(biomeRS)) {
-                 preventSpawning(event, restriction, level);
-                 return;
-             }
+            var biome = level.getBiome(event.getEntity().blockPosition()).get();
+            var biomeRS = ForgeRegistries.BIOMES.getKey(biome);
+            if (restriction.getRestrictedBiomes().contains(biomeRS)) {
+                preventSpawning(event, restriction, level);
+                return;
+            }
 
-             var lightLevel = level.getLightEmission(event.getEntity().blockPosition());
-             if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
-                 if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel && lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
-                     preventSpawning(event, restriction, level);
-//                     return;
-                 }
-             } else if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
-                 if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel) {
-                     preventSpawning(event, restriction, level);
-//                     return;
-                 }
-             } else if (restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
-                 if (lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
-                     preventSpawning(event, restriction, level);
-//                     return;
-                 }
-             }
+            var lightLevel = level.getLightEmission(event.getEntity().blockPosition());
+            if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
+                if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel && lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
+                    preventSpawning(event, restriction, level);
+                }
+            } else if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
+                if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel) {
+                    preventSpawning(event, restriction, level);
+                }
+            } else if (restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
+                if (lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
+                    preventSpawning(event, restriction, level);
+                }
+            }
         }
     }
 

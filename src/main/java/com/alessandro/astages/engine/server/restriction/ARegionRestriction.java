@@ -118,37 +118,78 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
         return setArea(type, from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
     }
 
-    @SuppressWarnings("unused")
+    public List<String> getDisabledCommands() {
+        return disabledCommands;
+    }
+
+    public ARegionRestriction explosionsAffectBlocks(boolean value) {
+        return set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
+    }
+
+    public ARegionRestriction explosionsAffectEntities(boolean value) {
+        return set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
+    }
+
+    public ARegionRestriction allowInteractions(boolean value) {
+        return set(Attributes.GENERIC_INTERACTIONS, value);
+    }
+
+    public ARegionRestriction allowMobSpawning(boolean value) {
+        return set(Attributes.MOB_SPAWNING, value);
+    }
+
+    public ARegionRestriction denyCommands(boolean value) {
+        return set(Attributes.PERFORM_COMMANDS, value);
+    }
+
+    public ARegionRestriction denyCommands(String... commands) {
+        Arrays.stream(commands).forEach(command -> {
+            var formatted = command.startsWith("/") ? command.replace("/", "") : command;
+            disabledCommands.add(formatted);
+        });
+
+        return this;
+    }
+
+    public ARegionRestriction interactMessage(Supplier<Component> message) {
+        return set(Attributes.Region.INTERACT_MESSAGE, message);
+    }
+
+    public ARegionRestriction commandMessage(Function<String, Component> message) {
+        return set(Attributes.Region.COMMAND_MESSAGE, message);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setMakeExplosionsAffectBlocks(boolean value) {
         set(Attributes.EXPLOSIONS_AFFECT_BLOCKS, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setMakeExplosionsAffectEntities(boolean value) {
         set(Attributes.EXPLOSIONS_AFFECT_ENTITIES, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setCanInteract(boolean value) {
         set(Attributes.GENERIC_INTERACTIONS, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setEnableMobSpawning(boolean value) {
         set(Attributes.MOB_SPAWNING, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setPerformCommands(boolean value) {
         set(Attributes.PERFORM_COMMANDS, value);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction addDisabledCommands(String... commands) {
         Arrays.stream(commands).forEach(command -> {
             var formatted = command.startsWith("/") ? command.replace("/", "") : command;
@@ -158,20 +199,16 @@ public class ARegionRestriction extends ARestriction<ARegionRestriction, Void, B
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setInteractMessage(Supplier<Component> message) {
         set(Attributes.Region.INTERACT_MESSAGE, message);
         return this;
     }
 
-    @SuppressWarnings("unused")
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public ARegionRestriction setCommandMessage(Function<String, Component> message) {
         set(Attributes.Region.COMMAND_MESSAGE, message);
         return this;
-    }
-
-    public List<String> getDisabledCommands() {
-        return disabledCommands;
     }
 
     @Override
