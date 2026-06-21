@@ -34,7 +34,7 @@ public class AStagesPlayerArgument implements ArgumentType<String> {
 
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
-        return ACommandUtils.parseGenericString(reader);
+        return reader.readString();
     }
 
     @NotYetImplemented("Add entity selector support")

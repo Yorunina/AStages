@@ -39,7 +39,7 @@ public class AStagesRestrictionTypeArgument implements ArgumentType<ARestriction
     @SuppressWarnings("ConstantConditions")
     @Override
     public ARestrictionType parse(StringReader stringReader) throws CommandSyntaxException {
-        var typeString = ACommandUtils.parseGenericString(stringReader); // stringReader.readUnquotedString();
+        var typeString = stringReader.readString();
         ResourceLocation associatedResourceLocation;
 
         if (!typeString.contains(":")) {
