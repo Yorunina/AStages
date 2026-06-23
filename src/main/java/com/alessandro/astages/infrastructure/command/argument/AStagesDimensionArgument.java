@@ -32,7 +32,7 @@ public class AStagesDimensionArgument implements ArgumentType<String> {
 
     @Override
     public String parse(StringReader stringReader) throws CommandSyntaxException {
-        return ACommandUtils.parseGenericString(stringReader);
+        return stringReader.readString();
     }
 
     @Override
