@@ -1,9 +1,8 @@
-package com.alessandro.astages.infrastructure.command.argument;
+package com.alessandro.astages.internal.legacy;
 
-import com.alessandro.astages.api.util.ACommandUtils;
-import com.alessandro.astages.api.util.AStagesClientUtils;
 import com.alessandro.astages.api.holder.AClientHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.util.AStagesClientUtils;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -18,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
+@Deprecated(forRemoval = true)
 @NotNullParamsAndMethodsReturn
 public class AStagesServerRemoveArgument implements ArgumentType<String> {
     private static final Collection<String> EXAMPLES = Arrays.asList("test_stage_1", "test_stage_2");
