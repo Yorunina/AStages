@@ -25,7 +25,7 @@ public class ALootManager extends AManager<ALootRestriction, Void, ItemStack> {
     public ALootRestriction getRestriction(AHolder holder, ItemStack stack, @Nullable EntityType<?> entityType, @Nullable ResourceLocation lootTable) {
         if (holder.isServerActive()) {
             var serverRestriction = getRegistry().stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
+                !AStagesUtils.hasStage(holder, AStageType.SERVER, r.getStage()) &&
                     r.isRestricted(stack, entityType, lootTable)
             ).findFirst().orElse(null);
 
@@ -34,7 +34,7 @@ public class ALootManager extends AManager<ALootRestriction, Void, ItemStack> {
 
         if (holder.isPlayerActive()) {
             return getRegistry().stream().filter(r ->
-                AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
+                !AStagesUtils.hasStage(holder, AStageType.PLAYER, r.getStage()) &&
                     r.isRestricted(stack, entityType, lootTable)
             ).findFirst().orElse(null);
         }
