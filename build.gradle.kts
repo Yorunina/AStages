@@ -237,6 +237,7 @@ dependencies {
     implementation(fg.deobf("curse.maven:ftb-quests-forge-289412:6829212"))
 
     implementation(fg.deobf("curse.maven:modernfix-790626:8255312"))
+    implementation(fg.deobf("curse.maven:better-modlist-neoforge-1089803:7535242"))
 
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }

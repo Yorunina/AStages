@@ -1,16 +1,16 @@
 package com.alessandro.astages.infrastructure.command;
 
+import com.alessandro.astages.api.command.AStagesSuggestions;
 import com.alessandro.astages.api.constant.AStageSource;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.api.util.AStagesUtils;
-import com.alessandro.astages.infrastructure.command.argument.AStagesAddArgument;
-import com.alessandro.astages.infrastructure.command.argument.AStagesRemoveArgument;
 import com.alessandro.astages.infrastructure.networking.Networking;
 import com.alessandro.astages.infrastructure.networking.packet.stages.RequestClientStagesS2C;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
