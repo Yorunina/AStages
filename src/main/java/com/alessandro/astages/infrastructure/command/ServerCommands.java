@@ -33,17 +33,17 @@ public class ServerCommands {
     }
 
     private static int addServerStageCommand(String stageToAdd) {
-        AStagesUtils.addStage(AHolder.server(), stageToAdd, false);
+        AStagesUtils.addStage(AHolder.server(), stageToAdd, true, true, true);
         return 1;
     }
 
     private static int removeServerStageCommand(String stageToRemove) {
-        AStagesUtils.removeStage(AHolder.server(), stageToRemove, false);
+        AStagesUtils.removeStage(AHolder.server(), stageToRemove, true, true, true);
         return 1;
     }
 
     private static int removeAllServerStageCommand() {
-        AStagesUtils.removeAllStages(AHolder.server(), false);
+        AStagesUtils.removeAllStages(AHolder.server(), true, true, true);
         return 1;
     }
 
@@ -52,11 +52,11 @@ public class ServerCommands {
 
         if (executor != null) {
             if (serverStage.isEmpty()) {
-                executor.sendSystemMessage(Component.translatable("chat.astages.info.server.no_stages").withStyle(ChatFormatting.RED));
+                executor.sendSystemMessage(Component.translatable("message.astages.server.info.no_stages").withStyle(ChatFormatting.RED));
             } else {
-                executor.sendSystemMessage(Component.translatable("chat.astages.info.server.has_stages").withStyle(ChatFormatting.GREEN));
+                executor.sendSystemMessage(Component.translatable("message.astages.server.info.has_stages").withStyle(ChatFormatting.GREEN));
                 for (var stage : serverStage) {
-                    executor.sendSystemMessage(Component.translatable("chat.astages.info.server.list_item", stage));
+                    executor.sendSystemMessage(Component.translatable("message.astages.server.info.list_item", stage));
                 }
             }
         }

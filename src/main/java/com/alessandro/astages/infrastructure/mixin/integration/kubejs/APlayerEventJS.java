@@ -31,7 +31,7 @@ public abstract class APlayerEventJS {
     @Info("Adds the specified game stage to the player")
     @Overwrite
     public void addGameStage(String stage) {
-        AStagesUtils.addStage(AHolder.player(getPlayer()), stage, false);
+        AStagesUtils.addStage(AHolder.player(getPlayer()), stage, false, false, false);
     }
 
     /**
@@ -41,6 +41,6 @@ public abstract class APlayerEventJS {
     @Info("Removes the specified game stage from the player")
     @Overwrite
     public void removeGameStage(String stage) {
-        AStagesUtils.removeStage(AHolder.player(getPlayer()), stage, false);
+        AStagesUtils.removeStage(AHolder.player(getPlayer()), stage, false, false, false);
     }
 }
