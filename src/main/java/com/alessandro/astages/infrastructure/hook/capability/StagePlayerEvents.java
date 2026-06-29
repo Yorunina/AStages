@@ -99,7 +99,7 @@ public class StagePlayerEvents {
                     }
 
                     listIterator.remove();
-                    AStagesUtils.removeStage(AHolder.player(player), stage.getStage(), true);
+                    AStagesUtils.removeStage(AHolder.player(player), stage.getStage(), true, true, true);
                 }
             }
         });
