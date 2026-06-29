@@ -1,15 +1,23 @@
-## [2.2.0] - 21-06-2026
+## [2.2.0] - 29-06-2026
 
 
 New Features
 
-- New methods for all restrictions. ([#133](https://github.com/Alessandro-Casale/AStages/pull/133))
-- Add check for item predicate restriction models when client connects to a dedicated server. ([#136](https://github.com/Alessandro-Casale/AStages/pull/136))
+- Refactor suggestion providers for player/server stages commands. ([#151](https://github.com/Alessandro-Casale/AStages/pull/151))
+- Rename method `disableSpawning` in `disableOverallSpawning` for AMobRestriction. ([#153](https://github.com/Alessandro-Casale/AStages/pull/153))
+- Refactor all config flags, both client and common sides. ([#158](https://github.com/Alessandro-Casale/AStages/pull/158))
+- Custom messages for stage can be shown in player action bar. ([#160](https://github.com/Alessandro-Casale/AStages/pull/160))
+- Change signature for stage methods in KubeJS. ([#161](https://github.com/Alessandro-Casale/AStages/pull/161))
 
 Bug Fixes
 
-- Fix item and block tinting rendering in inventory. ([#141](https://github.com/Alessandro-Casale/AStages/pull/141))
-- Parsing stages in AHolder does not include server stages. ([#140](https://github.com/Alessandro-Casale/AStages/pull/140))
-- Fix ModernFix crash. ([#145](https://github.com/Alessandro-Casale/AStages/pull/145))
+- Commands accept string with spaces (must be quoted with single or double quotes). ([#146](https://github.com/Alessandro-Casale/AStages/pull/146))
+- Fix in-game logo error. ([#148](https://github.com/Alessandro-Casale/AStages/pull/148))
+- Hide original item tooltip while waiting for synchronization. ([#157](https://github.com/Alessandro-Casale/AStages/pull/157))
+
+API Changes
+
+- Rename parameters in AMobRestriction. ([#154](https://github.com/Alessandro-Casale/AStages/pull/154))
+- Refactor all stage alert system for titles, subtitles, chat messages and action bar messages. ([#159](https://github.com/Alessandro-Casale/AStages/pull/159))
 
 
