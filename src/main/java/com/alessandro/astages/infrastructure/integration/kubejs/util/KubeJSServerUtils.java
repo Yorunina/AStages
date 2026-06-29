@@ -20,9 +20,6 @@ import com.alessandro.astages.engine.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.engine.server.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.engine.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.engine.server.restriction.recipe.ARecipeRestriction;
-import com.alessandro.astages.infrastructure.capability.PlayerStage;
-import com.alessandro.astages.infrastructure.capability.PlayerStageWrapper;
-import com.alessandro.astages.infrastructure.capability.ServerStageData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -35,21 +32,29 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-@NotNullParamsAndMethodsReturn
 @SuppressWarnings("unused")
+@NotNullParamsAndMethodsReturn
 public class KubeJSServerUtils {
     // Player Stages
-    public static void addStageToPlayer(String stage, Player player) {
-        AStagesUtils.addStage(AHolder.player(player), stage, false);
+    public static void addStageToPlayer(Player player, String stage) {
+        AStagesUtils.addStage(AHolder.player(player), stage, false, false, false);
     }
 
-    public static void removeStageFromPlayer(String stage, Player player) {
-        AStagesUtils.removeStage(AHolder.player(player), stage, false);
+    public static void addStagesToPlayer(Player player, Set<String> stages) {
+        AStagesUtils.addStages(AHolder.player(player), stages, false, false, false);
+    }
+
+    public static void removeStageFromPlayer(Player player, String stage) {
+        AStagesUtils.removeStage(AHolder.player(player), stage, false, false, false);
+    }
+
+    public static void removeStagesFromPlayer(Player player, Set<String> stages) {
+        AStagesUtils.removeStages(AHolder.player(player), stages, false, false, false);
     }
 
     public static List<String> getStagesFromPlayer(Player player) {
@@ -57,56 +62,102 @@ public class KubeJSServerUtils {
     }
 
     public static void removeAllStagesFromPlayer(Player player) {
-        AStagesUtils.removeAllStages(AHolder.player(player), false);
+        AStagesUtils.removeAllStages(AHolder.player(player), false, false, false);
     }
 
     public static boolean playerHasStage(String stage, Player player) {
         return AStagesUtils.hasStage(AHolder.player(player), stage);
     }
 
-    public static boolean playerHasAtLeastOneStage(List<String> stages, Player player) {
+    public static boolean playerHasAtLeastOneStage(Player player, Set<String> stages) {
         return AStagesUtils.hasAtLeastOneStage(AHolder.player(player), stages);
     }
 
-    public static boolean playerHasAllStages(List<String> stages, Player player) {
+    public static boolean playerHasAllStages(Player player, Set<String> stages) {
         return AStagesUtils.hasAllStages(AHolder.player(player), stages);
     }
 
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public static LazyOptional<PlayerStage> getPlayerCapability(Player player) {
-        return PlayerStageWrapper.getPlayerCapability(player);
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public static void addStageToPlayer(String stage, Player player) {
+        AStagesUtils.addStage(AHolder.player(player), stage, false, false, false);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public static void removeStageFromPlayer(String stage, Player player) {
+        AStagesUtils.removeStage(AHolder.player(player), stage, false, false, false);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public static boolean playerHasAtLeastOneStage(Set<String> stages, Player player) {
+        return AStagesUtils.hasAtLeastOneStage(AHolder.player(player), stages);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public static boolean playerHasAllStages(Set<String> stages, Player player) {
+        return AStagesUtils.hasAllStages(AHolder.player(player), stages);
     }
 
     // Server Stages
+    public static void addStageToServer(String stage) {
+        AStagesUtils.addStage(AHolder.server(), stage, false, false, false);
+    }
+
+    public static void addStagesToServer(Set<String> stages) {
+        AStagesUtils.addStages(AHolder.server(), stages, false, false, false);
+    }
+
+    public static void removeStageFromServer(String stage) {
+        AStagesUtils.removeStage(AHolder.server(), stage, false, false, false);
+    }
+
+    public static void removeStagesFromServer(Set<String> stages) {
+        AStagesUtils.removeStages(AHolder.server(), stages, false, false, false);
+    }
+
+    public static void removeAllStagesFromServer() {
+        AStagesUtils.removeAllStages(AHolder.server(), false, false, false);
+    }
+
+    public static boolean serverHasStage(String stage) {
+        return AStagesUtils.hasStage(AHolder.server(), stage);
+    }
+
+    public static boolean serverHasAtLeastOneStage(Set<String> stages) {
+        return AStagesUtils.hasAtLeastOneStage(AHolder.server(), stages);
+    }
+
+    public static boolean serverHasAllStages(Set<String> stages) {
+        return AStagesUtils.hasAllStages(AHolder.server(), stages);
+    }
+
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static void addStageToServer(String stage, MinecraftServer server) { // Server ignored!
-        AStagesUtils.addStage(AHolder.server(), stage, false);
+        AStagesUtils.addStage(AHolder.server(), stage, false, false, false);
     }
 
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static void removeStageFromServer(String stage, MinecraftServer server) { // Server ignored!
-        AStagesUtils.removeStage(AHolder.server(), stage, false);
+        AStagesUtils.removeStage(AHolder.server(), stage, false, false, false);
     }
 
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static void removeAllStagesFromServer(MinecraftServer server) { // Server ignored!
-        AStagesUtils.removeAllStages(AHolder.server(), false);
+        AStagesUtils.removeAllStages(AHolder.server(), false, false, false);
     }
 
+    @Deprecated(forRemoval = true, since = "3.0.0")
     public static boolean serverHasStage(String stage, MinecraftServer server) { // Server ignored!
         return AStagesUtils.hasStage(AHolder.server(), stage);
     }
 
-    public static boolean serverHasAtLeastOneStage(List<String> stages, MinecraftServer server) { // Server ignored!
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public static boolean serverHasAtLeastOneStage(Set<String> stages, MinecraftServer server) { // Server ignored!
         return AStagesUtils.hasAtLeastOneStage(AHolder.server(), stages);
     }
 
-    public static boolean serverHasAllStages(List<String> stages, MinecraftServer server) { // Server ignored!
+    @Deprecated(forRemoval = true, since = "3.0.0")
+    public static boolean serverHasAllStages(Set<String> stages, MinecraftServer server) { // Server ignored!
         return AStagesUtils.hasAllStages(AHolder.server(), stages);
-    }
-
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public static ServerStageData getServerData(MinecraftServer server) {
-        return ServerStageData.getData(server);
     }
 
     // General
