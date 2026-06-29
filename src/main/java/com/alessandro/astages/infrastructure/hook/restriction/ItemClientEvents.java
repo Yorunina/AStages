@@ -6,6 +6,7 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.engine.AClientRestrictionManager;
 import com.alessandro.astages.engine.store.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,6 +25,13 @@ public class ItemClientEvents {
                 event.getToolTip().clear();
                 event.getToolTip().add(properties.hiddenName());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onTooltipRender(RenderTooltipEvent.GatherComponents event) {
+        if (!AClientRestrictionManager.ITEM_INSTANCE.isTooltipReadyForStack(event.getItemStack())) {
+            event.setCanceled(true);
         }
     }
 }

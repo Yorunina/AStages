@@ -1,8 +1,10 @@
 package com.alessandro.astages.infrastructure.networking.packet.item;
 
-import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.engine.AClientRestrictionManager;
 import com.alessandro.astages.engine.client.restriction.item.AClientItemPropertyRestriction;
+import com.alessandro.astages.engine.server.restriction.item.ABaseItemRestriction;
+import com.alessandro.astages.engine.store.Attributes;
 import com.alessandro.astages.infrastructure.networking.AStagesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -11,7 +13,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-@NotNullParams
+@NotNullParamsAndMethodsReturn
 public class ReplyItemPropertyS2C implements AStagesPacket {
     private final String id;
     private final String stage;
@@ -27,6 +29,13 @@ public class ReplyItemPropertyS2C implements AStagesPacket {
         this.hiddenName = hiddenName;
         this.jadeItemMessage = jadeItemMessage;
         this.jadeBlockMessage = jadeBlockMessage;
+    }
+
+    public ReplyItemPropertyS2C(ABaseItemRestriction<?, ?> restriction, ItemStack stack) {
+        this(restriction.getId(), restriction.getStage(), stack,
+            restriction.get(Attributes.Item.HIDDEN_NAME).apply(stack),
+            restriction.get(Attributes.Item.JADE_ITEM_MESSAGE).apply(stack),
+            restriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack));
     }
 
     public ReplyItemPropertyS2C(FriendlyByteBuf buf) {
