@@ -44,6 +44,7 @@ public class SendClientModelsC2S implements AStagesPacket {
 
             var serverModels = AModelManager.MODELS.getModels();
 
+            // TODO: try replacing with Sets.difference()
             var missingModels = new HashSet<>(serverModels);
             missingModels.removeAll(clientModels);
 

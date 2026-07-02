@@ -238,6 +238,7 @@ dependencies {
 
     implementation(fg.deobf("curse.maven:modernfix-790626:8255312"))
     implementation(fg.deobf("curse.maven:better-modlist-neoforge-1089803:7535242"))
+    implementation(fg.deobf("curse.maven:lootr-361276:7263076"))
 
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }

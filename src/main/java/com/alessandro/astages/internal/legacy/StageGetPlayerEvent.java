@@ -5,6 +5,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public class StageGetPlayerEvent extends PlayerEvent {
     public final List<String> stages;
 

@@ -3,7 +3,6 @@ package com.alessandro.astages.internal.debug;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.constant.AEventPhase;
-import com.alessandro.astages.api.constant.AFilter;
 import com.alessandro.astages.api.event.AddRestrictionEvent;
 import com.alessandro.astages.api.event.AddStageEvent;
 import com.alessandro.astages.api.time.ATime;
@@ -48,21 +47,22 @@ public class DebugEvents {
         ARestrictionUtils.addRestrictionForStructure("astages:structure1", "stage_structure_1", List.of(AResourceLocation.parse("minecraft:village_plains")))
             .set(Attributes.ENTERING, false);
 
-        ARestrictionUtils.addRestrictionForLoot("astages:loot1", "stage_loot_1")
-            .applyEverywhere()
-            .restrictItems(Items.BONE)
-            .replacer(stack -> {
-                if (stack.is(Items.BONE)) {
-                    return Items.EMERALD.getDefaultInstance();
-                }
+        // TODO: Priority and restriction application is completely messed up, I think!
+//        ARestrictionUtils.addRestrictionForLoot("astages:loot1", "stage_loot_1")
+//            .applyEverywhere()
+//            .restrictItems(Items.BONE)
+//            .replacer(stack -> {
+//                if (stack.is(Items.BONE)) {
+//                    return Items.EMERALD.getDefaultInstance();
+//                }
+//
+//                return stack;
+//            });
 
-                return stack;
-            });
-
-        ARestrictionUtils.addRestrictionForLoot("astages:loot2", "stage_loot_2")
-            .lootTableFilter(AFilter.PARTIAL)
-            .restrictForLootTables(AResourceLocation.parse("minecraft:chests/simple_dungeon"))
-            .restrictItems(Items.ROTTEN_FLESH);
+//        ARestrictionUtils.addRestrictionForLoot("astages:loot2", "stage_loot_2")
+//            .lootTableFilter(AFilter.PARTIAL)
+//            .restrictForLootTables(AResourceLocation.parse("minecraft:chests/simple_dungeon"))
+//            .restrictItems(Items.ROTTEN_FLESH);
     }
 
     @SubscribeEvent

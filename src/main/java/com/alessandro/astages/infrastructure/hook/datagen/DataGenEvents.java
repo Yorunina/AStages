@@ -3,6 +3,7 @@ package com.alessandro.astages.infrastructure.hook.datagen;
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.infrastructure.datagen.ALanguageProvider;
+import com.alessandro.astages.infrastructure.datagen.ALootProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,9 +21,9 @@ public class DataGenEvents {
             new ALanguageProvider(packOutput, "en_us")
         );
 
-//        event.getGenerator().addProvider(
-//            event.includeServer(),
-//            new ALootProvider(packOutput)
-//        );
+        event.getGenerator().addProvider(
+            event.includeServer(),
+            new ALootProvider(packOutput)
+        );
     }
 }

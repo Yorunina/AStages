@@ -46,6 +46,7 @@ public class AStagesCommon {
     // --- MECHANICS ---
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ADD_ALL_OPERATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_REMOVE_ALL_OPERATION;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> FORCE_LAST_LOOT_MODIFIER;
 //    public static final ForgeConfigSpec.EnumValue<RestrictedItemBehavior> RESTRICTED_ITEM_BEHAVIOR;
 //    public static final ForgeConfigSpec.IntValue MESSAGE_COOLDOWN_TICKS;
 
@@ -150,6 +151,12 @@ public class AStagesCommon {
                 "If false, alerts will not be shown."
             )
             .define("Enable Remove All Operation Stage Alert", true);
+
+        FORCE_LAST_LOOT_MODIFIER = BUILDER.comment(
+                "If true, uses an injection Mixin to force AStages' loot restrictions to run as the absolute last check, after all other mods have finished.",
+                "If false, relies on Forge's standard Global Loot Modifier registry order (JSON)."
+            )
+            .define("Force Last Loot Modifier Execution", false);
 
 //        RESTRICTED_ITEM_BEHAVIOR = BUILDER
 //            .comment("What happens when a player somehow gets a restricted item they haven't unlocked yet. Options: DROP (drops it on ground), DELETE (removes it), INVENTORY_LOCK (keeps it but makes it un-interactable)")
