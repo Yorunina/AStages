@@ -1,6 +1,7 @@
 package com.alessandro.astages.infrastructure.integration.kubejs;
 
 import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.constant.AFilter;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.stage.BaseStage;
 import com.alessandro.astages.api.stage.Stage;
@@ -52,6 +53,7 @@ public class AKubeJSPlugin extends KubeJSPlugin {
         }
 
         event.add("ATime", ATime.class);
+        event.add("AFilter", AFilter.class);
         event.add("ARestrictionTypes", ARestrictionTypes.class);
 
         event.add("Attributes", Attributes.class);

@@ -1,6 +1,8 @@
-package com.alessandro.astages.internal.experimental.loot;
+package com.alessandro.astages.infrastructure.loot.modifier;
 
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.engine.loot.ALootProcessor;
+import com.alessandro.astages.infrastructure.config.AStagesCommon;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -21,18 +23,9 @@ public class ALootModifier extends LootModifier {
 
     @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-//        for (var condition : conditions) {
-//            AStages.LOGGER.debug(condition.toString());
-//        }
-//
-//        var entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
-//
-//        if (entity != null) {
-//            AStages.LOGGER.debug(entity.getType().toString());
-//        }
-//
-//        generatedLoot.add(new ItemStack(Items.EMERALD, 10));
-        return generatedLoot;
+        if (AStagesCommon.FORCE_LAST_LOOT_MODIFIER.get()) { return generatedLoot; }
+
+        return ALootProcessor.apply(generatedLoot, context);
     }
 
     @Override
