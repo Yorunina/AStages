@@ -2,6 +2,7 @@ package com.alessandro.astages.engine.server;
 
 import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AOperation;
+import com.alessandro.astages.api.constant.AStageSource;
 import com.alessandro.astages.api.constant.ASyncOperation;
 import com.alessandro.astages.api.constant.ReloadType;
 import com.alessandro.astages.api.feature.ClientSynchronizable;
@@ -55,6 +56,8 @@ public class RestrictionSyncService {
     }
 
     public static void reflectAllStagesChangesToClients(@Nullable ServerPlayer player) {
-        Networking.sendTo(player, new SyncKnownStagesS2C(MiscStorage.ALL_STAGES, ASyncOperation.ADD));
+        Networking.sendTo(player, new SyncKnownStagesS2C(MiscStorage.STAGES_ONLY_FOR_PLAYER, ASyncOperation.ADD, AStageSource.PLAYER));
+        Networking.sendTo(player, new SyncKnownStagesS2C(MiscStorage.STAGES_ONLY_FOR_SERVER, ASyncOperation.ADD, AStageSource.SERVER));
+        Networking.sendTo(player, new SyncKnownStagesS2C(MiscStorage.ALL_STAGES, ASyncOperation.ADD, AStageSource.BOTH));
     }
 }
