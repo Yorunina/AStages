@@ -40,7 +40,7 @@ public class PlayerStage {
     }
 
     public void setChangedFor(Player player, AOperation operation, Set<String> stages, boolean silentTitle) {
-        AStagesUtils.checkPlayerStages(player, operation, stages);
+//        AStagesUtils.checkPlayerStages(player, operation, stages);
 
         StageSyncedPlayerEvent event = new StageSyncedPlayerEvent(player, operation, stages);
         ALoader.EVENT_BUS.post(event);
@@ -91,7 +91,7 @@ public class PlayerStage {
     }
 
     public AStatus removeStage(String stage) {
-        return stages.remove(stage) ? AStatus.SUCCESS : AStatus.NOT_PRESENT;
+        return stages.remove(stage) ? AStatus.SUCCESSFUL : AStatus.NOT_PRESENT;
     }
 
     public void copyFrom(PlayerStage source) {
