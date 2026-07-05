@@ -140,19 +140,22 @@ public class AStagesCommon {
         // =========================================
         BUILDER.push("Mechanics");
 
-        ENABLE_ADD_ALL_OPERATION = BUILDER.comment(
+        ENABLE_ADD_ALL_OPERATION = BUILDER
+            .comment(
                 "If true, execute stage addition operations (adding multiple stages at once via code) will show an alert. ",
                 "If false, alerts will not be shown."
             )
             .define("Enable Add All Operation Stage Alert", true);
 
-        ENABLE_REMOVE_ALL_OPERATION = BUILDER.comment(
+        ENABLE_REMOVE_ALL_OPERATION = BUILDER
+            .comment(
                 "If true, bulk stage removal operations (removing multiple stages at once via code) will show an alert. ",
                 "If false, alerts will not be shown."
             )
             .define("Enable Remove All Operation Stage Alert", true);
 
-        FORCE_LAST_LOOT_MODIFIER = BUILDER.comment(
+        FORCE_LAST_LOOT_MODIFIER = BUILDER
+            .comment(
                 "If true, uses an injection Mixin to force AStages' loot restrictions to run as the absolute last check, after all other mods have finished.",
                 "If false, relies on Forge's standard Global Loot Modifier registry order (JSON)."
             )
