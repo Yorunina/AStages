@@ -60,8 +60,6 @@ public class AClientItemManager implements AClientMinimalManager<AClientBaseItem
     }
 
     public boolean isTooltipReadyForStack(@Nullable ItemStack stack) {
-        if (stack == null || stack.isEmpty()) { return true; }
-
         return registry.isPropertyPresent(CustomItemStackKey.build(stack));
     }
 
