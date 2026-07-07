@@ -1,8 +1,9 @@
-## [2.3.1] - 05-07-2026
+## [2.3.2] - 07-07-2026
 
 
 Bug Fixes
 
-- Add nullability and emptiness check for ItemStack in tooltip readiness. ([#180](https://github.com/Alessandro-Casale/AStages/pull/180))
+- Update item retrieval logic in AItemColors to use BlockItem directly. ([#187](https://github.com/Alessandro-Casale/AStages/pull/187))
+- Fix tooltip checks and handle missing properties. ([#188](https://github.com/Alessandro-Casale/AStages/pull/188))
 
 
