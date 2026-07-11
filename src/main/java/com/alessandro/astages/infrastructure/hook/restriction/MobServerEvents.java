@@ -10,7 +10,6 @@ import com.alessandro.astages.engine.store.Attributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -25,9 +24,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class MobServerEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void checkMobSpawning(MobSpawnEvent.FinalizeSpawn event) {
-        Player nearestPlayer = APlayerUtils.getNearestPlayer(event.getLevel().getLevel(), new Vec3(event.getX(), event.getY(), event.getZ()));
-        var level = event.getEntity().level();
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), event.getEntity().getType());
+        var mob = event.getEntity();
+        var pos = mob.blockPosition();
+        var entityType = mob.getType();
+        var spawnType = event.getSpawnType();
+
+        var level = mob.level();
+        Player nearestPlayer = APlayerUtils.getNearestPlayer(level, pos);
+        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), entityType);
 
         if (restriction != null) {
 //            var flag = restriction.isValueNull(Attributes.DIMENSION) && restriction.getDisabledSpawnTypes().isEmpty() &&
@@ -39,8 +43,14 @@ public class MobServerEvents {
                 return;
             }
 
-            if (restriction.getDisabledSpawnTypes().contains(event.getSpawnType())) {
+            if (restriction.getDisabledSpawnTypes().contains(spawnType)) {
                 preventSpawning(event, restriction, level);
+                return;
+            }
+
+            var biome = level.getBiome(event.getEntity().blockPosition()).get();
+            var biomeRS = ForgeRegistries.BIOMES.getKey(biome);
+            if (restriction.getIgnoredBiomes().contains(biomeRS)) {
                 return;
             }
 
@@ -50,8 +60,6 @@ public class MobServerEvents {
                 return;
             }
 
-            var biome = level.getBiome(event.getEntity().blockPosition()).get();
-            var biomeRS = ForgeRegistries.BIOMES.getKey(biome);
             if (restriction.getRestrictedBiomes().contains(biomeRS)) {
                 preventSpawning(event, restriction, level);
                 return;
@@ -90,6 +98,10 @@ public class MobServerEvents {
                 level.addFreshEntity(newEntity);
             } else {
                 AStages.LOGGER.warn("Features disabled in this level to spawn the replacer for restriction with id {}!", restriction.getId());
+            }
+        } else if (restriction.isEnabled(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT)) {
+            for (var wrapper : restriction.getEquipments()) {
+                event.getEntity().setItemSlot(wrapper.slot(), wrapper.stack());
             }
         }
 
