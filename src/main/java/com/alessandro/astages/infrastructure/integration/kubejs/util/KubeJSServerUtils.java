@@ -23,6 +23,7 @@ import com.alessandro.astages.engine.server.restriction.recipe.ARecipeRestrictio
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -200,8 +201,8 @@ public class KubeJSServerUtils {
         return ARestrictionUtils.addRestrictionForMod(id, stage, List.of(modIds));
     }
 
-    public static AItemTagRestriction addRestrictionForTag(String id, String stage, ResourceLocation name) {
-        return ARestrictionUtils.addRestrictionForTag(id, stage, name);
+    public static AItemTagRestriction addRestrictionForTag(String id, String stage, TagKey<Item> tag) {
+        return ARestrictionUtils.addRestrictionForTag(id, stage, tag);
     }
 
     public static AItemRestriction addRestrictionForArmor(String id, String stage, Item... armors) {

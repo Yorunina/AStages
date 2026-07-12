@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -35,7 +36,7 @@ public class DebugEvents {
             .allowInventoryStorage()
             .allowPickup()
             .allowContainerStorage();
-        ARestrictionUtils.addRestrictionForTag("astages:item3", "stage_item_3", AResourceLocation.fromTag("#forge:ingots/iron"));
+        ARestrictionUtils.addRestrictionForTag("astages:item3", "stage_item_3", Tags.Items.INGOTS_IRON);
 
         ARestrictionUtils.addRestrictionForMob("astages:mob1", "stage_mob_1", EntityType.BEE)
             .restrictDimensionSpawn(AResourceLocation.parse("minecraft:overworld"))
