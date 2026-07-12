@@ -12,9 +12,7 @@ import com.alessandro.astages.engine.server.restriction.item.*;
 import com.alessandro.astages.engine.server.restriction.recipe.ABaseRecipeRestriction;
 import com.alessandro.astages.engine.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.engine.server.restriction.recipe.ARecipeRestriction;
-import com.alessandro.astages.engine.store.ARestrictionTypes;
-import com.alessandro.astages.engine.store.Attributes;
-import com.alessandro.astages.engine.store.StageAttributes;
+import com.alessandro.astages.engine.store.*;
 import com.alessandro.astages.infrastructure.integration.Mods;
 import com.alessandro.astages.infrastructure.integration.kubejs.bridge.KubeJSEventBridge;
 import com.alessandro.astages.infrastructure.integration.kubejs.bridge.KubeJSStageEvents;
@@ -55,6 +53,9 @@ public class AKubeJSPlugin extends KubeJSPlugin {
         event.add("ATime", ATime.class);
         event.add("AFilter", AFilter.class);
         event.add("ARestrictionTypes", ARestrictionTypes.class);
+        event.add("ASimpleRestrictionTypes", ASimpleRestrictionTypes.class);
+        event.add("AttributeTypes", AttributeTypes.class);
+        event.add("StageAttributeTypes", StageAttributeTypes.class);
 
         event.add("Attributes", Attributes.class);
         event.add("ItemAttributes", Attributes.Item.class);
