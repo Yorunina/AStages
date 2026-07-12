@@ -18,9 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -37,18 +35,18 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     private final Set<TagKey<Item>> restrictedTags = new HashSet<>();
     private final Set<String> restrictedMods = new HashSet<>();
     private final Set<Item> ignoredItems = new HashSet<>();
-    private final Set<ResourceLocation> ignoredTags = new HashSet<>();
+    private final Set<TagKey<Item>> ignoredTags = new HashSet<>();
 
     private final Set<Block> restrictedBlocks = new HashSet<>();
     private final Set<BlockState> restrictedBlockStates = new HashSet<>();
     private final Set<BlockState> ignoredBlockStates = new HashSet<>();
 
     private AFilter entityFilter = AFilter.PARTIAL;
-    private final List<EntityType<?>> entities = new ArrayList<>();
+    private final Set<EntityType<?>> entities = new HashSet<>();
     private AFilter damageTypeFilter = AFilter.PARTIAL;
-    private final List<DamageType> damageTypes = new ArrayList<>();
+    private final Set<DamageType> damageTypes = new HashSet<>();
     private AFilter lootTableFilter = AFilter.PARTIAL;
-    private final List<ResourceLocation> lootTables = new ArrayList<>();
+    private final Set<ResourceLocation> lootTables = new HashSet<>();
 
     private Function<ItemStack, ItemStack> replacer;
 
@@ -75,58 +73,59 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     }
 
     public ALootRestriction restrictItems(Item... items) {
-        restrictedItems.addAll(List.of(items));
+        restrictedItems.addAll(Set.of(items));
         return this;
     }
 
     @SafeVarargs
     public final ALootRestriction restrictTags(TagKey<Item>... tags) {
-        restrictedTags.addAll(List.of(tags));
+        restrictedTags.addAll(Set.of(tags));
         return this;
     }
 
     public ALootRestriction restrictMods(String... modIds) {
-        restrictedMods.addAll(List.of(modIds));
+        restrictedMods.addAll(Set.of(modIds));
         return this;
     }
 
     public ALootRestriction ignoredItems(Item... items) {
-        ignoredItems.addAll(List.of(items));
+        ignoredItems.addAll(Set.of(items));
         return this;
     }
 
-    public ALootRestriction ignoredTags(ResourceLocation... tags) {
-        ignoredTags.addAll(List.of(tags));
+    @SafeVarargs
+    public final ALootRestriction ignoredTags(TagKey<Item>... tags) {
+        ignoredTags.addAll(Set.of(tags));
         return this;
     }
 
     public ALootRestriction restrictBlocks(Block... blocks) {
-        restrictedBlocks.addAll(List.of(blocks));
+        restrictedBlocks.addAll(Set.of(blocks));
         return this;
     }
 
     public ALootRestriction restrictBlockStates(BlockState... blockStates) {
-        restrictedBlockStates.addAll(List.of(blockStates));
+        restrictedBlockStates.addAll(Set.of(blockStates));
         return this;
     }
 
     public ALootRestriction ignoredBlockStates(BlockState... blockStates) {
-        ignoredBlockStates.addAll(List.of(blockStates));
+        ignoredBlockStates.addAll(Set.of(blockStates));
         return this;
     }
 
     public ALootRestriction restrictForEntities(EntityType<?>... entityTypes) {
-        entities.addAll(List.of(entityTypes));
+        entities.addAll(Set.of(entityTypes));
         return this;
     }
 
     public ALootRestriction restrictForDamageTypes(DamageType... damageTypes) {
-        this.damageTypes.addAll(List.of(damageTypes));
+        this.damageTypes.addAll(Set.of(damageTypes));
         return this;
     }
 
     public ALootRestriction restrictForLootTables(ResourceLocation... lootTables) {
-        this.lootTables.addAll(List.of(lootTables));
+        this.lootTables.addAll(Set.of(lootTables));
         return this;
     }
 
@@ -140,7 +139,7 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         }
 
         if (!ignoredTags.isEmpty() &&
-            ignoredTags.stream().anyMatch(ignoredTag -> stack.getTags().anyMatch(tag -> tag.location().equals(ignoredTag)))) {
+            ignoredTags.stream().anyMatch(stack::is)) {
             return false;
         }
 
@@ -154,7 +153,7 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         }
 
         if (!restrictedTags.isEmpty() &&
-            stack.getTags().anyMatch(tag -> restrictedTags.contains(tag.location())) ) {
+            restrictedTags.stream().anyMatch(stack::is)) {
             return true;
         }
 

@@ -3,20 +3,20 @@ package com.alessandro.astages.engine.client.restriction.item;
 import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.store.container.AttributeStore;
 import com.alessandro.astages.engine.AClientRestrictionManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @NotNullParams
 public class AClientItemModRestriction extends AClientBaseItemRestriction<AClientItemModRestriction, String> {
-    private final List<String> modIds = new ArrayList<>();
-    private final List<Item> ignoredItems = new ArrayList<>();
-    private final List<ResourceLocation> ignoredTags = new ArrayList<>();
+    private final Set<String> modIds = new HashSet<>();
+    private final Set<Item> ignoredItems = new HashSet<>();
+    private final Set<TagKey<Item>> ignoredTags = new HashSet<>();
 
     public AClientItemModRestriction(String id, String stage) {
         super(id, stage);
@@ -42,33 +42,32 @@ public class AClientItemModRestriction extends AClientBaseItemRestriction<AClien
 
         var registry = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (registry != null) {
-            return !ignoredItems.contains(stack.getItem()) &&
-                modIds.contains(registry.getNamespace()) &&
-                stack.getTags().noneMatch(t -> ignoredTags.contains(t.location()));
+            return ignoredTags.stream().anyMatch(stack::is) &&
+                modIds.contains(registry.getNamespace());
         }
 
         return false;
     }
 
-    public AClientItemModRestriction ignoreItems(List<Item> items) {
+    public AClientItemModRestriction ignoreItems(Set<Item> items) {
         ignoredItems.addAll(items);
         return this;
     }
 
-    public AClientItemModRestriction ignoreTags(List<ResourceLocation> tags) {
+    public AClientItemModRestriction ignoreTags(Set<TagKey<Item>> tags) {
         ignoredTags.addAll(tags);
         return this;
     }
 
-    public List<String> getModIds() {
+    public Set<String> getModIds() {
         return modIds;
     }
 
-    public List<Item> getIgnoredItems() {
+    public Set<Item> getIgnoredItems() {
         return ignoredItems;
     }
 
-    public List<ResourceLocation> getIgnoredTags() {
+    public Set<TagKey<Item>> getIgnoredTags() {
         return ignoredTags;
     }
 }

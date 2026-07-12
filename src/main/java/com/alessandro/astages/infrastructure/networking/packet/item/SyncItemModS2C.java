@@ -6,25 +6,27 @@ import com.alessandro.astages.engine.client.restriction.item.AClientItemModRestr
 import com.alessandro.astages.engine.server.restriction.item.AItemModRestriction;
 import com.alessandro.astages.engine.store.Attributes;
 import com.alessandro.astages.infrastructure.networking.packet.BaseItemSyncer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @NotNullParams
 public class SyncItemModS2C extends BaseItemSyncer {
-    private final List<String> modIds;
-    private final List<Item> ignoredItems;
-    private final List<ResourceLocation> ignoredTags;
+    private final Set<String> modIds;
+    private final Set<Item> ignoredItems;
+    private final Set<TagKey<Item>> ignoredTags;
 
     public SyncItemModS2C(AItemModRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getModIds(), restriction.getIgnoredItems(), restriction.getIgnoredTags(),
                 restriction.get(Attributes.RENDERING_NAME), restriction.get(Attributes.HIDING_TOOLTIP), restriction.get(Attributes.HIDING_JEI));
     }
 
-    public SyncItemModS2C(String id, String stage, List<String> modIds, List<Item> ignoredItems, List<ResourceLocation> ignoredTags, boolean renderItemName, boolean hideTooltip, boolean hideInJei) {
+    public SyncItemModS2C(String id, String stage, Set<String> modIds, Set<Item> ignoredItems, Set<TagKey<Item>> ignoredTags, boolean renderItemName, boolean hideTooltip, boolean hideInJei) {
         super(id, stage, renderItemName, hideTooltip, hideInJei);
         this.modIds = modIds;
         this.ignoredItems = ignoredItems;
@@ -33,9 +35,9 @@ public class SyncItemModS2C extends BaseItemSyncer {
 
     public SyncItemModS2C(FriendlyByteBuf buf) {
         super(buf);
-        modIds = buf.readList(FriendlyByteBuf::readUtf);
-        ignoredItems = buf.readList(r -> r.readRegistryIdUnsafe(ForgeRegistries.ITEMS));
-        ignoredTags = buf.readList(FriendlyByteBuf::readResourceLocation);
+        modIds = buf.readCollection(HashSet::new, FriendlyByteBuf::readUtf);
+        ignoredItems = buf.readCollection(HashSet::new, r -> r.readRegistryIdUnsafe(ForgeRegistries.ITEMS));
+        ignoredTags = buf.readCollection(HashSet::new, r -> TagKey.create(Registries.ITEM, r.readResourceLocation()));
     }
 
 
@@ -44,7 +46,7 @@ public class SyncItemModS2C extends BaseItemSyncer {
         super.toBytes(buf);
         buf.writeCollection(modIds, FriendlyByteBuf::writeUtf);
         buf.writeCollection(ignoredItems, (w, item) -> w.writeRegistryIdUnsafe(ForgeRegistries.ITEMS, item));
-        buf.writeCollection(ignoredTags, FriendlyByteBuf::writeResourceLocation);
+        buf.writeCollection(ignoredTags, (w, tag) -> w.writeResourceLocation(tag.location()));
     }
 
     @Override
