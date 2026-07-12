@@ -11,18 +11,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @NotNullParams
 public class SyncMobS2C extends BaseRestrictionSyncer {
-    private final List<EntityType<?>> types;
+    private final Set<EntityType<?>> types;
     private final Component jadeMobMessage;
 
     public SyncMobS2C(AMobRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getMobs(), restriction.get(Attributes.Mob.JADE_MOB_MESSAGE).get());
     }
 
-    public SyncMobS2C(String id, String stage, List<EntityType<?>> types, Component jadeMobMessage) {
+    public SyncMobS2C(String id, String stage, Set<EntityType<?>> types, Component jadeMobMessage) {
         super(id, stage);
         this.types = types;
         this.jadeMobMessage = jadeMobMessage;
@@ -30,7 +31,7 @@ public class SyncMobS2C extends BaseRestrictionSyncer {
 
     public SyncMobS2C(FriendlyByteBuf buf) {
         super(buf);
-        types = buf.readList(r -> r.readRegistryIdUnsafe(ForgeRegistries.ENTITY_TYPES));
+        types = buf.readCollection(HashSet::new, r -> r.readRegistryIdUnsafe(ForgeRegistries.ENTITY_TYPES));
         jadeMobMessage = buf.readComponent();
     }
 
