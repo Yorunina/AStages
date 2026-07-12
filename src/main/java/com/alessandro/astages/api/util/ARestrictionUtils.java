@@ -7,6 +7,10 @@ import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.api.restriction.ARestriction;
+import com.alessandro.astages.api.wrapper.OreWrapper;
+import com.alessandro.astages.api.wrapper.RecipeModWrapper;
+import com.alessandro.astages.api.wrapper.RecipeWrapper;
 import com.alessandro.astages.engine.ARestrictionManager;
 import com.alessandro.astages.engine.server.restriction.*;
 import com.alessandro.astages.engine.server.restriction.item.AItemModRestriction;
@@ -15,13 +19,10 @@ import com.alessandro.astages.engine.server.restriction.item.AItemRestriction;
 import com.alessandro.astages.engine.server.restriction.item.AItemTagRestriction;
 import com.alessandro.astages.engine.server.restriction.recipe.ARecipeModRestriction;
 import com.alessandro.astages.engine.server.restriction.recipe.ARecipeRestriction;
-import com.alessandro.astages.api.wrapper.OreWrapper;
-import com.alessandro.astages.api.wrapper.RecipeModWrapper;
-import com.alessandro.astages.api.wrapper.RecipeWrapper;
 import com.alessandro.astages.engine.store.Attributes;
-import com.alessandro.astages.api.restriction.ARestriction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
@@ -82,9 +83,9 @@ public class ARestrictionUtils {
         return restriction;
     }
 
-    public static AItemTagRestriction addRestrictionForTag(String id, String stage, ResourceLocation name) {
+    public static AItemTagRestriction addRestrictionForTag(String id, String stage, TagKey<Item> tag) {
         var restriction = new AItemTagRestriction(id, stage);
-        restriction.restrict(name);
+        restriction.restrict(tag);
         ARestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
 
         return restriction;
