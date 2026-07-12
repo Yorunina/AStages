@@ -12,6 +12,7 @@
     "integration.jei.AJeiStarter",
     "integration.kubejs.APlayerEventJS",
     "loot.AForgeHooks",
+    "loot.ALootModificationsAPI",
     "loot.ALootParams$Builder",
     "mob.AMob",
     "ore.ABlock",
