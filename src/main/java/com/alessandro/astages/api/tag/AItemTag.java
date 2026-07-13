@@ -2,6 +2,7 @@ package com.alessandro.astages.api.tag;
 
 import com.alessandro.astages.api.AResourceLocation;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import dev.latvian.mods.rhino.Context;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -28,7 +29,9 @@ public class AItemTag {
         return tag;
     }
 
-    public static AItemTag wrap(Context cx, Object object) {
+    public static @Nullable AItemTag wrap(Context cx, @Nullable Object object) {
+        if (object == null) { return null; }
+
         if (object instanceof AItemTag itemTag) {
             return itemTag;
         } else if (object instanceof TagKey<?> itemTag) {

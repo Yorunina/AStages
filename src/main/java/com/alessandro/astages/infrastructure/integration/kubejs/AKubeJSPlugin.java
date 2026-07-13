@@ -21,10 +21,12 @@ import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSClien
 import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSClientUtils;
 import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSModelUtils;
 import com.alessandro.astages.infrastructure.integration.kubejs.util.KubeJSServerUtils;
+import com.alessandro.astages.infrastructure.integration.kubejs.wrapper.AKubeJSWrappers;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
+import net.minecraft.world.entity.EntityType;
 
 @NotNullParams
 public class AKubeJSPlugin extends KubeJSPlugin {
@@ -37,6 +39,7 @@ public class AKubeJSPlugin extends KubeJSPlugin {
     @Override
     public void registerTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
         typeWrappers.registerSimple(ATime.class, ATime::of);
+        typeWrappers.register(EntityType.class, AKubeJSWrappers::wrapEntityType);
         typeWrappers.register(AItemTag.class, AItemTag::wrap);
     }
 
