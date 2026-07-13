@@ -8,6 +8,7 @@ import com.alessandro.astages.api.stage.Stage;
 import com.alessandro.astages.api.stage.TemporaryStage;
 import com.alessandro.astages.api.store.ARestrictionType;
 import com.alessandro.astages.api.store.config.AConfigPreset;
+import com.alessandro.astages.api.tag.AItemTag;
 import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.api.util.APresetUtils;
 import com.alessandro.astages.api.util.ARestrictionUtils;
@@ -23,7 +24,6 @@ import com.alessandro.astages.engine.server.restriction.recipe.ARecipeRestrictio
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -209,8 +209,8 @@ public class KubeJSServerUtils {
         return ARestrictionUtils.addRestrictionForMod(id, stage, List.of(modIds));
     }
 
-    public static AItemTagRestriction addRestrictionForTag(String id, String stage, TagKey<Item> tag) {
-        return ARestrictionUtils.addRestrictionForTag(id, stage, tag);
+    public static AItemTagRestriction addRestrictionForTag(String id, String stage, AItemTag tag) {
+        return ARestrictionUtils.addRestrictionForTag(id, stage, tag.getTag());
     }
 
     public static AItemRestriction addRestrictionForArmor(String id, String stage, Item... armors) {
