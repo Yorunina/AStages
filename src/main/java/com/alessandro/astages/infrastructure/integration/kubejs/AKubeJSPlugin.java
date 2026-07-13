@@ -6,6 +6,7 @@ import com.alessandro.astages.api.nullability.NotNullParams;
 import com.alessandro.astages.api.stage.BaseStage;
 import com.alessandro.astages.api.stage.Stage;
 import com.alessandro.astages.api.stage.TemporaryStage;
+import com.alessandro.astages.api.tag.AItemTag;
 import com.alessandro.astages.api.time.ATime;
 import com.alessandro.astages.engine.server.restriction.*;
 import com.alessandro.astages.engine.server.restriction.item.*;
@@ -36,6 +37,7 @@ public class AKubeJSPlugin extends KubeJSPlugin {
     @Override
     public void registerTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
         typeWrappers.registerSimple(ATime.class, ATime::of);
+        typeWrappers.register(AItemTag.class, AItemTag::wrap);
     }
 
     @Override

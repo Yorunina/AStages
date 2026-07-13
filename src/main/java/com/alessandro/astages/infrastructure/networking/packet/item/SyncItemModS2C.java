@@ -6,7 +6,6 @@ import com.alessandro.astages.engine.client.restriction.item.AClientItemModRestr
 import com.alessandro.astages.engine.server.restriction.item.AItemModRestriction;
 import com.alessandro.astages.engine.store.Attributes;
 import com.alessandro.astages.infrastructure.networking.packet.BaseItemSyncer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -37,7 +36,7 @@ public class SyncItemModS2C extends BaseItemSyncer {
         super(buf);
         modIds = buf.readCollection(HashSet::new, FriendlyByteBuf::readUtf);
         ignoredItems = buf.readCollection(HashSet::new, r -> r.readRegistryIdUnsafe(ForgeRegistries.ITEMS));
-        ignoredTags = buf.readCollection(HashSet::new, r -> TagKey.create(Registries.ITEM, r.readResourceLocation()));
+        ignoredTags = buf.readCollection(HashSet::new, r -> TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), r.readResourceLocation()));
     }
 
 

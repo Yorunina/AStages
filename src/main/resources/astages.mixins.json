@@ -11,6 +11,8 @@
     "integration.incontrol.AModRuleCompatibilityLayer",
     "integration.jei.AJeiStarter",
     "integration.kubejs.APlayerEventJS",
+    "integration.probejs.AClassAssignmentManager",
+    "integration.probejs.ASpecialCompiler",
     "loot.AForgeHooks",
     "loot.ALootModificationsAPI",
     "loot.ALootParams$Builder",

@@ -1,13 +1,16 @@
 package com.alessandro.astages.engine.server.restriction;
 
 import com.alessandro.astages.api.constant.AFilter;
+import com.alessandro.astages.api.develop.Info;
 import com.alessandro.astages.api.exception.UnsupportedMethodException;
 import com.alessandro.astages.api.loot.ALootPayload;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.restriction.ARestriction;
 import com.alessandro.astages.api.store.container.AttributeStore;
+import com.alessandro.astages.api.tag.AItemTag;
 import com.alessandro.astages.engine.ARestrictionManager;
 import com.alessandro.astages.engine.store.Attributes;
+import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -77,9 +80,19 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
         return this;
     }
 
+    @HideFromJS
     @SafeVarargs
     public final ALootRestriction restrictTags(TagKey<Item>... tags) {
         restrictedTags.addAll(Set.of(tags));
+        return this;
+    }
+
+    @Info("1.20.X only! Overload for KubeJS integration.")
+    public final ALootRestriction restrictTags(AItemTag... tags) {
+        for (var tag : tags) {
+            restrictedTags.add(tag.getTag());
+        }
+
         return this;
     }
 
@@ -96,6 +109,15 @@ public class ALootRestriction extends ARestriction<ALootRestriction, Void, ItemS
     @SafeVarargs
     public final ALootRestriction ignoredTags(TagKey<Item>... tags) {
         ignoredTags.addAll(Set.of(tags));
+        return this;
+    }
+
+    @Info("1.20.X only! Overload for KubeJS integration.")
+    public final ALootRestriction ignoredTags(ResourceLocation... tags) {
+        for (var tag : tags) {
+            ignoredTags.add(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), tag));
+        }
+
         return this;
     }
 
