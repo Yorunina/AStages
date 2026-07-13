@@ -1,4 +1,4 @@
-## [2.3.2] - 12-07-2026
+## [2.3.2] - 13-07-2026
 
 
 New Features
@@ -7,6 +7,7 @@ New Features
 - Enhance KubeJS integration with player and server stage management methods. ([#202](https://github.com/Alessandro-Casale/AStages/pull/202))
 - Integrate LootJS support for loot modification processing. ([#204](https://github.com/Alessandro-Casale/AStages/pull/204))
 - Add living drops check for enhanced loot control, flag must be enabled in common config. ([#208](https://github.com/Alessandro-Casale/AStages/pull/208))
+- Introduce entity type handling to show an error message if the wrong id is typed. ([#211](https://github.com/Alessandro-Casale/AStages/pull/211))
 
 Bug Fixes
 
@@ -15,6 +16,7 @@ Bug Fixes
 - Allow event to proceed when equipment restrictions are met. ([#203](https://github.com/Alessandro-Casale/AStages/pull/203))
 - Invert stage check logic in AScreenManager for server and player restrictions. ([#205](https://github.com/Alessandro-Casale/AStages/pull/205))
 - Update AHolder and AStagesSuggestions to use ServerPlayer collection for command suggestions. ([#206](https://github.com/Alessandro-Casale/AStages/pull/206))
+- Implement AItemTag integration with new formatter and assignment manager, fix suggestion provider (1.20.X only). ([#210](https://github.com/Alessandro-Casale/AStages/pull/210))
 
 API Changes
 
