@@ -53,7 +53,7 @@ public class MobServerEvents {
                     return;
                 }
 
-            var biome = level.getBiome(event.getEntity().blockPosition()).get();
+            var biome = level.getBiome(mob.blockPosition()).get();
             var biomeRS = ForgeRegistries.BIOMES.getKey(biome);
             if (restriction.getIgnoredBiomes().contains(biomeRS)) {
                 return;
