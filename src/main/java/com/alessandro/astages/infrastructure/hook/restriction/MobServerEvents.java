@@ -8,12 +8,12 @@ import com.alessandro.astages.engine.ARestrictionManager;
 import com.alessandro.astages.engine.server.restriction.AMobRestriction;
 import com.alessandro.astages.engine.store.Attributes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,31 +22,36 @@ import net.minecraftforge.registries.ForgeRegistries;
 @NotNullParams
 @Mod.EventBusSubscriber(modid = AStages.MODID)
 public class MobServerEvents {
+    /**
+     * This event fires when the entity is actually added to the level.
+     * It runs on the Main Server thread, making it safe to perform proximity checks for players
+     * and access game stages. We retrieve the SpawnType information stored earlier via data components.
+     */
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void checkMobSpawning(MobSpawnEvent.FinalizeSpawn event) {
-        var mob = event.getEntity();
-        var pos = mob.blockPosition();
-        var entityType = mob.getType();
-        var spawnType = event.getSpawnType();
+    public static void checkMobSpawning(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide()) {
+            return;
+        }
 
-        var level = mob.level();
-        Player nearestPlayer = APlayerUtils.getNearestPlayer(level, pos);
-        var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), entityType);
+        if (event.getEntity() instanceof Mob mob) {
+            var pos = mob.blockPosition();
+            var entityType = mob.getType();
+            var spawnType = mob.getSpawnType();
 
-        if (restriction != null) {
-//            var flag = restriction.isValueNull(Attributes.DIMENSION) && restriction.getDisabledSpawnTypes().isEmpty() &&
-//                restriction.getRestrictedBiomes().isEmpty() && restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) &&
-//                restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL);
+            var level = event.getLevel();
+            Player nearestPlayer = APlayerUtils.getNearestPlayer(level, pos);
+            var restriction = ARestrictionManager.MOB_INSTANCE.getRestriction(AHolder.serverAndPlayer(nearestPlayer), entityType);
 
-            if (restriction.isDisabled(Attributes.MOB_SPAWNING)/* && flag*/) {
-                preventSpawning(event, restriction, level);
-                return;
-            }
+            if (restriction != null) {
+                if (restriction.isDisabled(Attributes.MOB_SPAWNING)) {
+                    preventSpawning(event, restriction);
+                    return;
+                }
 
-            if (restriction.getDisabledSpawnTypes().contains(spawnType)) {
-                preventSpawning(event, restriction, level);
-                return;
-            }
+                if (restriction.getDisabledSpawnTypes().contains(spawnType)) {
+                    preventSpawning(event, restriction);
+                    return;
+                }
 
             var biome = level.getBiome(event.getEntity().blockPosition()).get();
             var biomeRS = ForgeRegistries.BIOMES.getKey(biome);
@@ -56,44 +61,51 @@ public class MobServerEvents {
 
             var dimensionRS = level.dimension().location();
             if (restriction.getRestrictedDimensions().contains(dimensionRS)) {
-                preventSpawning(event, restriction, level);
+                preventSpawning(event, restriction);
                 return;
             }
 
             if (restriction.getRestrictedBiomes().contains(biomeRS)) {
-                preventSpawning(event, restriction, level);
+                preventSpawning(event, restriction);
                 return;
             }
 
-            var lightLevel = level.getLightEmission(event.getEntity().blockPosition());
-            if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
-                if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel && lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
-                    preventSpawning(event, restriction, level);
-                }
-            } else if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
-                if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel) {
-                    preventSpawning(event, restriction, level);
-                }
-            } else if (restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
-                if (lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
-                    preventSpawning(event, restriction, level);
+                var lightLevel = level.getLightEmission(pos);
+                if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
+                    if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel && lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
+                        preventSpawning(event, restriction);
+//                     return;
+                    }
+                } else if (!restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
+                    if (restriction.get(Attributes.MIN_LIGHT_LEVEL) < lightLevel) {
+                        preventSpawning(event, restriction);
+//                     return;
+                    }
+                } else if (restriction.isValueNull(Attributes.MIN_LIGHT_LEVEL) && !restriction.isValueNull(Attributes.MAX_LIGHT_LEVEL)) {
+                    if (lightLevel < restriction.get(Attributes.MAX_LIGHT_LEVEL)) {
+                        preventSpawning(event, restriction);
+//                     return;
+                    }
                 }
             }
         }
     }
 
-    private static void preventSpawning(MobSpawnEvent.FinalizeSpawn event, AMobRestriction restriction, Level level) {
+    private static void preventSpawning(EntityJoinLevelEvent event, AMobRestriction restriction) {
         if (!restriction.isValueNull(Attributes.REPLACE)) {
+            var level = event.getLevel();
             Entity newEntity = restriction.get(Attributes.REPLACE).create(level);
 
             if (newEntity != null) {
-                if (restriction.isEnabled(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT)) {
-                    for (var wrapper : restriction.getEquipments()) {
-                        newEntity.setItemSlot(wrapper.slot(), wrapper.stack());
+                if (newEntity instanceof LivingEntity) {
+                    if (restriction.isEnabled(Attributes.SPAWN_WITH_DIFFERENT_EQUIPMENT)) {
+                        for (var wrapper : restriction.getEquipments()) {
+                            newEntity.setItemSlot(wrapper.slot(), wrapper.stack());
+                        }
                     }
                 }
 
-                newEntity.setPos(event.getX(), event.getY(), event.getZ());
+                newEntity.setPos(event.getEntity().position());
                 level.addFreshEntity(newEntity);
             } else {
                 AStages.LOGGER.warn("Features disabled in this level to spawn the replacer for restriction with id {}!", restriction.getId());
@@ -107,8 +119,6 @@ public class MobServerEvents {
         }
 
         event.setCanceled(true);
-        event.setSpawnCancelled(true);
-        event.setResult(Event.Result.DENY);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
