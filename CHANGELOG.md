@@ -1,4 +1,4 @@
-## [2.3.2] - 13-07-2026
+## [2.3.2] - 15-07-2026
 
 
 New Features
@@ -17,6 +17,7 @@ Bug Fixes
 - Invert stage check logic in AScreenManager for server and player restrictions. ([#205](https://github.com/Alessandro-Casale/AStages/pull/205))
 - Update AHolder and AStagesSuggestions to use ServerPlayer collection for command suggestions. ([#206](https://github.com/Alessandro-Casale/AStages/pull/206))
 - Implement AItemTag integration with new formatter and assignment manager, fix suggestion provider (1.20.X only). ([#210](https://github.com/Alessandro-Casale/AStages/pull/210))
+- Refactor mob spawning event handling to use EntityJoinLevelEvent (1.20.X only). ([#216](https://github.com/Alessandro-Casale/AStages/pull/216))
 
 API Changes
 
