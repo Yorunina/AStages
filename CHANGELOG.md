@@ -22,5 +22,7 @@ Bug Fixes
 API Changes
 
 - Change item restriction collections from List to Set for improved performance and semantics. ([#207](https://github.com/Alessandro-Casale/AStages/pull/207))
+- Rename reload methods to onReloadStarted and onReloadFinished for clarity. ([#218](https://github.com/Alessandro-Casale/AStages/pull/218))
+- Simplify enum definitions and update StreamCodec usage for better clarity (1.21.X only). ([#219](https://github.com/Alessandro-Casale/AStages/pull/219))
 
 
