@@ -36,10 +36,10 @@ public class RequestReloadS2C implements AStagesPacket {
         ctx.get().enqueueWork(() -> {
             switch (reloadType) {
                 case CLIENT_BEFORE -> {
-                    AClientStageManager.reloadBeforeScripts();
-                    AClientRestrictionManager.reloadBeforeScripts();
+                    AClientStageManager.onReloadStarted();
+                    AClientRestrictionManager.onReloadStarted();
                 }
-                case CLIENT_SYNC -> AClientRestrictionManager.reloadAfterScripts();
+                case CLIENT_SYNC -> AClientRestrictionManager.onReloadFinished();
                 case RELOAD_BEFORE -> ClientRestrictionReloadState.reloadStarted();
                 case JEI_ITEM -> ALoader.EVENT_BUS.post(new ClientItemUpdateEvent());
                 case JEI_RECIPE -> ALoader.EVENT_BUS.post(new ClientRecipeUpdateEvent());

@@ -58,8 +58,9 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
         return this;
     }
 
+    @SafeVarargs
     @SuppressWarnings("unused")
-    public AItemModRestriction ignoreTags(TagKey<Item>... tags) {
+    public final AItemModRestriction ignoreTags(TagKey<Item>... tags) {
         ignoredTags.addAll(Set.of(tags));
         return this;
     }
