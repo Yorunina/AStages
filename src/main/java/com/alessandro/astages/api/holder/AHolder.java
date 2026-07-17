@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 @NotNullParamsAndMethodsReturn
 public class AHolder {
     private final boolean isServer;
-    private boolean isPlayer;
+    private final boolean isPlayer;
     private final boolean isMultiple;
 
     private final List<UUID> uuids = new ArrayList<>();
@@ -50,19 +50,15 @@ public class AHolder {
     }
 
     public static AHolder serverAndPlayer(@Nullable Player player) {
-        var holder = new AHolder(true, true, false);
-
         if (player != null) {
-            holder.addPlayer(player);
+            return new AHolder(true, true, false).addPlayer(player);
         } else {
-            holder.setPlayer(false);
-
             if (AStagesCommon.ENABLE_DEV_LOGS.get()) {
                 AStages.LOGGER.debug("Encountered null player, skipped adding it to holder!");
             }
-        }
 
-        return holder;
+            return server();
+        }
     }
 
     private AHolder addPlayer(UUID uuid) {
@@ -121,11 +117,6 @@ public class AHolder {
         if (isPlayer && isMultiple) {
             forPlayers.accept(uuids);
         }
-    }
-
-    private AHolder setPlayer(boolean player) {
-        isPlayer = player;
-        return this;
     }
 
     public boolean holdOnlyOneType() {
