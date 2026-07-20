@@ -22,6 +22,7 @@ import com.alessandro.astages.networking.packet.recipe.RecipeSyncerS2CPacket;
 import com.alessandro.astages.networking.packet.reload.RequestRestrictionDeleteS2CPacket;
 import com.alessandro.astages.store.ARestrictionType;
 import com.alessandro.astages.store.ARestrictionTypes;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.server.AMinimalManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -71,17 +72,18 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
     }
 
     public ABaseRecipeRestriction<?, ?, ?> getRestriction(AHolder holder, RecipeWrapper wrapper) {
-        if (holder.isServerActive()) {
-            var serverRestriction = getRestriction(holder, AStageType.SERVER, wrapper);
+        ABaseRecipeRestriction<?, ?, ?> serverRestriction = null;
+        ABaseRecipeRestriction<?, ?, ?> playerRestriction = null;
 
-            if (serverRestriction == null) { return null; } // If the stage is unlocked in the server, pass!
+        if (holder.isServerActive()) {
+            serverRestriction = getRestriction(holder, AStageType.SERVER, wrapper);
         }
 
         if (holder.isPlayerActive()) {
-            return getRestriction(holder, AStageType.PLAYER, wrapper);
+            playerRestriction = getRestriction(holder, AStageType.PLAYER, wrapper);
         }
 
-        return null;
+        return (ABaseRecipeRestriction<?, ?, ?>) ARestrictionUtils.getServerAndPlayerRestriction(serverRestriction, playerRestriction);
     }
 
     public ARestrictionHolder<ABaseRecipeRestriction<?, ?, ?>> getHolder(AHolder holder, RecipeWrapper wrapper) {
@@ -89,10 +91,10 @@ public class ARecipeManager implements AMinimalManager<ABaseRecipeRestriction<?,
     }
 
     public ABaseRecipeRestriction<?, ?, ?> getRestriction(AHolder holder, AStageType type, RecipeWrapper wrapper) {
-        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && !AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
+        var modRestriction = mods.stream().filter(r -> r.isRestricted(wrapper) && r.get(Attributes.REVERSE) == AStagesUtils.hasStage(holder, type, r.getStage())).findFirst().orElse(null);
         if (modRestriction != null) { return modRestriction; }
 
-        return ARestrictionUtils.<ResourceLocation, ARecipeRestriction>getRestrictionFromCache(holder, RECIPE_CACHE, wrapper.recipe());
+        return ARestrictionUtils.<ResourceLocation, ARecipeRestriction>getRestrictionFromCache(holder, type, RECIPE_CACHE, wrapper.recipe());
     }
 
     public void addRestriction(ARecipeRestriction restriction) {

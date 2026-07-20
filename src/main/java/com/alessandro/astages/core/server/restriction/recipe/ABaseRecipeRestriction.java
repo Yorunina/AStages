@@ -4,6 +4,7 @@ import com.alessandro.astages.core.ARestrictionManager;
 import com.alessandro.astages.networking.ANetworking;
 import com.alessandro.astages.networking.packet.reload.RequestReloadS2CPacket;
 import com.alessandro.astages.api.feature.AMarkable;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.server.ARestriction;
 import com.alessandro.astages.util.ReloadType;
@@ -26,7 +27,8 @@ public class ABaseRecipeRestriction<R extends ARestriction<R, U, V>, U, V> exten
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        var defaultAttributes = AttributeStore.builder();
+        var defaultAttributes = AttributeStore.builder()
+            .addAttribute(Attributes.REVERSE);
 
         var pluginAttributes = ARestrictionManager.ATTACHED_ATTRIBUTES.getOrDefault(ABaseRecipeRestriction.class, null);
 

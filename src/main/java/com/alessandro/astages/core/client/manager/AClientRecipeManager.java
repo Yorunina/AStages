@@ -12,6 +12,7 @@ import com.alessandro.astages.core.client.restriction.recipe.AClientRecipeRestri
 import com.alessandro.astages.core.wrapper.RecipeWrapper;
 import com.alessandro.astages.store.ARestrictionType;
 import com.alessandro.astages.store.ARestrictionTypes;
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.client.AClientMinimalManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -58,20 +59,42 @@ public class AClientRecipeManager implements AClientMinimalManager<AClientBaseRe
     }
 
     public AClientBaseRecipeRestriction<?, ?, ?> getRestriction(AClientHolder holder, RecipeWrapper wrapper) {
-        var serverModRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !AStagesClientUtils.hasStage(holder, AStageType.SERVER, r.getStage())).findFirst().orElse(null);
-        if (serverModRestriction == null) { return null; }
-        var modRestriction = mods.stream().filter(r -> r.getModId().equals(wrapper.recipe().getNamespace()) && !AStagesClientUtils.hasStage(holder, AStageType.PLAYER, r.getStage())).findFirst().orElse(null);
-        if (modRestriction != null) { return modRestriction; }
+        AClientBaseRecipeRestriction<?, ?, ?> serverRestriction = null;
+        AClientBaseRecipeRestriction<?, ?, ?> playerRestriction = null;
 
-        var restrictions = RECIPE_TYPE_CACHE.get(wrapper.type());
-        for (var restriction : restrictions) {
-            if (restriction.getRecipes().contains(wrapper.recipe()) && AStagesClientUtils.hasStage(holder, AStageType.SERVER, restriction.getStage())) {
+        if (holder.isServerActive()) {
+            serverRestriction = getRestrictionForType(holder, AStageType.SERVER, wrapper);
+        }
+
+        if (holder.isPlayerActive()) {
+            playerRestriction = getRestrictionForType(holder, AStageType.PLAYER, wrapper);
+        }
+
+        if (serverRestriction != null) {
+            if (serverRestriction.get(Attributes.REVERSE)) {
+                return serverRestriction;
+            } else {
+                return playerRestriction == null ? null : serverRestriction;
+            }
+        } else {
+            if (playerRestriction != null && playerRestriction.get(Attributes.REVERSE)) {
+                return playerRestriction;
+            } else {
                 return null;
             }
         }
+    }
 
+    private AClientBaseRecipeRestriction<?, ?, ?> getRestrictionForType(AClientHolder holder, AStageType type, RecipeWrapper wrapper) {
+        for (var r : mods) {
+            if (r.getModId().equals(wrapper.recipe().getNamespace()) && r.get(Attributes.REVERSE) == AStagesClientUtils.hasStage(holder, type, r.getStage())) {
+                return r;
+            }
+        }
+
+        var restrictions = RECIPE_TYPE_CACHE.get(wrapper.type());
         for (var restriction : restrictions) {
-            if (restriction.getRecipes().contains(wrapper.recipe()) && !AStagesClientUtils.hasStage(holder, AStageType.PLAYER, restriction.getStage())) {
+            if (restriction.getRecipes().contains(wrapper.recipe()) && restriction.get(Attributes.REVERSE) == AStagesClientUtils.hasStage(holder, type, restriction.getStage())) {
                 return restriction;
             }
         }

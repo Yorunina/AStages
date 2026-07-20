@@ -1,5 +1,6 @@
 package com.alessandro.astages.core.client.restriction.recipe;
 
+import com.alessandro.astages.store.Attributes;
 import com.alessandro.astages.store.AttributeStore;
 import com.alessandro.astages.store.client.AClientRestriction;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,8 @@ public class AClientBaseRecipeRestriction<R extends AClientRestriction<R, U, V>,
 
     @Override
     public @NotNull AttributeStore allowedAttributes() {
-        return AttributeStore.builder();
+        return AttributeStore.builder()
+            .addAttribute(Attributes.REVERSE);
     }
 
     @Override

@@ -199,6 +199,7 @@ dependencies {
     compileOnly(fg.deobf("curse.maven:fastworkbench-288885:5101229"))
     compileOnly(fg.deobf("curse.maven:placebo-283644:5414631"))
     compileOnly(fg.deobf("curse.maven:in-control-257356:5932870"))
+    compileOnly(fg.deobf("curse.maven:toms-storage-378609:5548573"))
     implementation(fg.deobf("curse.maven:aether-255308:6134920"))
 
     implementation(fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.14"))
