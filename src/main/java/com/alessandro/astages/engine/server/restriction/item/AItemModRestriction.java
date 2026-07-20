@@ -45,7 +45,7 @@ public class AItemModRestriction extends ABaseItemRestriction<AItemModRestrictio
         var registry = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (registry != null) {
             return !ignoredItems.contains(stack.getItem()) &&
-                ignoredTags.stream().anyMatch(stack::is) &&
+                ignoredTags.stream().noneMatch(stack::is) &&
                 modIds.contains(registry.getNamespace());
         }
 

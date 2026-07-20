@@ -42,7 +42,8 @@ public class AClientItemModRestriction extends AClientBaseItemRestriction<AClien
 
         var registry = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (registry != null) {
-            return ignoredTags.stream().anyMatch(stack::is) &&
+            return !ignoredItems.contains(stack.getItem()) &&
+                ignoredTags.stream().noneMatch(stack::is) &&
                 modIds.contains(registry.getNamespace());
         }
 
