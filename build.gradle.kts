@@ -1,3 +1,4 @@
+import me.modmuss50.mpp.ReleaseType
 import net.minecraftforge.gradle.userdev.tasks.JarJar
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -20,6 +21,8 @@ import java.time.format.DateTimeFormatter
 @Suppress("PropertyName") val minecraft_version_range: String by project
 @Suppress("PropertyName") val loader_version_range: String by project
 @Suppress("PropertyName") val forge_version_range: String by project
+val logoLocation = "https://raw.githubusercontent.com/Alessandro-Casale/AStages/1.20.X/logo/astages.png"
+
 
 buildscript {
     repositories {
@@ -55,6 +58,10 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
 }
 
 minecraft {
@@ -180,7 +187,7 @@ jarJar.enable()
 dependencies {
     minecraft("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
 
-    implementation(fg.deobf("curse.maven:botania-225643:5002307"))
+    // implementation(fg.deobf("curse.maven:botania-225643:5002307"))
     implementation(fg.deobf("curse.maven:curios-309927:5680164"))
     implementation(fg.deobf("curse.maven:patchouli-306770:4966125"))
 
@@ -208,6 +215,9 @@ dependencies {
 
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
     implementation(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    
+    implementation(fg.deobf("curse.maven:cloth-config-348521:5729105"))
+    compileOnly(fg.deobf("curse.maven:roughly-enough-items-310111:5846923"))
 
     implementation(fg.deobf("curse.maven:jade-324717:5339264"))
     implementation(fg.deobf("curse.maven:probejs-585406:5227399"))
@@ -226,6 +236,11 @@ dependencies {
     implementation(fg.deobf("curse.maven:ftb-library-forge-404465:6807424"))
     implementation(fg.deobf("curse.maven:ftb-teams-forge-404468:6130786"))
     implementation(fg.deobf("curse.maven:ftb-quests-forge-289412:6829212"))
+
+    implementation(fg.deobf("curse.maven:modernfix-790626:8255312"))
+    implementation(fg.deobf("curse.maven:better-modlist-neoforge-1089803:7535242"))
+    compileOnly(fg.deobf("curse.maven:lootr-361276:7263076"))
+    compileOnly(fg.deobf("curse.maven:lootjs-570630:7551186"))
 
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }
@@ -282,15 +297,17 @@ publishMods {
     val today = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val formattedDate: String = today.format(formatter)
+    val changelogFile = layout.projectDirectory.file("CHANGELOG.md")
+    val formattedVersion = mod_version.substringBeforeLast("-")
 
     when {
         mod_version.contains("alpha", true) -> {
             type.set(ALPHA)
             changelog.set(
                 """
-                        ## [$mod_version] - $formattedDate
-                        ### This is an alpha version meant to be used only by developers!
-                        ### Changelog can be found in Discord server.
+                        ## [$formattedVersion] - $formattedDate
+                        This is an alpha version meant to be used only by developers!   
+                        Changelog can be found in Discord server.
                     """.trimIndent()
             )
         }
@@ -298,16 +315,29 @@ publishMods {
             type.set(BETA)
             changelog.set(
                 """
-                        ## [$mod_version] - $formattedDate
-                        ### This is a beta version meant to be used only by developers!
-                        ### Changelog can be found in Discord server.
+                        ## [$formattedVersion] - $formattedDate
+                        This is a beta version meant to be used only by developers!   
+                        Changelog can be found in Discord server.
                     """.trimIndent()
             )
         }
         else -> {
             type.set(STABLE)
-            changelog.set("# Changelog!")
+            changelog.set(providers.fileContents(changelogFile).asText.orElse("No changelog provided."))
         }
+    }
+
+    github {
+        accessToken.set(providers.environmentVariable("GITHUB_TOKEN"))
+        repository.set("Alessandro-Casale/AStages")
+        val version = mod_version.substringBeforeLast("-")
+        val branch = mod_version.substringAfterLast("-")
+        commitish.set(branch.toMcRange())
+        tagName.set("v$mod_version")
+
+        displayName.set("AStages $mod_version")
+
+        announcementTitle.set("Download from GitHub")
     }
 
     curseforge {
@@ -315,7 +345,12 @@ publishMods {
         projectId.set("1120180")
         minecraftVersions.add(minecraft_version)
         changelogType.set("markdown")
-        optional("roughly-enough-items", "jei", "kubejs")
+        optional(
+            "roughly-enough-items", "jei", "kubejs",
+            "in-control", "jade", "fastworkbench"
+        )
+        clientRequired = true
+        serverRequired = true
 
         displayName.set("astages-$mod_version")
 
@@ -324,19 +359,50 @@ publishMods {
     }
 
     modrinth {
+        accessToken.set(providers.environmentVariable("MODRINTH_API_KEY"))
+        projectId.set("6wy8fmIk")
+        minecraftVersions.add(minecraft_version)
+        optional(
+            "rei", "jei", "kubejs",
+            "in-control", "jade"
+        )
 
-    }
+        displayName.set("astages-$mod_version")
 
-    discord {
-        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
-        username.set("AServer")
-        avatarUrl.set("URL_HERE!!!!!!!!!!")
-        content.set(changelog)
-
-        style {
-            link
+        if (type.get() == ReleaseType.STABLE) {
+            changelog.set(
+                providers.fileContents(changelogFile)
+                    .asText
+                    .map { it.lineSequence().drop(3).joinToString("\n") }
+            )
+        } else {
+            changelog.set(changelog.get().dropFirstLine())
         }
+
+        announcementTitle.set("Download from Modrinth")
     }
+
+//    discord {
+//        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
+//        username.set("AServer")
+//        avatarUrl.set(logoLocation)
+//        content.set(changelog)
+//        setPlatforms(publishMods.platforms["curseforge"], publishMods.platforms["modrinth"])
+//
+//        style {
+//            thumbnailUrl = logoLocation
+//            look = "MODERN"
+//            link = "BUTTON"
+//        }
+//    }
+}
+
+fun String.toMcRange(): String {
+    return this.substringBeforeLast(".") + ".X"
+}
+
+fun String.dropFirstLine(): String {
+    return lines().drop(1).joinToString("\n")
 }
 
 tasks.withType<JavaCompile>().configureEach {

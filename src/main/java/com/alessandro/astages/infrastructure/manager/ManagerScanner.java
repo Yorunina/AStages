@@ -1,0 +1,57 @@
+package com.alessandro.astages.infrastructure.manager;
+
+import com.alessandro.astages.AStages;
+import com.alessandro.astages.api.manager.AMinimalManager;
+import com.alessandro.astages.api.manager.AManagerContainer;
+import com.alessandro.astages.api.manager.ManagerInstance;
+import com.alessandro.astages.engine.server.RestrictionRegistry;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.forgespi.language.ModFileScanData;
+import org.objectweb.asm.Type;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+public class ManagerScanner {
+    public static void getAllManagers() {
+        AStages.LOGGER.info("[ManagerScanner] Search started!");
+        var type = Type.getType(AManagerContainer.class);
+
+        for (ModFileScanData scanData : ModList.get().getAllScanData()) {
+            for (ModFileScanData.AnnotationData annotationData : scanData.getAnnotations()) {
+                if (!annotationData.annotationType().equals(type)) {
+                    continue;
+                }
+
+                try {
+                    // Get class full name
+                    String className = Type.getObjectType(annotationData.clazz().getInternalName()).getClassName();
+
+                    // Load class
+                    Class<?> clazz = Class.forName(className);
+                    for (Field field : clazz.getDeclaredFields()) {
+                        if (!field.isAnnotationPresent(ManagerInstance.class)) continue;
+
+                        if (!Modifier.isStatic(field.getModifiers())) {
+                            throw new IllegalStateException("@ManagerInstance must be static: " + field);
+                        }
+
+                        try {
+                            Object instance = field.get(null);
+                            if (instance instanceof AMinimalManager<?, ?> manager) {
+                                RestrictionRegistry.register(manager.associatedType(), manager);
+                                AStages.LOGGER.info("[ManagerScanner] Registered manager: {}", manager.associatedType());
+                            }
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException("Cannot access field: " + field, e);
+                        }
+                    }
+                } catch (Exception e) {
+                    AStages.LOGGER.warn(e.getLocalizedMessage());
+                }
+            }
+        }
+
+        AStages.LOGGER.info("[ManagerScanner] Search end! Found {} managers!", RestrictionRegistry.getRegisteredManagers().size());
+    }
+}

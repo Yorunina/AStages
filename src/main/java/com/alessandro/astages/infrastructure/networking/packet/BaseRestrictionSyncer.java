@@ -1,0 +1,44 @@
+package com.alessandro.astages.infrastructure.networking.packet;
+
+import com.alessandro.astages.api.nullability.NotNullParams;
+import com.alessandro.astages.infrastructure.networking.AStagesPacket;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
+
+@NotNullParams
+public abstract class BaseRestrictionSyncer implements AStagesPacket {
+    private final String id;
+    private final String stage;
+
+    public BaseRestrictionSyncer(String id, String stage) {
+        this.id = id;
+        this.stage = stage;
+    }
+
+    public BaseRestrictionSyncer(FriendlyByteBuf buf) {
+        id = buf.readUtf();
+        stage = buf.readUtf();
+    }
+
+    public void toBytes(FriendlyByteBuf buf) {
+        buf.writeUtf(id);
+        buf.writeUtf(stage);
+    }
+
+    public abstract void handle();
+
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(this::handle);
+        ctx.get().setPacketHandled(true);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getStage() {
+        return stage;
+    }
+}

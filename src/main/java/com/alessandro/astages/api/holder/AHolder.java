@@ -1,17 +1,18 @@
 package com.alessandro.astages.api.holder;
 
+import com.alessandro.astages.AStages;
 import com.alessandro.astages.api.constant.AStageType;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.capability.OfflinePlayerStage;
-import com.alessandro.astages.capability.ServerStage;
+import com.alessandro.astages.api.nullability.Nullable;
+import com.alessandro.astages.infrastructure.capability.OfflinePlayerStage;
+import com.alessandro.astages.infrastructure.capability.ServerStage;
+import com.alessandro.astages.infrastructure.config.AStagesCommon;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 @NotNullParamsAndMethodsReturn
@@ -38,7 +39,7 @@ public class AHolder {
         return new AHolder(false, true, false).addPlayer(uuid);
     }
 
-    public static AHolder players(List<Player> players) {
+    public static AHolder players(Collection<ServerPlayer> players) {
         var toReturn = new AHolder(false, true, true);
         players.forEach(toReturn::addPlayer);
         return toReturn;
@@ -48,8 +49,16 @@ public class AHolder {
         return new AHolder(true, false, false);
     }
 
-    public static AHolder serverAndPlayer(Player player) {
-        return new AHolder(true, true, true).addPlayer(player);
+    public static AHolder serverAndPlayer(@Nullable Player player) {
+        if (player != null) {
+            return new AHolder(true, true, true).addPlayer(player);
+        } else {
+            if (AStagesCommon.ENABLE_DEV_LOGS.get()) {
+                AStages.LOGGER.debug("Encountered null player, skipped adding it to holder!");
+            }
+
+            return server();
+        }
     }
 
     private AHolder addPlayer(UUID uuid) {
@@ -71,27 +80,21 @@ public class AHolder {
     }
 
     public AStageHolder getStages() {
-        if (isPlayer && !isMultiple) {
-            return AStageHolder.initAndHold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(uuids.get(0)));
-        }
+        var holder = AStageHolder.init();
 
-        if (isServer && isPlayer) { // Server stages is prioritized!
-            return AStageHolder.init()
-                .hold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(uuids.get(0)))
-                .hold(AStageType.SERVER, ServerStage.getServerStages());
+        if (isPlayer && !isMultiple) {
+            holder.hold(AStageType.PLAYER, OfflinePlayerStage.getPlayerStagesFromCache(uuids.get(0)));
+        } else if (isPlayer) {
+            var stageSet = new HashSet<String>();
+            for (UUID uuid : uuids) { stageSet.addAll(OfflinePlayerStage.getPlayerStagesFromCache(uuid)); }
+            holder.hold(AStageType.PLAYER, stageSet);
         }
 
         if (isServer) {
-            return AStageHolder.initAndHold(AStageType.SERVER, ServerStage.getServerStages());
+            holder.hold(AStageType.SERVER, ServerStage.getServerStages());
         }
 
-        if (isPlayer) {
-            var stageSet = new HashSet<String>();
-            uuids.forEach(uuid -> stageSet.addAll(OfflinePlayerStage.getPlayerStagesFromCache(uuid)));
-            return AStageHolder.initAndHold(AStageType.PLAYER, stageSet);
-        }
-
-        return AStageHolder.init();
+        return holder;
     }
 
     public void perform(Consumer<UUID> forPlayer, Consumer<MinecraftServer> forServer) {
@@ -114,5 +117,17 @@ public class AHolder {
         if (isPlayer && isMultiple) {
             forPlayers.accept(uuids);
         }
+    }
+
+    public boolean holdOnlyOneType() {
+        return getStages().holdOnlyOneType();
+    }
+
+    public @Nullable AStageType getHeldType() {
+        return getStages().getHeldType();
+    }
+
+    public UUID getPlayer() {
+        return uuids.get(0);
     }
 }

@@ -1,16 +1,16 @@
 package com.alessandro.astages.api.event;
 
-import com.alessandro.astages.api.constant.ARestrictionStage;
+import com.alessandro.astages.api.constant.AEventPhase;
 import net.minecraftforge.eventbus.api.Event;
 
 public class AddRestrictionEvent extends Event {
-    private final ARestrictionStage stage;
+    private final AEventPhase phase;
 
-    public AddRestrictionEvent(ARestrictionStage stage) {
-        this.stage = stage;
+    public AddRestrictionEvent(AEventPhase phase) {
+        this.phase = phase;
     }
 
-    public ARestrictionStage getStage() {
-        return stage;
+    public AEventPhase getEventPhase() {
+        return phase;
     }
 }

@@ -1,33 +1,32 @@
 {
+  "template": "\n\n#{{CHANGELOG}}\n",
+  "pr_template": "- #{{TITLE}}. ([##{{NUMBER}}](#{{URL}}))",
   "categories": [
     {
-      "title": "🚀 API Changes",
-      "labels": ["api", "breaking-change"],
-      "commits": ["^api", "^breaking-change"]
+      "title": "New Features",
+      "labels": ["feat"]
     },
     {
-      "title": "✨ Added",
-      "labels": ["feature", "enhancement", "addition"],
-      "commits": ["^feature", "^enhancement", "^addition"]
+      "title": "Bug Fixes",
+      "labels": ["fix"]
     },
     {
-      "title": "🔧 Changed",
-      "labels": ["change", "refactor", "improvement"],
-      "commits": ["^change", "^refactor", "^improvement"]
+      "title": "API Changes",
+      "labels": ["api"]
     },
     {
-      "title": "🐛 Fixed Bugs",
-      "labels": ["bug", "fix", "bugfix"],
-      "commits": ["^bug", "^fix", "^bugfix"]
+      "title": "Performance Improvements",
+      "labels": ["perf"]
     },
     {
-      "title": "🧹 Other",
-      "labels": ["chore", "docs", "misc"],
-      "commits": ["^chore", "^docs", "^misc"]
+      "title": "Removed Features",
+      "labels": ["removed"]
     }
   ],
-  "ignore_labels": ["skip-changelog"],
-  "sort": "ASC",
-  "template": "${{CHANGELOG}}",
-  "pr_template": "- [#${{NUMBER}}] ${{TITLE}} by @${{AUTHOR}}"
+  "transformers": [
+    {
+      "pattern": "^(api|feat|fix|perf|removed):\\s*",
+      "target": ""
+    }
+  ]
 }

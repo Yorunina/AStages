@@ -1,12 +1,15 @@
 package com.alessandro.astages.api.stage;
 
-import com.alessandro.astages.api.develop.UnderDevelopment;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
 import com.alessandro.astages.api.stage.event.ExpiredEvent;
 import com.alessandro.astages.api.stage.event.TickEvent;
 import com.alessandro.astages.api.stage.implementation.AExpirable;
 import com.alessandro.astages.api.stage.implementation.ATickable;
 import com.alessandro.astages.api.time.AMutableTime;
+import com.alessandro.astages.api.time.ATime;
+import com.alessandro.astages.engine.AStageManager;
+import com.alessandro.astages.api.store.container.AttributeStore;
+import com.alessandro.astages.engine.store.StageAttributes;
 
 import java.util.function.Consumer;
 
@@ -14,14 +17,13 @@ import java.util.function.Consumer;
 public class TemporaryStage extends BaseStage<TemporaryStage> implements ATickable, AExpirable {
     private final AMutableTime timer;
 
-    private boolean hasCustomTickEvent = false;
-    private Consumer<TickEvent> tickEvent;
-    private boolean hasCustomExpiredEvent = false;
-    private Consumer<ExpiredEvent> expiredEvent;
-
     public TemporaryStage(String stage, AMutableTime initialTimer) {
         super(stage);
         this.timer = initialTimer;
+    }
+
+    public TemporaryStage(String stage, ATime initialTimer) {
+        this(stage, AMutableTime.fromFixed(initialTimer));
     }
 
     public TemporaryStage(String stage, String description, AMutableTime initialTimer) {
@@ -29,40 +31,44 @@ public class TemporaryStage extends BaseStage<TemporaryStage> implements ATickab
         this.timer = initialTimer;
     }
 
+    public TemporaryStage(String stage, String description, ATime initialTimer) {
+        this(stage, description, AMutableTime.fromFixed(initialTimer));
+    }
+
+    @Override
+    public AttributeStore allowedAttributes() {
+        var defaultAttributes = new AttributeStore()
+            .addAttribute(StageAttributes.TICK_EVENT, true)
+            .addAttribute(StageAttributes.EXPIRED_EVENT, true);
+
+        return AttributeStore.compose()
+            .withSuper(super.allowedAttributes())
+            .withSelf(defaultAttributes)
+            .withPlugin(AStageManager.ATTACHED_ATTRIBUTES, TemporaryStage.class)
+            .build();
+    }
+
     public AMutableTime getActualTimer() {
         return timer;
     }
 
-    @Override
-    public boolean hasCustomTickEvent() {
-        return hasCustomTickEvent;
-    }
-
-    @UnderDevelopment
     public TemporaryStage everyTick(Consumer<TickEvent> consumer) {
-        tickEvent = consumer;
-        hasCustomTickEvent = true;
+        set(StageAttributes.TICK_EVENT, consumer);
         return this;
     }
 
     @Override
     public void postTickEvent(TickEvent event) {
-        tickEvent.accept(event);
-    }
-
-    @Override
-    public boolean hasCustomExpiredEvent() {
-        return hasCustomExpiredEvent;
+        get(StageAttributes.TICK_EVENT).accept(event);
     }
 
     public TemporaryStage whenExpired(Consumer<ExpiredEvent> consumer) {
-        expiredEvent = consumer;
-        hasCustomExpiredEvent = true;
+        set(StageAttributes.EXPIRED_EVENT, consumer);
         return this;
     }
 
     @Override
     public void postExpiredEvent(ExpiredEvent event) {
-        expiredEvent.accept(event);
+        get(StageAttributes.EXPIRED_EVENT).accept(event);
     }
 }
