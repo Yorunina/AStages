@@ -213,10 +213,11 @@ dependencies {
     implementation(fg.deobf("dev.architectury:architectury-forge:9.1.13"))
 
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-    implementation(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    compileOnly(fg.deobf("curse.maven:emi-580555:8081375"))
     
     implementation(fg.deobf("curse.maven:cloth-config-348521:5729105"))
-    compileOnly(fg.deobf("curse.maven:roughly-enough-items-310111:5846923"))
+    implementation(fg.deobf("curse.maven:roughly-enough-items-310111:5846923"))
 
     implementation(fg.deobf("curse.maven:jade-324717:5339264"))
     implementation(fg.deobf("curse.maven:probejs-585406:5227399"))

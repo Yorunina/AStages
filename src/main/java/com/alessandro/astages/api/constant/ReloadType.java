@@ -1,5 +1,6 @@
 package com.alessandro.astages.api.constant;
 
+@Deprecated(forRemoval = true, since = "3.0.0")
 public enum ReloadType {
     CLIENT_BEFORE,
     CLIENT_SYNC,
