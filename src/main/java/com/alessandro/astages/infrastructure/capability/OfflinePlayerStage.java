@@ -9,7 +9,10 @@ import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.foldersystem.AFolderPaths;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
-import com.alessandro.astages.api.util.*;
+import com.alessandro.astages.api.util.AFileIOUtils;
+import com.alessandro.astages.api.util.ASetUtils;
+import com.alessandro.astages.api.util.AStagesUtils;
+import com.alessandro.astages.api.util.ATitleUtils;
 import com.alessandro.astages.infrastructure.networking.Networking;
 import com.alessandro.astages.infrastructure.networking.packet.stages.SyncPlayerStagesS2C;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,14 +22,15 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @NotNullParamsAndMethodsReturn
-// @Mod.EventBusSubscriber(modid = AStages.MODID)
+//@EventBusSubscriber(modid = AStages.MODID)
 public class OfflinePlayerStage {
     public static final String UUID_TO_USERNAME_FILE = "uuid_to_username";
     public static final String USERNAME_TO_UUID_FILE = "username_to_uuid";
 
-    private static final Map<UUID, Set<String>> CACHE = new HashMap<>();
+    private static final Map<UUID, Set<String>> CACHE = new ConcurrentHashMap<>();
 
     // Try using a Google BiMap
     private static Map<UUID, String> UUID_USERNAME;
@@ -81,7 +85,7 @@ public class OfflinePlayerStage {
     public static void addPlayerStage(UUID uuid, String stage) {
         AStagesUtils.checkPlayerStage(uuid, AOperation.ADD, stage);
 
-        CACHE.computeIfAbsent(uuid, k -> ASetUtils.newSynchronizedSet()).add(stage);
+        CACHE.computeIfAbsent(uuid, OfflinePlayerStage::readStagesFromDisk).add(stage);
         markAsDirty(uuid);
     }
 
@@ -92,7 +96,7 @@ public class OfflinePlayerStage {
     public static void addPlayerStages(UUID uuid, Set<String> stages) {
         AStagesUtils.checkPlayerStages(uuid, AOperation.ADD_ALL, stages);
 
-        CACHE.computeIfAbsent(uuid, k -> ASetUtils.newSynchronizedSet()).addAll(stages);
+        CACHE.computeIfAbsent(uuid, OfflinePlayerStage::readStagesFromDisk).addAll(stages);
         markAsDirty(uuid);
     }
 
@@ -104,7 +108,7 @@ public class OfflinePlayerStage {
     public static AStatus removePlayerStage(UUID uuid, String stage) {
         AStagesUtils.checkPlayerStage(uuid, AOperation.REMOVE, stage);
 
-        var removeStatus = CACHE.computeIfAbsent(uuid, k -> ASetUtils.newSynchronizedSet()).remove(stage) ? AStatus.SUCCESSFUL : AStatus.NOT_PRESENT;
+        var removeStatus = CACHE.computeIfAbsent(uuid, OfflinePlayerStage::readStagesFromDisk).remove(stage) ? AStatus.SUCCESSFUL : AStatus.NOT_PRESENT;
         if (removeStatus == AStatus.SUCCESSFUL) { markAsDirty(uuid); }
         return removeStatus;
     }
@@ -117,9 +121,13 @@ public class OfflinePlayerStage {
     public static AStatus removePlayerStages(UUID uuid, Set<String> stages) {
         AStagesUtils.checkPlayerStages(uuid, AOperation.REMOVE_ALL, stages);
 
-        var removeStatus = CACHE.computeIfAbsent(uuid, k -> ASetUtils.newSynchronizedSet()).removeAll(stages) ? AStatus.SUCCESSFUL : AStatus.NOT_PRESENT;
+        var removeStatus = CACHE.computeIfAbsent(uuid, OfflinePlayerStage::readStagesFromDisk).removeAll(stages) ? AStatus.SUCCESSFUL : AStatus.NOT_PRESENT;
         if (removeStatus == AStatus.SUCCESSFUL) { markAsDirty(uuid); }
         return removeStatus;
+    }
+
+    private static Set<String> readStagesFromDisk(UUID uuid) {
+        return ASetUtils.synchronizedSet(AFileIOUtils.readHashSetOrDefault(getPermanentStagesFile(uuid), String.class));
     }
 
     @Info("Synchronization is required only if the player is 'physically' in the server!")
