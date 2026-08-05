@@ -3,7 +3,7 @@ package com.alessandro.astages.infrastructure.networking.packet.structure;
 import com.alessandro.astages.api.misc.Twin;
 import com.alessandro.astages.api.network.AByteBuf;
 import com.alessandro.astages.api.nullability.NotNullParams;
-import com.alessandro.astages.engine.collision.StructureCollisionManager;
+import com.alessandro.astages.engine.AClientStructureCollisionManager;
 import com.alessandro.astages.infrastructure.networking.AStagesPacket;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,6 +43,6 @@ public class SyncRestrictedStructuresS2C implements AStagesPacket {
 
     @Override
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        StructureCollisionManager.CLIENT_INSTANCE.populateClientCacheForChunk(dimension, chunkPos, boxes);
+        AClientStructureCollisionManager.INSTANCE.populateClientCacheForChunk(dimension, chunkPos, boxes);
     }
 }
