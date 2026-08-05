@@ -242,6 +242,12 @@ dependencies {
     compileOnly(fg.deobf("curse.maven:lootr-361276:7263076"))
     compileOnly(fg.deobf("curse.maven:lootjs-570630:7551186"))
 
+    implementation(fg.deobf("curse.maven:citadel-331936:7476570"))
+    implementation(fg.deobf("curse.maven:alexs-caves-924854:4806629"))
+
+    implementation(fg.deobf("curse.maven:radium-reforged-570017:5706069"))
+    implementation(fg.deobf("curse.maven:ferritecore-429235:4810975"))
+
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }
 

@@ -17,6 +17,7 @@ import com.alessandro.astages.infrastructure.networking.packet.reload.SendClient
 import com.alessandro.astages.infrastructure.networking.packet.simple.SyncSimpleIdsS2C;
 import com.alessandro.astages.infrastructure.networking.packet.stages.*;
 import com.alessandro.astages.infrastructure.networking.packet.structure.SyncRestrictedStructuresS2C;
+import com.alessandro.astages.infrastructure.networking.packet.structure.SyncStructureS2C;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -166,6 +167,12 @@ public class Networking {
             .add();
 
         // STRUCTURE
+        INSTANCE.messageBuilder(SyncStructureS2C.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+            .decoder(SyncStructureS2C::new)
+            .encoder(SyncStructureS2C::toBytes)
+            .consumerMainThread(SyncStructureS2C::handle)
+            .add();
+
         INSTANCE.messageBuilder(SyncRestrictedStructuresS2C.class, id(), NetworkDirection.PLAY_TO_CLIENT)
             .decoder(SyncRestrictedStructuresS2C::new)
             .encoder(SyncRestrictedStructuresS2C::toBytes)
