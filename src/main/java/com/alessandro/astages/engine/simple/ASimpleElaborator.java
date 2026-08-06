@@ -111,14 +111,14 @@ public class ASimpleElaborator {
 
     @SuppressWarnings("ConstantConditions")
     public static void elaborateTame(ASimpleRestriction simple, boolean ignoredMarkAsDirty) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, true).set(Attributes.TAMABLE, false));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AResourceLocation.parse(simple.object))).set(Attributes.BREEDING, true).set(Attributes.MOUNTING, true).set(Attributes.TAMING, false));
 
         commonOperations(simple);
     }
 
     @SuppressWarnings("ConstantConditions")
     public static void elaborateMount(ASimpleRestriction simple, boolean ignoredMarkAsDirty) {
-        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AResourceLocation.parse(simple.object))).set(Attributes.BREEDABLE, true).set(Attributes.MOUNTABLE, false).set(Attributes.TAMABLE, true));
+        ARestrictionManager.PET_INSTANCE.addRestriction(new APetRestriction(simple.id, simple.stage).restrict(ForgeRegistries.ENTITY_TYPES.getValue(AResourceLocation.parse(simple.object))).set(Attributes.BREEDING, true).set(Attributes.MOUNTING, false).set(Attributes.TAMING, true));
 
         commonOperations(simple);
     }
