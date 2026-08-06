@@ -20,7 +20,7 @@ public class SyncMobS2C extends BaseRestrictionSyncer {
     private final Component jadeMobMessage;
 
     public SyncMobS2C(AMobRestriction restriction) {
-        this(restriction.getId(), restriction.getStage(), restriction.getMobs(), restriction.get(Attributes.Mob.JADE_MOB_MESSAGE).get());
+        this(restriction.getId(), restriction.getStage(), restriction.getMobs(), restriction.get(Attributes.Mob.JADE_MESSAGE).get());
     }
 
     public SyncMobS2C(String id, String stage, Set<EntityType<?>> types, Component jadeMobMessage) {
@@ -44,7 +44,7 @@ public class SyncMobS2C extends BaseRestrictionSyncer {
     @Override
     public void handle() {
         var restriction = new AClientMobRestriction(getId(), getStage())
-                .set(Attributes.Mob.JADE_MOB_MESSAGE, () -> jadeMobMessage);
+                .set(Attributes.Mob.JADE_MESSAGE, () -> jadeMobMessage);
 
         for (var type : types) {
             restriction.restrict(type);

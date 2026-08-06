@@ -17,7 +17,7 @@ public class SyncOreS2C extends BaseRestrictionSyncer {
     private final boolean stageAllBlockStates;
 
     public SyncOreS2C(AOreRestriction restriction) {
-        this(restriction.getId(), restriction.getStage(), restriction.getOriginal(), restriction.getReplacement(), restriction.get(Attributes.STAGE_ALL_BLOCK_STATES));
+        this(restriction.getId(), restriction.getStage(), restriction.getOriginal(), restriction.getReplacement(), restriction.get(Attributes.MATCH_ALL_BLOCK_STATES));
     }
 
     public SyncOreS2C(String id, String stage, BlockState original, BlockState replacement, boolean stageAllBlockStates) {
@@ -45,7 +45,7 @@ public class SyncOreS2C extends BaseRestrictionSyncer {
     public void handle() {
         var restriction = new AClientOreRestriction(getId(), getStage())
                 .restrict(new OreWrapper(original, replacement))
-                .set(Attributes.STAGE_ALL_BLOCK_STATES, stageAllBlockStates);
+                .set(Attributes.MATCH_ALL_BLOCK_STATES, stageAllBlockStates);
 
         AClientRestrictionManager.ORE_INSTANCE.addRestriction(restriction);
     }

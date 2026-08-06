@@ -25,8 +25,8 @@ public class AGui {
         var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), this.lastToolHighlight);
         var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), this.lastToolHighlight);
 
-        if (restriction != null && properties != null && restriction.isDisabled(Attributes.RENDERING_NAME)) {
-            return Component.empty().append(properties.hiddenName()).withStyle(ChatFormatting.RED);
+        if (restriction != null && properties != null && restriction.isDisabled(Attributes.SHOW_ACTION_BAR_NAME)) {
+            return properties.getMessage(Attributes.Item.ACTION_BAR_MESSAGE, this.lastToolHighlight).copy();
         }
 
         return instance;

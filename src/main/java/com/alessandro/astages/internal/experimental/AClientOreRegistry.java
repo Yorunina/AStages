@@ -5,7 +5,7 @@ import com.alessandro.astages.engine.client.restriction.AClientOreRestriction;
 import com.alessandro.astages.api.manager.registry.AClientRegistry;
 
 @UnderDevelopment
-public class AClientOreRegistry extends AClientRegistry<AClientOreRestriction> {
+public class    AClientOreRegistry extends AClientRegistry<AClientOreRestriction> {
 //    private final Map<String, AClientOreRestriction> restrictionsByStage = new HashMap<>();
 //
 //    @Override
