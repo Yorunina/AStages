@@ -21,11 +21,11 @@ public class SyncItemTagS2C extends BaseItemSyncer {
 
     public SyncItemTagS2C(AItemTagRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getTag(), restriction.getIgnoredItems(),
-                restriction.get(Attributes.RENDERING_NAME), restriction.get(Attributes.HIDING_TOOLTIP), restriction.get(Attributes.HIDING_JEI));
+            restriction.get(Attributes.HIDING_RECIPE_VIEWER), restriction.get(Attributes.SHOW_ACTION_BAR_NAME), restriction.get(Attributes.SHOW_TOOLTIP_NAME), restriction.get(Attributes.SHOW_RECIPE_VIEWER_NAME), restriction.get(Attributes.SHOW_JADE_BLOCK_NAME), restriction.get(Attributes.SHOW_JADE_BLOCK_NAME));
     }
 
-    public SyncItemTagS2C(String id, String stage, TagKey<Item> tag, Set<Item> ignoredItems, boolean renderItemName, boolean hideTooltip, boolean hideInJei) {
-        super(id, stage, renderItemName, hideTooltip, hideInJei);
+    public SyncItemTagS2C(String id, String stage, TagKey<Item> tag, Set<Item> ignoredItems, boolean hideInRecipeViewer, boolean showActionBarName, boolean showTooltipName, boolean showRecipeViewerName, boolean showJadeItemName, boolean showJadeBlockName) {
+        super(id, stage, hideInRecipeViewer, showActionBarName, showTooltipName, showRecipeViewerName, showJadeItemName, showJadeBlockName);
         this.tag = tag;
         this.ignoredItems = ignoredItems;
     }
@@ -46,11 +46,14 @@ public class SyncItemTagS2C extends BaseItemSyncer {
     @Override
     public void handle() {
         var restriction = new AClientItemTagRestriction(getId(), getStage())
-                .set(Attributes.RENDERING_NAME, isRenderItemName())
-                .set(Attributes.HIDING_TOOLTIP, isHideTooltip())
-                .set(Attributes.HIDING_JEI, isHideInJei())
-                .restrict(tag)
-                .ignoreItems(ignoredItems);
+            .restrict(tag)
+            .ignoreItems(ignoredItems)
+            .set(Attributes.HIDING_RECIPE_VIEWER, isHideInRecipeViewer())
+            .set(Attributes.SHOW_ACTION_BAR_NAME, isShowActionBarName())
+            .set(Attributes.SHOW_TOOLTIP_NAME, isShowTooltipName())
+            .set(Attributes.SHOW_RECIPE_VIEWER_NAME, isShowRecipeViewerName())
+            .set(Attributes.SHOW_JADE_ITEM_NAME, isShowJadeItemName())
+            .set(Attributes.SHOW_JADE_BLOCK_NAME, isShowJadeBlockName());
 
         AClientRestrictionManager.ITEM_INSTANCE.addRestriction(restriction);
     }

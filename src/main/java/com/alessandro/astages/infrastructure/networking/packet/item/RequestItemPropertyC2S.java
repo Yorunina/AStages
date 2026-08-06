@@ -50,7 +50,9 @@ public class RequestItemPropertyC2S implements AStagesPacket {
                 if (!Objects.equals(serverRestriction.getStage(), stage)) { throw EXCEPTION.apply(id); }
 
                 Networking.sendToPlayer(ctx.get().getSender(), new ReplyItemPropertyS2C(id, stage, stack,
-                    serverRestriction.get(Attributes.Item.HIDDEN_NAME).apply(stack),
+                    serverRestriction.get(Attributes.Item.ACTION_BAR_MESSAGE).apply(stack),
+                    serverRestriction.get(Attributes.Item.TOOLTIP_MESSAGE).apply(stack),
+                    serverRestriction.get(Attributes.Item.RECIPE_VIEWER_MESSAGE).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_ITEM_MESSAGE).apply(stack),
                     serverRestriction.get(Attributes.Item.JADE_BLOCK_MESSAGE).apply(stack)
                 ));

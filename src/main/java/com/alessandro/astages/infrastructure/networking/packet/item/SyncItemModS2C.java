@@ -22,11 +22,11 @@ public class SyncItemModS2C extends BaseItemSyncer {
 
     public SyncItemModS2C(AItemModRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getModIds(), restriction.getIgnoredItems(), restriction.getIgnoredTags(),
-                restriction.get(Attributes.RENDERING_NAME), restriction.get(Attributes.HIDING_TOOLTIP), restriction.get(Attributes.HIDING_JEI));
+            restriction.get(Attributes.HIDING_RECIPE_VIEWER), restriction.get(Attributes.SHOW_ACTION_BAR_NAME), restriction.get(Attributes.SHOW_TOOLTIP_NAME), restriction.get(Attributes.SHOW_RECIPE_VIEWER_NAME), restriction.get(Attributes.SHOW_JADE_BLOCK_NAME), restriction.get(Attributes.SHOW_JADE_BLOCK_NAME));
     }
 
-    public SyncItemModS2C(String id, String stage, Set<String> modIds, Set<Item> ignoredItems, Set<TagKey<Item>> ignoredTags, boolean renderItemName, boolean hideTooltip, boolean hideInJei) {
-        super(id, stage, renderItemName, hideTooltip, hideInJei);
+    public SyncItemModS2C(String id, String stage, Set<String> modIds, Set<Item> ignoredItems, Set<TagKey<Item>> ignoredTags, boolean hideInRecipeViewer, boolean showActionBarName, boolean showTooltipName, boolean showRecipeViewerName, boolean showJadeItemName, boolean showJadeBlockName) {
+        super(id, stage, hideInRecipeViewer, showActionBarName, showTooltipName, showRecipeViewerName, showJadeItemName, showJadeBlockName);
         this.modIds = modIds;
         this.ignoredItems = ignoredItems;
         this.ignoredTags = ignoredTags;
@@ -51,11 +51,14 @@ public class SyncItemModS2C extends BaseItemSyncer {
     @Override
     public void handle() {
         var restriction = new AClientItemModRestriction(getId(), getStage())
-                .set(Attributes.RENDERING_NAME, isRenderItemName())
-                .set(Attributes.HIDING_TOOLTIP, isHideTooltip())
-                .set(Attributes.HIDING_JEI, isHideInJei())
-                .ignoreItems(ignoredItems)
-                .ignoreTags(ignoredTags);
+            .ignoreItems(ignoredItems)
+            .ignoreTags(ignoredTags)
+            .set(Attributes.HIDING_RECIPE_VIEWER, isHideInRecipeViewer())
+            .set(Attributes.SHOW_ACTION_BAR_NAME, isShowActionBarName())
+            .set(Attributes.SHOW_TOOLTIP_NAME, isShowTooltipName())
+            .set(Attributes.SHOW_RECIPE_VIEWER_NAME, isShowRecipeViewerName())
+            .set(Attributes.SHOW_JADE_ITEM_NAME, isShowJadeItemName())
+            .set(Attributes.SHOW_JADE_BLOCK_NAME, isShowJadeBlockName());
 
         for (var modId : modIds) { restriction.restrict(modId); }
 
