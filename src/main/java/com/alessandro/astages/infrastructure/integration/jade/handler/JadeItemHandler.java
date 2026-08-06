@@ -20,12 +20,9 @@ public class JadeItemHandler {
                 var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), stack);
                 var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), stack);
 
-                if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
+                if (restriction != null && properties != null && restriction.isDisabled(Attributes.SHOW_JADE_BLOCK_NAME)) {
                     tooltip.clear();
-
-                    if (properties.jadeBlockMessage() != null) {
-                        tooltip.add(properties.jadeBlockMessage());
-                    }
+                    tooltip.add(properties.getMessage(Attributes.Item.JADE_BLOCK_MESSAGE, stack));
                 }
             }
 
@@ -33,15 +30,13 @@ public class JadeItemHandler {
                 var original = entityAccessor.getEntity();
 
                 if (original instanceof ItemEntity itemEntity) {
-                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), itemEntity.getItem());
-                    var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), itemEntity.getItem());
+                    var stack = itemEntity.getItem();
+                    var restriction = AClientRestrictionManager.ITEM_INSTANCE.getRestriction(AClientHolder.serverAndPlayer(), stack);
+                    var properties = AClientRestrictionManager.ITEM_INSTANCE.getProperties(AClientHolder.serverAndPlayer(), stack);
 
-                    if (restriction != null && properties != null && restriction.isEnabled(Attributes.HIDING_TOOLTIP)) {
+                    if (restriction != null && properties != null && restriction.isDisabled(Attributes.SHOW_JADE_ITEM_NAME)) {
                         tooltip.clear();
-
-                        if (properties.jadeItemMessage() != null) {
-                            tooltip.add(properties.jadeItemMessage());
-                        }
+                        tooltip.add(properties.getMessage(Attributes.Item.JADE_ITEM_MESSAGE, stack));
                     }
                 }
             }

@@ -18,11 +18,11 @@ public class SyncItemS2C extends BaseItemSyncer {
 
     public SyncItemS2C(AItemRestriction restriction) {
         this(restriction.getId(), restriction.getStage(), restriction.getItems(),
-                restriction.get(Attributes.RENDERING_NAME), restriction.get(Attributes.HIDING_TOOLTIP), restriction.get(Attributes.HIDING_JEI));
+            restriction.get(Attributes.HIDING_RECIPE_VIEWER), restriction.get(Attributes.SHOW_ACTION_BAR_NAME), restriction.get(Attributes.SHOW_TOOLTIP_NAME), restriction.get(Attributes.SHOW_RECIPE_VIEWER_NAME), restriction.get(Attributes.SHOW_JADE_BLOCK_NAME), restriction.get(Attributes.SHOW_JADE_BLOCK_NAME));
     }
 
-    public SyncItemS2C(String id, String stage, List<Item> items, boolean renderItemName, boolean hideTooltip, boolean hideInJei) {
-        super(id, stage, renderItemName, hideTooltip, hideInJei);
+    public SyncItemS2C(String id, String stage, List<Item> items, boolean hideInRecipeViewer, boolean showActionBarName, boolean showTooltipName, boolean showRecipeViewerName, boolean showJadeItemName, boolean showJadeBlockName) {
+        super(id, stage, hideInRecipeViewer, showActionBarName, showTooltipName, showRecipeViewerName, showJadeItemName, showJadeBlockName);
         this.items = items;
     }
 
@@ -41,9 +41,12 @@ public class SyncItemS2C extends BaseItemSyncer {
     @Override
     public void handle() {
         var restriction = new AClientItemRestriction(getId(), getStage())
-                .set(Attributes.RENDERING_NAME, isRenderItemName())
-                .set(Attributes.HIDING_TOOLTIP, isHideTooltip())
-                .set(Attributes.HIDING_JEI, isHideInJei());
+            .set(Attributes.HIDING_RECIPE_VIEWER, isHideInRecipeViewer())
+            .set(Attributes.SHOW_ACTION_BAR_NAME, isShowActionBarName())
+            .set(Attributes.SHOW_TOOLTIP_NAME, isShowTooltipName())
+            .set(Attributes.SHOW_RECIPE_VIEWER_NAME, isShowRecipeViewerName())
+            .set(Attributes.SHOW_JADE_ITEM_NAME, isShowJadeItemName())
+            .set(Attributes.SHOW_JADE_BLOCK_NAME, isShowJadeBlockName());
 
         for (var item : items) {
             restriction.restrict(item);

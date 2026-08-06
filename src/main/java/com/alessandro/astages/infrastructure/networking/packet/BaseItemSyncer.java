@@ -5,41 +5,65 @@ import net.minecraft.network.FriendlyByteBuf;
 
 @NotNullParams
 public abstract class BaseItemSyncer extends BaseRestrictionSyncer {
-    private final boolean renderItemName;
-    private final boolean hideTooltip;
-    private final boolean hideInJei;
+    private final boolean hideInRecipeViewer;
+    private final boolean showActionBarName;
+    private final boolean showTooltipName;
+    private final boolean showRecipeViewerName;
+    private final boolean showJadeItemName;
+    private final boolean showJadeBlockName;
 
-    public BaseItemSyncer(String id, String stage, boolean renderItemName, boolean hideTooltip, boolean hideInJei) {
+    public BaseItemSyncer(String id, String stage, boolean hideInRecipeViewer, boolean showActionBarName, boolean showTooltipName, boolean showRecipeViewerName, boolean showJadeItemName, boolean showJadeBlockName) {
         super(id, stage);
-        this.renderItemName = renderItemName;
-        this.hideTooltip = hideTooltip;
-        this.hideInJei = hideInJei;
+        this.hideInRecipeViewer = hideInRecipeViewer;
+        this.showActionBarName = showActionBarName;
+        this.showTooltipName = showTooltipName;
+        this.showRecipeViewerName = showRecipeViewerName;
+        this.showJadeItemName = showJadeItemName;
+        this.showJadeBlockName = showJadeBlockName;
     }
 
     public BaseItemSyncer(FriendlyByteBuf buf) {
         super(buf);
-        renderItemName = buf.readBoolean();
-        hideTooltip = buf.readBoolean();
-        hideInJei = buf.readBoolean();
+        hideInRecipeViewer = buf.readBoolean();
+        showActionBarName = buf.readBoolean();
+        showTooltipName = buf.readBoolean();
+        showRecipeViewerName = buf.readBoolean();
+        showJadeItemName = buf.readBoolean();
+        showJadeBlockName = buf.readBoolean();
     }
 
     @Override
     public void toBytes(FriendlyByteBuf buf) {
         super.toBytes(buf);
-        buf.writeBoolean(renderItemName);
-        buf.writeBoolean(hideTooltip);
-        buf.writeBoolean(hideInJei);
+        buf.writeBoolean(hideInRecipeViewer);
+        buf.writeBoolean(showActionBarName);
+        buf.writeBoolean(showTooltipName);
+        buf.writeBoolean(showRecipeViewerName);
+        buf.writeBoolean(showJadeItemName);
+        buf.writeBoolean(showJadeBlockName);
+    }
+    
+    public boolean isHideInRecipeViewer() {
+        return hideInRecipeViewer;
     }
 
-    public boolean isRenderItemName() {
-        return renderItemName;
+    public boolean isShowActionBarName() {
+        return showActionBarName;
     }
 
-    public boolean isHideTooltip() {
-        return hideTooltip;
+    public boolean isShowTooltipName() {
+        return showTooltipName;
     }
 
-    public boolean isHideInJei() {
-        return hideInJei;
+    public boolean isShowRecipeViewerName() {
+        return showRecipeViewerName;
+    }
+
+    public boolean isShowJadeItemName() {
+        return showJadeItemName;
+    }
+
+    public boolean isShowJadeBlockName() {
+        return showJadeBlockName;
     }
 }
