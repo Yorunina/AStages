@@ -1,13 +1,14 @@
 package com.alessandro.astages.api.misc;
 
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @NotNullParamsAndMethodsReturn
-public record Twin<A, B>(A id, B value) {
+public record Twin<A, B>(@Nullable A id, @Nullable B value) {
     public Twin() {
         this(null, null);
     }
