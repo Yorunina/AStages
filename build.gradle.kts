@@ -1,9 +1,10 @@
 import me.modmuss50.mpp.ReleaseType
-import net.minecraftforge.gradle.userdev.tasks.JarJar
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
 
 @Suppress("PropertyName") val mod_group_id: String by project
 @Suppress("PropertyName") val mod_id: String by project
@@ -21,31 +22,17 @@ import java.time.format.DateTimeFormatter
 @Suppress("PropertyName") val minecraft_version_range: String by project
 @Suppress("PropertyName") val loader_version_range: String by project
 @Suppress("PropertyName") val forge_version_range: String by project
+@Suppress("PropertyName") val parchment_minecraft_version: String by project
+@Suppress("PropertyName") val parchment_mappings_version: String by project
 val logoLocation = "https://raw.githubusercontent.com/Alessandro-Casale/AStages/1.20.X/logo/astages.png"
-
-
-buildscript {
-    repositories {
-        maven { url = uri("https://repo.spongepowered.org/repository/maven-public/") }
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("org.spongepowered:mixingradle:0.7-SNAPSHOT")
-    }
-}
 
 plugins {
     id("eclipse")
     id("idea")
-    id("net.minecraftforge.gradle") version "[6.0.16,6.2)"
-    id("org.parchmentmc.librarian.forgegradle") version "1.+"
+    id("net.neoforged.moddev.legacyforge") version "2.0.143"
     id("maven-publish")
-    id("org.spongepowered.mixin") version "0.7.+"
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
-
-apply(plugin = "org.spongepowered.mixin")
 
 group = mod_group_id
 version = mod_version
@@ -64,49 +51,56 @@ tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
 }
 
-minecraft {
-    mappings("parchment", "2023.09.03-1.20.1")
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
 
-    copyIdeResources.set(true)
-    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    validateAccessTransformers = true
+
+    parchment {
+        minecraftVersion = parchment_minecraft_version
+        mappingsVersion = parchment_mappings_version
+    }
 
     runs {
-        configureEach {
-            workingDirectory(project.file("run"))
-
-            property("forge.logging.markers", "REGISTRIES")
-            property("forge.logging.console.level", "debug")
-
-            mods {
-                create(property("mod_id") as String) {
-                    source(sourceSets.main.get())
-                }
-            }
-        }
-
         create("client") {
-            property("forge.enabledGameTestNamespaces", property("mod_id") as String)
+            client()
+            gameDirectory = project.file("run")
+            systemProperty("forge.enabledGameTestNamespaces", mod_id)
         }
 
         create("server") {
-            workingDirectory(project.file("run-server"))
-            property("forge.enabledGameTestNamespaces", property("mod_id") as String)
-            args("--nogui")
+            server()
+            gameDirectory = project.file("run-server")
+            programArgument("--nogui")
+            systemProperty("forge.enabledGameTestNamespaces", mod_id)
         }
 
         create("gameTestServer") {
-            property("forge.enabledGameTestNamespaces", property("mod_id") as String)
+            type = "gameTestServer"
+            gameDirectory = project.file("run")
+            systemProperty("forge.enabledGameTestNamespaces", mod_id)
         }
 
         create("data") {
-            workingDirectory(project.file("run-data"))
-
-            args(
-                "--mod", property("mod_id") as String,
+            data()
+            gameDirectory = project.file("run-data")
+            programArguments.addAll(
+                "--mod", mod_id,
                 "--all",
-                "--output", file("src/generated/resources/"),
-                "--existing", file("src/main/resources/")
+                "--output", file("src/generated/resources/").absolutePath,
+                "--existing", file("src/main/resources/").absolutePath
             )
+        }
+
+        configureEach {
+            systemProperty("forge.logging.markers", "REGISTRIES")
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        create(mod_id) {
+            sourceSet(sourceSets.main.get())
         }
     }
 }
@@ -123,6 +117,11 @@ sourceSets.main {
 }
 
 repositories {
+    maven {
+        name = "Sponge maven"
+        url = uri("https://repo.spongepowered.org/repository/maven-public/")
+    }
+
     maven {
         name = "Illusive Soulworks maven"
         url = uri("https://maven.theillusivec4.top/")
@@ -182,71 +181,71 @@ repositories {
     }
 }
 
-jarJar.enable()
-
 dependencies {
-    minecraft("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    modImplementation("curse.maven:curios-309927:5680164")
+    modImplementation("curse.maven:patchouli-306770:4966125")
 
-    // implementation(fg.deobf("curse.maven:botania-225643:5002307"))
-    implementation(fg.deobf("curse.maven:curios-309927:5680164"))
-    implementation(fg.deobf("curse.maven:patchouli-306770:4966125"))
+    modImplementation("curse.maven:mekanism-268560:5662583")
 
-    implementation(fg.deobf("curse.maven:mekanism-268560:5662583"))
-
-    implementation(fg.deobf("com.simibubi.create:create-1.20.1:6.0.6-152:slim")).let {
-        (it as ExternalModuleDependency).isTransitive = false
+    modImplementation("com.simibubi.create:create-1.20.1:6.0.6-152:slim") {
+        isTransitive = false
     }
-    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:1.0.51"))
-    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:1.0.1"))
-    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:1.0.1"))
-    implementation(fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3"))
+    modImplementation("net.createmod.ponder:Ponder-Forge-${minecraft_version}:1.0.51")
+    modCompileOnly("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:1.0.1")
+    modRuntimeOnly("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:1.0.1")
+    modImplementation("com.tterrag.registrate:Registrate:MC1.20-1.3.3")
 
-    implementation(fg.deobf("curse.maven:potionsmaster-356801:4722415"))
+    modImplementation("curse.maven:potionsmaster-356801:4722415")
 
-    compileOnly(fg.deobf("curse.maven:fastworkbench-288885:5101229"))
-    compileOnly(fg.deobf("curse.maven:placebo-283644:5414631"))
-    compileOnly(fg.deobf("curse.maven:in-control-257356:5932870"))
-    implementation(fg.deobf("curse.maven:aether-255308:6134920"))
+    modCompileOnly("curse.maven:fastworkbench-288885:5101229")
+    modCompileOnly("curse.maven:placebo-283644:5414631")
+    modCompileOnly("curse.maven:in-control-257356:5932870")
+    modImplementation("curse.maven:aether-255308:6134920")
 
-    implementation(fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.14"))
-    implementation(fg.deobf("dev.latvian.mods:rhino-forge:2001.2.2-build.18"))
-    implementation(fg.deobf("dev.architectury:architectury-forge:9.1.13"))
+    modImplementation("dev.latvian.mods:kubejs-forge:2001.6.5-build.14")
+    modImplementation("dev.latvian.mods:rhino-forge:2001.2.2-build.18")
+    modImplementation("dev.architectury:architectury-forge:9.1.13")
 
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
-    compileOnly(fg.deobf("curse.maven:emi-580555:8081375"))
-    
-    implementation(fg.deobf("curse.maven:cloth-config-348521:5729105"))
-    implementation(fg.deobf("curse.maven:roughly-enough-items-310111:5846923"))
+    modCompileOnly("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    modCompileOnly("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    modCompileOnly("curse.maven:emi-580555:8081375")
 
-    implementation(fg.deobf("curse.maven:jade-324717:5339264"))
-    implementation(fg.deobf("curse.maven:probejs-585406:5227399"))
+    modImplementation("curse.maven:cloth-config-348521:5729105")
+    modImplementation("curse.maven:roughly-enough-items-310111:5846923")
 
-    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
-    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
+    modImplementation("curse.maven:jade-324717:5339264")
+    modImplementation("curse.maven:probejs-585406:5227399")
 
-    compileOnly(fg.deobf("curse.maven:cold-sweat-506194:6258866"))
+    modCompileOnly("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${curios_version}")
+
+    modCompileOnly("curse.maven:cold-sweat-506194:6258866")
 
     implementation("io.github.llamalad7:mixinextras-common:0.4.1")
     annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1")
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
-        jarJar.ranged(this, "[0.4.1,)")
+    run {
+        val mixinExtrasForge = implementation("io.github.llamalad7:mixinextras-forge:0.4.1") as ExternalModuleDependency
+        mixinExtrasForge.version {
+            strictly("[0.4.1,)")
+            prefer("0.4.1")
+        }
+        add("jarJar", mixinExtrasForge)
     }
 
-    implementation(fg.deobf("curse.maven:ftb-library-forge-404465:6807424"))
-    implementation(fg.deobf("curse.maven:ftb-teams-forge-404468:6130786"))
-    implementation(fg.deobf("curse.maven:ftb-quests-forge-289412:6829212"))
+    modImplementation("curse.maven:ftb-library-forge-404465:6807424")
+    modImplementation("curse.maven:ftb-teams-forge-404468:6130786")
+    modImplementation("curse.maven:ftb-quests-forge-289412:6829212")
 
-    implementation(fg.deobf("curse.maven:modernfix-790626:8255312"))
-    implementation(fg.deobf("curse.maven:better-modlist-neoforge-1089803:7535242"))
-    compileOnly(fg.deobf("curse.maven:lootr-361276:7263076"))
-    compileOnly(fg.deobf("curse.maven:lootjs-570630:7551186"))
+    modImplementation("curse.maven:modernfix-790626:8255312")
+    modImplementation("curse.maven:better-modlist-neoforge-1089803:7535242")
+    modCompileOnly("curse.maven:lootr-361276:7263076")
+    modCompileOnly("curse.maven:lootjs-570630:7551186")
 
-    compileOnly(fg.deobf("curse.maven:citadel-331936:7476570"))
-    compileOnly(fg.deobf("curse.maven:alexs-caves-924854:4806629"))
+    modCompileOnly("curse.maven:citadel-331936:7476570")
+    modCompileOnly("curse.maven:alexs-caves-924854:4806629")
 
-    implementation(fg.deobf("curse.maven:radium-reforged-570017:5706069"))
-    implementation(fg.deobf("curse.maven:ferritecore-429235:4810975"))
+    modImplementation("curse.maven:radium-reforged-570017:5706069")
+    modImplementation("curse.maven:ferritecore-429235:4810975")
 
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }
@@ -273,10 +272,6 @@ tasks.named<ProcessResources>("processResources").configure {
     }
 }
 
-tasks.named("jarJar").configure {
-    finalizedBy("reobfJarJar")
-}
-
 tasks.named<Jar>("jar").configure {
     manifest {
         attributes(
@@ -292,13 +287,10 @@ tasks.named<Jar>("jar").configure {
             )
         )
     }
-
-    dependsOn(tasks.named("jarJar"))
-    finalizedBy("reobfJar")
 }
 
 publishMods {
-    file.set(tasks.named("jarJar", JarJar::class).flatMap { it.archiveFile })
+    file.set(tasks.named<AbstractArchiveTask>("reobfJar").flatMap { it.archiveFile })
     modLoaders.add("forge")
     val today = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
@@ -312,7 +304,7 @@ publishMods {
             changelog.set(
                 """
                         ## [$formattedVersion] - $formattedDate
-                        This is an alpha version meant to be used only by developers!   
+                        This is an alpha version meant to be used only by developers!
                         Changelog can be found in Discord server.
                     """.trimIndent()
             )
@@ -322,7 +314,7 @@ publishMods {
             changelog.set(
                 """
                         ## [$formattedVersion] - $formattedDate
-                        This is a beta version meant to be used only by developers!   
+                        This is a beta version meant to be used only by developers!
                         Changelog can be found in Discord server.
                     """.trimIndent()
             )
@@ -387,20 +379,6 @@ publishMods {
 
         announcementTitle.set("Download from Modrinth")
     }
-
-//    discord {
-//        webhookUrl.set(providers.environmentVariable("DISCORD_WEBHOOK"))
-//        username.set("AServer")
-//        avatarUrl.set(logoLocation)
-//        content.set(changelog)
-//        setPlatforms(publishMods.platforms["curseforge"], publishMods.platforms["modrinth"])
-//
-//        style {
-//            thumbnailUrl = logoLocation
-//            look = "MODERN"
-//            link = "BUTTON"
-//        }
-//    }
 }
 
 fun String.toMcRange(): String {
