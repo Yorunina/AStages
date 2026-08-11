@@ -12,9 +12,7 @@ import com.alessandro.astages.engine.client.restriction.item.AClientBaseItemRest
 import dev.emi.emi.api.*;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.FluidEmiStack;
-import dev.emi.emi.registry.EmiStackList;
 import dev.emi.emi.runtime.EmiHidden;
-import dev.emi.emi.search.EmiSearch;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Unmodifiable;
@@ -40,12 +38,6 @@ public class EmiItemStagesPlugin implements EmiPlugin {
         @Override
         public void hideEntries(Collection<EmiStack> entries) {
             EmiHidden.pluginDisabledStacks.addAll(entries);
-        }
-
-        @Override
-        public void reload() {
-            EmiStackList.bakeFiltered();
-            EmiSearch.update();
         }
 
         @Override
@@ -81,12 +73,6 @@ public class EmiItemStagesPlugin implements EmiPlugin {
         @Override
         public void hideEntries(Collection<FluidEmiStack> entries) {
             EmiHidden.pluginDisabledStacks.addAll(entries);
-        }
-
-        @Override
-        public void reload() {
-            EmiStackList.bakeFiltered();
-            EmiSearch.update();
         }
 
         @Override
