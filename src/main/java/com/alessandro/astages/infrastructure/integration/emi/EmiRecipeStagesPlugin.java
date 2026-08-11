@@ -9,7 +9,6 @@ import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.registry.EmiRecipes;
 
 import java.util.Set;
 
@@ -35,7 +34,5 @@ public class EmiRecipeStagesPlugin implements EmiPlugin {
 
     public static void onReloadFinished() { }
 
-    public static void onStageChanged(AOperation operation, Set<String> syncedStages) {
-        EmiRecipes.bake();
-    }
+    public static void onStageChanged(AOperation operation, Set<String> syncedStages) {}
 }
