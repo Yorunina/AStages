@@ -32,18 +32,15 @@ public class ASmithingMenu {
         astages$player = playerInventory.player;
     }
 
-    @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;)V", at = @At("TAIL"))
-    public void astages$init(int containerId, Inventory playerInventory, CallbackInfo ci) {
-        astages$player = playerInventory.player;
-    }
-
     @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/SmithingRecipe;assemble(Lnet/minecraft/world/Container;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;"), cancellable = true)
     public void astages$createResult(CallbackInfo ci, @Local SmithingRecipe recipe) {
-        var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(astages$player), new RecipeWrapper(recipe.getType(), recipe.getId()));
+        if (!astages$player.level().isClientSide()) {
+            var restriction = ARestrictionManager.RECIPE_INSTANCE.getRestriction(AHolder.serverAndPlayer(astages$player), new RecipeWrapper(recipe.getType(), recipe.getId()));
 
-        if (restriction != null) {
-            smithingMenu$self().resultSlots.setItem(0, ItemStack.EMPTY);
-            ci.cancel();
+            if (restriction != null) {
+                smithingMenu$self().resultSlots.setItem(0, ItemStack.EMPTY);
+                ci.cancel();
+            }
         }
     }
 }
