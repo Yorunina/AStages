@@ -50,7 +50,7 @@ public class AKubeJSPlugin extends KubeJSPlugin {
             event.add("AModels", KubeJSModelUtils.class);
         }
 
-        if (event.getType().isClient()) {
+        if (event.getType().isClient() || event.getType().isStartup()) {
             event.add("AStagesClient", KubeJSClientUtils.class);
             event.add("AModels", KubeJSClientModelUtils.class);
         }

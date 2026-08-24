@@ -180,6 +180,15 @@ repositories {
         name = "TerraformersMC"
         url = uri("https://maven.terraformersmc.com/")
     }
+
+    maven {
+        name = "Geckolib"
+        url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        content {
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
+        }
+    }
 }
 
 jarJar.enable()
@@ -241,6 +250,10 @@ dependencies {
     implementation(fg.deobf("curse.maven:better-modlist-neoforge-1089803:7535242"))
     compileOnly(fg.deobf("curse.maven:lootr-361276:7263076"))
     compileOnly(fg.deobf("curse.maven:lootjs-570630:7551186"))
+
+    // Biomancy integration (bio_forging recipe restriction)
+    compileOnly(fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:4.7.1.1"))
+    compileOnly(fg.deobf("curse.maven:biomancy-492939:5886758"))
 
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }

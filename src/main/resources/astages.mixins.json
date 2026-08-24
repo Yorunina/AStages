@@ -9,6 +9,7 @@
     "AStorageTerminalMenuAccessor",
     "enchant.AEnchantmentMenu",
     "food.ALivingEntity",
+    "integration.biomancy.ABioForgeMenu",
     "integration.fastworkbench.AFastBenchUtil",
     "integration.incontrol.AModRuleCompatibilityLayer",
     "integration.jei.AJeiStarter",
@@ -40,6 +41,7 @@
     "structure.AEntity"
   ],
   "client": [
+    "integration.biomancy.ABioForgeScreenController",
     "item.AGui",
     "ore.ABlockColors",
     "ore.ABlockModelShaper",

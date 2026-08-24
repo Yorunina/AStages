@@ -48,7 +48,9 @@ public class OfflinePlayerStage {
     }
 
     private static Path getPermanentStagesFile(UUID uuid) {
-        var file = AFolderPaths.getPlayerPermanentFolder().resolve(uuid + AFileIOUtils.JSON_EXTENSION);
+        var folder = AFolderPaths.getPlayerPermanentFolder();
+        if (folder == null) { return null; }
+        var file = folder.resolve(uuid + AFileIOUtils.JSON_EXTENSION);
         return AFileIOUtils.getOrCreateFile(file);
     }
 
@@ -57,7 +59,11 @@ public class OfflinePlayerStage {
     }
 
     public static Path getTemporaryStagesFile(UUID uuid) {
-        var file = AFolderPaths.getPlayerTemporaryFolder().resolve(uuid + AFileIOUtils.JSON_EXTENSION);
+        var folder = AFolderPaths.getPlayerTemporaryFolder();
+        if (folder == null) {
+            return null;
+        }
+        var file = folder.resolve(uuid + AFileIOUtils.JSON_EXTENSION);
         return AFileIOUtils.getOrCreateFile(file);
     }
 
@@ -67,7 +73,10 @@ public class OfflinePlayerStage {
 
     public static @UnmodifiableView Set<String> getPlayerStagesFromCache(UUID uuid) {
         if (!CACHE.containsKey(uuid)) {
-            var stages = ASetUtils.synchronizedSet(AFileIOUtils.readHashSetOrDefault(getPermanentStagesFile(uuid), String.class));
+            var file = getPermanentStagesFile(uuid);
+            var stages = file != null
+                ? ASetUtils.synchronizedSet(AFileIOUtils.readHashSetOrDefault(file, String.class))
+                : ASetUtils.<String>newSynchronizedSet();
             CACHE.put(uuid, stages);
         }
 
@@ -183,7 +192,10 @@ public class OfflinePlayerStage {
 
     public static void markAsDirty(UUID playerUUID) {
         var stages = CACHE.get(playerUUID);
-        AFileIOUtils.writeFileContent(getPermanentStagesFile(playerUUID), stages);
+        var file = getPermanentStagesFile(playerUUID);
+        if (file != null) {
+            AFileIOUtils.writeFileContent(file, stages);
+        }
 
         AStages.LOGGER.debug("Saving stages for {} -> {}", playerUUID, stages);
     }

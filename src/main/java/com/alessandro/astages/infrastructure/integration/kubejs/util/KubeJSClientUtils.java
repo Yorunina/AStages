@@ -82,4 +82,12 @@ public class KubeJSClientUtils {
     public static boolean serverHasAllStages(Set<String> stages) {
         return AStagesClientUtils.hasAllStages(AClientHolder.server(), stages);
     }
+
+    public static boolean serverAndPlayerHasStage(String stage) {
+        return AStagesClientUtils.hasStage(AClientHolder.serverAndPlayer(), stage);
+    }
+
+    public static Set<String> getServerAndPlayerStages() {
+        return AStagesClientUtils.getStages(AClientHolder.serverAndPlayer());
+    }
 }

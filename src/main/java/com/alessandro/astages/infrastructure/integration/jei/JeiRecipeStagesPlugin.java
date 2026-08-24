@@ -13,6 +13,7 @@ import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.api.util.AStagesClientUtils;
 import com.alessandro.astages.engine.AClientRestrictionManager;
 import com.alessandro.astages.infrastructure.integration.Mods;
+import com.alessandro.astages.infrastructure.integration.biomancy.BiomancyJeiSupport;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -81,6 +82,10 @@ public class JeiRecipeStagesPlugin implements IModPlugin {
             updateRecipesForType(RecipeType.BLASTING, RecipeTypes.BLASTING);
             updateRecipesForType(RecipeType.SMITHING, RecipeTypes.SMITHING);
             updateRecipesForType(RecipeType.STONECUTTING, RecipeTypes.STONECUTTING);
+
+            if (Mods.BIOMANCY.isLoaded()) {
+                BiomancyJeiSupport.updateBioForgingRecipes(runtime);
+            }
 
             AStages.LOGGER.info("AStages recipe update completed in {} ms!", System.currentTimeMillis() - time);
         }

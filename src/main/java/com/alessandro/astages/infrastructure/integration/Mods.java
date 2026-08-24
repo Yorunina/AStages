@@ -10,7 +10,8 @@ public enum Mods {
     JEI,
     KUBEJS,
     JADE,
-    LOOTJS;
+    LOOTJS,
+    BIOMANCY;
 
     public boolean isLoaded() {
         return ModList.get().isLoaded(asId());
