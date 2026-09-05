@@ -19,9 +19,15 @@ import java.util.UUID;
 public class PlayerStagesEvents {
     @SubscribeEvent
     public static void serverStarted(ServerStartingEvent event) {
+        var uuidToUsernameFile = OfflinePlayerStage.getConfigFile(OfflinePlayerStage.UUID_TO_USERNAME_FILE);
+        var usernameToUuidFile = OfflinePlayerStage.getConfigFile(OfflinePlayerStage.USERNAME_TO_UUID_FILE);
+        if (uuidToUsernameFile == null || usernameToUuidFile == null) {
+            return;
+        }
+
         OfflinePlayerStage.setUUIDToUsernameMap(
             AFileIOUtils.readMapOrDefault(
-                OfflinePlayerStage.getConfigFile(OfflinePlayerStage.UUID_TO_USERNAME_FILE),
+                uuidToUsernameFile,
                 UUID.class,
                 String.class
             )
@@ -29,7 +35,7 @@ public class PlayerStagesEvents {
 
         OfflinePlayerStage.setUsernameToUUIDMap(
             AFileIOUtils.readMapOrDefault(
-                OfflinePlayerStage.getConfigFile(OfflinePlayerStage.USERNAME_TO_UUID_FILE),
+                usernameToUuidFile,
                 String.class,
                 UUID.class
             )
@@ -38,18 +44,28 @@ public class PlayerStagesEvents {
 
     @SubscribeEvent
     public static void serverStopped(ServerStoppingEvent event) {
-        AFileIOUtils.writeFileContent(OfflinePlayerStage.getConfigFile(OfflinePlayerStage.UUID_TO_USERNAME_FILE), OfflinePlayerStage.getUUIDToUsernameMap());
-        AFileIOUtils.writeFileContent(OfflinePlayerStage.getConfigFile(OfflinePlayerStage.USERNAME_TO_UUID_FILE), OfflinePlayerStage.getUsernameToUUIDMap());
+        var uuidToUsernameFile = OfflinePlayerStage.getConfigFile(OfflinePlayerStage.UUID_TO_USERNAME_FILE);
+        var usernameToUuidFile = OfflinePlayerStage.getConfigFile(OfflinePlayerStage.USERNAME_TO_UUID_FILE);
+        if (uuidToUsernameFile == null || usernameToUuidFile == null) {
+            return;
+        }
+
+        AFileIOUtils.writeFileContent(uuidToUsernameFile, OfflinePlayerStage.getUUIDToUsernameMap());
+        AFileIOUtils.writeFileContent(usernameToUuidFile, OfflinePlayerStage.getUsernameToUUIDMap());
     }
 
     @Info("Migration purpose only!")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void playerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        var file = OfflinePlayerStage.getPermanentStagesFile(event.getEntity());
+        if (file == null) {
+            return;
+        }
+
         var playerUUID = event.getEntity().getUUID();
         var playerName = event.getEntity().getGameProfile().getName();
         OfflinePlayerStage.setPlayerNameToUUIDAssociation(playerName, playerUUID);
 
-        var file = OfflinePlayerStage.getPermanentStagesFile(event.getEntity());
         var stageList = AFileIOUtils.readList(file, String.class);
 
         if (stageList == null) {

@@ -30,6 +30,9 @@ public class StagePlayerEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         var file = OfflinePlayerStage.getTemporaryStagesFile(event.getEntity());
+        if (file == null) {
+            return;
+        }
         var actualTimerMap = AFileIOUtils.readMapOrDefault(file, String.class, Integer.class);
 
         actualTimerMap.forEach((stage, actualTimer) -> AStageManager.TEMPORARY_INSTANCE.addAlreadyObtainedStageToExpire(event.getEntity().getUUID(), stage, actualTimer));
@@ -37,11 +40,15 @@ public class StagePlayerEvents {
 
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        var file = OfflinePlayerStage.getTemporaryStagesFile(event.getEntity());
-
-        var mapToWrite = new HashMap<String, Integer>();
         var stageContainer = AStageManager.TEMPORARY_INSTANCE.getStageContainersForPlayer(event.getEntity().getUUID());
         if (stageContainer == null) { return; }
+
+        var file = OfflinePlayerStage.getTemporaryStagesFile(event.getEntity());
+        if (file == null) {
+            return;
+        }
+
+        var mapToWrite = new HashMap<String, Integer>();
         for (var stage : stageContainer) { mapToWrite.put(stage.getStage().getStage(), stage.getCurrentTimer().getCurrentTicks()); }
 
         AFileIOUtils.writeFileContent(file, mapToWrite);

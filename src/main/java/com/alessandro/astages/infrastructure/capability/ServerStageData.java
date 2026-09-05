@@ -126,8 +126,12 @@ public class ServerStageData extends SavedData {
         return nbt;
     }
 
-    public static Path getTemporaryStagesFile() {
-        var file = AFolderPaths.getServerTemporaryFolder().resolve("server.json");
+    public static @Nullable Path getTemporaryStagesFile() {
+        var folder = AFolderPaths.getServerTemporaryFolder();
+        if (folder == null) {
+            return null;
+        }
+        var file = folder.resolve("server.json");
         return AFileIOUtils.getOrCreateFile(file);
     }
 

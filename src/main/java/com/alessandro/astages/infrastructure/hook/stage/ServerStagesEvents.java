@@ -14,9 +14,14 @@ import net.minecraftforge.fml.common.Mod;
 public class ServerStagesEvents {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
+        var file = ServerStage.getPermanentStagesFile();
+        if (file == null) {
+            return;
+        }
+
         ServerStage.setCache(
             AFileIOUtils.readHashSetOrDefault(
-                ServerStage.getPermanentStagesFile(),
+                file,
                 String.class
             )
         );
@@ -32,6 +37,9 @@ public class ServerStagesEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onServerStartingHighest(ServerStartingEvent event) {
         var file = ServerStage.getPermanentStagesFile();
+        if (file == null) {
+            return;
+        }
         var stageList = AFileIOUtils.readList(file, String.class);
 
         if (stageList == null) {

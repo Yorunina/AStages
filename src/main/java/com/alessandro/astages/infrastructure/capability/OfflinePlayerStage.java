@@ -9,6 +9,7 @@ import com.alessandro.astages.api.event.player.*;
 import com.alessandro.astages.api.foldersystem.AFolderPaths;
 import com.alessandro.astages.api.holder.AHolder;
 import com.alessandro.astages.api.nullability.NotNullParamsAndMethodsReturn;
+import com.alessandro.astages.api.nullability.Nullable;
 import com.alessandro.astages.api.util.*;
 import com.alessandro.astages.infrastructure.networking.Networking;
 import com.alessandro.astages.infrastructure.networking.packet.stages.SyncPlayerStagesS2C;
@@ -38,12 +39,16 @@ public class OfflinePlayerStage {
         USERNAME_UUID.put(playerName, playerUUID);
     }
 
-    public static Path getConfigFile(String fileName) {
-        var file = AFolderPaths.getAStagesDataFolder().resolve(fileName + AFileIOUtils.JSON_EXTENSION);
+    public static @Nullable Path getConfigFile(String fileName) {
+        var folder = AFolderPaths.getAStagesDataFolder();
+        if (folder == null) {
+            return null;
+        }
+        var file = folder.resolve(fileName + AFileIOUtils.JSON_EXTENSION);
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    public static Path getPermanentStagesFile(Player player) {
+    public static @Nullable Path getPermanentStagesFile(Player player) {
         return getPermanentStagesFile(player.getUUID());
     }
 

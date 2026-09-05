@@ -31,6 +31,9 @@ public class StageServerEvents {
     @SubscribeEvent
     public static void onServerStarted(ServerStartedEvent event) {
         var file = ServerStage.getTemporaryStagesFile();
+        if (file == null) {
+            return;
+        }
         var actualTimerMap = AFileIOUtils.readMapOrDefault(file, String.class, Integer.class);
 
         actualTimerMap.forEach(AStageManager.TEMPORARY_INSTANCE::addAlreadyObtainedServerStageToExpire);
@@ -38,11 +41,15 @@ public class StageServerEvents {
 
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
-        var file = ServerStage.getTemporaryStagesFile();
-
-        var mapToWrite = new HashMap<String, Integer>();
         var stageContainer = AStageManager.TEMPORARY_INSTANCE.getStageContainersForServer();
         if (stageContainer == null) { return; }
+
+        var file = ServerStage.getTemporaryStagesFile();
+        if (file == null) {
+            return;
+        }
+
+        var mapToWrite = new HashMap<String, Integer>();
         for (var stage : stageContainer) { mapToWrite.put(stage.getStage().getStage(), stage.getCurrentTimer().getCurrentTicks()); }
 
         AFileIOUtils.writeFileContent(file, mapToWrite);

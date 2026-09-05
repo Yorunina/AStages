@@ -28,13 +28,21 @@ public class ServerStage {
 
     private static Set<String> CACHE = ASetUtils.newSynchronizedSet();
 
-    public static Path getPermanentStagesFile() {
-        var file = AFolderPaths.getServerPermanentFolder().resolve(SERVER_STAGES_FILE);
+    public static @Nullable Path getPermanentStagesFile() {
+        var folder = AFolderPaths.getServerPermanentFolder();
+        if (folder == null) {
+            return null;
+        }
+        var file = folder.resolve(SERVER_STAGES_FILE);
         return AFileIOUtils.getOrCreateFile(file);
     }
 
-    public static Path getTemporaryStagesFile() {
-        var file = AFolderPaths.getServerTemporaryFolder().resolve(SERVER_STAGES_FILE);
+    public static @Nullable Path getTemporaryStagesFile() {
+        var folder = AFolderPaths.getServerTemporaryFolder();
+        if (folder == null) {
+            return null;
+        }
+        var file = folder.resolve(SERVER_STAGES_FILE);
         return AFileIOUtils.getOrCreateFile(file);
     }
 
@@ -117,7 +125,10 @@ public class ServerStage {
 
     // When saving, call this
     public static void markAsDirty() {
-        AFileIOUtils.writeFileContent(getPermanentStagesFile(), CACHE);
+        var file = getPermanentStagesFile();
+        if (file != null) {
+            AFileIOUtils.writeFileContent(file, CACHE);
+        }
     }
 
     public static void clearCache() {

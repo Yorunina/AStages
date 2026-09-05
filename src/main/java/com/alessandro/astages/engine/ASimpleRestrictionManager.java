@@ -235,6 +235,7 @@ public class ASimpleRestrictionManager {
 
     public static void onReloadStarted() { // Better when reload STARTS!
         if (ServerLifecycleHooks.getCurrentServer() == null) { return; }
+        if (RESTRICTION_CACHE == null) { return; } // Caches are loaded on ServerStartingEvent; nothing to re-synchronize yet.
 
         for (var type : RESTRICTION_CACHE.keySet()) {
             synchronizeWithServerNoUpdate(type, RESTRICTION_CACHE.get(type));
